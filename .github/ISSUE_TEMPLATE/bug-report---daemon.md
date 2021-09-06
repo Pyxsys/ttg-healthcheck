@@ -29,7 +29,7 @@ If applicable, add screenshots to help explain your problem.
  - OS: [e.g. Rasberry Pi OS]
  - version: [e.g. 3]
 
-**Suggested fix***
+**Suggested fix**
 A proposed fix if the root cause is known. (optional)
 
 **Additional context**

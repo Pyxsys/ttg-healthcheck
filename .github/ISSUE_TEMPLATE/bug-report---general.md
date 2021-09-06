@@ -40,7 +40,7 @@ If applicable, add screenshots to help explain your problem.
  - Browser [e.g. stock browser, safari]
  - Version [e.g. 22]
 
-**Suggested fix***
+**Suggested fix**
 A proposed fix if the root cause is known. (optional)
 
 **Additional context**
