@@ -7,30 +7,30 @@ assignees: ''
 
 ---
 
-**Describe the bug**
+### **Describe the bug**
 A clear and concise description of what the bug is.
 
-**To Reproduce**
+### **To Reproduce**
 Steps to reproduce the behavior:
 1. Go to '...'
 2. Click on '....'
 3. Scroll down to '....'
 4. See error
 
-**Expected behavior**
+### **Expected behavior**
 A clear and concise description of what you expected to happen.
 
-**Screenshots**
+### **Screenshots**
 If applicable, add screenshots to help explain your problem.
 
-**Device (please complete the following information):**
+### **Device (please complete the following information):**
  - type: [e.g. Rasberry Pi]
  - model: [e.g. Pico ]
  - OS: [e.g. Rasberry Pi OS]
  - version: [e.g. 3]
 
-**Suggested fix**
+### **Suggested fix**
 A proposed fix if the root cause is known. (optional)
 
-**Additional context**
+### **Additional context**
 Add any other context about the problem here.
