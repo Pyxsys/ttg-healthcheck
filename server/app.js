@@ -1,6 +1,6 @@
-const express = require("express");
+const express = require('express');
 const app = express();
-const connectDB = require("./db/db_connection");
+const connectDB = require('./db/db_connection');
 
 // setup middlewares
 app.use(express.json());
@@ -9,6 +9,6 @@ app.use(express.json());
 connectDB();
 
 // Define Routes
-app.use("/api/user", require("./api/user"));
+app.use('/api/user', require('./api/user'));
 
 module.exports = app;
