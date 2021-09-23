@@ -26,7 +26,7 @@
     "start": "env-cmd -f ./config/dev.env nodemon server",
     "server": "nodemon server",
     "build": "react-scripts build",
-    "test": "env-cmd -f ./config/test.env jest --watchAll --detectOpenHandles",
+    "test": "env-cmd -f ./config/test.env jest --config ./jest.config.js --detectOpenHandles",
     "eject": "react-scripts eject",
     "lint": "eslint *"
   }

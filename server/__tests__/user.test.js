@@ -2,6 +2,7 @@ const request = require("supertest");
 const connectDB = require("../db/db_connection");
 const User = require("../models/user.js");
 const app = require("../app");
+const mongoose = require("mongoose");
 
 beforeAll(async () => {
   await connectDB(); // connect to local_db
@@ -21,4 +22,10 @@ describe("Create a new user", () => {
     });
     console.log(response.body);
   });
+});
+
+afterAll((done) => {
+  // Closing the DB connection allows Jest to exit successfully.
+  mongoose.connection.close();
+  done();
 });
