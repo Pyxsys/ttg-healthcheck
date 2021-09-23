@@ -2,8 +2,15 @@ const express = require("express");
 const app = express();
 const connectDB = require("./db/db_connection");
 
-// setup middleware
+// setup middlewares
 app.use(express.json());
 
-// Connect Database
+// connect database
 connectDB();
+
+// Define Routes
+app.use("/api/user", require("./api/user"));
+
+// start server
+const PORT = process.env.PORT;
+app.listen(PORT, () => console.log("Server started"));
