@@ -1,9 +1,14 @@
-const express = require('express');
-
+const express = require("express");
 const app = express();
+const connectDB = require("./db/db_connection");
 
-app.get('/users', (req, res) => {
-    res.send('hello world')
-})
+// setup middlewares
+app.use(express.json());
 
-export default app 
+// connect database
+connectDB();
+
+// Define Routes
+app.use("/api/user", require("./api/user"));
+
+module.exports = app;
