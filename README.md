@@ -21,11 +21,11 @@ Before starting the installation process, ensure that your computer has all the 
 ### Server Folder
 * cd into the server folder and install all the dependencies by typing `npm install` from your command line.
 * `npm run dev`  to run server and client concurently
-* `npm start` to run the server only
+* `npm run start` to run the server only
 
 ### Client Folder
 * cd into the client folder and install all the dependencies by typing `npm install` from your command line.
-* `npm start` to run the client only
+* `npm run start` to run the client only
 
 ## Unit Tests
 
