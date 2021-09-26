@@ -1,0 +1,29 @@
+{
+  "name": "client",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "dotenv": "^10.0.0",
+    "env-cmd": "^10.1.0",
+    "express": "^4.17.1",
+    "mongoose": "^6.0.7"
+  },
+  "devDependencies": {
+    "concurrently": "^6.2.1",
+    "eslint": "^7.32.0",
+    "eslint-config-google": "^0.14.0",
+    "eslint-plugin-react": "^7.26.0",
+    "jest": "^27.2.1",
+    "nodemon": "^2.0.7",
+    "supertest": "^6.1.6"
+  },
+  "scripts": {
+    "start": "env-cmd -f ./config/dev.env nodemon server",
+    "client": "npm run start --prefix ../client",
+    "dev": "concurrently \"npm run start\" \"npm run client\"",
+    "build": "react-scripts build",
+    "test": "env-cmd -f ./config/test.env jest --config ./jest.config.js --detectOpenHandles",
+    "eject": "react-scripts eject",
+    "lint": "eslint *"
+  }
+}

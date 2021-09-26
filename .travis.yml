@@ -1,0 +1,21 @@
+matrix:
+  include:
+    - language: node_js
+      node_js:
+        - "stable"
+      before_script:
+        - cd client
+        - npm install
+      script:
+        - npm run test
+    - language: node_js
+      node_js:
+        - "stable"
+      services: 
+        - mongodb
+      before_script:
+        - cd server
+        - npm install
+        - mongo mydb_test --eval 'db.createUser({user:"travis",pwd:"test",roles:["readWrite"]});'
+      script:
+        - npm run test
