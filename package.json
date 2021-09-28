@@ -10,8 +10,8 @@
     }
   },
   "lint-staged": {
-    "**/*.{js}": [
-      "npm run lint:fix --prefix server",
+    "**/*.{js,jsx,ts,tsx}": [
+      "npm run all-lint:fix",
       "npm run all-test:staged",
       "git add"
     ]
