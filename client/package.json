@@ -18,15 +18,37 @@
     "web-vitals": "^1.1.2"
   },
   "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^4.32.0",
+    "@typescript-eslint/parser": "^4.32.0",
     "eslint": "^7.32.0",
     "eslint-config-google": "^0.14.0",
-    "eslint-plugin-react": "^7.26.0"
+    "eslint-plugin-react": "^7.26.0",
+    "husky": "^7.0.2",
+    "lint-staged": "^11.1.2",
+    "prettier-eslint": "^13.0.0",
+    "prettier-eslint-cli": "^5.0.1"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.ts*": [
+      "npm run lint:fix",
+      "npm run test:staged",
+      "git add"
+    ]
   },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test src --watchAll=false",
-    "eject": "react-scripts eject"
+    "test:coverage": "react-scripts test src --watchAll=false --coverage",
+    "eject": "react-scripts eject",
+    "lint": "eslint **/*.ts*",
+    "lint:fix": "prettier-eslint **/*.ts* --write",
+    "test:staged" : "react-scripts test src --watchAll=false --findRelatedTests"
   },
   "eslintConfig": {
     "extends": [

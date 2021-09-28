@@ -13,17 +13,34 @@
     "eslint": "^7.32.0",
     "eslint-config-google": "^0.14.0",
     "eslint-plugin-react": "^7.26.0",
+    "husky": "^7.0.2",
     "jest": "^27.2.1",
+    "lint-staged": "^11.1.2",
     "nodemon": "^2.0.7",
+    "prettier-eslint": "^13.0.0",
+    "prettier-eslint-cli": "^5.0.1",
     "supertest": "^6.1.6"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.js*": [
+      "npm run lint:fix",
+      "npm run test:staged",
+      "git add"
+    ]
   },
   "scripts": {
     "start": "env-cmd -f ./config/dev.env nodemon server",
-    "client": "npm run start --prefix ../client",
-    "dev": "concurrently \"npm run start\" \"npm run client\"",
     "build": "react-scripts build",
     "test": "env-cmd -f ./config/test.env jest --config ./jest.config.js --detectOpenHandles",
+    "test:coverage": "env-cmd -f ./config/test.env jest --config ./jest.config.js --detectOpenHandles --coverage",
     "eject": "react-scripts eject",
-    "lint": "eslint *"
+    "lint": "eslint **/*.js",
+    "lint:fix": "prettier-eslint **/*.js --write",
+    "test:staged" : "env-cmd -f ./config/test.env jest --config ./jest.config.js --findRelatedTests *"
   }
 }

@@ -45,7 +45,7 @@ To run these tests, you'll need a mongodb database on your local machine.
 ## Coding Style
 * [Google JavaScript Style Guide](https://google.github.io/styleguide/jsguide.html)
 * [Google TypeScript Style Guide](https://google.github.io/styleguide/tsguide.html)
-* Tabs for indentation, tad width of 2
+* Spaces for indentation, space width of 2.
 
 ## Contributors
 * Derek Ruiz-Cigana
