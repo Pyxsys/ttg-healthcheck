@@ -10,14 +10,9 @@
     }
   },
   "lint-staged": {
-    "*.js*": [
-      "npm run lint:fix --prefix server",
-      "npm run server:staged",
-      "git add"
-    ],
-    "*.ts*": [
-      "npm run lint:fix --prefix client",
-      "npm run client:staged",
+    "**/*.{js,jsx,ts,tsx}": [
+      "npm run all-lint:fix",
+      "npm run all-test:staged",
       "git add"
     ]
   },
@@ -30,7 +25,6 @@
     "all-lint:fix": "concurrently \"npm run lint:fix --prefix server\" \"npm run lint:fix --prefix client\"",
     "all-test": "concurrently \"npm run test --prefix server\" \"npm run test --prefix client\"",
     "all-test:coverage": "concurrently \"npm run test:coverage --prefix server\" \"npm run test:coverage --prefix client\"",
-    "server-test:staged" : "npm run test:staged --prefix server",
-    "client-test:staged" : "npm run test:staged  --prefix client"
+    "all-test:staged" : "concurently \"npm run test:staged --prefix server\" \"npm run test:staged  --prefix client\""
   }
 }
