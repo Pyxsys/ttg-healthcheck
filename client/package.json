@@ -25,6 +25,7 @@
     "eslint-plugin-react": "^7.26.0",
     "husky": "^7.0.2",
     "lint-staged": "^11.1.2",
+    "prettier": "^2.4.1",
     "prettier-eslint": "^13.0.0",
     "prettier-eslint-cli": "^5.0.1"
   },
@@ -48,7 +49,7 @@
     "eject": "react-scripts eject",
     "lint": "eslint **/*.ts*",
     "lint:fix": "prettier-eslint **/*.ts* --write",
-    "test:staged" : "react-scripts test src --watchAll=false --findRelatedTests"
+    "test:staged": "react-scripts test src --watchAll=false --findRelatedTests"
   },
   "eslintConfig": {
     "extends": [

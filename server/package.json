@@ -17,6 +17,7 @@
     "jest": "^27.2.1",
     "lint-staged": "^11.1.2",
     "nodemon": "^2.0.7",
+    "prettier": "^2.4.1",
     "prettier-eslint": "^13.0.0",
     "prettier-eslint-cli": "^5.0.1",
     "supertest": "^6.1.6"
@@ -39,8 +40,8 @@
     "test": "env-cmd -f ./config/test.env jest --config ./jest.config.js --detectOpenHandles",
     "test:coverage": "env-cmd -f ./config/test.env jest --config ./jest.config.js --detectOpenHandles --coverage",
     "eject": "react-scripts eject",
-    "lint": "eslint **/*.js",
-    "lint:fix": "prettier-eslint **/*.js --write",
-    "test:staged" : "env-cmd -f ./config/test.env jest --config ./jest.config.js --findRelatedTests *"
+    "lint": "eslint **/*.js*",
+    "lint:fix": "prettier-eslint **/*.js* --write",
+    "test:staged": "env-cmd -f ./config/test.env jest --config ./jest.config.js --findRelatedTests *"
   }
 }
