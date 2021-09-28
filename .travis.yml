@@ -7,7 +7,6 @@ matrix:
         - cd client
         - npm ci
       script:
-        - npm run lint
         - npm run test:coverage
     - language: node_js
       node_js:
@@ -19,5 +18,4 @@ matrix:
         - npm ci
         - mongo mydb_test --eval 'db.createUser({user:"travis",pwd:"test",roles:["readWrite"]});'
       script:
-        - npm run lint
         - npm run test:coverage
