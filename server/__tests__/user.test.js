@@ -20,7 +20,6 @@ describe("Create a new user", () => {
       name: userOne.name,
       email: userOne.email,
     });
-    console.log(response.body);
   });
 });
 
