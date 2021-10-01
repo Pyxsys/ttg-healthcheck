@@ -1,0 +1,51 @@
+#!/bin/bash
+
+
+#Variables ==============
+name="Celebid"
+console_prefix="[Script: $name]"
+
+#Functions===============
+exitProcess() {
+	case $1 in
+		"0")
+			echo $console_prefix Script ended successfully.
+			exit 0
+			;;
+		*)
+			echo $console_prefix Script ended with error \($1\).
+		 	exit 1
+			;;
+
+		esac
+}
+
+lockCheck () {
+	uuid_key=`cat /proc/sys/kernel/random/uuid`
+	lock_file=/tmp/${0##*/}.lock
+
+	if test -f "$lock_file" ; then
+		old_uuid=`cat $lock_file | awk '{print $2}'`
+		if [ "$old_uuid" == "$uuid_key" ]; then
+			echo "$console_prefix New uuid: $uuid_key"
+			echo "$console_prefix Old uuid: $old_uuid"
+		else
+			timestamp=`cat $lock_file | awk '{print $1}'`
+			echo "$console_prefix (Error) An instance of this program is already running."
+			echo "$console_prefix Instance was created at: `date -d@$timestamp`"
+			exitProcess 1
+		fi
+	else
+		echo "`date +%s` $uuid_key" > $lock_file	
+	fi
+}
+#========================
+#Setup
+
+lockCheck
+
+#Main loop
+while true; do
+	date;
+	sleep 10;
+done
