@@ -1,0 +1,46 @@
+#!/bin/bash
+#==========================================
+#Author: Pierre-Alexis Barras (Pyxsys)
+#Verified Environments:
+#	Debian GNU/Linux v.10
+#==========================================
+
+#Variables ==============
+name="Celebi"
+console_prefix="[Script: $name]"
+
+#Functions ==============
+exitProcess() {
+	case $1 in
+		"0")
+			echo $console_prefix Script ended successfully.
+			exit 0
+			;;
+		*)
+			echo $console_prefix Script ended with error \($1\).
+		 	exit 1
+			;;
+
+		esac
+}
+
+stopDaemon() {	
+#get lockfile
+#kill process
+#erase lockfile
+exitProcess 0
+}
+
+#Main Logic ============
+#check flags
+while test $# != 0 ; do
+	case "$1" in
+		-k) stopDaemon ;;
+		-h) printHelp ;;
+		*)  echo "$console_prefix (Error) Unkown flag '$1'."
+		    exitProcess 1 ;;
+	esac
+done
+
+./celebid
+
