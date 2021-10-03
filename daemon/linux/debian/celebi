@@ -6,7 +6,7 @@
 #==========================================
 
 #Variables ==============
-name="Celebi"
+name="celebi"
 console_prefix="[Script: $name]"
 
 #Functions ==============
@@ -24,23 +24,80 @@ exitProcess() {
 		esac
 }
 
-stopDaemon() {	
-#get lockfile
-#kill process
-#erase lockfile
-exitProcess 0
+lockCheck () {
+	uuid_key=`cat /proc/sys/kernel/random/uuid`
+	lock_file="/tmp/${0##*/}d.lock"
+
+	if test -f "$lock_file" ; then
+		old_uuid=`cat $lock_file | awk '{print $2}'`
+		if [ "$old_uuid" == "$uuid_key" ]; then
+			echo "$console_prefix Duplicate uuid,"
+			echo "		New uuid: $uuid_key"
+			echo "		Old uuid: $old_uuid"
+		else
+			timestamp=`cat $lock_file | awk '{print $1}'`
+			echo "$console_prefix (Error) An instance of this program is already running."
+			echo
+			echo "		Instance was created at: `date -d@$timestamp`"
+			echo "		Please end any existing daemons before starting a new ${name}d instance."
+			echo "		You can do so by using the '--kill' flag to kill the process:"
+		       	echo "			eg. ./${name} --kill"
+			echo
+			exitProcess 1
+		fi
+	else
+		echo "`date +%s` $uuid_key" > $lock_file	
+	fi
 }
+
+stopDaemon() {	
+	#get lockfile
+	lock_file_path=`find /tmp/${name}d.lock 2>/dev/null`
+	if [ -z "$lock_file_path" ]; then
+		echo "$console_prefix (Error) No lock file found."
+		exitProcess 1;
+	fi
+	
+	#kill daemon process
+	kill $(ps aux | grep '[c]elebid' | awk '{print $2}')
+
+	#delete lockfile
+	rm $lock_file_path
+	
+	exitProcess 0
+}
+
+startDaemon() {
+	#set unique uuid/check for existing process
+	lockCheck
+	
+	echo "${console_prefix} Starting daemon process."
+	
+	dir=$(cd -P -- "$(dirname -- "$)")" && pwd -P)
+	echo "${console_output} Output log for daemon is: ${dir}/${name}d.log"
+	
+	#fork child
+	nohup $dir/celebid 0<&- &> "${dir}/${name}d.log" &
+	
+	#end parent
+	exit 0
+}
+
 
 #Main Logic ============
 #check flags
+if [ $# -eq 0 ]; then 
+	echo "no flags found"
+	exitProcess 1
+fi
+
 while test $# != 0 ; do
 	case "$1" in
-		-k) stopDaemon ;;
-		-h) printHelp ;;
+		-s | --start) startDaemon;;
+		-k | --kill) stopDaemon ;;
 		*)  echo "$console_prefix (Error) Unkown flag '$1'."
 		    exitProcess 1 ;;
 	esac
 done
 
-./celebid
 
