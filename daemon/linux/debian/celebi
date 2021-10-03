@@ -50,6 +50,11 @@ lockCheck () {
 	fi
 }
 
+printHelp() {
+	cat .readme
+	exit 0
+}
+
 stopDaemon() {	
 	#get lockfile
 	lock_file_path=`find /tmp/${name}d.lock 2>/dev/null`
@@ -87,16 +92,16 @@ startDaemon() {
 #Main Logic ============
 #check flags
 if [ $# -eq 0 ]; then 
-	echo "no flags found"
-	exitProcess 1
+	printHelp
 fi
 
 while test $# != 0 ; do
 	case "$1" in
+		-h | --help) printHelp;;
 		-s | --start) startDaemon;;
 		-k | --kill) stopDaemon ;;
 		*)  echo "$console_prefix (Error) Unkown flag '$1'."
-		    exitProcess 1 ;;
+		    printHelp ;;
 	esac
 done
 

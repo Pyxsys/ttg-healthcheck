@@ -1,0 +1,11 @@
+'celebi' is the initialization script for the hardware usage reporter daemon 'celebid'.
+It creates the daemon to run in the background. The daemon sends hardware usage and process info to a database defined in the celebi.config file.
+
+usage: celebi <argument>
+argument:
+    -s, --start     start the celebid daemon
+    -k, --kill      stop an existing running celebid daemon
+    -h, --help      displays this help text
+
+Verified versions:
+    Debian GNU/Linux v.10
