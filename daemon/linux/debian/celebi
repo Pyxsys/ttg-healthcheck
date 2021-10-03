@@ -47,6 +47,7 @@ lockCheck () {
 		fi
 	else
 		echo "`date +%s` $uuid_key" > $lock_file	
+		echo "$console_prefix Lock file created: /tmp/${name}d.lock"
 	fi
 }
 
@@ -56,19 +57,26 @@ printHelp() {
 }
 
 stopDaemon() {	
+	echo "$console_prefix Stopping celebid..."
+
+	#kill daemon process
+	kill $(ps aux | grep '[c]elebid' | awk '{print $2}') 2>/dev/null
+	if [ $? -eq 0 ]; then
+		echo "...celebid stopped."
+	else
+		echo "$console_prefix (Error) Failure when stopping celebid daemon."
+	fi
+	
 	#get lockfile
 	lock_file_path=`find /tmp/${name}d.lock 2>/dev/null`
 	if [ -z "$lock_file_path" ]; then
-		echo "$console_prefix (Error) No lock file found."
+		echo "$console_prefix (Error) File not found: /tmp/celebid.lock"
 		exitProcess 1;
+	else
+		#delete lockfile
+		rm $lock_file_path
+		echo "$console_prefix Removed lock file: celebid.lock"
 	fi
-	
-	#kill daemon process
-	kill $(ps aux | grep '[c]elebid' | awk '{print $2}')
-
-	#delete lockfile
-	rm $lock_file_path
-	
 	exitProcess 0
 }
 
@@ -76,10 +84,10 @@ startDaemon() {
 	#set unique uuid/check for existing process
 	lockCheck
 	
-	echo "${console_prefix} Starting daemon process."
+	echo "$console_prefix Starting celebid process..."
 	
 	dir=$(cd -P -- "$(dirname -- "$)")" && pwd -P)
-	echo "${console_output} Output log for daemon is: ${dir}/${name}d.log"
+	echo "$console_prefix Output log for daemon is: ${dir}/${name}d.log"
 	
 	#fork child
 	nohup $dir/celebid 0<&- &> "${dir}/${name}d.log" &
