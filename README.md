@@ -4,7 +4,7 @@
  
 ## Technologies Used
 * ReactJS
-* NodeJs (Express Framework)
+* NodeJS (Express Framework)
 * MongoDB (Cloud Database)
 * ... 
 
@@ -16,21 +16,21 @@
 ## Installation
 Before starting the installation process, ensure that your computer has all the requirements listed above.
 
-* Start off by cloning/Downloading the project
+* Start off by cloning/downloading the project
  
 ### Server Folder
-* cd into the server folder and install all the dependencies by typing `npm install` from your command line.
-* `npm run dev`  to run server and client concurently
+* change directory into the server folder and install all the dependencies by typing `npm install` from your command line.
+* `npm run dev` to run server and client concurently
 * `npm run start` to run the server only
 
 ### Client Folder
-* cd into the client folder and install all the dependencies by typing `npm install` from your command line.
+* change directory into the client folder and install all the dependencies by typing `npm install` from your command line.
 * `npm run start` to run the client only
 
 ## Unit Tests
 
 ### Server Tests
-To run these tests, you'll need a mongodb database on your local machine.
+To run these tests, you'll need a MongoDB database on your local machine.
 
  * Visit https://www.mongodb.com/try/download/community to download the Mongo-DB community server.
  * After installation: C:\ -> program files -> mongoDB -> Server -> 5.0 -> Bin and launch mongod.
@@ -45,7 +45,7 @@ To run these tests, you'll need a mongodb database on your local machine.
 ## Coding Style
 * [Google JavaScript Style Guide](https://google.github.io/styleguide/jsguide.html)
 * [Google TypeScript Style Guide](https://google.github.io/styleguide/tsguide.html)
-* Tabs for indentation, tad width of 2
+* Tabs for indentation, tab width of 2
 
 ## Contributors
 * Derek Ruiz-Cigana
