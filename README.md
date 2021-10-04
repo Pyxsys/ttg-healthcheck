@@ -5,7 +5,7 @@
  
 ## Technologies Used
 * ReactJS
-* NodeJs (Express Framework)
+* NodeJS (Express Framework)
 * MongoDB (Cloud Database)
 * ... 
 
@@ -31,7 +31,7 @@ Before starting the installation process, ensure that your computer has all the 
 ## Unit Tests
 
 ### Server Tests
-To run these tests, you'll need a mongodb database on your local machine.
+To run these tests, you'll need a MongoDB database on your local machine.
 
 * Visit https://www.mongodb.com/try/download/community to download the Mongo-DB community server.
 * After installation: C:\ -> program files -> mongoDB -> Server -> 5.0 -> Bin and launch mongod.
