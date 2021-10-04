@@ -58,7 +58,7 @@ Table of Contents
 | Name | Date    | Reason For Changes  | Version   |
 | ---- | ------- | ------------------- | --------- |
 | James El-Tayar     | 14/09/2021        | Creation of document                     | 1.0          |
-|      |         |                     |           |
+|  James El-Tayar    |  04/10/2021       |     Small Changes                |   1.1        |
 |      |         |                     |           |
 
 ## 1. Introduction
