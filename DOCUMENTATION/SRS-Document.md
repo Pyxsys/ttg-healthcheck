@@ -4,6 +4,7 @@ Prepared by TBD
 
 Table of Contents
 =
+  * [Team Members](#team-members)
   * [Revision History](#revision-history)
   * 1 [Introduction](#1-introduction)
     * 1.1 [Purpose](#11-purpose)
@@ -37,6 +38,21 @@ Table of Contents
 * [Appendix A: Glossary](#appendix-a-glossary)
 * [Appendix B: Analysis Models](#appendix-b-analysis-models)
 * [Appendix C: To Be Determined List](#appendix-c-to-be-determined-list)
+
+## Team Members
+| Name | Student ID    |
+| ---- | ------- |
+|Derek Ruiz-Cigana (Team Leader)| 40096268|
+|Nathan Ziri|40062756|
+|Shashank Patel|40094236|
+|Sacha Elkaim|29779698|
+|Michael Takenaka|40095917|
+|Adam Richard|27059329|
+|Ashraf Khalil|40066289|
+|Pierre-Alexis Barras|40022016|
+|James El Tayar|40097755|
+
+
 
 ## Revision History
 | Name | Date    | Reason For Changes  | Version   |
