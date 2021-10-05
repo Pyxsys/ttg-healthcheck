@@ -1,0 +1,35 @@
+{
+  "devDependencies": {
+    "concurrently": "^6.2.2",
+    "husky": "^4.3.8",
+    "lint-staged": "^8.2.1"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "**/*.{js,jsx}": [
+      "npm run lint:fix --prefix server",
+      "npm run test:staged --prefix server",
+      "git add ."
+    ],
+    "**/*.{ts,tsx}": [
+      "npm run lint:fix --prefix client",
+      "npm run test:staged --prefix client",
+      "git add ."
+    ]
+  },
+  "scripts": {
+    "dev": "concurrently \"npm run start --prefix server\" \"npm run start --prefix client\"",
+    "server-dependencies": "cd server && npm install",
+    "client-dependencies": "cd client && npm install",
+    "install-all-deps": "concurrently \"npm install\" \"npm run server-dependencies\" \"npm run client-dependencies\"",
+    "all-lint:check": "concurrently \"npm run lint --prefix server\" \"npm run lint --prefix client\"",
+    "all-lint:fix": "concurrently \"npm run lint:fix --prefix server\" \"npm run lint:fix --prefix client\"",
+    "all-test": "concurrently \"npm run test --prefix server\" \"npm run test --prefix client\"",
+    "all-test:coverage": "concurrently \"npm run test:coverage --prefix server\" \"npm run test:coverage --prefix client\"",
+    "all-test:staged": "concurently \"npm run test:staged --prefix server\" \"npm run test:staged  --prefix client\""
+  }
+}
