@@ -2,14 +2,17 @@
 const express = require('express')
 const router = express.Router()
 const User = require('../models/user.js')
+const jwt = require('jsonwebtoken')
 
-// create a user
+// signup
 router.post('/', async (req, res) => {
   try {
-    const { name, email } = req.body
+    const { name, password, email, role } = req.body
     newUser = new User({
       name,
+      password,
       email,
+      role,
     })
     await newUser.save()
     res.send(newUser)
