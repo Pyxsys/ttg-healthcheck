@@ -13,7 +13,7 @@ const userOne = {
   name: 'test',
   password: 'password',
   email: 'test@gmail.com',
-  role: 'admin',
+  role: 'none',
 }
 
 describe('Create a new user', () => {
