@@ -41,7 +41,10 @@ router.post('/register', async (req, res) => {
         secure: process.env.NODE_ENV === 'production',
       })
       .status(200)
-      .json({ message: 'Registered successfully' })
+      .json({
+        message: 'Registered successfully',
+        user: { name: name, role: role, id: newUser.id },
+      })
   } catch (err) {
     console.error(err.message)
     res.status(500).send('Server Error')
@@ -76,7 +79,10 @@ router.post('/login', async (req, res) => {
         secure: process.env.NODE_ENV === 'production',
       })
       .status(200)
-      .json({ message: 'Logged in' })
+      .json({
+        message: 'Logged in',
+        user: { name: user.name, role: user.role, id: user.id },
+      })
   } catch (err) {
     console.error(err.message)
     res.status(500).send('Server error')
