@@ -22,7 +22,7 @@ matrix:
     - language: python
       python:
         - "3.6"
-      install: pip install --user -r daemon/requirements.txt
+      install: pip install -r daemon/requirements.txt
       script:
         - cd daemon
         - python -m unittest -v
