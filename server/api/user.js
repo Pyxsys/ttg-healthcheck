@@ -4,6 +4,7 @@ const router = express.Router()
 const User = require('../models/user.js')
 const jwt = require('jsonwebtoken')
 const bcrypt = require('bcrypt')
+const auth = require('../middleware/auth.js')
 
 // signup
 router.post('/register', async (req, res) => {
@@ -26,9 +27,10 @@ router.post('/register', async (req, res) => {
     }
     // save new user, create JWT, store in cookie and send to front-end
     await newUser.save()
+    console.log(newUser.id)
     const token = jwt.sign(
-      { name: name, role: role },
-      process.env.ACCESS_TOKEN,
+      { name: name, role: role, id: newUser.id },
+      process.env.ACCESS_TOKEN_KEY,
       {
         expiresIn: '1h',
       }
@@ -62,8 +64,8 @@ router.post('/login', async (req, res) => {
     }
     // Create JWT, store in cookie and send to front-end
     const token = jwt.sign(
-      { name: user.name, role: user.role },
-      process.env.ACCESS_TOKEN,
+      { name: user.name, role: user.role, id: user.id },
+      process.env.ACCESS_TOKEN_KEY,
       {
         expiresIn: '1h',
       }
@@ -79,6 +81,10 @@ router.post('/login', async (req, res) => {
     console.error(err.message)
     res.status(500).send('Server error')
   }
+})
+
+router.get('/protected', auth, (req, res) => {
+  return res.json({ user: { id: req.userId, role: req.userRole } })
 })
 
 // log out user
