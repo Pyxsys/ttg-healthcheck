@@ -19,3 +19,12 @@ matrix:
         - mongo mydb_test --eval 'db.createUser({user:"travis",pwd:"test",roles:["readWrite"]});'
       script:
         - npm run test:coverage
+    - language: python
+      python:
+        - "3.10"
+      install:
+        - pip install unittest
+        - pip install psutil
+      script:
+        - cd daemon
+        - python -m unittest -v
