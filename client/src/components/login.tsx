@@ -14,11 +14,21 @@ const Login = () => {
   const onChange = (e: React.ChangeEvent<any>) =>
     setFormData({...formData, [e.target.name]: e.target.value});
 
+  const [formData1, setFormData1] = useState({
+    email1: '',
+    password1: '',
+  });
+
+  const {email1, password1} = formData1;
+
+  const onChange1 = (e: React.ChangeEvent<any>) =>
+    setFormData1({...formData1, [e.target.name]: e.target.value});
+
   const onSubmit = async (e: React.ChangeEvent<any>) => {
     e.preventDefault();
     const body = {
-      email: formData.email,
-      password: formData.password,
+      email: formData1.email1,
+      password: formData1.password1,
     };
     await axios
         .post('api/user/login', body)
@@ -92,7 +102,6 @@ const Login = () => {
     }
   };
 
-
   return (
     <>
       <div>
@@ -103,9 +112,9 @@ const Login = () => {
             <input
               type="email"
               placeholder="Enter email"
-              name="email"
-              value={email}
-              onChange={(e) => onChange(e)}
+              name="email1"
+              value={email1}
+              onChange={(e) => onChange1(e)}
             />
           </div>
           <div>
@@ -113,15 +122,17 @@ const Login = () => {
             <input
               type="password"
               placeholder="password"
-              name="password"
-              value={password}
-              onChange={(e) => onChange(e)}
+              name="password1"
+              value={password1}
+              onChange={(e) => onChange1(e)}
             />
           </div>
           <button type="submit">Login</button>
         </form>
         <button onClick={(e) => logout(e)}>Log Out</button>
         <button onClick={(e) => protect(e)}>only logged users</button>
+        <br />
+        <br />
         <form onSubmit={(e) => register(e)}>
           <div>SIGN UP</div>
           <div>
