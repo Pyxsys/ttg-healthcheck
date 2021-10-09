@@ -19,10 +19,38 @@ const Login = () => {
       password: formData.password,
     };
     await axios
-        .post('/api/login', body)
+        .post('api/user/login', body)
         .then((response) => {
           if (response.data) {
-            console.log('im logged in');
+            console.log(response.data);
+          }
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+  };
+
+  const logout = async (e: React.ChangeEvent<any>) => {
+    e.preventDefault();
+    await axios
+        .get('api/user/logout')
+        .then((response) => {
+          if (response.data) {
+            console.log(response.data);
+          }
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+  };
+
+  const protect = async (e: React.ChangeEvent<any>) => {
+    e.preventDefault();
+    await axios
+        .get('api/user/protected')
+        .then((response) => {
+          if (response.data) {
+            console.log(response.data);
           }
         })
         .catch((error) => {
@@ -33,7 +61,7 @@ const Login = () => {
   return (
     <>
       <div>
-        <form onSubmit={(e) => onSubmit(e)} className="adminlogin-form">
+        <form onSubmit={(e) => onSubmit(e)}>
           <div>SIGN IN</div>
           <div>
             <div>Email address</div>
@@ -57,6 +85,8 @@ const Login = () => {
           </div>
           <button type="submit">Login</button>
         </form>
+        <button onClick={(e) => logout(e)}>Log Out</button>
+        <button onClick={(e) => protect(e)}>only logged users</button>
       </div>
     </>
   );

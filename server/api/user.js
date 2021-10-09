@@ -55,7 +55,7 @@ router.post('/login', async (req, res) => {
     // Verify email
     const user = await User.findOne({ email })
     if (!user) {
-      return res.status(400).json({ errors: [{ msg: 'Email does not exist' }] })
+      return res.status(400).json({ message: 'Email does not exist' })
     }
     // Verify pw matches ( pw against encrypted pw)
     const isMatch = await bcrypt.compare(password, user.password)
@@ -88,7 +88,7 @@ router.get('/protected', auth, (req, res) => {
 })
 
 // log out user
-router.get('/logout', (req, res) => {
+router.get('/logout', auth, (req, res) => {
   return res
     .clearCookie('access_token')
     .status(200)
