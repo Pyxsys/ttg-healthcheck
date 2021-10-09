@@ -5,9 +5,9 @@ matrix:
         - "stable"
       before_script:
         - cd client
-        - npm install
+        - npm ci
       script:
-        - npm run test
+        - npm run test:coverage
     - language: node_js
       node_js:
         - "stable"
@@ -15,7 +15,7 @@ matrix:
         - mongodb
       before_script:
         - cd server
-        - npm install
+        - npm ci
         - mongo mydb_test --eval 'db.createUser({user:"travis",pwd:"test",roles:["readWrite"]});'
       script:
-        - npm run test
+        - npm run test:coverage
