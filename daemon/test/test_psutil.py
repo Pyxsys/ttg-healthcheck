@@ -3,7 +3,7 @@ import psutil
 
 class TestPsutilIterator(unittest.TestCase):
 
-    def test_getting_process_name(self):
+    def testGettingProcessName(self):
         process_list = list()
 
         for proc in psutil.process_iter():
