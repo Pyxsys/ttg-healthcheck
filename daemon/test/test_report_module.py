@@ -1,12 +1,11 @@
 import sys
-import json
 import unittest
 
 # Include src directory for imports
 sys.path.append('../')
 from daemon.src.system_report import SysReport
 
-class TestSystemReportModule(unittest.TestCase):
+class TestSystemReportClass(unittest.TestCase):
     mock_dictionary={
         "names": {
             "John Doe" : {"age": 49},
