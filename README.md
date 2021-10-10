@@ -20,13 +20,16 @@ Before starting the installation process, ensure that your computer has all the 
 * Start off by cloning/Downloading the project 
 * In the root folder of the project, install root dependencies by running `npm install`.
 * Then, install all the required dependencies for the project by running `npm run install-all-deps`.
-* Then, run `npm run dev` to run the server and client concurrently. 
 
-### Server Folder
+## Running
+### Server and Client
+* To run the server and client concurrently, run `npm run dev` in the root folder. 
+
+### Server
 * If you want to only run the server, run `npm run start` in the server folder.
 
-### Client Folder
-* If you want to only run the server, run `npm run start` in the server folder.
+### Client
+* If you want to only run the client web application, run `npm run start` in the client folder.
 
 ## Unit Tests
 
