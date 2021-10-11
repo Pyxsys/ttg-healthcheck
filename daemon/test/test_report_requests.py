@@ -11,7 +11,7 @@ class TestRunner(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        cls.test_runner=Runner(sys.path[0] + '\\test\\config.json')
+        cls.test_runner=Runner(sys.path[0] + '/test/config.json')
         print("\n[config values]:")
         print(json.dumps(cls.test_runner.getConfig(), indent=4, sort_keys=True))
         
@@ -28,7 +28,7 @@ class TestRunner(unittest.TestCase):
         self.test_runner.genReport()
         self.assertTrue(expected_result in self.test_runner.getReport())
 
-    @unittest.skipIf("localhost" in json.load(open(sys.path[0] + '\\test\\config.json'))['destination'],
+    @unittest.skipIf("localhost" in json.load(open(sys.path[0] + '/test/config.json'))['destination'],
      'Cannot run test automatically with "localhost" destination.')
     def testConnectionToServer(self):
         expected_result = 200
@@ -39,7 +39,7 @@ class TestRunner(unittest.TestCase):
         actual_result = response.status_code
         self.assertEqual(expected_result, actual_result)
 
-    @unittest.skipIf("localhost" in json.load(open(sys.path[0] + '\\test\\config.json'))['destination'],
+    @unittest.skipIf("localhost" in json.load(open(sys.path[0] + '/test/config.json'))['destination'],
      'Cannot run test automatically with "localhost" destination.')
     def testSendingReportToServer(self):
         expected_result = 200
