@@ -2,7 +2,7 @@ import requests
 import psutil
 import json
 import sys
-from datetime import datetime, timedelta
+from datetime import datetime
 
 class Runner:
 
