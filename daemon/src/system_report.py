@@ -1,21 +1,6 @@
 import psutil
 import json
 
-class Runner:
-    def __init__(self):
-        pass
-
-    def getConfig(self, path):
-        pass
-
-    def sendReport(self):
-        pass
-
-    def genReport():
-        report=SysReport()
-        report.addSystemProcessInfo()
-        return report
-
 class SysReport:
 
     # Initializes instance attributes.
