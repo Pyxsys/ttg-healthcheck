@@ -1,6 +1,8 @@
 import requests
 import psutil
 import json
+import sys
+from datetime import datetime, timedelta
 
 class Runner:
 
@@ -51,4 +53,19 @@ class SysReport:
             process_list.append(process_info_dictionary)
 
         self.setSection("processes", process_list)
-        
+
+def main(config):
+    start=datetime.now()
+    print("Starting new report routine at", start)
+    runner=Runner(config)
+    print("\tWriting report...")
+    runner.genReport()
+    print("\tSending report to server...")
+    runner.sendReport()
+    print("\tCleaning up...")
+    del runner
+    elapsed=datetime.now()-start
+    print("Ending report routine. \nTime elapsed:", elapsed.total_seconds(), "sec")
+
+if __name__ == "__main__":
+    main(sys.argv[1])
