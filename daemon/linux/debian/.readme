@@ -1,0 +1,16 @@
+Initialization script for the hardware usage reporter daemon 'celebid'.
+It creates a daemon to run in the background. The daemon sends hardware usage and process info to a database defined in the celebi.config file.
+
+usage: celebi <argument>
+
+argument:
+    -s, --start     start the celebid daemon
+    -k, --kill      stop an running celebid daemon
+    -h, --help      displays this help text
+
+Output of the celebid daemon sent to 'celebid.log'
+Lock file found at '/tmp/celebid.lock'
+
+Verified versions:
+    Debian GNU/Linux v.10
+
