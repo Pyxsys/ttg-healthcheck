@@ -81,13 +81,7 @@ stopDaemon() {
 }
 
 startDaemon() {
-	#set unique uuid/check for existing process
-	lockCheck
-	
-	echo "$console_prefix Starting celebid process..."
-	
-	dir=$(cd -P -- "$(dirname -- "$)")" && pwd -P)
-	echo "$console_prefix Output log for daemon is: ${dir}/${name}d.log"
+	echo "$console_prefix Verifying environment..."
 
 	#fetch python module in system
 	module=`find / -type f -name "system_report.py" 2>&1 | grep -v "Permission denied"`
@@ -104,6 +98,14 @@ startDaemon() {
 		echo "$console_prefix (Error) Configuration file 'config.json' not found."
 		exitProcess 1
 	fi
+	
+	echo "$console_prefix Starting celebid process..."
+	
+	#set unique uuid/check for existing process
+	lockCheck
+			
+	dir=$(cd -P -- "$(dirname -- "$)")" && pwd -P)
+	echo "$console_prefix Output log for daemon is: ${dir}/${name}d.log"
 
 	#fork child
 	nohup $dir/celebid $module $config 0<&- &> "${dir}/${name}d.log" &
