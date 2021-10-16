@@ -88,10 +88,18 @@ startDaemon() {
 	
 	dir=$(cd -P -- "$(dirname -- "$)")" && pwd -P)
 	echo "$console_prefix Output log for daemon is: ${dir}/${name}d.log"
+
+	#fetch python module in system
+	module=`find / -type f -name "system_report.py" 2>&1 | grep -v "Permission denied"`
 	
+	#fetch config file in current dir neigbourhood
+	config=`find $(pwd) -maxdepth 2 -type f -name "config.json"`
+
 	#fork child
-	nohup $dir/celebid 0<&- &> "${dir}/${name}d.log" &
-	
+	nohup $dir/celebid $module $config 0<&- &> "${dir}/${name}d.log" &
+
+	echo "$console_prefix ${name}d daemon started."
+
 	#end parent
 	exit 0
 }

@@ -4,6 +4,8 @@
 #Variables ==============
 name="celebid"
 console_prefix="[Script: $name]"
+scrubber=$1
+config=$2
 
 #Functions===============
 exitProcess() {
@@ -23,12 +25,14 @@ exitProcess() {
 
 #========================
 #Setup
+echo "$console_prefix Source scrubber: 	$scrubber"
+echo "$console_prefix Source config:	$config"
 
 cd "/"		#move to permanent dir
 umask 0		#reset file mask
 
 #Main loop
 while true; do
-	date;
+	python3 $scrubber $config
 	sleep 10;
 done
