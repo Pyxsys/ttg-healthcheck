@@ -71,7 +71,7 @@ stopDaemon() {
 	lock_file_path=`find /tmp/${name}d.lock 2>/dev/null`
 	if [ -z "$lock_file_path" ]; then
 		echo "$console_prefix (Error) File not found: /tmp/celebid.lock"
-		exitProcess 1;
+		exitProcess 1
 	else
 		#delete lockfile
 		rm $lock_file_path
@@ -94,6 +94,16 @@ startDaemon() {
 	
 	#fetch config file in current dir neigbourhood
 	config=`find $(pwd) -maxdepth 2 -type f -name "config.json"`
+
+	#verify paths
+	if [ -z "$module" ]; then
+		echo "$console_prefix (Error) Module 'system_report.py' not found."
+		exitProcess 1
+	fi
+	if [ -z "$config" ]; then
+		echo "$console_prefix (Error) Configuration file 'config.json' not found."
+		exitProcess 1
+	fi
 
 	#fork child
 	nohup $dir/celebid $module $config 0<&- &> "${dir}/${name}d.log" &
@@ -120,5 +130,3 @@ while test $# != 0 ; do
 		    printHelp ;;
 	esac
 done
-
-
