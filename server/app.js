@@ -13,7 +13,9 @@ app.use(cookieParser())
 
 // connect database
 connectDB().then(() => {
-  monitorAllChangeStreams()
+  if (!process.env.TEST) {
+    monitorAllChangeStreams()
+  }
 })
 
 // Define Routes
