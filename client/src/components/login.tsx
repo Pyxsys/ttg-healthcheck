@@ -1,7 +1,64 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import axios from 'axios';
 
 const Login = () => {
+  const [realData, setRealData] = useState([] as any[]);
+  const realTimeData: any[] = [];
+
+  useEffect(() => {
+    const ws1 = new WebSocket('ws://localhost:5000/?collection=cpu_usage');
+    const ws2 = new WebSocket('ws://localhost:5000/?collection=memory_usage');
+
+    ws1.onmessage = (event) => {
+      console.log('event from cpu: ', JSON.parse(event.data));
+      const data = JSON.parse(event.data);
+
+      if (data.operationType === 'update') {
+        realTimeData.push({
+          _id: data.documentKey._id,
+          collection: 'cpu_usage',
+          operation: data.operationType,
+          updatedFields: data.updateDescription.updatedFields,
+        });
+      } else {
+        realTimeData.push({
+          _id: data.documentKey._id,
+          collection: 'cpu_usage',
+          operation: data.operationType,
+          updatedFields: data.fullDocument,
+        });
+      }
+      setRealData([...realTimeData]);
+    };
+
+    ws2.onmessage = (event) => {
+      console.log('event from mem: ', JSON.parse(event.data));
+      const data = JSON.parse(event.data);
+
+      if (data.operationType === 'update') {
+        realTimeData.push({
+          _id: data.documentKey._id,
+          collection: 'memory_usage',
+          operation: data.operationType,
+          updatedFields: data.updateDescription.updatedFields,
+        });
+      } else {
+        realTimeData.push({
+          _id: data.documentKey._id,
+          collection: 'memory_usage',
+          operation: data.operationType,
+          updatedFields: data.fullDocument,
+        });
+      }
+      setRealData([...realTimeData]);
+    };
+
+    return () => {
+      ws1.close();
+      ws2.close();
+    };
+  }, []);
+
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -177,6 +234,39 @@ const Login = () => {
           </div>
           <button type="submit">Sign up</button>
         </form>
+
+        <div style={{display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'center',
+          marginTop: '1.5rem'}}>
+
+          <div>Updated Data From MongoDB</div>
+          <table style={{borderCollapse: 'collapse'}}>
+            <tbody>
+              <tr>
+                <th>Object ID</th>
+                <th>Collection</th>
+                <th>Operation</th>
+                <th>data Changed</th>
+              </tr>
+
+              {realData
+                  .map((data, i) => (
+                    <tr key={`${data._id}-${i}`}
+                      style={{borderBottom: 'solid 2px black'}}>
+                      <td>{data._id}</td>
+                      <td>{data.collection}</td>
+                      <td>{data.operation}</td>
+                      <td>
+                        {Object.keys(data.updatedFields).map((col) => (
+                          <div key={col}>{col} - {data.updatedFields[col]}</div>
+                        ))}
+                      </td>
+                    </tr>
+                  ))}
+            </tbody>
+          </table>
+        </div>
       </div>
     </>
   );
