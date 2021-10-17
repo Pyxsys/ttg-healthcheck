@@ -36,11 +36,15 @@ Before calling the main routine, ensure you have a **config.json* file with a `"
 * To run the main routine once, run `python /src/system_report.py <path_to_config.json>` in the daemon folder.
 
 ### Deployed Daemon
-To come soon...
+In a terminal, from the daemon folder, do the following:
+1. Navigate to the folder for your distro (eg: `cd /linux/debian`)
+1. Verify the "destination" attribute in config.json points to your desired server endpoint.
+1. To start the daemon run: `./celebi -s`
+1. To stop the daemon run: `./celebi -k`
 
 # Unit Testing
 ### Unittest
-* From you command line, go to the daemon folder of the project and run `python -m unittest`
+From you command line, go to the daemon folder of the project and run `python -m unittest`
 
 #
 *NOTE: you may have to substitute `python` with `python3` when executing commands depending on your system.
