@@ -1,9 +1,24 @@
 import React, {useEffect, useState} from 'react';
 import axios from 'axios';
 
+interface CollectionEvent {
+  _id: string;
+  collection?: string;
+  operation?: string;
+  updatedFields?: any;
+}
+
 const Login = () => {
-  const [realData, setRealData] = useState([] as any[]);
-  const realTimeData: any[] = [];
+  const [realTimeData, setRealTimeData] = useState([] as CollectionEvent[]);
+  const [collectionData, setCollectionData] = useState(
+    null as CollectionEvent | null,
+  );
+
+  useEffect(() => {
+    if (collectionData) {
+      setRealTimeData([...realTimeData, collectionData]);
+    }
+  }, [collectionData]);
 
   useEffect(() => {
     const ws1 = new WebSocket('ws://localhost:5000/?collection=cpu_usage');
@@ -11,46 +26,32 @@ const Login = () => {
 
     ws1.onmessage = (event) => {
       console.log('event from cpu: ', JSON.parse(event.data));
-      const data = JSON.parse(event.data);
 
-      if (data.operationType === 'update') {
-        realTimeData.push({
-          _id: data.documentKey._id,
-          collection: 'cpu_usage',
-          operation: data.operationType,
-          updatedFields: data.updateDescription.updatedFields,
-        });
-      } else {
-        realTimeData.push({
-          _id: data.documentKey._id,
-          collection: 'cpu_usage',
-          operation: data.operationType,
-          updatedFields: data.fullDocument,
-        });
-      }
-      setRealData([...realTimeData]);
+      const data = JSON.parse(event.data);
+      const realTimeData: CollectionEvent = {
+        _id: data.documentKey._id,
+        collection: 'cpu_usage',
+        operation: data.operationType,
+        updatedFields: data.operationType === 'update' ?
+          data.updateDescription.updatedFields :
+          data.fullDocument,
+      };
+      setCollectionData(realTimeData);
     };
 
     ws2.onmessage = (event) => {
       console.log('event from mem: ', JSON.parse(event.data));
-      const data = JSON.parse(event.data);
 
-      if (data.operationType === 'update') {
-        realTimeData.push({
-          _id: data.documentKey._id,
-          collection: 'memory_usage',
-          operation: data.operationType,
-          updatedFields: data.updateDescription.updatedFields,
-        });
-      } else {
-        realTimeData.push({
-          _id: data.documentKey._id,
-          collection: 'memory_usage',
-          operation: data.operationType,
-          updatedFields: data.fullDocument,
-        });
-      }
-      setRealData([...realTimeData]);
+      const data = JSON.parse(event.data);
+      const realTimeData: CollectionEvent = {
+        _id: data.documentKey._id,
+        collection: 'memory_usage',
+        operation: data.operationType,
+        updatedFields: data.operationType === 'update' ?
+          data.updateDescription.updatedFields :
+          data.fullDocument,
+      };
+      setCollectionData(realTimeData);
     };
 
     return () => {
@@ -250,7 +251,7 @@ const Login = () => {
                 <th>data Changed</th>
               </tr>
 
-              {realData
+              {realTimeData
                   .map((data, i) => (
                     <tr key={`${data._id}-${i}`}
                       style={{borderBottom: 'solid 2px black'}}>
