@@ -27,13 +27,9 @@ router.post('/register', async (req, res) => {
     }
     // save new user, create JWT, store in cookie and send to front-end
     await newUser.save()
-    const token = jwt.sign(
-      { name: name, role: role, id: newUser.id },
-      process.env.ACCESS_TOKEN_KEY,
-      {
-        expiresIn: '1h',
-      }
-    )
+    const token = jwt.sign({ name: name }, process.env.ACCESS_TOKEN_KEY, {
+      expiresIn: '1h',
+    })
     return res
       .cookie('access_token', token, {
         httpOnly: true,
@@ -65,13 +61,9 @@ router.post('/login', async (req, res) => {
       return res.status(400).json({ message: 'Invalid Password' })
     }
     // Create JWT, store in cookie and send to front-end
-    const token = jwt.sign(
-      { name: user.name, role: user.role, id: user.id },
-      process.env.ACCESS_TOKEN_KEY,
-      {
-        expiresIn: '1h',
-      }
-    )
+    const token = jwt.sign({ name: user.name }, process.env.ACCESS_TOKEN_KEY, {
+      expiresIn: '1h',
+    })
     return res
       .cookie('access_token', token, {
         httpOnly: true,
@@ -88,8 +80,9 @@ router.post('/login', async (req, res) => {
   }
 })
 
-router.get('/protected', auth, (req, res) => {
-  return res.json({ user: { id: req.userId, role: req.userRole } })
+// verify authentication
+router.get('/authenticate', auth, (req, res) => {
+  return res.json({ authenticate: true })
 })
 
 // log out user
