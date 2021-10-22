@@ -1,12 +1,46 @@
 const mongoose = require('mongoose')
 
-const memorySchema = new mongoose.Schema({
-  max_size: {
+const MemorySchema = new mongoose.Schema({
+  maxSize: {
     type: Number,
   },
-  form_factor: {
+  formFactor: {
     type: String,
   },
 })
 
-module.exports = Memory = mongoose.model('memory', memorySchema)
+const MemoryLogsSchema = new mongoose.Schema({
+  deviceId: {
+    type: String,
+    required: true,
+  },
+  usagePercentage: {
+    type: Number,
+  },
+  inUse: {
+    type: Number,
+  },
+  available: {
+    type: Number,
+  },
+  cached: {
+    type: Number,
+  },
+  pagedPool: {
+    type: Number,
+  },
+  nonPagedPool: {
+    type: Number,
+  },
+  timestamp: {
+    type: Date,
+  },
+})
+
+const MemoryLogs = mongoose.model('memory_logs', MemoryLogsSchema)
+
+module.exports = {
+  MemorySchema: MemorySchema,
+  MemoryLogsSchema: MemoryLogsSchema,
+  MemoryLogs: MemoryLogs,
+}
