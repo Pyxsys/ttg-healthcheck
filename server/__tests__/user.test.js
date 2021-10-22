@@ -30,9 +30,38 @@ describe('Sign up given a username and password', () => {
     )
     expect(response.body.user.id).toBeDefined()
   })
+  it('should respond with a 400 status code when user already exists', async () => {
+    const response = await request(app).post('/api/user/register').send({
+      name: userOne.name,
+      password: userOne.password,
+      email: userOne.email,
+      role: userOne.role,
+    })
+    const response1 = await request(app).post('/api/user/register').send({
+      name: userOne.name,
+      password: userOne.password,
+      email: userOne.email,
+      role: userOne.role,
+    })
+    expect(response1.statusCode).toBe(400)
+  })
 })
 
 describe('Log in given a username and password', () => {
+  it('Should respond with a 400 status code when email does not exists', async () => {
+    const response = await request(app).post('/api/user/login').send({
+      email: 'a324@test.com',
+      password: userOne.password,
+    })
+    expect(response.statusCode).toBe(400)
+  })
+  it('Should respond with a 400 status code when password is wrong', async () => {
+    const response = await request(app).post('/api/user/login').send({
+      email: userOne.email,
+      password: 'a',
+    })
+    expect(response.statusCode).toBe(400)
+  })
   it('Should respond with a 200 status code', async () => {
     const response = await request(app).post('/api/user/login').send({
       email: userOne.email,

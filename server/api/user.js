@@ -89,7 +89,7 @@ router.post('/login', async (req, res) => {
 })
 
 router.get('/protected', auth, (req, res) => {
-  return res.json({ user: { id: req.userId, role: req.userRole } })
+  return res.json({ user: { id: req.userId, role: req.userRole } }).status(200)
 })
 
 // log out user
