@@ -82,7 +82,7 @@ router.post('/login', async (req, res) => {
 
 // verify authentication
 router.get('/authenticate', auth, (req, res) => {
-  return res.json({ authenticate: true })
+  return res.status(200).json({ authenticated: true })
 })
 
 // log out user
