@@ -1,11 +1,12 @@
 import React, {useEffect, useState} from 'react';
 import axios from 'axios';
+import AuthService from '../services/authService';
 
 interface CollectionEvent {
-  _id: string;
-  collection?: string;
-  operation?: string;
-  updatedFields?: any;
+  _id: string
+  collection?: string
+  operation?: string
+  updatedFields?: any
 }
 
 const Login = () => {
@@ -32,9 +33,10 @@ const Login = () => {
         _id: data.documentKey._id,
         collection: 'cpu',
         operation: data.operationType,
-        updatedFields: data.operationType === 'update' ?
-          data.updateDescription.updatedFields :
-          data.fullDocument,
+        updatedFields:
+          data.operationType === 'update' ?
+            data.updateDescription.updatedFields :
+            data.fullDocument,
       };
       setCollectionData(realTimeData);
     };
@@ -47,9 +49,10 @@ const Login = () => {
         _id: data.documentKey._id,
         collection: 'memory',
         operation: data.operationType,
-        updatedFields: data.operationType === 'update' ?
-          data.updateDescription.updatedFields :
-          data.fullDocument,
+        updatedFields:
+          data.operationType === 'update' ?
+            data.updateDescription.updatedFields :
+            data.fullDocument,
       };
       setCollectionData(realTimeData);
     };
@@ -160,6 +163,13 @@ const Login = () => {
     }
   };
 
+  useEffect(() => {
+    AuthService.isAuthenticated().then((data) => {
+      console.log(data);
+      console.log('hello');
+    });
+  }, [formData1]);
+
   return (
     <>
       <div>
@@ -236,11 +246,14 @@ const Login = () => {
           <button type="submit">Sign up</button>
         </form>
 
-        <div style={{display: 'flex',
-          flexDirection: 'column',
-          justifyContent: 'center',
-          marginTop: '1.5rem'}}>
-
+        <div
+          style={{
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'center',
+            marginTop: '1.5rem',
+          }}
+        >
           <div>Updated Data From MongoDB</div>
           <table style={{borderCollapse: 'collapse'}}>
             <tbody>
@@ -251,20 +264,23 @@ const Login = () => {
                 <th>data Changed</th>
               </tr>
 
-              {realTimeData
-                  .map((data, i) => (
-                    <tr key={`${data._id}-${i}`}
-                      style={{borderBottom: 'solid 2px black'}}>
-                      <td>{data._id}</td>
-                      <td>{data.collection}</td>
-                      <td>{data.operation}</td>
-                      <td>
-                        {Object.keys(data.updatedFields).map((col) => (
-                          <div key={col}>{col} - {data.updatedFields[col]}</div>
-                        ))}
-                      </td>
-                    </tr>
-                  ))}
+              {realTimeData.map((data, i) => (
+                <tr
+                  key={`${data._id}-${i}`}
+                  style={{borderBottom: 'solid 2px black'}}
+                >
+                  <td>{data._id}</td>
+                  <td>{data.collection}</td>
+                  <td>{data.operation}</td>
+                  <td>
+                    {Object.keys(data.updatedFields).map((col) => (
+                      <div key={col}>
+                        {col} - {data.updatedFields[col]}
+                      </div>
+                    ))}
+                  </td>
+                </tr>
+              ))}
             </tbody>
           </table>
         </div>
