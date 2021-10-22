@@ -1,6 +1,6 @@
 const clientCollections = {
-  cpu_usage: [],
-  memory_usage: [],
+  cpu_logs: [],
+  memory_logs: [],
 }
 
 module.exports = clientCollections
