@@ -21,8 +21,8 @@ const Login = () => {
   }, [collectionData]);
 
   useEffect(() => {
-    const ws1 = new WebSocket('ws://localhost:5000/?collection=cpu_usage');
-    const ws2 = new WebSocket('ws://localhost:5000/?collection=memory_usage');
+    const ws1 = new WebSocket('ws://localhost:5000/?collection=cpu_logs');
+    const ws2 = new WebSocket('ws://localhost:5000/?collection=memory_logs');
 
     ws1.onmessage = (event) => {
       console.log('event from cpu: ', JSON.parse(event.data));
@@ -30,7 +30,7 @@ const Login = () => {
       const data = JSON.parse(event.data);
       const realTimeData: CollectionEvent = {
         _id: data.documentKey._id,
-        collection: 'cpu_usage',
+        collection: 'cpu',
         operation: data.operationType,
         updatedFields: data.operationType === 'update' ?
           data.updateDescription.updatedFields :
@@ -45,7 +45,7 @@ const Login = () => {
       const data = JSON.parse(event.data);
       const realTimeData: CollectionEvent = {
         _id: data.documentKey._id,
-        collection: 'memory_usage',
+        collection: 'memory',
         operation: data.operationType,
         updatedFields: data.operationType === 'update' ?
           data.updateDescription.updatedFields :
