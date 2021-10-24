@@ -3,10 +3,19 @@ const mongoose = require('mongoose')
 const ProcessSchema = new mongoose.Schema({
   processes: [
     {
-      name: String,
-      pid: Number,
+      name: {
+        type: String,
+      },
+      pid: {
+        type: Number,
+      },
     },
   ],
 })
 
-module.exports = Processes = mongoose.model('processes', ProcessSchema)
+const Processes = mongoose.model('processes', ProcessSchema)
+
+module.exports = {
+  ProcessSchema: ProcessSchema,
+  Processes: Processes,
+}
