@@ -1,3 +1,4 @@
+from datetime import datetime
 import sys
 import unittest
 
@@ -47,6 +48,11 @@ class TestSystemReportClass(unittest.TestCase):
         
         process_list=self.test_report.getSection("processes")
         self.assertTrue(x.name == 'python.exe' for x in process_list)
+
+    def testAddingTimestampToReport(self):
+        self.test_report.addTimestamp()
+        actual_result=self.test_report.getSection("timestamp")
+        self.assertIsNotNone(actual_result)
 
         
 if __name__ == '__main__':

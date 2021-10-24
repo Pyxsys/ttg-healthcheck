@@ -27,6 +27,7 @@ class Runner:
     def genReport(self):
         self.report=SysReport()
         self.report.addSystemProcessInfo()
+        self.report.addTimestamp()
 
 class SysReport:
     # Initializes instance attributes.
@@ -53,6 +54,9 @@ class SysReport:
             process_list.append(process_info_dictionary)
 
         self.setSection("processes", process_list)
+
+    def addTimestamp(self):
+        self.setSection("timestamp",datetime.now())
 
 def main(config):
     start=datetime.now()

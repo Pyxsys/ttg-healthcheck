@@ -24,9 +24,18 @@ class TestRunner(unittest.TestCase):
         self.assertIsInstance(self.test_runner, Runner, msg=None)
    
     def testRunnerGeneratingReport(self):
-        expected_result='processes'
+        expected_sections={'processes', 'timestamp'}
+        missing_sections=[]
+
         self.test_runner.genReport()
-        self.assertTrue(expected_result in self.test_runner.getReport())
+        section_list=list(self.test_runner.getReport().keys())
+        for section in expected_sections:
+            if section not in section_list:
+                missing_sections.append(section)
+        self.assertEqual(len(missing_sections), 0, msg=missing_sections)
+                
+
+
 
     @unittest.skipIf("localhost" in json.load(open(sys.path[0] + '/test/config.json'))['destination'],
      'Cannot run test automatically with "localhost" destination.')
