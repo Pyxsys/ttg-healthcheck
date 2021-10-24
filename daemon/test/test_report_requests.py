@@ -34,9 +34,6 @@ class TestRunner(unittest.TestCase):
                 missing_sections.append(section)
         self.assertEqual(len(missing_sections), 0, msg=missing_sections)
                 
-
-
-
     @unittest.skipIf("localhost" in json.load(open(sys.path[0] + '/test/config.json'))['destination'],
      'Cannot run test automatically with "localhost" destination.')
     def testConnectionToServer(self):
