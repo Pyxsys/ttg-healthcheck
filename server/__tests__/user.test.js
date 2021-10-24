@@ -45,6 +45,14 @@ describe('Sign up given a username and password', () => {
     })
     expect(response1.statusCode).toBe(400)
   })
+  it('should respond with a 500 status code when a param is missing', async () => {
+    const response = await request(app).post('/api/user/register').send({
+      name: userOne.name,
+      email: userOne.email,
+      role: userOne.role,
+    })
+    expect(response.statusCode).toBe(500)
+  })
 })
 
 describe('Log in given a username and password', () => {
@@ -84,6 +92,37 @@ describe('Log in given a username and password', () => {
       password: userOne.password,
     })
     expect(response.body.message).toBeDefined()
+  })
+  it('should respond with a 500 status code when a param is missing', async () => {
+    const response = await request(app).post('/api/user/login').send({
+      email: userOne.email,
+    })
+    expect(response.statusCode).toBe(500)
+  })
+})
+
+describe('protected', () => {
+  it('Should respond with a 200 status code', async () => {
+    const response = await request(app).post('/api/user/login').send({
+      email: userOne.email,
+      password: userOne.password,
+    })
+    const response1 = await request(app).get('/api/user/protected')
+    expect(response1.statusCode).toBe(200)
+  })
+})
+
+describe('Log out', () => {
+  it('Should respond with a 200 status code on successful logout', async () => {
+    const response = await request(app).post('/api/user/login').send({
+      email: userOne.email,
+      password: userOne.password,
+    })
+    const response1 = await request(app).get('/api/user/logout').send({
+      email: userOne.email,
+      password: userOne.password,
+    })
+    expect(response1.statusCode).toBe(200)
   })
 })
 
