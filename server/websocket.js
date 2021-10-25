@@ -16,7 +16,7 @@ const attachWSConnection = (server) => {
     if (path) {
       const collections = path.split(',')
       collections.forEach((collection) => {
-        clientCollections[collection]?.push(client)
+        clientCollections[collection].push(client)
       })
     }
 

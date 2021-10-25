@@ -9,7 +9,7 @@ const auth = require('../middleware/auth.js')
 // signup
 router.post('/register', async (req, res) => {
   try {
-    const role = 'none'
+    const role = 'user'
     const { name, password, email } = req.body
     newUser = new User({
       name,
@@ -27,7 +27,7 @@ router.post('/register', async (req, res) => {
     }
     // save new user, create JWT, store in cookie and send to front-end
     await newUser.save()
-    const token = jwt.sign({ name: name }, process.env.ACCESS_TOKEN_KEY, {
+    const token = jwt.sign({ id: newUser.id }, process.env.ACCESS_TOKEN_KEY, {
       expiresIn: '1h',
     })
     return res
@@ -61,7 +61,7 @@ router.post('/login', async (req, res) => {
       return res.status(400).json({ message: 'Invalid Password' })
     }
     // Create JWT, store in cookie and send to front-end
-    const token = jwt.sign({ name: user.name }, process.env.ACCESS_TOKEN_KEY, {
+    const token = jwt.sign({ id: user.id }, process.env.ACCESS_TOKEN_KEY, {
       expiresIn: '1h',
     })
     return res
@@ -81,8 +81,11 @@ router.post('/login', async (req, res) => {
 })
 
 // verify authentication
-router.get('/authenticate', auth, (req, res) => {
-  return res.status(200).json({ authenticated: true })
+router.get('/authenticate', auth, async (req, res) => {
+  const user = await User.findOne({ id: req.userId })
+  return res
+    .status(200)
+    .json({ isAuthenticated: true, user: { name: user.name, role: user.role } })
 })
 
 // log out user
