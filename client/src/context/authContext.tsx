@@ -3,7 +3,9 @@ import AuthService from '../services/authService';
 
 interface AuthObject {
   isAuthenticated: boolean
+  setIsAuthenticated: (active: boolean) => void
   user: UserObject
+  setUser: (active: UserObject) => void
 }
 
 interface UserObject {
