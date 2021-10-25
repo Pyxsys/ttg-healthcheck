@@ -12,7 +12,7 @@
 ## Project Requirements
 * [NodeJS (12 or above)](https://nodejs.org/en/download/)
 * MongoDB Account
-* ...
+* LocalMongo DB instance must be active in order to push code to repo
 
 ## Installation
 Before starting the installation process, ensure that your computer has all the requirements listed above.

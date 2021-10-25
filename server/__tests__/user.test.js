@@ -28,7 +28,7 @@ describe('Sign up given a username and password', () => {
     expect(response.headers['content-type']).toEqual(
       expect.stringContaining('json')
     )
-    expect(response.body.user.id).toBeDefined()
+    expect(response.body.message).toBeDefined()
   })
 })
 
@@ -54,7 +54,7 @@ describe('Log in given a username and password', () => {
       email: userOne.email,
       password: userOne.password,
     })
-    expect(response.body.user.id).toBeDefined()
+    expect(response.body.message).toBeDefined()
   })
 })
 
