@@ -6,7 +6,6 @@ export default {
         .get('api/user/authenticate')
         .then((response) => {
           if (response.data) {
-            console.log(response.data);
             return response.data;
           }
         })

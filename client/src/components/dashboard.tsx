@@ -1,13 +1,13 @@
 import React from 'react';
 import {useAuth} from '../context/authContext';
 
-const AdminPanel = () => {
+const Dashboard = () => {
   const {user} = useAuth();
   return (
     <div>
-      admin panel, user: {user.name}, role: {user.role}
+      dashboard, user: {user.name}, role: {user.role}
     </div>
   );
 };
 
-export default AdminPanel;
+export default Dashboard;
