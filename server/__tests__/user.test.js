@@ -13,7 +13,7 @@ const userOne = {
   name: 'test',
   password: 'password',
   email: 'test@gmail.com',
-  role: 'none',
+  role: 'user',
 }
 
 describe('Sign up given a username and password', () => {

@@ -163,9 +163,13 @@ const Login = () => {
     }
   };
 
+  interface Authenticate {
+    authenticated: boolean
+  }
+
   useEffect(() => {
-    AuthService.isAuthenticated().then((data) => {
-      console.log(data);
+    AuthService.isAuthenticated().then((data: Authenticate | any) => {
+      console.log(data.isAuthenticated);
       console.log('hello');
     });
   }, [formData1]);
