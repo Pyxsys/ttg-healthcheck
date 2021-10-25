@@ -1,22 +1,20 @@
-import {useContext} from 'react';
-import {Route, Redirect} from 'react-router-dom';
-import {AuthContext} from '../context/authContext';
+import React, {Route, Redirect} from 'react-router-dom';
+import {useAuth} from '../context/authContext';
 
 const PrivateRoute = ({component: Component, roles, ...rest}: any) => {
-  const {isAuthenticated, user} = useContext(AuthContext);
+  const {isAuthenticated, user} = useAuth();
   return (
     <Route
       {...rest}
       render={(props): any => {
         if (!isAuthenticated) {
           return (
-            <Redirect
-              to={{pathname: '/login', state: {from: props.location}}}
-            />
+            <Redirect to={{pathname: '/', state: {from: props.location}}} />
           );
         }
 
         if (!roles.includes(user.role)) {
+          console.log('im here');
           return (
             <Redirect to={{pathname: '/', state: {from: props.location}}} />
           );

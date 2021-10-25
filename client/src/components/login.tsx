@@ -1,6 +1,5 @@
 import React, {useEffect, useState} from 'react';
 import axios from 'axios';
-import AuthService from '../services/authService';
 
 interface CollectionEvent {
   _id: string
@@ -162,17 +161,6 @@ const Login = () => {
       }
     }
   };
-
-  interface Authenticate {
-    authenticated: boolean
-  }
-
-  useEffect(() => {
-    AuthService.isAuthenticated().then((data: Authenticate | any) => {
-      console.log(data.isAuthenticated);
-      console.log('hello');
-    });
-  }, [formData1]);
 
   return (
     <>

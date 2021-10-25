@@ -21,7 +21,7 @@ router.post('/register', async (req, res) => {
     // Hash password
     newUser.password = await bcrypt.hash(password, salt)
     // check if email already in use
-    let user = await User.findOne({ email })
+    let user = await User.findOne({ email: email })
     if (user) {
       return res.status(400).json({ message: 'User already exists' })
     }
@@ -51,7 +51,7 @@ router.post('/login', async (req, res) => {
   try {
     const { email, password } = req.body
     // Verify email
-    const user = await User.findOne({ email })
+    const user = await User.findOne({ email: email })
     if (!user) {
       return res.status(400).json({ message: 'Email does not exist' })
     }
@@ -82,7 +82,7 @@ router.post('/login', async (req, res) => {
 
 // verify authentication
 router.get('/authenticate', auth, async (req, res) => {
-  const user = await User.findOne({ id: req.userId })
+  const user = await User.findOne({ _id: req.userId })
   return res
     .status(200)
     .json({ isAuthenticated: true, user: { name: user.name, role: user.role } })
