@@ -1,4 +1,4 @@
-import React, {createContext, useState, useEffect} from 'react';
+import React, {createContext, useState, useEffect, useContext} from 'react';
 import AuthService from '../services/authService';
 
 interface AuthObject {
@@ -11,18 +11,32 @@ interface UserObject {
   role: string
 }
 
-export const AuthContext = createContext({} as AuthObject);
+const AuthContext = createContext({} as AuthObject);
 
-export default (props: any) => {
+/**
+ *
+ * @return {void} user information and authentication status
+ */
+export function useAuth() {
+  return useContext(AuthContext);
+}
+
+/**
+ *
+ * @param {object} param0 render from index.js
+ * @return {void} auth context values
+ */
+export function AuthProvider({children}: any) {
   const [user, setUser] = useState({name: '', role: ''});
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [isLoaded, setIsLoaded] = useState(false);
-
+  const [loading, setLoading] = useState(true);
   useEffect(() => {
     AuthService.isAuthenticated().then((data: any) => {
       setUser(data.user);
       setIsAuthenticated(data.isAuthenticated);
-      setIsLoaded(true);
+      setLoading(false);
+      console.log(data.user);
+      console.log(data.isAuthenticated);
     });
   }, []);
 
@@ -34,14 +48,8 @@ export default (props: any) => {
   };
 
   return (
-    <div>
-      {!isLoaded ? (
-        <h1>Loading</h1>
-      ) : (
-        <AuthContext.Provider value={authContextValue}>
-          {...props}
-        </AuthContext.Provider>
-      )}
-    </div>
+    <AuthContext.Provider value={authContextValue}>
+      {!loading && children}
+    </AuthContext.Provider>
   );
-};
+}
