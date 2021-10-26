@@ -26,6 +26,8 @@ jobs:
     services:
       mongodb:
         image: mongo:3.4.23
+        ports:
+         - 27017:27017
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
