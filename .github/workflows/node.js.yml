@@ -22,6 +22,10 @@ jobs:
       matrix:
         node-version: [14.x]
         # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
+    
+    services:
+      mongodb:
+        image: mongo:3.4.23
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
@@ -34,10 +38,10 @@ jobs:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
 
-    - name: Start MongoDB
-      uses: supercharge/mongodb-github-action@1.6.0
-      with:
-        mongodb-version: ${{ matrix.mongodb-version }}
+#     - name: Start MongoDB
+#       uses: supercharge/mongodb-github-action@1.6.0
+#       with:
+#         mongodb-version: ${{ matrix.mongodb-version }}
 
     - name: Run frontend tests
       run: |
