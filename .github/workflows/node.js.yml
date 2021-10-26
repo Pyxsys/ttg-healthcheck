@@ -20,8 +20,8 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [14.x]
-        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
+        node-version: [14.x] # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
+        python-version: [3.6]
     
     services:
       mongodb:
@@ -40,11 +40,6 @@ jobs:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
 
-#     - name: Start MongoDB
-#       uses: supercharge/mongodb-github-action@1.6.0
-#       with:
-#         mongodb-version: ${{ matrix.mongodb-version }}
-
     - name: Run frontend tests
       run: |
         cd client
@@ -57,4 +52,10 @@ jobs:
         npm ci
         mongo mydb_test --eval 'db.createUser({user:"travis",pwd:"test",roles:["readWrite"]});'
         npm run test:coverage
+            
+    - name: Run python tests
+      run: |
+        pip install -r daemon/requirements.txt
+        cd deamon
+        python -m unittest -v
          
