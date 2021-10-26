@@ -1,3 +1,7 @@
+// Set new color palette.
+$primary: #3f4651;
+$secondary: #F8F9FA;
+
 .App {
   text-align: center;
 }
@@ -11,6 +15,10 @@
   .App-logo {
     animation: App-logo-spin infinite 20s linear;
   }
+}
+
+.increase-roundness{
+  border-radius: 50px;
 }
 
 .App-header {
@@ -36,3 +44,11 @@
     transform: rotate(360deg);
   }
 }
+
+html, body {
+  margin: 0;
+  height: 100%;
+}
+
+// Must me imported after to overwrite colors.
+@import '~bootstrap/scss/bootstrap';
