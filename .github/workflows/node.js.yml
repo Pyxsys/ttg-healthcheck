@@ -25,30 +25,30 @@ jobs:
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      - name: Checkout repository
-      - uses: actions/checkout@v2
-      
-      - name: Set up Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v2
-        with:
-          node-version: ${{ matrix.node-version }}
-          cache: 'npm'
-          
-      - name: Start MongoDB
-        uses: supercharge/mongodb-github-action@1.6.0
-        with:
-          mongodb-version: ${{ matrix.mongodb-version }}
-              
-      - name: Run frontend tests
-        run: |
-          cd client
-          npm ci
-          npm run test:coverage
-          
-      - name: Run backend tests
-        run: |
-          cd server
-          npm ci
-          mongo mydb_test --eval 'db.createUser({user:"travis",pwd:"test",roles:["readWrite"]});'
-          npm run test:coverage
+    - name: Checkout repository
+    - uses: actions/checkout@v2
+
+    - name: Set up Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v2
+      with:
+        node-version: ${{ matrix.node-version }}
+        cache: 'npm'
+
+    - name: Start MongoDB
+      uses: supercharge/mongodb-github-action@1.6.0
+      with:
+        mongodb-version: ${{ matrix.mongodb-version }}
+
+    - name: Run frontend tests
+      run: |
+        cd client
+        npm ci
+        npm run test:coverage
+
+    - name: Run backend tests
+      run: |
+        cd server
+        npm ci
+        mongo mydb_test --eval 'db.createUser({user:"travis",pwd:"test",roles:["readWrite"]});'
+        npm run test:coverage
          
