@@ -9,7 +9,6 @@ module.exports = function (req, res, next) {
   try {
     const data = jwt.verify(token, process.env.ACCESS_TOKEN_KEY)
     req.userId = data.id
-    req.userRole = data.role
     return next()
   } catch {
     res.status(401).json({ message: 'Invalid token' })
