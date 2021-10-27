@@ -1,9 +1,9 @@
 const mongoose = require('mongoose')
 const { HardwareSchema } = require('./hardware')
-const { CpuSchema, CpuLogsSchema } = require('./cpu')
-const { DiskSchema, DiskLogsSchema } = require('./disk')
-const { MemorySchema, MemoryLogsSchema } = require('./memory')
-const { WifiSchema, WifiLogsSchema } = require('./wifi')
+const { CpuSchema } = require('./cpu')
+const { DiskSchema } = require('./disk')
+const { MemorySchema } = require('./memory')
+const { WifiSchema } = require('./wifi')
 
 const DeviceSchema = new mongoose.Schema({
   deviceId: {
@@ -30,10 +30,6 @@ const DeviceSchema = new mongoose.Schema({
   memory: MemorySchema,
   disk: DiskSchema,
   wifi: WifiSchema,
-  cpuLogLatest: CpuLogsSchema,
-  memoryLogLatest: MemoryLogsSchema,
-  diskLogLatest: DiskLogsSchema,
-  wifiLogLatest: WifiLogsSchema,
 })
 
 module.exports = Devices = mongoose.model('devices', DeviceSchema)
