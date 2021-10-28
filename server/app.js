@@ -20,6 +20,7 @@ connectDB().then(() => {
 
 // Define Routes
 app.use('/api/user', require('./api/user'))
+app.use('/api/device', require('./api/device'))
 app.use('/api/daemon_endpoint', require('./api/daemon_endpoint'))
 
 module.exports = app
