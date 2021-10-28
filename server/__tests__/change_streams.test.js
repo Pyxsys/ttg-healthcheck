@@ -23,7 +23,7 @@ const testValues = {
 }
 const userOne = {
   name: 'test',
-  password: 'password',
+  password: 'test_password',
   email: 'test@gmail.com',
   role: 'user',
 }
