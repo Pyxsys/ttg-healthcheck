@@ -1,7 +1,7 @@
 # Network Devices Health Monitoring System
 #### By _Team the Group_
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Build Status](https://app.travis-ci.com/Pyxsys/ttg-healthcheck.svg?token=yqePnie6vvPik5z1MhQa&branch=main)](https://app.travis-ci.com/Pyxsys/ttg-healthcheck)
+[![CI/CD](https://github.com/Pyxsys/ttg-healthcheck/actions/workflows/integration.yml/badge.svg)](https://github.com/Pyxsys/ttg-healthcheck/actions/workflows/integration.yml)
  
 ## Technologies Used
 * ReactJS
