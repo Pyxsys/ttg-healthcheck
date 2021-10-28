@@ -24,19 +24,19 @@ jobs:
         python-version: [3.6]
         mongodb-version: [3.6, 4.0, 4.2]
     
-    # services:
-    #   mongodb:
-    #     image: mongo:3.4.23
-    #     ports:
-    #      - 27017:27017
+    services:
+      mongodb:
+        image: mongo:3.4.23
+        ports:
+         - 27017:27017
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
     - name: Start MongoDB v${{ matrix.mongodb-version }}
-      uses: supercharge/mongodb-github-action@1.2.0
+      uses: supercharge/mongodb-github-action@1.6.0
       with:
-        mongodb-version: ${{ matrix.mongodb-version }}
-        mongodb-replica-set: rs0
+          mongodb-version: '3.4.23'
+          mongodb-replica-set: rs0
 
     - name: Checkout repository
       uses: actions/checkout@v2
