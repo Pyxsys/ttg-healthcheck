@@ -8,8 +8,8 @@ const auth = require('../middleware/auth.js')
 router.get('/specific', auth, async (req, res) => {
   try {
     let param = req.query.entry
-    Devices.find(
-      { $or: [{ region: param }, { sector: param }] },
+    Devices.findOne(
+      { $or: [{ deviceId: param }, { name: param }] },
       function (err, device) {
         if (err) {
           res.send(err)
