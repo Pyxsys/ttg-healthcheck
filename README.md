@@ -2,6 +2,7 @@
 #### By _Team the Group_
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![CI/CD](https://github.com/Pyxsys/ttg-healthcheck/actions/workflows/integration.yml/badge.svg)](https://github.com/Pyxsys/ttg-healthcheck/actions/workflows/integration.yml)
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=Pyxsys_ttg-healthcheck&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=Pyxsys_ttg-healthcheck)
  
 ## Technologies Used
 * ReactJS
