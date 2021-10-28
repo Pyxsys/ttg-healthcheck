@@ -16,6 +16,9 @@ const attachWSConnection = (server) => {
     if (path) {
       const collections = path.split(',')
       collections.forEach((collection) => {
+        if (!clientCollections[collection]) {
+          clientCollections[collection] = []
+        }
         clientCollections[collection].push(client)
       })
     }
@@ -28,6 +31,10 @@ const attachWSConnection = (server) => {
         )
       })
     })
+  })
+
+  server.on('close', () => {
+    wsServer.close()
   })
 }
 
