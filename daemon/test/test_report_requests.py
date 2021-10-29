@@ -24,7 +24,7 @@ class TestRunner(unittest.TestCase):
         self.assertIsInstance(self.test_runner, Runner, msg=None)
    
     def testRunnerGeneratingReport(self):
-        expected_sections={'processes', 'timestamp'}
+        expected_sections={'deviceId', 'processes', 'timestamp'}
         missing_sections=[]
 
         self.test_runner.genReport()

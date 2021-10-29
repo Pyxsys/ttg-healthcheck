@@ -54,6 +54,11 @@ class TestSystemReportClass(unittest.TestCase):
         actual_result=self.test_report.getSection("timestamp")
         self.assertIsNotNone(actual_result)
 
+    def testAddingDeviceIdToReport(self):
+        self.test_report.addDeviceUUID()
+        actual_result=self.test_report.getSection("deviceId")
+        self.assertRegex(actual_result,'^[a-zA-Z0-9]{8}(?:-[a-zA-Z0-9]{4}){3}-[a-zA-Z0-9]{12}$')
+
         
 if __name__ == '__main__':
     unittest.main()

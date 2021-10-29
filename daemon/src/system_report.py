@@ -1,7 +1,5 @@
-import requests
-import psutil
-import json
-import sys
+import requests, psutil
+import sys, os, json, re
 from datetime import datetime
 
 class Runner:
@@ -26,8 +24,9 @@ class Runner:
 
     def genReport(self):
         self.report=SysReport()
-        self.report.addSystemProcessInfo()
+        self.report.addDeviceUUID()
         self.report.addTimestamp()
+        self.report.addSystemProcessInfo()
 
 class SysReport:
     # Initializes instance attributes.
@@ -57,6 +56,22 @@ class SysReport:
 
     def addTimestamp(self):
         self.setSection("timestamp",datetime.now())
+
+    def addDeviceUUID(self):
+        os_type = sys.platform.lower()
+        pattern = '[a-zA-Z0-9]{8}(?:-[a-zA-Z0-9]{4}){3}-[a-zA-Z0-9]{12}'
+        flags=re.MULTILINE
+
+        if "win" in os_type:
+            command = "wmic csproduct get uuid"
+        elif "linux" in os_type:
+            command = "sudo dmidecode -s system-uuid"
+
+        extract=os.popen(command)
+        uuid=re.findall(pattern, extract.read(), flags)[0]
+        extract.close()
+        
+        self.setSection("deviceId", uuid)
 
 def main(config):
     start=datetime.now()
