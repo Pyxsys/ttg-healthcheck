@@ -1,20 +1,14 @@
 const connectDB = require('../db/db_connection')
 const mongoose = require('mongoose')
 const { subscribeOnExit, unsubscribeAll } = require('../destroyProcess')
-const { createChangeStream } = require('../db/change_streams')
 
 const initDbURL = process.env.MONGODB_URL
-
-describe('Create a change stream without connecting to MongoDB', () => {
-  it('should fail to establish Mongo ChangeStream on collection', async () => {
-    await expect(createChangeStream('test')).rejects.toBeDefined()
-  })
-})
 
 describe('Connect to the MongoDB with an incorrect URL', () => {
   it('should try to exit the server with code 1', (done) => {
     subscribeOnExit((err, code) => {
       expect(code).toBe(1)
+      unsubscribeAll()
       done()
     })
 

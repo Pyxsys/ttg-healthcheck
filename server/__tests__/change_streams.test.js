@@ -1,96 +1,124 @@
+const mongoose = require('mongoose')
+const WebSocket = require('ws')
 const request = require('supertest')
+
 const connectDB = require('../db/db_connection')
 const User = require('../models/user.js')
 const app = require('../app')
-const mongoose = require('mongoose')
-const WebSocket = require('ws')
+const { createWebSocketServer, listeningForClients } = require('../ws_server')
 const {
-  createChangeStream,
-  attachNotifyClients,
   monitorPredefinedCollections,
   closeMonitoredCollection,
+  monitorCollection,
+  numOfMonitoredChangeStream,
 } = require('../db/change_streams')
-const { attachWSConnection } = require('../websocket')
-const clientCollections = require('../db/ws_clients')
 
-const PORT = 80
+const PORT = 8081
 const collectionName = 'users'
 
 const testValues = {
+  httpServer: null,
   wsServer: null,
-  changeStream: null,
+
   wsClient: null,
 }
-const userOne = {
+
+const testUser = {
   name: 'test',
   password: 'test_password',
   email: 'test@gmail.com',
   role: 'user',
 }
 
-const closeWebSocket = () => {
-  if (testValues.wsClient) {
-    testValues.wsClient.close()
-    testValues.wsClient = null
-  }
-}
-
 beforeAll(async () => {
-  // create websocket server
-  testValues.wsServer = app.listen(PORT, () =>
-    console.log(`Web socket listening on port ${PORT}`)
+  // create http server
+  await new Promise(
+    (res) => (testValues.httpServer = app.listen(PORT, () => res()))
   )
-  attachWSConnection(testValues.wsServer)
+  // create web socket server
+  testValues.wsServer = createWebSocketServer(testValues.httpServer)
+  listeningForClients(testValues.wsServer)
 
   // connect to local_db
-  await connectDB().then(async () => {
-    testValues.changeStream = await createChangeStream(collectionName)
-    await attachNotifyClients(testValues.changeStream)
-    await monitorPredefinedCollections()
-  })
+  await connectDB()
 
   await User.deleteMany()
 })
 
-describe('Insert a new user to the database', () => {
-  it('should receive the inserted data from the websocket ', (done) => {
-    closeWebSocket()
+describe('Insert a new user to the database and get data from the change stream', () => {
+  beforeAll(() => {
+    monitorCollection(collectionName)
+  })
+
+  it('should receive the inserted data from the websocket', async () => {
     testValues.wsClient = new WebSocket(
       `ws://localhost:${PORT}/?collection=${collectionName}`
     )
-
-    testValues.wsClient.onmessage = (event) => {
-      const data = JSON.parse(event.data)
-      expect(data.fullDocument).toBeDefined()
-      expect(data.operationType).toBe('insert')
-      closeWebSocket()
-      done()
-    }
+    await new Promise((res) => testValues.wsClient.on('open', () => res()))
 
     request(app)
       .post('/api/user/register')
-      .send(userOne)
+      .send(testUser)
       .then((response) => {
         expect(response.statusCode).toBe(200)
       })
+
+    const dataStr = await new Promise((resolve) => {
+      testValues.wsClient.onmessage = (event) => resolve(event.data)
+    })
+
+    try {
+      const dataObj = JSON.parse(dataStr)
+      expect(dataObj && dataObj.constructor === Object).toBeTruthy()
+      expect(dataObj.fullDocument).toBeDefined()
+      expect(dataObj.operationType).toBe('insert')
+    } catch (err) {
+      expect(err).toBeFalsy()
+    }
+  })
+
+  afterAll(() => {
+    if (testValues.wsClient) {
+      testValues.wsClient.close()
+      testValues.wsClient = null
+    }
+
+    closeMonitoredCollection()
+  })
+})
+
+describe('Closes the collection change streams', () => {
+  afterEach(async () => {
+    closeMonitoredCollection()
+  })
+
+  it('should close one collection change stream', async () => {
+    monitorCollection('new_collection_1')
+    monitorCollection('new_collection_2')
+    const numOfChangeStreams = numOfMonitoredChangeStream()
+    closeMonitoredCollection('new_collection_1')
+    expect(numOfMonitoredChangeStream()).toBe(numOfChangeStreams - 1)
+  })
+
+  it('should close all the collection change streams', async () => {
+    monitorPredefinedCollections()
+    expect(numOfMonitoredChangeStream()).not.toBe(0)
+    closeMonitoredCollection()
+    expect(numOfMonitoredChangeStream()).toBe(0)
   })
 })
 
 afterAll(async () => {
-  // Close client web socket if hanging
-  closeWebSocket()
-  // Close change stream
-  if (testValues.changeStream) {
-    testValues.changeStream.close()
-  }
-  // Close predefined collections
-  await closeMonitoredCollection(Object.keys(clientCollections)[0])
-  await closeMonitoredCollection()
-
-  // Close web socket server
+  // Close servers
   if (testValues.wsServer) {
     testValues.wsServer.close()
+    testValues.wsServer = null
   }
+  if (testValues.httpServer) {
+    testValues.httpServer.close()
+    testValues.httpServer = null
+  }
+
   // Closing the DB connection allows Jest to exit successfully.
-  mongoose.connection.close()
+  await mongoose.connection.close()
 })
