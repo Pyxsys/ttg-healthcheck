@@ -23,9 +23,9 @@ const testValues = {
 }
 
 const testUser = {
-  name: 'test',
-  password: 'password',
-  email: 'test@gmail.com',
+  name: process.env.USERNAME,
+  password: process.env.PASSWORD,
+  email: process.env.EMAIL,
   role: 'user',
 }
 
@@ -55,12 +55,14 @@ describe('Insert a new user to the database and get data from the change stream'
     )
     await new Promise((res) => testValues.wsClient.on('open', () => res()))
 
-    await request(app).post('/api/user/register').send({
-      name: testUser.name,
-      password: testUser.password,
-      email: testUser.email,
-      role: testUser.role,
-    })
+    await request(app)
+      .post('/api/user/register')
+      .send({
+        name: testUser.name,
+        password: testUser.password,
+        email: testUser.email,
+        role: testUser.role,
+      })
       .then((response) => {
         expect(response.statusCode).toBe(200)
       })
