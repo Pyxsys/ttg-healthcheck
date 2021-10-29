@@ -19,12 +19,12 @@ const collectionName = 'users'
 const testValues = {
   httpServer: null,
   wsServer: null,
-
   wsClient: null,
 }
 
 const testUser = {
   name: 'test',
+  password: 'password',
   email: 'test@gmail.com',
   role: 'user',
 }
@@ -55,9 +55,12 @@ describe('Insert a new user to the database and get data from the change stream'
     )
     await new Promise((res) => testValues.wsClient.on('open', () => res()))
 
-    request(app)
-      .post('/api/user/register')
-      .send({ ...testUser, password: 'fake_test' })
+    await request(app).post('/api/user/register').send({
+      name: testUser.name,
+      password: testUser.password,
+      email: testUser.email,
+      role: testUser.role,
+    })
       .then((response) => {
         expect(response.statusCode).toBe(200)
       })

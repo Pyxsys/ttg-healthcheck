@@ -150,13 +150,20 @@ describe('Attach/Detatch/Notify client Web Sockets To Collections', () => {
     const messages = { client1: null, client2: null }
     await expect(
       new Promise(async (resolve) => {
+        const checkResolvePromise = () => {
+          if (oneResolved) {
+            resolve(messages)
+          } else {
+            oneResolved = true
+          }
+        }
         testValues.wsClientTemp1.onmessage = (event) => {
           messages.client1 = event.data
-          oneResolved ? resolve(messages) : (oneResolved = true)
+          checkResolvePromise()
         }
         testValues.wsClientTemp2.onmessage = (event) => {
           messages.client2 = event.data
-          oneResolved ? resolve(messages) : (oneResolved = true)
+          checkResolvePromise()
         }
         await new Promise((r) => setTimeout(r, 3000))
         resolve('no message received')
@@ -201,12 +208,12 @@ describe('Attach/Detatch/Notify client Web Sockets To Collections', () => {
     notifyClients(collection1, 'message received')
 
     await expect(
-      new Promise(async (resolve) => {
+      new Promise(async (res) => {
         testValues.wsClientTemp1.onmessage = (event) => {
-          resolve(event.data)
+          res(event.data)
         }
         await new Promise((r) => setTimeout(r, 50))
-        resolve('no message received')
+        res('no message received')
       })
     ).resolves.toBe('no message received')
   })
