@@ -1,5 +1,5 @@
 const mongoose = require('mongoose')
-const clientCollections = require('./ws_clients')
+const { notifyClients, getCollectionsNames } = require('./collection_subject')
 
 var changeStreamsMonitored = []
 const pipeline = {
@@ -9,6 +9,10 @@ const pipeline = {
   },
 }
 
+const numOfMonitoredChangeStream = () => {
+  return changeStreamsMonitored.length
+}
+
 /**
  * Creates a change stream for a given collection.
  * If the collection does not exist it will be created
@@ -16,7 +20,7 @@ const pipeline = {
  * @param {String} collectionName
  * @returns a change stream
  */
-const createChangeStream = async (collectionName) => {
+const createChangeStream = (collectionName) => {
   const client = mongoose.connection.getClient()
   const db = client.db(process.env.MONGO_DB)
   const collection = db.collection(collectionName)
@@ -25,17 +29,13 @@ const createChangeStream = async (collectionName) => {
 
 /**
  * Attach a change stream to notify the clients
- * when the change stream recieves a change.
+ * when the change stream recieves an update.
  * @param {ChangeStream<Document>} changeStream
  */
-const attachNotifyClients = async (changeStream) => {
+const attachNotifyClients = (changeStream) => {
   // When there is a change to the collection
   changeStream.on('change', (next) => {
-    clientCollections[changeStream.parent.collectionName].forEach((client) => {
-      if (client.readyState === client.OPEN) {
-        client.send(JSON.stringify(next))
-      }
-    })
+    notifyClients(changeStream.parent.collectionName, JSON.stringify(next))
   })
 }
 
@@ -44,8 +44,8 @@ const attachNotifyClients = async (changeStream) => {
  * the collection receives an update.
  * @param {String} collectionName
  */
-const monitorCollection = async (collectionName) => {
-  const changeStream = await createChangeStream(collectionName)
+const monitorCollection = (collectionName) => {
+  const changeStream = createChangeStream(collectionName)
   changeStreamsMonitored.push(changeStream)
   attachNotifyClients(changeStream)
 }
@@ -54,9 +54,9 @@ const monitorCollection = async (collectionName) => {
  * Monitor all the predefined collections to notify
  * clients when the collection receives an update.
  */
-const monitorPredefinedCollections = async () => {
-  Object.keys(clientCollections).forEach(async (dbCollection) => {
-    await monitorCollection(dbCollection)
+const monitorPredefinedCollections = () => {
+  getCollectionsNames().forEach((dbCollection) => {
+    monitorCollection(dbCollection)
   })
 }
 
@@ -65,7 +65,7 @@ const monitorPredefinedCollections = async () => {
  * is null then close all the open monitor collections.
  * @param {String} collectionName
  */
-const closeMonitoredCollection = async (collectionName) => {
+const closeMonitoredCollection = (collectionName) => {
   changeStreamsMonitored = changeStreamsMonitored.filter((changeStream) => {
     if (
       !collectionName ||
@@ -84,4 +84,5 @@ module.exports = {
   monitorCollection,
   monitorPredefinedCollections,
   closeMonitoredCollection,
+  numOfMonitoredChangeStream,
 }
