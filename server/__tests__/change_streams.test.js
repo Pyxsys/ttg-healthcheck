@@ -25,7 +25,6 @@ const testValues = {
 
 const testUser = {
   name: 'test',
-  password: 'test_password',
   email: 'test@gmail.com',
   role: 'user',
 }
@@ -58,7 +57,7 @@ describe('Insert a new user to the database and get data from the change stream'
 
     request(app)
       .post('/api/user/register')
-      .send(testUser)
+      .send({ ...testUser, password: 'fake_test' })
       .then((response) => {
         expect(response.statusCode).toBe(200)
       })
