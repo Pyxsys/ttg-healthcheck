@@ -1,7 +1,8 @@
 # Network Devices Health Monitoring System
 #### By _Team the Group_
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Build Status](https://app.travis-ci.com/Pyxsys/ttg-healthcheck.svg?token=yqePnie6vvPik5z1MhQa&branch=main)](https://app.travis-ci.com/Pyxsys/ttg-healthcheck)
+[![CI/CD](https://github.com/Pyxsys/ttg-healthcheck/actions/workflows/integration.yml/badge.svg)](https://github.com/Pyxsys/ttg-healthcheck/actions/workflows/integration.yml)
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=Pyxsys_ttg-healthcheck&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=Pyxsys_ttg-healthcheck)
  
 ## Technologies Used
 * ReactJS
@@ -12,7 +13,7 @@
 ## Project Requirements
 * [NodeJS (12 or above)](https://nodejs.org/en/download/)
 * MongoDB Account
-* ...
+* LocalMongo DB instance must be active in order to push code to repo
 
 ## Installation
 Before starting the installation process, ensure that your computer has all the requirements listed above.
