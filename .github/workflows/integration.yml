@@ -5,11 +5,13 @@ name: CI/CD
 
 # Controls when the workflow will run
 on:
-  # Triggers the workflow on push or pull request events but only for the main branch
+  # Trigger analysis when pushing in master or pull requests, and when creating
+  # a pull request.
   push:
-    branches: [ main ]
+    branches:
+      - master
   pull_request:
-    branches: [ main ]
+      types: [opened, synchronize, reopened]
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
@@ -51,7 +53,7 @@ jobs:
       uses: actions/setup-python@v2
       with:
         python-version: ${{ matrix.python-version }}
-
+        
     - name: Run frontend tests
       run: |
         cd client
@@ -70,4 +72,4 @@ jobs:
         pip install -r daemon/requirements.txt
         cd daemon
         python -m unittest -v
-         
+    
