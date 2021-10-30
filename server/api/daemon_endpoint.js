@@ -29,8 +29,6 @@ async function processCpuLogInfo(payload) {
   const threadsAlive = 0
   const threadsSleeping = 0
   const uptime = 0
-  //const newProcesses = new process.ProcessesSchema({ processes })
-  //const newProcesses = Object.create(new process.ProcessSchema(), processes)
 
   return new cpu.CpuLogs({
     deviceId,
@@ -41,7 +39,7 @@ async function processCpuLogInfo(payload) {
     threadsSleeping,
     uptime,
     timestamp,
-    processes, //: newProcesses,
+    processes,
   })
 }
 
