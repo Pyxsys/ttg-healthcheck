@@ -51,7 +51,7 @@ const CpuLogsSchema = new mongoose.Schema({
   timestamp: {
     type: Date,
   },
-  arrays: [ProcessSchema],
+  processes: [ProcessSchema],
 })
 
 const CpuLogs = mongoose.model('cpu_logs', CpuLogsSchema)
