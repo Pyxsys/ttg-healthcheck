@@ -13,9 +13,6 @@ const ProcessSchema = new mongoose.Schema({
   ],
 })
 
-const Processes = mongoose.model('processes', ProcessSchema)
-
 module.exports = {
   ProcessSchema: ProcessSchema,
-  Processes: Processes,
 }
