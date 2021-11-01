@@ -4,13 +4,11 @@ const router = express.Router()
 const Devices = require('../models/device.js')
 const auth = require('../middleware/auth.js')
 
-// get a specific device, based on Id, or name
-router.get('/specific', async (req, res) => {
+// get a specific device, based on param options of either deviceId or name
+router.get('/specific-device', async (req, res) => {
   try {
-    let param = req.query.entry
-    await Devices.findOne({
-      $or: [{ deviceId: param }, { name: param }],
-    }).exec(function (err, device) {
+    const queryObj = req.query
+    await Devices.findOne(queryObj).exec(function (err, device) {
       res.status(200).json(device)
       return
     })
@@ -20,7 +18,7 @@ router.get('/specific', async (req, res) => {
   }
 })
 
-// get multiple devices with options (limit, attributes, orderBy, orderValue)
+// get multiple devices with param options (limit, multiple attributes, orderBy, orderValue)
 router.get('/options', async (req, res) => {
   try {
     let options = {}
@@ -36,12 +34,14 @@ router.get('/options', async (req, res) => {
     }
     if (queryObj.orderValue) {
       var orderValue = queryObj.orderValue
+      delete queryObj.orderValue
+    }
+    if (orderValue && orderBy) {
       options.sort = {
         [orderBy]: parseInt(orderValue),
       }
-      delete queryObj.orderValue
     }
-    for (var k in queryObj) {
+    for (let k in queryObj) {
       queryObj[k] = queryObj[k].split(',')
     }
     await Devices.find({ $and: [queryObj] }, {}, options).exec(
