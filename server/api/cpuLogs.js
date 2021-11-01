@@ -7,10 +7,11 @@ router.get('/specific-device', async (req, res) => {
   try {
     let limit = req.query.limit
     const id = req.query.deviceId
+    let query = { deviceId: parseInt(id)}
     if (!!limit) {
       limit = parseInt(limit)
     }
-    await Cpu.CpuLogs.find({ deviceId: id })
+    await Cpu.CpuLogs.find(query)
       .sort({ timestamp: -1 })
       .limit(limit)
       .exec(function (err, cpuLogs) {
@@ -26,16 +27,15 @@ router.get('/specific-device', async (req, res) => {
 // get multiples entries within a timestamp
 router.get('/timestamp', async (req, res) => {
   try {
-    const optionalId = req.query.deviceId
-    const startTimeStamp = req.query.startTimeStamp
-    const endTimeStamp = req.query.endTimeStamp
+    const optionalId = parseInt(req.query.deviceId)
+    const startTimeStamp = Date(req.query.startTimeStamp)
+    const endTimeStamp = Date(req.query.endTimeStamp)
     if (optionalId) {
-      await Cpu.CpuLogs.find({
-        deviceId: optionalId,
+      await Cpu.CpuLogs.find({ deviceId: optionalId,
         timestamp: {
           $gte: startTimeStamp,
           $lte: endTimeStamp,
-        },
+        }
       }).exec(function (err, WifiLogs) {
         res.status(200).json(WifiLogs)
         return
