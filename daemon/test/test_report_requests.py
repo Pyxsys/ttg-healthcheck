@@ -66,14 +66,15 @@ class TestRunner(unittest.TestCase):
         
         self.assertEqual(expected_result, actual_result)
 
-    def testRunnerDelay(self):
+    def testRunnerDelay(self): 
+        tolerance = 1.10 #A decimal multiplier that defines the upper bound
         config_file = open(sys.path[0] + '/test/config.json')
-        expected_result = json.load(config_file)['report_delay']
+        permitted_time = json.load(config_file)['report_delay'] * tolerance
         config_file.close()
 
-        actual_result = timeit.timeit(self.test_runner.sleep(), number = 10)
+        actual_time = timeit.timeit(lambda: self.test_runner.sleep(), number=1)
         
-        self.assertAlmostEqual(expected_result, actual_result)
+        self.assertGreater(permitted_time, actual_time)
 
 if __name__ == '__main__':
     unittest.main()

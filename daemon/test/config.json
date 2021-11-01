@@ -1,4 +1,4 @@
 {
     "destination":"http://localhost:5000/",
-    "report_delay": 0.1
+    "report_delay": 5
 }
