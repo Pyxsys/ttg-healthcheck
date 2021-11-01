@@ -14,13 +14,13 @@ const CpuSchema = new mongoose.Schema({
   processors: {
     type: Number,
   },
-  cahceSizeL1: {
+  cacheSizeL1: {
     type: Number,
   },
-  cahceSizeL2: {
+  cacheSizeL2: {
     type: Number,
   },
-  cahceSizeL3: {
+  cacheSizeL3: {
     type: Date,
   },
 })

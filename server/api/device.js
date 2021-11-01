@@ -12,6 +12,7 @@ router.get('/specific', async (req, res) => {
       $or: [{ deviceId: param }, { name: param }],
     }).exec(function (err, device) {
       res.status(200).json(device)
+      return
     })
   } catch (err) {
     console.error(err.message)
@@ -20,26 +21,31 @@ router.get('/specific', async (req, res) => {
 })
 
 // get multiple devices with options
-router.get('/multiple', async (req, res) => {
+router.get('/options', async (req, res) => {
   try {
-    let limit = req.query.limit
-    let attribute = req.query.attribute
-    let attribute_value = req.query.attribute_value
-    if (!!limit && !!attribute && !!attribute_value) {
-      await Devices.find({ [attribute]: attribute_value })
-        .limit(parseInt(limit))
-        .exec(function (err, device) {
-          res.status(200).json(device)
-        })
-    } else if (!!limit) {
-      await Devices.find()
-        .limit(parseInt(limit))
-        .exec(function (err, device) {
-          res.status(200).json(device)
-        })
-    } else {
-      return res.status(200).json('nope')
+    let options = {}
+    const limit = req.query.limit
+    const attributes = req.query.attributes || {}
+    const orderBy = req.query.orderBy
+    const orderValue = req.query.orderValue || 1
+    if (!!attributes) {
+      const params = new URLSearchParams(attributes)
+      var attributeObject = Object.fromEntries(params.entries())
     }
+    if (!!limit) {
+      options.limit = parseInt(limit)
+    }
+    if (!!orderBy) {
+      options.sort = {
+        [orderBy]: parseInt(orderValue),
+      }
+    }
+    await Devices.find({ $and: [attributeObject] }, {}, options).exec(
+      (err, device) => {
+        res.status(200).json(device)
+        return
+      }
+    )
   } catch (err) {
     console.error(err.message)
     res.status(500).send('Server error')
