@@ -20,27 +20,31 @@ router.get('/specific', async (req, res) => {
   }
 })
 
-// get multiple devices with options
+// get multiple devices with options (limit, attributes, orderBy, orderValue)
 router.get('/options', async (req, res) => {
   try {
     let options = {}
-    const limit = req.query.limit
-    const attributes = req.query.attributes || {}
-    const orderBy = req.query.orderBy
-    const orderValue = req.query.orderValue || 1
-    if (!!attributes) {
-      const params = new URLSearchParams(attributes)
-      var attributeObject = Object.fromEntries(params.entries())
-    }
-    if (!!limit) {
+    let queryObj = req.query
+    if (queryObj.limit) {
+      var limit = queryObj.limit
       options.limit = parseInt(limit)
+      delete queryObj.limit
     }
-    if (!!orderBy) {
+    if (queryObj.orderBy) {
+      var orderBy = queryObj.orderBy
+      delete queryObj.orderBy
+    }
+    if (queryObj.orderValue) {
+      var orderValue = queryObj.orderValue
       options.sort = {
         [orderBy]: parseInt(orderValue),
       }
+      delete queryObj.orderValue
     }
-    await Devices.find({ $and: [attributeObject] }, {}, options).exec(
+    for (var k in queryObj) {
+      queryObj[k] = queryObj[k].split(',')
+    }
+    await Devices.find({ $and: [queryObj] }, {}, options).exec(
       (err, device) => {
         res.status(200).json(device)
         return
