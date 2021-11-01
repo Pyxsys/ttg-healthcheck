@@ -30,10 +30,6 @@ const DeviceSchema = new mongoose.Schema({
   memory: MemorySchema,
   disk: DiskSchema,
   wifi: WifiSchema,
-  cpuLogLatest: CpuLogsSchema,
-  memoryLogLatest: MemoryLogsSchema,
-  diskLogLatest: DiskLogsSchema,
-  wifiLogLatest: WifiLogsSchema,
 })
 
 module.exports = Devices = mongoose.model('devices', DeviceSchema)
