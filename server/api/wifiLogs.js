@@ -3,10 +3,10 @@ const router = express.Router()
 const Wifi = require('../models/wifi.js')
 
 // get X number of entries for single device
-router.get('/specificDevice', async (req, res) => {
+router.get('/specific-device', async (req, res) => {
   try {
+    let limit = req.query.limit
     const id = req.query.deviceId
-    const limit = req.query.limit
     if (!!limit) {
       limit = parseInt(limit)
     }
@@ -26,16 +26,15 @@ router.get('/specificDevice', async (req, res) => {
 // get multiples entries within a timestamp
 router.get('/timestamp', async (req, res) => {
   try {
-    let optionalId = ''
+    const optionalId = req.query.deviceId
     const startTimeStamp = req.query.startTimeStamp
     const endTimeStamp = req.query.endTimeStamp
-    if (!!query.deviceId) {
-      optionalId = query.deviceId
+    if (optionalId) {
       await Wifi.WifiLogs.find({
         deviceId: optionalId,
         timestamp: {
-          $gte: ISODate(startTimeStamp),
-          $lte: ISODate(endTimeStamp),
+          $gte: startTimeStamp,
+          $lte: endTimeStamp,
         },
       }).exec(function (err, WifiLogs) {
         res.status(200).json(WifiLogs)
@@ -44,8 +43,8 @@ router.get('/timestamp', async (req, res) => {
     } else {
       await Wifi.WifiLogs.find({
         timestamp: {
-          $gte: ISODate(startTimeStamp),
-          $lte: ISODate(endTimeStamp),
+          $gte: startTimeStamp,
+          $lte: endTimeStamp,
         },
       }).exec(function (err, WifiLogs) {
         res.status(200).json(WifiLogs)
@@ -57,3 +56,5 @@ router.get('/timestamp', async (req, res) => {
     res.status(500).send('Server error')
   }
 })
+
+module.exports = router
