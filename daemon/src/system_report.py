@@ -84,10 +84,12 @@ def main(config):
     runner.genReport()
     print("\tSending report to server...")
     runner.sendReport()
-    print("\tCleaning up...")
-    del runner
     elapsed=datetime.now()-start
     print("Ending report routine. \nTime elapsed:", elapsed.total_seconds(), "sec")
+    print("\tProcess will now sleep...")
+    runner.sleep()
+    del runner
+    
 
 if __name__ == "__main__":
     main(sys.argv[1])
