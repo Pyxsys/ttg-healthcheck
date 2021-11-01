@@ -1,5 +1,6 @@
 import requests, psutil
 import sys, os, json, re
+import time
 from datetime import datetime
 
 class Runner:
@@ -10,7 +11,6 @@ class Runner:
     def __init__(self, path):
         with open(path, "r") as config_file:
             self.configs = json.load(config_file)
-
 
     def getConfig(self):
         return self.configs
@@ -27,6 +27,9 @@ class Runner:
         self.report.addDeviceUUID()
         self.report.addTimestamp()
         self.report.addSystemProcessInfo()
+
+    def sleep(self):
+        time.sleep(self.getConfig()['report_delay'])
 
 class SysReport:
     # Initializes instance attributes.
