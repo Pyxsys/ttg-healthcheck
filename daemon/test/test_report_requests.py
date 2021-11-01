@@ -2,6 +2,7 @@ import sys
 import json
 import requests
 import unittest
+import timeit
 
 # Include src directory for imports
 sys.path.append('../')
@@ -55,6 +56,24 @@ class TestRunner(unittest.TestCase):
         
         actual_result = response.status_code
         self.assertEqual(expected_result, actual_result)
+
+    def testFetchingDelayInterval(self):
+        config_file = open(sys.path[0] + '/test/config.json')
+        expected_result = json.load(config_file)['report_delay']
+        config_file.close()
+
+        actual_result = self.test_runner.getConfig()['report_delay']
+        
+        self.assertEqual(expected_result, actual_result)
+
+    def testRunnerDelay(self):
+        config_file = open(sys.path[0] + '/test/config.json')
+        expected_result = json.load(config_file)['report_delay']
+        config_file.close()
+
+        actual_result = timeit.timeit(self.test_runner.sleep(), number = 10)
+        
+        self.assertAlmostEqual(expected_result, actual_result)
 
 if __name__ == '__main__':
     unittest.main()
