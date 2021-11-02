@@ -41,8 +41,7 @@ const numberAttributes = [
 // get a specific device, based on param options of either deviceId or name
 router.get('/specific-device', async (req, res) => {
   try {
-    let queryObj = {}
-    queryObj = req.query
+    let queryObj = Object(req.query)
     await Devices.findOne(queryObj).exec(function (err, device) {
       return res.status(200).json(device)
     })
@@ -58,18 +57,13 @@ router.get('/options', async (req, res) => {
     let options = {}
     let query = {}
     let queryObj = Object(req.query)
-    console.log(queryObj)
     for (let k in queryObj) {
       queryObj[k] = queryObj[k].split(',')
       if (stringAttributes.includes(k)) {
-        if (Array.isArray(queryObj[k])) {
-          query[String(k)] = queryObj[k]
-        }
+        query[String(k)] = queryObj[k]
       }
       if (numberAttributes.includes(k)) {
-        if (Array.isArray(queryObj[k])) {
-          query[String(k)] = queryObj[k].map(Number)
-        }
+        query[String(k)] = queryObj[k].map(Number)
       }
     }
     if (query.limit) {
@@ -89,7 +83,6 @@ router.get('/options', async (req, res) => {
         [orderBy]: orderValue,
       }
     }
-    console.log(query)
     await Devices.find({ $and: [query] }, {}, options).exec((err, device) => {
       return res.status(200).json(device)
     })
@@ -99,7 +92,7 @@ router.get('/options', async (req, res) => {
   }
 })
 
-//get multiple devices that have an attributes
+/*
 router.get('/devices-attribute', async (req, res) => {
   try {
     let options = {}
@@ -131,5 +124,6 @@ router.get('/devices-attribute', async (req, res) => {
     res.status(500).send('Server error')
   }
 })
+*/
 
 module.exports = router

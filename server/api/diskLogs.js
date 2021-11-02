@@ -2,7 +2,7 @@ const express = require('express')
 const router = express.Router()
 const Disk = require('../models/disk.js')
 
-// get X number of entries for single device
+// get X number of entries for single device (limit, deviceId)
 router.get('/specific-device', async (req, res) => {
   try {
     let limit = req.query.limit
@@ -23,7 +23,7 @@ router.get('/specific-device', async (req, res) => {
   }
 })
 
-// get multiples entries within a timestamp
+// get multiples entries within a timestamp ( optionalId, startTimeStamp, endTimeStamp)
 router.get('/timestamp', async (req, res) => {
   try {
     const optionalId = String(req.query.deviceId)
