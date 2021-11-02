@@ -26,7 +26,7 @@ router.get('/specific-device', async (req, res) => {
 // get multiples entries within a timestamp
 router.get('/timestamp', async (req, res) => {
   try {
-    const optionalId = req.query.deviceId.toString()
+    const optionalId = String(req.query.deviceId)
     const startTimeStamp = Date(req.query.startTimeStamp)
     const endTimeStamp = Date(req.query.endTimeStamp)
     if (optionalId) {

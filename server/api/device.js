@@ -7,7 +7,8 @@ const auth = require('../middleware/auth.js')
 // get a specific device, based on param options of either deviceId or name
 router.get('/specific-device', async (req, res) => {
   try {
-    const queryObj = req.query.toString()
+    let queryObj = {}
+    queryObj = req.query
     await Devices.findOne(queryObj).exec(function (err, device) {
       return res.status(200).json(device)
     })
@@ -21,7 +22,8 @@ router.get('/specific-device', async (req, res) => {
 router.get('/options', async (req, res) => {
   try {
     let options = {}
-    let queryObj = req.query
+    let queryObj = {}
+    queryObj = req.query
     if (queryObj.limit) {
       var limit = queryObj.limit
       options.limit = parseInt(limit)
@@ -43,7 +45,7 @@ router.get('/options', async (req, res) => {
     for (let k in queryObj) {
       queryObj[k] = queryObj[k].split(',')
     }
-    await Devices.find({ $and: [queryObj.toString()] }, {}, options).exec(
+    await Devices.find({ $and: [queryObj] }, {}, options).exec(
       (err, device) => {
         return res.status(200).json(device)
       }
@@ -58,7 +60,8 @@ router.get('/options', async (req, res) => {
 router.get('/devices-attribute', async (req, res) => {
   try {
     let options = {}
-    let queryObj = req.query
+    let queryObj = {}
+    queryObj = req.query
     if (queryObj.limit) {
       var limit = queryObj.limit
       options.limit = parseInt(limit)
@@ -77,7 +80,6 @@ router.get('/devices-attribute', async (req, res) => {
         [orderBy]: parseInt(orderValue),
       }
     }
-    query = queryObj.toString()
     await Devices.find({ queryObj }, {}, options).exec((err, device) => {
       return res.status(200).json(device)
     })
