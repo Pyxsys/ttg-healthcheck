@@ -2,9 +2,10 @@ const express = require('express')
 const router = express.Router()
 const Disk = require('../models/disk.js')
 const { filterData } = require('./shared/filter')
+const auth = require('../middleware/auth.js')
 
 // get X number of entries for single device (limit, deviceId)
-router.get('/specific-device', async (req, res) => {
+router.get('/specific-device', auth, async (req, res) => {
   try {
     let limit = req.query.limit
     const id = String(req.query.deviceId)
@@ -25,7 +26,7 @@ router.get('/specific-device', async (req, res) => {
 })
 
 // get multiples entries within a timestamp ( optionalId, startTimeStamp, endTimeStamp)
-router.get('/timestamp', async (req, res) => {
+router.get('/timestamp', auth, async (req, res) => {
   try {
     let optionalId = req.query.deviceId
     const startTimeStamp = String(req.query.startTimeStamp)
@@ -58,7 +59,7 @@ router.get('/timestamp', async (req, res) => {
 })
 
 // get multiple entries given an attribute with the ability to add a limit and order by filter
-router.get('/specific-attribute', async (req, res) => {
+router.get('/specific-attribute', auth, async (req, res) => {
   try {
     let [query, options] = filterData(req.query)
     await Disk.DiskLogs.find({ $and: [query] }, {}, options).exec(

@@ -6,7 +6,7 @@ const auth = require('../middleware/auth.js')
 const { filterData } = require('./shared/filter')
 
 // get a specific device, based on param option of either deviceId or name
-router.get('/specific-device', async (req, res) => {
+router.get('/specific-device', auth, async (req, res) => {
   try {
     const param = String(req.query.entry)
     await Devices.findOne({
@@ -21,7 +21,7 @@ router.get('/specific-device', async (req, res) => {
 })
 
 // get multiple devices with param options (limit, multiple attributes, orderBy, orderValue)
-router.get('/options', async (req, res) => {
+router.get('/options', auth, async (req, res) => {
   try {
     let [query, options] = filterData(req.query)
     await Devices.find({ $and: [query] }, {}, options).exec((err, device) => {
