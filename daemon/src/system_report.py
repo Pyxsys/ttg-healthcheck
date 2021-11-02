@@ -1,5 +1,6 @@
 import requests, psutil
 import sys, os, json, re
+import time
 from datetime import datetime
 
 class Runner:
@@ -10,7 +11,6 @@ class Runner:
     def __init__(self, path):
         with open(path, "r") as config_file:
             self.configs = json.load(config_file)
-
 
     def getConfig(self):
         return self.configs
@@ -28,6 +28,9 @@ class Runner:
         self.report.addTimestamp()
         self.report.addSystemProcessInfo()
 
+    def sleep(self):
+        time.sleep(self.getConfig()['report_delay'])
+
 class SysReport:
     # Initializes instance attributes.
     def __init__(self):
@@ -44,7 +47,7 @@ class SysReport:
 
     def printReport(self):
         print(json.dumps(self.report_message, indent=4, sort_keys=True))
-       
+
     def addSystemProcessInfo(self):
         process_list = list()
 
@@ -55,7 +58,7 @@ class SysReport:
         self.setSection("processes", process_list)
 
     def addTimestamp(self):
-        self.setSection("timestamp",datetime.now())
+        self.setSection("timestamp",datetime.now().isoformat())
 
     def addDeviceUUID(self):
         os_type = sys.platform.lower()
@@ -70,7 +73,7 @@ class SysReport:
         extract=os.popen(command)
         uuid=re.findall(pattern, extract.read(), flags)[0]
         extract.close()
-        
+
         self.setSection("deviceId", uuid)
 
 def main(config):
@@ -81,10 +84,12 @@ def main(config):
     runner.genReport()
     print("\tSending report to server...")
     runner.sendReport()
-    print("\tCleaning up...")
-    del runner
     elapsed=datetime.now()-start
     print("Ending report routine. \nTime elapsed:", elapsed.total_seconds(), "sec")
+    print("Process will now sleep...")
+    runner.sleep()
+    del runner
+
 
 if __name__ == "__main__":
     main(sys.argv[1])
