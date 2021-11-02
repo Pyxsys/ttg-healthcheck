@@ -12,10 +12,12 @@
   "lint-staged": {
     "**/*.{js,jsx}": [
       "npm run lint:fix --prefix server",
+      "npm run test:staged --prefix server",
       "git add ."
     ],
     "**/*.{ts,tsx}": [
       "npm run lint:fix --prefix client",
+      "npm run test:staged --prefix client",
       "git add ."
     ]
   },
