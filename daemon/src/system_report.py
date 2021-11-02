@@ -47,7 +47,7 @@ class SysReport:
 
     def printReport(self):
         print(json.dumps(self.report_message, indent=4, sort_keys=True))
-       
+
     def addSystemProcessInfo(self):
         process_list = list()
 
@@ -58,7 +58,7 @@ class SysReport:
         self.setSection("processes", process_list)
 
     def addTimestamp(self):
-        self.setSection("timestamp",datetime.now())
+        self.setSection("timestamp",datetime.now().isoformat())
 
     def addDeviceUUID(self):
         os_type = sys.platform.lower()
@@ -73,7 +73,7 @@ class SysReport:
         extract=os.popen(command)
         uuid=re.findall(pattern, extract.read(), flags)[0]
         extract.close()
-        
+
         self.setSection("deviceId", uuid)
 
 def main(config):
@@ -89,7 +89,7 @@ def main(config):
     print("\tProcess will now sleep...")
     runner.sleep()
     del runner
-    
+
 
 if __name__ == "__main__":
     main(sys.argv[1])
