@@ -38,11 +38,13 @@ const numberAttributes = [
   'disk.capacity',
 ]
 
-// get a specific device, based on param options of either deviceId or name
+// get a specific device, based on param option of either deviceId or name
 router.get('/specific-device', async (req, res) => {
   try {
-    let queryObj = Object(req.query)
-    await Devices.findOne(queryObj).exec(function (err, device) {
+    const param = String(req.query.entry)
+    await Devices.findOne({
+      $or: [{ deviceId: param }, { name: param }],
+    }).exec(function (err, device) {
       return res.status(200).json(device)
     })
   } catch (err) {
