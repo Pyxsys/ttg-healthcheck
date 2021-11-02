@@ -94,38 +94,4 @@ router.get('/options', async (req, res) => {
   }
 })
 
-/*
-router.get('/devices-attribute', async (req, res) => {
-  try {
-    let options = {}
-    let queryObj = {}
-    queryObj = req.query
-    if (queryObj.limit) {
-      var limit = queryObj.limit
-      options.limit = parseInt(limit)
-      delete queryObj.limit
-    }
-    if (queryObj.orderBy) {
-      var orderBy = queryObj.orderBy
-      delete queryObj.orderBy
-    }
-    if (queryObj.orderValue) {
-      var orderValue = queryObj.orderValue
-      delete queryObj.orderValue
-    }
-    if (orderValue && orderBy) {
-      options.sort = {
-        [orderBy]: parseInt(orderValue),
-      }
-    }
-    await Devices.find({ queryObj }, {}, options).exec((err, device) => {
-      return res.status(200).json(device)
-    })
-  } catch (err) {
-    console.error(err.message)
-    res.status(500).send('Server error')
-  }
-})
-*/
-
 module.exports = router

@@ -6,16 +6,16 @@ const Memory = require('../models/memory.js')
 router.get('/specific-device', async (req, res) => {
   try {
     let limit = req.query.limit
-    const id = req.query.deviceId
-    let query = { deviceId: parseInt(id) }
-    if (!!limit) {
+    const id = String(req.query.deviceId)
+    let query = { deviceId: id }
+    if (limit) {
       limit = parseInt(limit)
     }
     await Memory.MemoryLogs.find(query)
       .sort({ timestamp: -1 })
       .limit(limit)
-      .exec(function (err, MemoryLogs) {
-        return res.status(200).json(MemoryLogs)
+      .exec(function (err, memoryLogs) {
+        return res.status(200).json(memoryLogs)
       })
   } catch (err) {
     console.error(err.message)
@@ -26,18 +26,19 @@ router.get('/specific-device', async (req, res) => {
 // get multiples entries within a timestamp ( optionalId, startTimeStamp, endTimeStamp)
 router.get('/timestamp', async (req, res) => {
   try {
-    const optionalId = String(req.query.deviceId)
-    const startTimeStamp = Date(req.query.startTimeStamp)
-    const endTimeStamp = Date(req.query.endTimeStamp)
+    let optionalId = req.query.deviceId
+    const startTimeStamp = String(req.query.startTimeStamp)
+    const endTimeStamp = String(req.query.endTimeStamp)
     if (optionalId) {
+      optionalId = String(req.query.deviceId)
       await Memory.MemoryLogs.find({
         deviceId: optionalId,
         timestamp: {
           $gte: startTimeStamp,
           $lte: endTimeStamp,
         },
-      }).exec(function (err, WifiLogs) {
-        return res.status(200).json(WifiLogs)
+      }).exec(function (err, memoryLogs) {
+        return res.status(200).json(memoryLogs)
       })
     } else {
       await Memory.MemoryLogs.find({
@@ -45,8 +46,8 @@ router.get('/timestamp', async (req, res) => {
           $gte: startTimeStamp,
           $lte: endTimeStamp,
         },
-      }).exec(function (err, WifiLogs) {
-        return res.status(200).json(WifiLogs)
+      }).exec(function (err, memoryLogs) {
+        return res.status(200).json(memoryLogs)
       })
     }
   } catch (err) {
