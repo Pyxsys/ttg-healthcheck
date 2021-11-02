@@ -86,7 +86,7 @@ def main(config):
     runner.sendReport()
     elapsed=datetime.now()-start
     print("Ending report routine. \nTime elapsed:", elapsed.total_seconds(), "sec")
-    print("\tProcess will now sleep...")
+    print("Process will now sleep...")
     runner.sleep()
     del runner
 
