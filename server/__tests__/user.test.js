@@ -13,7 +13,7 @@ const userOne = {
   name: 'test',
   password: 'password',
   email: 'test@gmail.com',
-  role: 'none',
+  role: 'user',
 }
 
 describe('Sign up given a username and password', () => {
@@ -28,7 +28,7 @@ describe('Sign up given a username and password', () => {
     expect(response.headers['content-type']).toEqual(
       expect.stringContaining('json')
     )
-    expect(response.body.user.id).toBeDefined()
+    expect(response.body.message).toBeDefined()
   })
   it('should respond with a 400 status code when user already exists', async () => {
     const response = await request(app).post('/api/user/register').send({
@@ -91,7 +91,7 @@ describe('Log in given a username and password', () => {
       email: userOne.email,
       password: userOne.password,
     })
-    expect(response.body.user.id).toBeDefined()
+    expect(response.body.message).toBeDefined()
   })
   it('should respond with a 500 status code when a param is missing', async () => {
     const response = await request(app).post('/api/user/login').send({

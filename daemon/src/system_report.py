@@ -1,7 +1,6 @@
-import requests
-import psutil
-import json
-import sys
+import requests, psutil
+import sys, os, json, re
+import time
 from datetime import datetime
 
 class Runner:
@@ -12,7 +11,6 @@ class Runner:
     def __init__(self, path):
         with open(path, "r") as config_file:
             self.configs = json.load(config_file)
-
 
     def getConfig(self):
         return self.configs
@@ -26,7 +24,12 @@ class Runner:
 
     def genReport(self):
         self.report=SysReport()
+        self.report.addDeviceUUID()
+        self.report.addTimestamp()
         self.report.addSystemProcessInfo()
+
+    def sleep(self):
+        time.sleep(self.getConfig()['report_delay'])
 
 class SysReport:
     # Initializes instance attributes.
@@ -44,7 +47,7 @@ class SysReport:
 
     def printReport(self):
         print(json.dumps(self.report_message, indent=4, sort_keys=True))
-       
+
     def addSystemProcessInfo(self):
         process_list = list()
 
@@ -54,6 +57,25 @@ class SysReport:
 
         self.setSection("processes", process_list)
 
+    def addTimestamp(self):
+        self.setSection("timestamp",datetime.now().isoformat())
+
+    def addDeviceUUID(self):
+        os_type = sys.platform.lower()
+        pattern = '[a-zA-Z0-9]{8}(?:-[a-zA-Z0-9]{4}){3}-[a-zA-Z0-9]{12}'
+        flags=re.MULTILINE
+
+        if "win" in os_type:
+            command = "wmic csproduct get uuid"
+        elif "linux" in os_type:
+            command = "sudo dmidecode -s system-uuid"
+
+        extract=os.popen(command)
+        uuid=re.findall(pattern, extract.read(), flags)[0]
+        extract.close()
+
+        self.setSection("deviceId", uuid)
+
 def main(config):
     start=datetime.now()
     print("Starting new report routine at", start)
@@ -62,10 +84,12 @@ def main(config):
     runner.genReport()
     print("\tSending report to server...")
     runner.sendReport()
-    print("\tCleaning up...")
-    del runner
     elapsed=datetime.now()-start
     print("Ending report routine. \nTime elapsed:", elapsed.total_seconds(), "sec")
+    print("Process will now sleep...")
+    runner.sleep()
+    del runner
+
 
 if __name__ == "__main__":
     main(sys.argv[1])

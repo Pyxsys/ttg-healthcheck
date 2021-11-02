@@ -1,11 +1,13 @@
 import React, {useEffect, useState} from 'react';
+import {Redirect} from 'react-router-dom';
 import axios from 'axios';
+import {useAuth} from '../context/authContext';
 
 interface CollectionEvent {
-  _id: string;
-  collection?: string;
-  operation?: string;
-  updatedFields?: any;
+  _id: string
+  collection?: string
+  operation?: string
+  updatedFields?: any
 }
 
 const Login = () => {
@@ -32,9 +34,10 @@ const Login = () => {
         _id: data.documentKey._id,
         collection: 'cpu',
         operation: data.operationType,
-        updatedFields: data.operationType === 'update' ?
-          data.updateDescription.updatedFields :
-          data.fullDocument,
+        updatedFields:
+          data.operationType === 'update' ?
+            data.updateDescription.updatedFields :
+            data.fullDocument,
       };
       setCollectionData(realTimeData);
     };
@@ -47,9 +50,10 @@ const Login = () => {
         _id: data.documentKey._id,
         collection: 'memory',
         operation: data.operationType,
-        updatedFields: data.operationType === 'update' ?
-          data.updateDescription.updatedFields :
-          data.fullDocument,
+        updatedFields:
+          data.operationType === 'update' ?
+            data.updateDescription.updatedFields :
+            data.fullDocument,
       };
       setCollectionData(realTimeData);
     };
@@ -60,6 +64,16 @@ const Login = () => {
     };
   }, []);
 
+  interface AxiosResult {
+    message: string
+    user: {
+      name: string
+      role: string
+    }
+  }
+
+  const {setUser, setIsAuthenticated} = useAuth();
+  const [loggedIn, setLoggedIn] = useState(false);
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -89,10 +103,12 @@ const Login = () => {
       password: formData1.password1,
     };
     await axios
-        .post('api/user/login', body)
+        .post<AxiosResult>('api/user/login', body)
         .then((response) => {
           if (response.data) {
-            console.log(response.data);
+            setUser(response.data.user);
+            setIsAuthenticated(true);
+            setLoggedIn(true);
           }
         })
         .catch((error) => {
@@ -107,20 +123,9 @@ const Login = () => {
         .then((response) => {
           if (response.data) {
             console.log(response.data);
-          }
-        })
-        .catch((error) => {
-          console.error(error);
-        });
-  };
-
-  const protect = async (e: React.ChangeEvent<any>) => {
-    e.preventDefault();
-    await axios
-        .get('api/user/protected')
-        .then((response) => {
-          if (response.data) {
-            console.log(response.data);
+            setUser({name: '', role: ''});
+            setIsAuthenticated(false);
+            setLoggedIn(false);
           }
         })
         .catch((error) => {
@@ -145,10 +150,12 @@ const Login = () => {
         };
         const body = JSON.stringify(newUser);
         await axios
-            .post('/api/user/register', body, config)
+            .post<AxiosResult>('/api/user/register', body, config)
             .then((response) => {
               if (response.data) {
-                console.log(response.data);
+                setUser(response.data.user);
+                setIsAuthenticated(true);
+                setLoggedIn(true);
               }
             })
             .catch((error) => {
@@ -160,6 +167,9 @@ const Login = () => {
     }
   };
 
+  if (loggedIn) {
+    return <Redirect to="/dashboard" />;
+  }
   return (
     <>
       <div>
@@ -188,7 +198,6 @@ const Login = () => {
           <button type="submit">Login</button>
         </form>
         <button onClick={(e) => logout(e)}>Log Out</button>
-        <button onClick={(e) => protect(e)}>only logged users</button>
         <br />
         <br />
         <form onSubmit={(e) => register(e)}>
@@ -236,11 +245,14 @@ const Login = () => {
           <button type="submit">Sign up</button>
         </form>
 
-        <div style={{display: 'flex',
-          flexDirection: 'column',
-          justifyContent: 'center',
-          marginTop: '1.5rem'}}>
-
+        <div
+          style={{
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'center',
+            marginTop: '1.5rem',
+          }}
+        >
           <div>Updated Data From MongoDB</div>
           <table style={{borderCollapse: 'collapse'}}>
             <tbody>
@@ -251,20 +263,23 @@ const Login = () => {
                 <th>data Changed</th>
               </tr>
 
-              {realTimeData
-                  .map((data, i) => (
-                    <tr key={`${data._id}-${i}`}
-                      style={{borderBottom: 'solid 2px black'}}>
-                      <td>{data._id}</td>
-                      <td>{data.collection}</td>
-                      <td>{data.operation}</td>
-                      <td>
-                        {Object.keys(data.updatedFields).map((col) => (
-                          <div key={col}>{col} - {data.updatedFields[col]}</div>
-                        ))}
-                      </td>
-                    </tr>
-                  ))}
+              {realTimeData.map((data, i) => (
+                <tr
+                  key={`${data._id}-${i}`}
+                  style={{borderBottom: 'solid 2px black'}}
+                >
+                  <td>{data._id}</td>
+                  <td>{data.collection}</td>
+                  <td>{data.operation}</td>
+                  <td>
+                    {Object.keys(data.updatedFields).map((col) => (
+                      <div key={col}>
+                        {col} - {data.updatedFields[col]}
+                      </div>
+                    ))}
+                  </td>
+                </tr>
+              ))}
             </tbody>
           </table>
         </div>

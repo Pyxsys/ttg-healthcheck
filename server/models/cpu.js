@@ -1,4 +1,5 @@
 const mongoose = require('mongoose')
+const { ProcessSchema, Processes } = require('./process')
 
 const CpuSchema = new mongoose.Schema({
   baseSpeed: {
@@ -50,6 +51,7 @@ const CpuLogsSchema = new mongoose.Schema({
   timestamp: {
     type: Date,
   },
+  processes: [ProcessSchema],
 })
 
 const CpuLogs = mongoose.model('cpu_logs', CpuLogsSchema)
