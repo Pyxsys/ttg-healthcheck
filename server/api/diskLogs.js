@@ -7,11 +7,11 @@ router.get('/specific-device', async (req, res) => {
   try {
     let limit = req.query.limit
     const id = req.query.deviceId
-    let query = { deviceId: parseInt(id) }
+    let query = { deviceId: id.toString() }
     if (!!limit) {
       limit = parseInt(limit)
     }
-    await Disk.DiskLogs.find({ deviceId: id })
+    await Disk.DiskLogs.find(query)
       .sort({ timestamp: -1 })
       .limit(limit)
       .exec(function (err, DiskLogs) {
@@ -26,7 +26,7 @@ router.get('/specific-device', async (req, res) => {
 // get multiples entries within a timestamp
 router.get('/timestamp', async (req, res) => {
   try {
-    const optionalId = req.query.deviceId
+    const optionalId = req.query.deviceId.toString()
     const startTimeStamp = Date(req.query.startTimeStamp)
     const endTimeStamp = Date(req.query.endTimeStamp)
     if (optionalId) {
