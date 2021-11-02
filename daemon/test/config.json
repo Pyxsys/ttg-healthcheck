@@ -1,3 +1,4 @@
 {
-    "destination":"http://localhost:5000/"
+    "destination":"http://localhost:5000/",
+    "report_delay": 5
 }

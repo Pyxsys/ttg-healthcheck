@@ -34,5 +34,4 @@ umask 0		#reset file mask
 #Main loop
 while true; do
 	python3 $scrubber $config
-	sleep 10;
 done
