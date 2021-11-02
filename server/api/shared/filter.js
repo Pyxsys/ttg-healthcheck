@@ -81,7 +81,7 @@ const filterData = (req) => {
         [orderBy]: orderValue,
       }
     }
-    return query;
+    return [query, options];
 }
 
 module.exports = { filterData }

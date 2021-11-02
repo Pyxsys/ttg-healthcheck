@@ -3,7 +3,7 @@ const express = require('express')
 const router = express.Router()
 const Devices = require('../models/device.js')
 const auth = require('../middleware/auth.js')
-const filterData = require('./shared/filter')
+const { filterData } = require('./shared/filter')
 
 // get a specific device, based on param option of either deviceId or name
 router.get('/specific-device', async (req, res) => {
@@ -23,7 +23,7 @@ router.get('/specific-device', async (req, res) => {
 // get multiple devices with param options (limit, multiple attributes, orderBy, orderValue)
 router.get('/options', async (req, res) => {
   try {
-    let query = filterData(req.query)
+    let [query, options] = filterData(req.query)
     await Devices.find({ $and: [query] }, {}, options).exec((err, device) => {
       return res.status(200).json(device)
     })

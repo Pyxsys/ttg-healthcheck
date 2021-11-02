@@ -1,7 +1,7 @@
 const express = require('express')
 const router = express.Router()
 const Cpu = require('../models/cpu.js')
-const filterData = require('./shared/filter')
+const { filterData } = require('./shared/filter')
 
 // get X number of entries for single device (limit, deviceId)
 router.get('/specific-device', async (req, res) => {
@@ -60,7 +60,7 @@ router.get('/timestamp', async (req, res) => {
 // get multiple entries given an attribute with the ability to add a limit and order by filter
 router.get('/specific-attribute', async (req, res) => {
   try {
-    let query = filterData(req.query)
+    let [query, options] = filterData(req.query)
     await Cpu.CpuLogs.find({ $and: [query] }, {}, options).exec(
       (err, cpuLogs) => {
         return res.status(200).json(cpuLogs)
