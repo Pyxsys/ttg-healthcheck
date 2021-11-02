@@ -7,7 +7,7 @@ router.get('/specific-device', async (req, res) => {
   try {
     let limit = req.query.limit
     const id = req.query.deviceId
-    let query = { deviceId: parseInt(id)}
+    let query = { deviceId: parseInt(id) }
     if (!!limit) {
       limit = parseInt(limit)
     }
@@ -15,8 +15,7 @@ router.get('/specific-device', async (req, res) => {
       .sort({ timestamp: -1 })
       .limit(limit)
       .exec(function (err, cpuLogs) {
-        res.status(200).json(cpuLogs)
-        return
+        return res.status(200).json(cpuLogs)
       })
   } catch (err) {
     console.error(err.message)
@@ -31,14 +30,14 @@ router.get('/timestamp', async (req, res) => {
     const startTimeStamp = Date(req.query.startTimeStamp)
     const endTimeStamp = Date(req.query.endTimeStamp)
     if (optionalId) {
-      await Cpu.CpuLogs.find({ deviceId: optionalId,
+      await Cpu.CpuLogs.find({
+        deviceId: optionalId,
         timestamp: {
           $gte: startTimeStamp,
           $lte: endTimeStamp,
-        }
+        },
       }).exec(function (err, WifiLogs) {
-        res.status(200).json(WifiLogs)
-        return
+        return res.status(200).json(WifiLogs)
       })
     } else {
       await Cpu.CpuLogs.find({
@@ -47,8 +46,7 @@ router.get('/timestamp', async (req, res) => {
           $lte: endTimeStamp,
         },
       }).exec(function (err, WifiLogs) {
-        res.status(200).json(WifiLogs)
-        return
+        return res.status(200).json(WifiLogs)
       })
     }
   } catch (err) {

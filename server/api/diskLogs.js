@@ -14,8 +14,7 @@ router.get('/specific-device', async (req, res) => {
       .sort({ timestamp: -1 })
       .limit(limit)
       .exec(function (err, DiskLogs) {
-        res.status(200).json(DiskLogs)
-        return
+        return res.status(200).json(DiskLogs)
       })
   } catch (err) {
     console.error(err.message)
@@ -37,8 +36,7 @@ router.get('/timestamp', async (req, res) => {
           $lte: endTimeStamp,
         },
       }).exec(function (err, WifiLogs) {
-        res.status(200).json(WifiLogs)
-        return
+        return res.status(200).json(WifiLogs)
       })
     } else {
       await Disk.DiskLogs.find({
@@ -47,8 +45,7 @@ router.get('/timestamp', async (req, res) => {
           $lte: endTimeStamp,
         },
       }).exec(function (err, WifiLogs) {
-        res.status(200).json(WifiLogs)
-        return
+        return res.status(200).json(WifiLogs)
       })
     }
   } catch (err) {
