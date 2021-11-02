@@ -57,18 +57,18 @@ router.get('/options', async (req, res) => {
   try {
     let options = {}
     let query = {}
-    let queryObj = req.query
+    let queryObj = Object(req.query)
     console.log(queryObj)
     for (let k in queryObj) {
       queryObj[k] = queryObj[k].split(',')
       if (stringAttributes.includes(k)) {
-        query[k] = queryObj[k]
+        if (Array.isArray(queryObj[k])) {
+          query[String(k)] = queryObj[k]
+        }
       }
       if (numberAttributes.includes(k)) {
         if (Array.isArray(queryObj[k])) {
-          query[k] = queryObj[k].map(Number)
-        } else {
-          query[k] = parseInt(queryObj[k])
+          query[String(k)] = queryObj[k].map(Number)
         }
       }
     }
