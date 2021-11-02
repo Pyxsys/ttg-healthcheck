@@ -7,10 +7,11 @@ router.get('/specific-device', async (req, res) => {
   try {
     let limit = req.query.limit
     const id = req.query.deviceId
+    let query = { deviceId: parseInt(id) }
     if (!!limit) {
       limit = parseInt(limit)
     }
-    await Wifi.WifiLogs.find({ deviceId: id })
+    await Wifi.WifiLogs.find(query)
       .sort({ timestamp: -1 })
       .limit(limit)
       .exec(function (err, WifiLogs) {
@@ -27,8 +28,8 @@ router.get('/specific-device', async (req, res) => {
 router.get('/timestamp', async (req, res) => {
   try {
     const optionalId = req.query.deviceId
-    const startTimeStamp = req.query.startTimeStamp
-    const endTimeStamp = req.query.endTimeStamp
+    const startTimeStamp = Date(req.query.startTimeStamp)
+    const endTimeStamp = Date(req.query.endTimeStamp)
     if (optionalId) {
       await Wifi.WifiLogs.find({
         deviceId: optionalId,

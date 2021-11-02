@@ -7,6 +7,7 @@ router.get('/specific-device', async (req, res) => {
   try {
     let limit = req.query.limit
     const id = req.query.deviceId
+    let query = { deviceId: parseInt(id) }
     if (!!limit) {
       limit = parseInt(limit)
     }
@@ -27,8 +28,8 @@ router.get('/specific-device', async (req, res) => {
 router.get('/timestamp', async (req, res) => {
   try {
     const optionalId = req.query.deviceId
-    const startTimeStamp = req.query.startTimeStamp
-    const endTimeStamp = req.query.endTimeStamp
+    const startTimeStamp = Date(req.query.startTimeStamp)
+    const endTimeStamp = Date(req.query.endTimeStamp)
     if (optionalId) {
       await Disk.DiskLogs.find({
         deviceId: optionalId,

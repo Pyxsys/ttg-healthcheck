@@ -7,7 +7,7 @@ const auth = require('../middleware/auth.js')
 // get a specific device, based on param options of either deviceId or name
 router.get('/specific-device', async (req, res) => {
   try {
-    const queryObj = req.query
+    const queryObj = req.query.toString()
     await Devices.findOne(queryObj).exec(function (err, device) {
       res.status(200).json(device)
       return
@@ -44,7 +44,7 @@ router.get('/options', async (req, res) => {
     for (let k in queryObj) {
       queryObj[k] = queryObj[k].split(',')
     }
-    await Devices.find({ $and: [queryObj] }, {}, options).exec(
+    await Devices.find({ $and: [queryObj.toString()] }, {}, options).exec(
       (err, device) => {
         res.status(200).json(device)
         return
@@ -79,6 +79,7 @@ router.get('/devices-attribute', async (req, res) => {
         [orderBy]: parseInt(orderValue),
       }
     }
+    query = queryObj.toString()
     await Devices.find({ queryObj }, {}, options).exec((err, device) => {
       res.status(200).json(device)
       return
