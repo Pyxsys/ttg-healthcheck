@@ -21,7 +21,7 @@ const CpuSchema = new mongoose.Schema({
     type: Number,
   },
   cacheSizeL3: {
-    type: Date,
+    type: Number,
   },
 })
 
