@@ -9,8 +9,7 @@ router.get('/specific-device', async (req, res) => {
   try {
     const queryObj = req.query.toString()
     await Devices.findOne(queryObj).exec(function (err, device) {
-      res.status(200).json(device)
-      return
+      return res.status(200).json(device)
     })
   } catch (err) {
     console.error(err.message)
@@ -46,8 +45,7 @@ router.get('/options', async (req, res) => {
     }
     await Devices.find({ $and: [queryObj.toString()] }, {}, options).exec(
       (err, device) => {
-        res.status(200).json(device)
-        return
+        return res.status(200).json(device)
       }
     )
   } catch (err) {
@@ -81,8 +79,7 @@ router.get('/devices-attribute', async (req, res) => {
     }
     query = queryObj.toString()
     await Devices.find({ queryObj }, {}, options).exec((err, device) => {
-      res.status(200).json(device)
-      return
+      return res.status(200).json(device)
     })
   } catch (err) {
     console.error(err.message)

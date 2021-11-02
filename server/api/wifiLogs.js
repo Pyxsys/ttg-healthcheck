@@ -15,8 +15,7 @@ router.get('/specific-device', async (req, res) => {
       .sort({ timestamp: -1 })
       .limit(limit)
       .exec(function (err, WifiLogs) {
-        res.status(200).json(WifiLogs)
-        return
+        return res.status(200).json(WifiLogs)
       })
   } catch (err) {
     console.error(err.message)
@@ -38,8 +37,7 @@ router.get('/timestamp', async (req, res) => {
           $lte: endTimeStamp,
         },
       }).exec(function (err, WifiLogs) {
-        res.status(200).json(WifiLogs)
-        return
+        return res.status(200).json(WifiLogs)
       })
     } else {
       await Wifi.WifiLogs.find({
@@ -48,8 +46,7 @@ router.get('/timestamp', async (req, res) => {
           $lte: endTimeStamp,
         },
       }).exec(function (err, WifiLogs) {
-        res.status(200).json(WifiLogs)
-        return
+        return res.status(200).json(WifiLogs)
       })
     }
   } catch (err) {
