@@ -11,6 +11,11 @@ app.use(cookieParser())
 
 // Define Routes
 app.use('/api/user', require('./api/user'))
+app.use('/api/device', require('./api/device'))
+app.use('/api/disk-logs', require('./api/diskLogs'))
+app.use('/api/memory-logs', require('./api/memoryLogs'))
+app.use('/api/wifi-logs', require('./api/wifiLogs'))
+app.use('/api/cpu-logs', require('./api/cpuLogs'))
 app.use('/api/daemon_endpoint', require('./api/daemon_endpoint'))
 
 module.exports = app
