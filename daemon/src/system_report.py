@@ -54,8 +54,7 @@ class SysReport:
         for proc in psutil.process_iter():
             process_info_dictionary = proc.as_dict(attrs=['name', 'pid'])
             
-            proc.cpu_percent(interval=None) #Ignore initial 0.0 result
-            process_info_dictionary['cpu_percent']=proc.cpu_percent(interval=None)/psutil.cpu_count()
+            process_info_dictionary['cpu_percent'] = proc.cpu_percent(interval=0.1) / psutil.cpu_count()
 
             process_list.append(process_info_dictionary)
 
