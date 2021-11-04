@@ -129,6 +129,9 @@ const Login = () => {
     return <Redirect to="/dashboard" />;
   }
 
+  if (loggedIn) {
+    return <Redirect to="/dashboard" />;
+  }
   return (
     <>
       <div

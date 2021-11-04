@@ -1,4 +1,5 @@
 const mongoose = require('mongoose')
+const { exitProcess } = require('../destroyProcess')
 
 // connect to database
 const connectDB = async () => {
@@ -10,8 +11,7 @@ const connectDB = async () => {
       })
       .then(() => console.log('MongoDB connected...'))
   } catch (err) {
-    console.error(err.message)
-    process.exit(1)
+    exitProcess(err.message, 1)
   }
 }
 

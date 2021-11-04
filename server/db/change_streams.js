@@ -1,6 +1,7 @@
 const mongoose = require('mongoose')
-const clientCollections = require('./ws_clients')
+const { notifyClients, getCollectionsNames } = require('./collection_subject')
 
+var changeStreamsMonitored = []
 const pipeline = {
   $match: {
     $or: [{ operationType: 'insert' }, { operationType: 'update' }],
@@ -8,34 +9,80 @@ const pipeline = {
   },
 }
 
-const monitorChangeStream = async (collectionName) => {
-  const client = mongoose.connection.getClient()
-  const db = client.db('database')
-  const collection = db.collection(collectionName)
-  const changeStream = collection.watch([pipeline])
+const numOfMonitoredChangeStream = () => {
+  return changeStreamsMonitored.length
+}
 
+/**
+ * Creates a change stream for a given collection.
+ * If the collection does not exist it will be created
+ * implicitly. Returns the created change stream.
+ * @param {String} collectionName
+ * @returns a change stream
+ */
+const createChangeStream = (collectionName) => {
+  const client = mongoose.connection.getClient()
+  const db = client.db(process.env.MONGO_DB)
+  const collection = db.collection(collectionName)
+  return collection.watch([pipeline])
+}
+
+/**
+ * Attach a change stream to notify the clients
+ * when the change stream recieves an update.
+ * @param {ChangeStream<Document>} changeStream
+ */
+const attachNotifyClients = (changeStream) => {
   // When there is a change to the collection
   changeStream.on('change', (next) => {
-    clientCollections[collectionName].forEach((client) => {
-      if (client.readyState === client.OPEN) {
-        client.send(JSON.stringify(next))
-      }
-    })
-  })
-
-  // When the process exits, close the change stream
-  process.on('exit', () => {
-    changeStream.close()
-    console.log(
-      `Closed MongoDB Change Stream for collection: ${collectionName}`
-    )
+    notifyClients(changeStream.parent.collectionName, JSON.stringify(next))
   })
 }
 
-const monitorAllChangeStreams = async () => {
-  Object.keys(clientCollections).forEach((dbCollection) => {
-    monitorChangeStream(dbCollection)
+/**
+ * Monitor a collection to notify clients when
+ * the collection receives an update.
+ * @param {String} collectionName
+ */
+const monitorCollection = (collectionName) => {
+  const changeStream = createChangeStream(collectionName)
+  changeStreamsMonitored.push(changeStream)
+  attachNotifyClients(changeStream)
+}
+
+/**
+ * Monitor all the predefined collections to notify
+ * clients when the collection receives an update.
+ */
+const monitorPredefinedCollections = () => {
+  getCollectionsNames().forEach((dbCollection) => {
+    monitorCollection(dbCollection)
   })
 }
 
-module.exports = { monitorChangeStream, monitorAllChangeStreams }
+/**
+ * Close the selected monitored collections. If collectionName
+ * is null then close all the open monitor collections.
+ * @param {String} collectionName
+ */
+const closeMonitoredCollection = (collectionName) => {
+  changeStreamsMonitored = changeStreamsMonitored.filter((changeStream) => {
+    if (
+      !collectionName ||
+      changeStream.parent.collectionName === collectionName
+    ) {
+      changeStream.close()
+      return false
+    }
+    return true
+  })
+}
+
+module.exports = {
+  createChangeStream,
+  attachNotifyClients,
+  monitorCollection,
+  monitorPredefinedCollections,
+  closeMonitoredCollection,
+  numOfMonitoredChangeStream,
+}
