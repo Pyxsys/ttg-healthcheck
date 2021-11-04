@@ -18,12 +18,20 @@ router.post('/', async (req, res) => {
   }
 })
 
+function sumProcessCpuUsage(processes) { 
+  let sum = 0
+  processes.forEach(function(proc){
+    sum += proc.cpu_percent
+  })
+  return sum
+}
+
 async function processCpuLogInfo(payload) {
   //load values
   const { deviceId, timestamp, processes } = payload
 
-  //compute values
-  const usagePercentage = 0
+  //load computed values
+  const usagePercentage = sumProcessCpuUsage(processes)
   const usageSpeed = 0
   const numProcesses = processes.length
   const threadsAlive = 0
