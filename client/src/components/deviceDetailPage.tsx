@@ -1,9 +1,12 @@
-import React, {useEffect, useState} from 'react';
+import React from 'react';
+import Navbar from './nav';
+import {Col, Row} from 'react-bootstrap';
 import {useAuth} from '../context/authContext';
 
-const DeviceDetailPage = () => {
+const DeviceDetailPage = (props: any) => {
   // will define interfaces here for each type of data
 
+  /*
   const [memoryData, setMemoryData] = useState([]);
 
   const [wifiData, setWifiData] = useState([]);
@@ -11,11 +14,21 @@ const DeviceDetailPage = () => {
   const [cpuData, setCpuData] = useState([]);
 
   const [diskData, setDiskData] = useState([]);
+  */
 
   const {user} = useAuth();
+
   return (
     <div>
-      dashboard, user: {user.name}, role: {user.role}
+      <Row className="h-100">
+        <Navbar />
+        <Col>
+          <div className="">
+            device detail page, user: {user.name}, role: {user.role}
+            device id:{props.location.state.id}
+          </div>
+        </Col>
+      </Row>
     </div>
   );
 };

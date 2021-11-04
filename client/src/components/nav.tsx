@@ -30,7 +30,7 @@ const Navbar = () => {
     <>
       <Col className="h-100 col-auto">
         <Nav className="h-100 bg-primary" activeKey="/dashboard">
-          <Container className=" flex align-items-start flex-column h-100 mt-5 mb-5">
+          <Container className="align-items-start h-100">
             <Row className="p-2">
               <Col>
                 <Nav.Item>
@@ -47,7 +47,7 @@ const Navbar = () => {
             <Row className="p-2">
               <Col>
                 <Nav.Item>
-                  <Nav.Link className="text-secondary mt-5" href="/dashboard">
+                  <Nav.Link className="text-secondary mt-5" href="/devices">
                     <IconContext.Provider value={{size: '2em'}}>
                       <div>
                         <DiRasberryPi />
