@@ -4,7 +4,7 @@ const app = require('../app')
 const CPU = require('../models/cpu.js')
 const Device = require('../models/device.js')
 const mongoose = require('mongoose')
-const api = require('../api/daemon_endpoint')
+const api = require('../api/daemon')
 
 beforeAll(async () => {
   await connectDB() // connect to local_db
@@ -41,7 +41,7 @@ describe('Save daemon payload to DB', () => {
 
   it('Should save the contents of a post to the DB', async () => {
     const response = await request(app)
-      .post('/api/daemon_endpoint')
+      .post('/api/daemon')
       .send(mockPayload)
 
     expect(response.statusCode).toBe(200)

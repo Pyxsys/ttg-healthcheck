@@ -5,7 +5,7 @@ from datetime import datetime
 
 class Runner:
 
-    api_endpoint='api/daemon_endpoint'
+    api_endpoint='api/daemon'
 
     # Initializes instance attributes.
     def __init__(self, path):
