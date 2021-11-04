@@ -21,7 +21,8 @@ router.post('/', async (req, res) => {
 function sumProcessCpuUsage(processes) { 
   let sum = 0
   processes.forEach(function(proc){
-    sum += proc.cpu_percent
+    if(proc.name === 'System Idle Process'){}
+    else{ sum += proc.cpu_percent }
   })
   return sum
 }
