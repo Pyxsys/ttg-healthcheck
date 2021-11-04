@@ -7,6 +7,9 @@ const ProcessSchema = new mongoose.Schema({
   pid: {
     type: Number,
   },
+  status: {
+    type: String,
+  },
 })
 
 module.exports = {

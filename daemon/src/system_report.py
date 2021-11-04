@@ -52,7 +52,7 @@ class SysReport:
         process_list = list()
 
         for proc in psutil.process_iter():
-            process_info_dictionary = proc.as_dict(attrs=['name', 'pid'])
+            process_info_dictionary = proc.as_dict(attrs=['name', 'pid', 'status'])
             process_list.append(process_info_dictionary)
 
         self.setSection("processes", process_list)

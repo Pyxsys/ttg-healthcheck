@@ -22,12 +22,23 @@ async function processCpuLogInfo(payload) {
   //load values
   const { deviceId, timestamp, processes } = payload
 
+  //count number of running and stopped processes
+  var runningProcs = 0,
+    sleepingProcs = 0
+  for (let i = 0; i < processes.length; i++) {
+    if (processes[i].status === 'running') {
+      runningProcs++
+    } else {
+      sleepingProcs++
+    }
+  }
+
   //compute values
   const usagePercentage = 0
   const usageSpeed = 0
   const numProcesses = processes.length
-  const threadsAlive = 0
-  const threadsSleeping = 0
+  const threadsAlive = runningProcs
+  const threadsSleeping = sleepingProcs
   const uptime = 0
 
   return new cpu.CpuLogs({
