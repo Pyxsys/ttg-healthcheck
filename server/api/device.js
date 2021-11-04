@@ -1,16 +1,15 @@
+/* eslint-disable new-cap */
 const express = require('express')
 const router = express.Router()
-const User = require('../models/user.js')
-const Device = require('../models/device.js')
-const jwt = require('jsonwebtoken')
-const bcrypt = require('bcrypt')
+const Devices = require('../models/device.js')
 const auth = require('../middleware/auth.js')
+const { filterData } = require('./shared/filter')
 
 // get all devices
 router.get('/', async (req, res) => {
     try {
     console.log("hello, in api");
-      const devices = await Device.find({},{hardware:0})
+      const devices = await Devices.find({},{hardware:0})
       console.log(devices[0]);
       res.json(devices)
     } catch (err) {
@@ -18,12 +17,6 @@ router.get('/', async (req, res) => {
       res.status(500).send('Server Error')
     }
   })
-/* eslint-disable new-cap */
-const express = require('express')
-const router = express.Router()
-const Devices = require('../models/device.js')
-const auth = require('../middleware/auth.js')
-const { filterData } = require('./shared/filter')
 
 // get a specific device, based on param option of either deviceId or name
 router.get('/specific-device', auth, async (req, res) => {
