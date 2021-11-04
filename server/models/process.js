@@ -7,6 +7,9 @@ const ProcessSchema = new mongoose.Schema({
   pid: {
     type: Number,
   },
+  cpu_percent: {
+    type: Number
+  }
 })
 
 module.exports = {

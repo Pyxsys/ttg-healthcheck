@@ -5,7 +5,7 @@ from datetime import datetime
 
 class Runner:
 
-    api_endpoint='api/daemon_endpoint'
+    api_endpoint='api/daemon'
 
     # Initializes instance attributes.
     def __init__(self, path):
@@ -53,6 +53,9 @@ class SysReport:
 
         for proc in psutil.process_iter():
             process_info_dictionary = proc.as_dict(attrs=['name', 'pid'])
+            
+            process_info_dictionary['cpu_percent'] = proc.cpu_percent(interval=0.1) / psutil.cpu_count()
+
             process_list.append(process_info_dictionary)
 
         self.setSection("processes", process_list)
