@@ -66,7 +66,8 @@ const DeviceDetailPage = (props: any) => {
               <Card className="h-100 border-0 me-4">
                 <Card.Body className="mt-0 mb-0 pt-0 pb-0 d-flex">
                   <Card className=" me-2 w-100 text-center">
-                    <Card.Header className="text-center bg-primary text-secondary">
+                    <Card.Header
+                      className="text-center bg-primary text-secondary">
                       CPU
                     </Card.Header>
                     <Card.Body>
@@ -76,7 +77,8 @@ const DeviceDetailPage = (props: any) => {
                     </Card.Body>
                   </Card>
                   <Card className=" me-2 w-100 text-center">
-                    <Card.Header className="text-center bg-primary text-secondary">
+                    <Card.Header
+                      className="text-center bg-primary text-secondary">
                       Memory
                     </Card.Header>
                     <Card.Body>
@@ -86,7 +88,8 @@ const DeviceDetailPage = (props: any) => {
                     </Card.Body>
                   </Card>
                   <Card className="w-100 text-center">
-                    <Card.Header className="text-center bg-primary text-secondary">
+                    <Card.Header
+                      className="text-center bg-primary text-secondary">
                       Disk
                     </Card.Header>
                     <Card.Body>
