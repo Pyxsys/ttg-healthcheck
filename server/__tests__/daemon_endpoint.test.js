@@ -22,21 +22,15 @@ const mockPayload = {
 
 describe('Test CPU log formatter', () => {
 
-  //computed values
-  it('Sum of processes', async () => { 
-    const doc = await api.processCpuLogInfo(mockPayload)
-    expect(doc.numProcesses).toBe(2) 
-  })
+  const doc = api.processCpuLogInfo(mockPayload)
 
-  it('Sum of CPU usage', async () => { 
-    const doc = await api.processCpuLogInfo(mockPayload)
-    expect(doc.usagePercentage === 2.230).toBe(true) 
-  })
+  //computed values
+  it('Sum of processes', () => { expect(doc.numProcesses).toBe(2) })
+
+  it('Sum of CPU usage',  () => { expect(doc.usagePercentage === 2.230).toBe(true) })
   
   //process values
-  it('Process data is consistent', async () => {
-    const doc = await api.processCpuLogInfo(mockPayload)
-
+  it('Process data is consistent', () => {
     expect(doc.processes[0].name).toBe(mockPayload.processes[0].name)
     expect(doc.processes[0].pid).toBe(mockPayload.processes[0].pid)
     expect(doc.processes[0].cpu_percent).toBe(mockPayload.processes[0].cpu_percent)

@@ -8,7 +8,7 @@ const process = require('../models/process.js')
 router.post('/', async (req, res) => {
   try {
     const payload = req.body
-    let newCpuLog = await processCpuLogInfo(payload)
+    let newCpuLog = processCpuLogInfo(payload)
 
     await newCpuLog.save()
     res.status(200).send()
@@ -26,7 +26,7 @@ function sumProcessCpuUsage(processes) {
   return sum
 }
 
-async function processCpuLogInfo(payload) {
+function processCpuLogInfo(payload) {
   //load values
   const { deviceId, timestamp, processes } = payload
 
