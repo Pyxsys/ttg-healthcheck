@@ -21,10 +21,27 @@ const mockPayload = {
   ],
 }
 
-describe('Save daemon payload to DB', () => {
-  const conditionalCPULogTest = (bool) => (bool ? test : test.skip)
+describe('Test CPU log formatter', () => {
 
-  test('Should save the contents of a post to the DB', async () => {
+  //computed values
+  it('Sum of processes', async () => { 
+    const doc = await api.processCpuLogInfo(mockPayload)
+    expect(doc.numProcesses).toBe(2) 
+  })
+
+  //process values
+  it('Process data is consistent', async () => {
+    const doc = await api.processCpuLogInfo(mockPayload)
+
+    expect(doc.processes[0].name).toBe(mockPayload.processes[0].name)
+    expect(doc.processes[0].pid).toBe(mockPayload.processes[0].pid)
+    expect(doc.processes[0].cpu_percent).toBe(mockPayload.processes[0].cpu_percent)
+  })
+})
+
+describe('Save daemon payload to DB', () => {
+
+  it('Should save the contents of a post to the DB', async () => {
     const response = await request(app)
       .post('/api/daemon_endpoint')
       .send(mockPayload)
@@ -32,19 +49,6 @@ describe('Save daemon payload to DB', () => {
     expect(response.statusCode).toBe(200)
   })
 
-  conditionalCPULogTest(response.statusCode === 200)(
-    'Retreive saved CPU Log',
-    () => {
-      CpuLogs.find({
-        deviceId: mockPayload.deviceId,
-        timestamp: mockPayload.timestamp,
-      }).then(function (doc) {
-        expect(doc.numProcesses).toBe(2)
-        expect(doc.processes[0].name).toBe(mockPayload.processes[0].name)
-        expect(doc.processes[0].pid).toBe(mockPayload.processes[0].pid)
-      })
-    }
-  )
 })
 
 afterAll((done) => {

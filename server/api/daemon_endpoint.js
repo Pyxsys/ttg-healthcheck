@@ -43,4 +43,8 @@ async function processCpuLogInfo(payload) {
   })
 }
 
-module.exports = router
+module.exports = {
+  router,
+  processCpuLogInfo
+}
+
