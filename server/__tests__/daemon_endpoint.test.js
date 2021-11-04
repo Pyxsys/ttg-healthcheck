@@ -4,8 +4,7 @@ const app = require('../app')
 const CPU = require('../models/cpu.js')
 const Device = require('../models/device.js')
 const mongoose = require('mongoose')
-const { response } = require('express')
-const { CpuLogs } = require('../models/cpu.js')
+const api = require('../api/daemon_endpoint')
 
 beforeAll(async () => {
   await connectDB() // connect to local_db
@@ -16,8 +15,8 @@ const mockPayload = {
   deviceId: 'B3C2D-C033-7B87-4B31-244BFE931F1E',
   timestamp: '2021-10-24 09:47:55.966088',
   processes: [
-    { name: 'python', pid: 12345 },
-    { name: 'celebid', pid: 12344 },
+    { name: 'python', pid: 12345, cpu_percent: 1.768 },
+    { name: 'celebid', pid: 12344, cpu_percent: 0.462 },
   ],
 }
 
@@ -29,6 +28,11 @@ describe('Test CPU log formatter', () => {
     expect(doc.numProcesses).toBe(2) 
   })
 
+  it('Sum of CPU usage', async () => { 
+    const doc = await api.processCpuLogInfo(mockPayload)
+    expect(doc.usagePercentage === 2.230).toBe(true) 
+  })
+  
   //process values
   it('Process data is consistent', async () => {
     const doc = await api.processCpuLogInfo(mockPayload)
