@@ -1,24 +1,26 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {useAuth} from '../context/authContext';
 import Navbar from './nav';
 import {Col, Row} from 'react-bootstrap';
 import BootstrapTable from 'react-bootstrap-table-next';
 import filterFactory, {textFilter} from 'react-bootstrap-table2-filter';
 import {Link} from 'react-router-dom';
+import {useState} from 'react';
+import axios from 'axios';
 
 const DevicePage = () => {
-  /*
-  interface Device {
-    _id: string
-    location: string
-    CPU: number
-    memory: number
-    disk: number
-    uptime: number
-  }
-
   const [deviceData, setDeviceData] = useState([]);
-  */
+  useEffect( () => {
+    const lookup = async () => {
+      await axios
+          .get('api/device').then((response) => {
+            if (response.data) {
+              setDeviceData(response.data);
+            }
+          });
+    };
+    lookup();
+  }, []);
 
   const idFormatter = (cell: {} | null | undefined) => {
     return (
@@ -28,7 +30,7 @@ const DevicePage = () => {
     );
   };
 
-  const columns = [
+  /* const columns = [
     {
       dataField: 'id',
       text: 'PID',
@@ -61,8 +63,33 @@ const DevicePage = () => {
       text: 'Uptime',
       sort: true,
     },
-  ];
+  ]; */
 
+  const columns = [
+    {
+      dataField: '_id',
+      text: 'PID',
+      filter: textFilter(),
+      formatter: idFormatter,
+    },
+    {
+      dataField: 'name',
+      text: 'Name',
+      filter: textFilter(),
+      sort: true,
+    },
+    {
+      dataField: 'status',
+      text: 'Status',
+      sort: true,
+    },
+    {
+      dataField: 'hardware',
+      text: 'Hardware',
+      sort: true,
+    },
+  ];
+  /*
   const fakeData = [
     {
       id: 1,
@@ -89,7 +116,7 @@ const DevicePage = () => {
       uptime: '40 ms',
     },
   ];
-
+*/
   const {user} = useAuth();
 
   return (
@@ -98,11 +125,11 @@ const DevicePage = () => {
         <Navbar />
         <Col>
           <div className="">
-            device page, user: {user.name}, role: {user.role}
+            user name : {user.name}, role: {user.role}
             <h1 className="text-primary mb-5 mt-5">Devices</h1>
             <BootstrapTable
               keyField="id"
-              data={fakeData}
+              data={deviceData}
               columns={columns}
               filter={filterFactory()}
             />
