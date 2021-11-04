@@ -94,7 +94,7 @@ const DevicePage = () => {
 
   return (
     <div>
-      <Row className="h-100">
+      <Row className="flex-nowrap h-100">
         <Navbar />
         <Col>
           <div className="">
