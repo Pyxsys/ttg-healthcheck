@@ -44,8 +44,6 @@ function processCpuLogInfo(payload) {
   }
 
   //compute values
-  const usagePercentage = 0
-  //load computed values
   const usagePercentage = sumProcessCpuUsage(processes)
   const usageSpeed = 0
   const numProcesses = processes.length
