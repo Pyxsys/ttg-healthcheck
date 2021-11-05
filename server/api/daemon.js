@@ -35,8 +35,8 @@ function processCpuLogInfo(payload) {
   //count number of running and stopped processes
   var runningProcs = 0,
     sleepingProcs = 0
-  for (let i = 0; i < processes.length; i++) {
-    if (processes[i].status === 'running') {
+  for (const process of processes) {
+    if (process.status === 'running') {
       runningProcs++
     } else {
       sleepingProcs++
