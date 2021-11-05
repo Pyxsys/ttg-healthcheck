@@ -18,10 +18,12 @@ router.post('/', async (req, res) => {
   }
 })
 
-function sumProcessCpuUsage(processes) { 
+function sumProcessCpuUsage(processes) {
   let sum = 0
-  processes.forEach(function(proc){
-    if(proc.name !== 'System Idle Process'){ sum += proc.cpu_percent }
+  processes.forEach(function (proc) {
+    if (proc.name !== 'System Idle Process') {
+      sum += proc.cpu_percent
+    }
   })
   return sum
 }
@@ -30,12 +32,23 @@ function processCpuLogInfo(payload) {
   //load values
   const { deviceId, timestamp, processes } = payload
 
-  //load computed values
+  //count number of running and stopped processes
+  var runningProcs = 0,
+    sleepingProcs = 0
+  for (const proc of processes) {
+    if (proc.status === 'running') {
+      runningProcs++
+    } else {
+      sleepingProcs++
+    }
+  }
+
+  //compute values
   const usagePercentage = sumProcessCpuUsage(processes)
   const usageSpeed = 0
   const numProcesses = processes.length
-  const threadsAlive = 0
-  const threadsSleeping = 0
+  const threadsAlive = runningProcs
+  const threadsSleeping = sleepingProcs
   const uptime = 0
 
   return new cpu.CpuLogs({
@@ -53,6 +66,5 @@ function processCpuLogInfo(payload) {
 
 module.exports = {
   router,
-  processCpuLogInfo
+  processCpuLogInfo,
 }
-
