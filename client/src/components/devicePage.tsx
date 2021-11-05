@@ -1,7 +1,6 @@
 import React, {useEffect} from 'react';
-import {useAuth} from '../context/authContext';
 import Navbar from './nav';
-import {Col, Row} from 'react-bootstrap';
+import {Col, Row, Table} from 'react-bootstrap';
 import BootstrapTable from 'react-bootstrap-table-next';
 import filterFactory, {textFilter} from 'react-bootstrap-table2-filter';
 import {Link} from 'react-router-dom';
@@ -10,14 +9,13 @@ import axios from 'axios';
 
 const DevicePage = () => {
   const [deviceData, setDeviceData] = useState([]);
-  useEffect( () => {
+  useEffect(() => {
     const lookup = async () => {
-      await axios
-          .get('api/device').then((response) => {
-            if (response.data) {
-              setDeviceData(response.data);
-            }
-          });
+      await axios.get('api/device').then((response) => {
+        if (response.data) {
+          setDeviceData(response.data);
+        }
+      });
     };
     lookup();
   }, []);
@@ -117,25 +115,27 @@ const DevicePage = () => {
     },
   ];
 */
-  const {user} = useAuth();
-
   return (
-    <div>
-      <Row className="flex-nowrap h-100">
-        <Navbar />
-        <Col>
-          <div className="">
-            user name : {user.name}, role: {user.role}
-            <h1 className="text-primary mb-5 mt-5">Devices</h1>
-            <BootstrapTable
-              keyField="id"
-              data={deviceData}
-              columns={columns}
-              filter={filterFactory()}
-            />
-          </div>
-        </Col>
-      </Row>
+    <div id="outer-container">
+      <Navbar />
+      <div id="page-wrap" className="h-100 overflow-auto container">
+        <Row className="flex-nowrap h-100">
+          <Col>
+            <div className="">
+              <h1 className="text-primary mb-5 mt-5">Devices</h1>
+              <Table responsive>
+                <BootstrapTable
+                  keyField="id"
+                  data={deviceData}
+                  columns={columns}
+                  filter={filterFactory()}
+                  wrapperClasses="table-responsive"
+                />
+              </Table>
+            </div>
+          </Col>
+        </Row>
+      </div>
     </div>
   );
 };
