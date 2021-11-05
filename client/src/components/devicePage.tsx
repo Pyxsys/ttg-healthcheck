@@ -8,16 +8,110 @@ import {Link} from 'react-router-dom';
 import {useState} from 'react';
 import axios from 'axios';
 
+interface Device{
+  id: string,
+  // location: string,
+  cpuUsage: number,
+  memoryUsage: number,
+  // diskUsage: number,
+  uptime: number
+}
+
+interface CpuLog{
+  deviceId: string,
+  usagePercentage: number,
+  usageSpeed: number,
+  numProcesses: number,
+  threadsAlive: number,
+  threadsSleeping: number,
+  uptime: number,
+  timestamp: Date,
+}
+
+interface MemoryLog{
+  deviceId: string,
+  usagePercentage: number,
+  inUse: number,
+  available: number,
+  cached: number,
+  pagedPool: number,
+  nonPagedPool: number,
+  timestamp: Date,
+}
+interface IdLog{
+  _id: string,
+  deviceId: string,
+}
+
 const DevicePage = () => {
-  const [deviceData, setDeviceData] = useState([]);
+  const [deviceData, setDeviceData] = useState([] as Device[]);
+  let cpuData: CpuLog[];
+  let memData: MemoryLog[];
+  // let diskData: Object[];
+  // let locationData: Object[];
+  let idData: IdLog[];
+
   useEffect( () => {
     const lookup = async () => {
       await axios
-          .get('api/device').then((response) => {
+          .get('api/device/ids').then((response) => {
             if (response.data) {
-              setDeviceData(response.data);
+              idData = response.data;
             }
           });
+      await axios
+          .get('api/cpu-logs/timestamp', {
+            params: {
+              startTimeStamp: new Date(Date.now() - 2000000000),
+              endTimeStamp: Date.now(),
+            },
+          }).then((response) => {
+            if (response.data) {
+              cpuData = response.data;
+              console.log(cpuData);
+            }
+          });
+      await axios
+          .get('api/memory-logs/timestamp', {
+            params: {
+              startTimeStamp: new Date(Date.now() - 2000000000),
+              endTimeStamp: Date.now(),
+            },
+          }).then((response) => {
+            if (response.data) {
+              memData = response.data;
+              console.log(cpuData);
+            }
+          });
+      /* await axios
+          .get('api/diskLogs/timestamp', {
+            params: {
+              query: {
+                startTimeStamp: new Date(Date.now() - 20000),
+                endTimeStamp: Date.now(),
+              },
+            },
+          }).then((response) => {
+            if (response.data) {
+              diskData = response.data;
+            }
+          });
+          */
+      const tempDeviceData: Device[] = [];
+      idData.forEach((e) => {
+        const id = e.deviceId;
+        const device : Device = {
+          id: id,
+          cpuUsage:
+            cpuData?.find((l) => l?.deviceId == id)?.usagePercentage as number,
+          memoryUsage:
+            memData?.find((l) => l?.deviceId == id)?.usagePercentage as number,
+          uptime:
+            cpuData?.find((l) => l?.deviceId == id)?.uptime as number,
+        };
+        tempDeviceData.push(device);
+      });
+      setDeviceData(tempDeviceData);
     };
     lookup();
   }, []);
@@ -30,41 +124,32 @@ const DevicePage = () => {
     );
   };
 
-  /* const columns = [
+  const columns = [
     {
       dataField: 'id',
       text: 'PID',
       filter: textFilter(),
       formatter: idFormatter,
     },
+
     {
-      dataField: 'location',
-      text: 'Location',
-      filter: textFilter(),
-      sort: true,
-    },
-    {
-      dataField: 'cpu_usage',
+      dataField: 'cpuUsage',
       text: 'CPU',
       sort: true,
     },
     {
-      dataField: 'memory_usage',
+      dataField: 'memoryUsage',
       text: 'Memory',
       sort: true,
     },
-    {
-      dataField: 'disk_usage',
-      text: 'Disk',
-      sort: true,
-    },
+
     {
       dataField: 'uptime',
       text: 'Uptime',
       sort: true,
     },
-  ]; */
-
+  ];
+  /*
   const columns = [
     {
       dataField: '_id',
@@ -89,6 +174,7 @@ const DevicePage = () => {
       sort: true,
     },
   ];
+  */
   /*
   const fakeData = [
     {
