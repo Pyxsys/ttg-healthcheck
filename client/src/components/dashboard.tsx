@@ -1,20 +1,13 @@
 import React from 'react';
-import {useAuth} from '../context/authContext';
 import Navbar from './nav';
-import {Col, Row} from 'react-bootstrap';
 
 const Dashboard = () => {
-  const {user} = useAuth();
   return (
-    <div>
-      <Row className="flex-nowrap h-100">
-        <Navbar />
-        <Col>
-          <div className="">
-            dashboard, user: {user.name}, role: {user.role}
-          </div>
-        </Col>
-      </Row>
+    <div id="outer-container">
+      <Navbar />
+      <div id="page-wrap" className="h-100 overflow-auto container">
+        dashboard
+      </div>
     </div>
   );
 };

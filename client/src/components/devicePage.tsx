@@ -1,46 +1,45 @@
 import React, {useEffect} from 'react';
-import {useAuth} from '../context/authContext';
 import Navbar from './nav';
-import {Col, Row} from 'react-bootstrap';
+import {Col, Row, Table} from 'react-bootstrap';
 import BootstrapTable from 'react-bootstrap-table-next';
 import filterFactory, {textFilter} from 'react-bootstrap-table2-filter';
 import {Link} from 'react-router-dom';
 import {useState} from 'react';
 import axios from 'axios';
 
-interface Device{
-  id: string,
+interface Device {
+  id: string
   // location: string,
-  cpuUsage: number,
-  memoryUsage: number,
+  cpuUsage: number
+  memoryUsage: number
   // diskUsage: number,
   uptime: number
 }
 
-interface CpuLog{
-  deviceId: string,
-  usagePercentage: number,
-  usageSpeed: number,
-  numProcesses: number,
-  threadsAlive: number,
-  threadsSleeping: number,
-  uptime: number,
-  timestamp: Date,
+interface CpuLog {
+  deviceId: string
+  usagePercentage: number
+  usageSpeed: number
+  numProcesses: number
+  threadsAlive: number
+  threadsSleeping: number
+  uptime: number
+  timestamp: Date
 }
 
-interface MemoryLog{
-  deviceId: string,
-  usagePercentage: number,
-  inUse: number,
-  available: number,
-  cached: number,
-  pagedPool: number,
-  nonPagedPool: number,
-  timestamp: Date,
+interface MemoryLog {
+  deviceId: string
+  usagePercentage: number
+  inUse: number
+  available: number
+  cached: number
+  pagedPool: number
+  nonPagedPool: number
+  timestamp: Date
 }
-interface IdLog{
-  _id: string,
-  deviceId: string,
+interface IdLog {
+  _id: string
+  deviceId: string
 }
 
 const DevicePage = () => {
@@ -51,21 +50,21 @@ const DevicePage = () => {
   // let locationData: Object[];
   let idData: IdLog[];
 
-  useEffect( () => {
+  useEffect(() => {
     const lookup = async () => {
-      await axios
-          .get('api/device/ids').then((response) => {
-            if (response.data) {
-              idData = response.data;
-            }
-          });
+      await axios.get('api/device/ids').then((response) => {
+        if (response.data) {
+          idData = response.data;
+        }
+      });
       await axios
           .get('api/cpu-logs/timestamp', {
             params: {
               startTimeStamp: new Date(Date.now() - 2000000000),
               endTimeStamp: Date.now(),
             },
-          }).then((response) => {
+          })
+          .then((response) => {
             if (response.data) {
               cpuData = response.data;
               console.log(cpuData);
@@ -77,7 +76,8 @@ const DevicePage = () => {
               startTimeStamp: new Date(Date.now() - 2000000000),
               endTimeStamp: Date.now(),
             },
-          }).then((response) => {
+          })
+          .then((response) => {
             if (response.data) {
               memData = response.data;
               console.log(cpuData);
@@ -100,14 +100,13 @@ const DevicePage = () => {
       const tempDeviceData: Device[] = [];
       idData.forEach((e) => {
         const id = e.deviceId;
-        const device : Device = {
+        const device: Device = {
           id: id,
-          cpuUsage:
-            cpuData?.find((l) => l?.deviceId == id)?.usagePercentage as number,
-          memoryUsage:
-            memData?.find((l) => l?.deviceId == id)?.usagePercentage as number,
-          uptime:
-            cpuData?.find((l) => l?.deviceId == id)?.uptime as number,
+          cpuUsage: cpuData?.find((l) => l?.deviceId == id)
+              ?.usagePercentage as number,
+          memoryUsage: memData?.find((l) => l?.deviceId == id)
+              ?.usagePercentage as number,
+          uptime: cpuData?.find((l) => l?.deviceId == id)?.uptime as number,
         };
         tempDeviceData.push(device);
       });
@@ -203,25 +202,27 @@ const DevicePage = () => {
     },
   ];
 */
-  const {user} = useAuth();
-
   return (
-    <div>
-      <Row className="flex-nowrap h-100">
-        <Navbar />
-        <Col>
-          <div className="">
-            user name : {user.name}, role: {user.role}
-            <h1 className="text-primary mb-5 mt-5">Devices</h1>
-            <BootstrapTable
-              keyField="id"
-              data={deviceData}
-              columns={columns}
-              filter={filterFactory()}
-            />
-          </div>
-        </Col>
-      </Row>
+    <div id="outer-container">
+      <Navbar />
+      <div id="page-wrap" className="h-100 overflow-auto container">
+        <Row className="flex-nowrap h-100">
+          <Col>
+            <div className="">
+              <h1 className="text-primary mb-5 mt-5">Devices</h1>
+              <Table responsive>
+                <BootstrapTable
+                  keyField="id"
+                  data={deviceData}
+                  columns={columns}
+                  filter={filterFactory()}
+                  wrapperClasses="table-responsive"
+                />
+              </Table>
+            </div>
+          </Col>
+        </Row>
+      </div>
     </div>
   );
 };
