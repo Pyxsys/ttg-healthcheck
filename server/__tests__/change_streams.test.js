@@ -79,7 +79,7 @@ describe('Insert a new user to the database and get data from the change stream'
     } catch (err) {
       expect(err).toBeFalsy()
     }
-  })
+  }, 15000)
 
   afterAll(() => {
     if (testValues.wsClient) {
