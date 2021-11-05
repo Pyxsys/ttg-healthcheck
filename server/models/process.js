@@ -10,6 +10,9 @@ const ProcessSchema = new mongoose.Schema({
   status: {
     type: String,
   },
+  cpu_percent: {
+    type: Number,
+  },
 })
 
 module.exports = {

@@ -8,7 +8,7 @@ const process = require('../models/process.js')
 router.post('/', async (req, res) => {
   try {
     const payload = req.body
-    let newCpuLog = await processCpuLogInfo(payload)
+    let newCpuLog = processCpuLogInfo(payload)
 
     await newCpuLog.save()
     res.status(200).send()
@@ -18,7 +18,17 @@ router.post('/', async (req, res) => {
   }
 })
 
-async function processCpuLogInfo(payload) {
+function sumProcessCpuUsage(processes) {
+  let sum = 0
+  processes.forEach(function (proc) {
+    if (proc.name !== 'System Idle Process') {
+      sum += proc.cpu_percent
+    }
+  })
+  return sum
+}
+
+function processCpuLogInfo(payload) {
   //load values
   const { deviceId, timestamp, processes } = payload
 
@@ -35,6 +45,8 @@ async function processCpuLogInfo(payload) {
 
   //compute values
   const usagePercentage = 0
+  //load computed values
+  const usagePercentage = sumProcessCpuUsage(processes)
   const usageSpeed = 0
   const numProcesses = processes.length
   const threadsAlive = runningProcs
@@ -54,4 +66,7 @@ async function processCpuLogInfo(payload) {
   })
 }
 
-module.exports = router
+module.exports = {
+  router,
+  processCpuLogInfo,
+}
