@@ -6,10 +6,9 @@ const auth = require('../middleware/auth.js')
 const { filterData } = require('./shared/filter')
 
 // get all devices
-router.get('/', async (req, res) => {
+router.get('/ids', async (req, res) => {
     try {
-    console.log("hello, in api");
-      const devices = await Devices.find({},{hardware:0})
+      const devices = await Devices.find({},{deviceId:1})
       console.log(devices[0]);
       res.json(devices)
     } catch (err) {
