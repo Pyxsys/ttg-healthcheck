@@ -15,8 +15,8 @@ const mockPayload = {
   deviceId: 'B3C2D-C033-7B87-4B31-244BFE931F1E',
   timestamp: '2021-10-24 09:47:55.966088',
   processes: [
-    { name: 'python', pid: 12345, cpu_percent: 1.768 },
-    { name: 'celebid', pid: 12344, cpu_percent: 0.462 },
+    { name: 'python', pid: 12345, status: 'running', cpu_percent: 1.768 },
+    { name: 'celebid', pid: 12344, status: 'idle', cpu_percent: 0.462 },
   ],
 }
 
@@ -32,10 +32,19 @@ describe('Test CPU log formatter', () => {
     expect(doc.usagePercentage === 2.23).toBe(true)
   })
 
+  it('Running processes', () => {
+    expect(doc.threadsAlive === 1).toBe(true)
+  })
+
+  it('Sleeping processes', () => {
+    expect(doc.threadsSleeping === 1).toBe(true)
+  })
+
   //process values
   it('Process data is consistent', () => {
     expect(doc.processes[0].name).toBe(mockPayload.processes[0].name)
     expect(doc.processes[0].pid).toBe(mockPayload.processes[0].pid)
+    expect(doc.processes[0].status).toBe(mockPayload.processes[0].status)
     expect(doc.processes[0].cpu_percent).toBe(
       mockPayload.processes[0].cpu_percent
     )
