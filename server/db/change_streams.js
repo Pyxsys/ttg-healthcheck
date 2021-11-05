@@ -46,8 +46,8 @@ const attachNotifyClients = (changeStream) => {
  */
 const monitorCollection = (collectionName) => {
   const changeStream = createChangeStream(collectionName)
-  changeStreamsMonitored.push(changeStream)
   attachNotifyClients(changeStream)
+  changeStreamsMonitored.push(changeStream)
 }
 
 /**
