@@ -10,9 +10,11 @@ from daemon.src.system_report import Runner, SysReport
 
 class TestRunner(unittest.TestCase):
 
+    test_config_path = '/test/config.json'
+
     @classmethod
     def setUpClass(cls):
-        cls.test_runner=Runner(sys.path[0] + '/test/config.json')
+        cls.test_runner=Runner(sys.path[0] + cls.test_config_path)
         print("\n[config values]:")
         print(json.dumps(cls.test_runner.getConfig(), indent=4, sort_keys=True))
 
@@ -35,7 +37,7 @@ class TestRunner(unittest.TestCase):
                 missing_sections.append(section)
         self.assertEqual(len(missing_sections), 0, msg=missing_sections)
 
-    @unittest.skipIf("localhost" in json.load(open(sys.path[0] + '/test/config.json'))['destination'],
+    @unittest.skipIf("localhost" in json.load(open(sys.path[0] + test_config_path))['destination'],
      'Cannot run test automatically with "localhost" destination.')
     def testConnectionToServer(self):
         expected_result = 500
@@ -46,7 +48,7 @@ class TestRunner(unittest.TestCase):
         actual_result = response.status_code
         self.assertEqual(expected_result, actual_result)
 
-    @unittest.skipIf("localhost" in json.load(open(sys.path[0] + '/test/config.json'))['destination'],
+    @unittest.skipIf("localhost" in json.load(open(sys.path[0] + test_config_path))['destination'],
      'Cannot run test automatically with "localhost" destination.')
     def testSendingReportToServer(self):
         expected_result = 200
@@ -58,7 +60,7 @@ class TestRunner(unittest.TestCase):
         self.assertEqual(expected_result, actual_result)
 
     def testFetchingDelayInterval(self):
-        config_file = open(sys.path[0] + '/test/config.json')
+        config_file = open(sys.path[0] + self.test_config_path)
         expected_result = json.load(config_file)['report_delay']
         config_file.close()
 
@@ -68,7 +70,7 @@ class TestRunner(unittest.TestCase):
 
     def testRunnerDelay(self):
         tolerance = 1.10 #A decimal multiplier that defines the upper bound
-        config_file = open(sys.path[0] + '/test/config.json')
+        config_file = open(sys.path[0] + self.test_config_path)
         permitted_time = json.load(config_file)['report_delay'] * tolerance
         config_file.close()
 
