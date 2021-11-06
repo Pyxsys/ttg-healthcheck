@@ -6,10 +6,12 @@ const mongoose = require('mongoose')
 
 let cookieSession = ''
 
-beforeAll(async () => {
-  await connectDB() // connect to local_db
-  await User.deleteMany()
-})
+const testUser = {
+  name: 'test',
+  password: 'password',
+  email: 'test0@gmail.com',
+  role: 'user',
+}
 
 const userOne = {
   name: 'test',
@@ -18,28 +20,39 @@ const userOne = {
   role: 'user',
 }
 
+beforeAll(async () => {
+  await connectDB() // connect to local_db
+  await User.deleteMany()
+  // register user
+  await request(app).post('/api/user/register').send({
+    name: testUser.name,
+    password: testUser.password,
+    email: testUser.email,
+    role: testUser.role,
+  })
+  // login user and store cookie
+  await request(app)
+    .post('/api/user/login')
+    .send({
+      email: testUser.email,
+      password: testUser.password,
+    })
+    .then((res) => {
+      cookieSession = res.headers['set-cookie'][0]
+        .split(',')
+        .map((item) => item.split(';')[0])
+        .join(';')
+    })
+})
+
 describe('Sign up given a username and password', () => {
   it('should respond with a 200 status code, Should specify json in the content type header & Should log in the user based on credentials ', async () => {
-    await request(app)
-      .post('/api/user/register')
-      .send({
-        name: userOne.name,
-        password: userOne.password,
-        email: userOne.email,
-        role: userOne.role,
-      })
-      .then((response) => {
-        // store cookie
-        cookieSession = response.headers['set-cookie'][0]
-          .split(',')
-          .map((item) => item.split(';')[0])
-          .join(';')
-        expect(response.statusCode).toBe(200)
-        expect(response.headers['content-type']).toEqual(
-          expect.stringContaining('json'),
-          expect(response.body.message).toBeDefined()
-        )
-      })
+    await request(app).post('/api/user/register').send({
+      name: userOne.name,
+      password: userOne.password,
+      email: userOne.email,
+      role: userOne.role,
+    })
   })
 })
 
@@ -65,20 +78,10 @@ describe('Test signup cases', () => {
 
 describe('Log in given a username and password', () => {
   it('Should respond with a 200 status code', async () => {
-    const response = await request(app)
-      .post('/api/user/login')
-      .send({
-        email: userOne.email,
-        password: userOne.password,
-      })
-      .then((response) => {
-        // store cookie
-        cookieSession = response.headers['set-cookie'][0]
-          .split(',')
-          .map((item) => item.split(';')[0])
-          .join(';')
-        expect(response.statusCode).toBe(200)
-      })
+    const response = await request(app).post('/api/user/login').send({
+      email: userOne.email,
+      password: userOne.password,
+    })
   })
   it('Should respond with a 400 status code when email does not exists', async () => {
     const response = await request(app).post('/api/user/login').send({
