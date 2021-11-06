@@ -7,9 +7,9 @@ const mongoose = require('mongoose')
 const { response } = require('express')
 const { CpuLogs } = require('../models/cpu.js')
 
-const userOne = {
+const testUser = {
   name: 'test',
-  password: 'password',
+  password: process.env.PASSWORD,
   email: 'test1@gmail.com',
   role: 'user',
 }
@@ -21,17 +21,17 @@ beforeAll(async () => {
   await CPU.CpuLogs.deleteMany() //clear logs
   // register user
   await request(app).post('/api/user/register').send({
-    name: userOne.name,
-    password: userOne.password,
-    email: userOne.email,
-    role: userOne.role,
+    name: testUser.name,
+    password: testUser.password,
+    email: testUser.email,
+    role: testUser.role,
   })
   // login user and store cookie
   await request(app)
     .post('/api/user/login')
     .send({
-      email: userOne.email,
-      password: userOne.password,
+      email: testUser.email,
+      password: testUser.password,
     })
     .then((res) => {
       cookieSession = res.headers['set-cookie'][0]

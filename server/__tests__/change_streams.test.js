@@ -23,9 +23,9 @@ const testValues = {
 }
 
 const testUser = {
-  name: process.env.USERNAME,
+  name: 'test',
   password: process.env.PASSWORD,
-  email: process.env.EMAIL,
+  email: 'test2@gmail.com',
   role: 'user',
 }
 

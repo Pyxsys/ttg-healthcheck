@@ -8,14 +8,14 @@ let cookieSession = ''
 
 const testUser = {
   name: 'test',
-  password: 'password',
+  password: process.env.PASSWORD,
   email: 'test0@gmail.com',
   role: 'user',
 }
 
 const userOne = {
   name: 'test',
-  password: 'password',
+  password: process.env.PASSWORD,
   email: 'test@gmail.com',
   role: 'user',
 }
