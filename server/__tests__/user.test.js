@@ -20,17 +20,26 @@ const userOne = {
 
 describe('Sign up given a username and password', () => {
   it('should respond with a 200 status code, Should specify json in the content type header & Should log in the user based on credentials ', async () => {
-    const response = await request(app).post('/api/user/register').send({
-      name: userOne.name,
-      password: userOne.password,
-      email: userOne.email,
-      role: userOne.role,
-    })
-    expect(response.statusCode).toBe(200)
-    expect(response.headers['content-type']).toEqual(
-      expect.stringContaining('json')
-    )
-    expect(response.body.message).toBeDefined()
+    await request(app)
+      .post('/api/user/register')
+      .send({
+        name: userOne.name,
+        password: userOne.password,
+        email: userOne.email,
+        role: userOne.role,
+      })
+      .then((response) => {
+        // store cookie
+        cookieSession = response.headers['set-cookie'][0]
+          .split(',')
+          .map((item) => item.split(';')[0])
+          .join(';')
+        expect(response.statusCode).toBe(200)
+        expect(response.headers['content-type']).toEqual(
+          expect.stringContaining('json'),
+          expect(response.body.message).toBeDefined()
+        )
+      })
   })
 })
 
@@ -55,6 +64,22 @@ describe('Test signup cases', () => {
 })
 
 describe('Log in given a username and password', () => {
+  it('Should respond with a 200 status code', async () => {
+    const response = await request(app)
+      .post('/api/user/login')
+      .send({
+        email: userOne.email,
+        password: userOne.password,
+      })
+      .then((response) => {
+        // store cookie
+        cookieSession = response.headers['set-cookie'][0]
+          .split(',')
+          .map((item) => item.split(';')[0])
+          .join(';')
+        expect(response.statusCode).toBe(200)
+      })
+  })
   it('Should respond with a 400 status code when email does not exists', async () => {
     const response = await request(app).post('/api/user/login').send({
       email: 'a324@test.com',
@@ -68,22 +93,6 @@ describe('Log in given a username and password', () => {
       password: 'a',
     })
     expect(response.statusCode).toBe(400)
-  })
-  it('Should respond with a 200 status code', async () => {
-    const response = await request(app)
-      .post('/api/user/login')
-      .send({
-        email: userOne.email,
-        password: userOne.password,
-      })
-      .then((res) => {
-        // store cookie
-        cookieSession = res.headers['set-cookie'][0]
-          .split(',')
-          .map((item) => item.split(';')[0])
-          .join(';')
-        expect(res.statusCode).toBe(200)
-      })
   })
   it('Should specify json in the content type header', async () => {
     const response = await request(app).post('/api/user/login').send({
@@ -117,18 +126,14 @@ describe('Log in given a username and password', () => {
 
 describe('Log out', () => {
   it('Should respond with a 200 status code on successful logout', async () => {
-    const response = await request(app).post('/api/user/login').send({
-      email: userOne.email,
-      password: userOne.password,
-    })
-    const response1 = await request(app)
+    const response = await request(app)
       .get('/api/user/logout')
       .set('Cookie', cookieSession)
       .send({
         email: userOne.email,
         password: userOne.password,
       })
-    expect(response1.statusCode).toBe(200)
+    expect(response.statusCode).toBe(200)
   })
 })
 
