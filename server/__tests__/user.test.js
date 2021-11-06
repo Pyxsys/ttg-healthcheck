@@ -4,6 +4,8 @@ const User = require('../models/user.js')
 const app = require('../app')
 const mongoose = require('mongoose')
 
+let cookieSession = ''
+
 beforeAll(async () => {
   await connectDB() // connect to local_db
   await User.deleteMany()
@@ -30,6 +32,9 @@ describe('Sign up given a username and password', () => {
     )
     expect(response.body.message).toBeDefined()
   })
+})
+
+describe('Test signup cases', () => {
   it('should respond with a 400 status code when user already exists', async () => {
     const response = await request(app).post('/api/user/register').send({
       name: userOne.name,
@@ -37,13 +42,7 @@ describe('Sign up given a username and password', () => {
       email: userOne.email,
       role: userOne.role,
     })
-    const response1 = await request(app).post('/api/user/register').send({
-      name: userOne.name,
-      password: userOne.password,
-      email: userOne.email,
-      role: userOne.role,
-    })
-    expect(response1.statusCode).toBe(400)
+    expect(response.statusCode).toBe(400)
   })
   it('should respond with a 500 status code when a param is missing', async () => {
     const response = await request(app).post('/api/user/register').send({
@@ -71,11 +70,20 @@ describe('Log in given a username and password', () => {
     expect(response.statusCode).toBe(400)
   })
   it('Should respond with a 200 status code', async () => {
-    const response = await request(app).post('/api/user/login').send({
-      email: userOne.email,
-      password: userOne.password,
-    })
-    expect(response.statusCode).toBe(200)
+    const response = await request(app)
+      .post('/api/user/login')
+      .send({
+        email: userOne.email,
+        password: userOne.password,
+      })
+      .then((res) => {
+        // store cookie
+        cookieSession = res.headers['set-cookie'][0]
+          .split(',')
+          .map((item) => item.split(';')[0])
+          .join(';')
+        expect(res.statusCode).toBe(200)
+      })
   })
   it('Should specify json in the content type header', async () => {
     const response = await request(app).post('/api/user/login').send({
@@ -99,16 +107,11 @@ describe('Log in given a username and password', () => {
     })
     expect(response.statusCode).toBe(500)
   })
-})
-
-describe('protected', () => {
-  it('Should respond with a 200 status code', async () => {
-    const response = await request(app).post('/api/user/login').send({
-      email: userOne.email,
-      password: userOne.password,
-    })
-    const response1 = await request(app).get('/api/user/protected')
-    expect(response1.statusCode).toBe(200)
+  it('Should be able to access authenticated route', async () => {
+    const response = await request(app)
+      .get('/api/user/authenticate')
+      .set('Cookie', cookieSession)
+    expect(response.statusCode).toBe(200)
   })
 })
 
@@ -118,10 +121,13 @@ describe('Log out', () => {
       email: userOne.email,
       password: userOne.password,
     })
-    const response1 = await request(app).get('/api/user/logout').send({
-      email: userOne.email,
-      password: userOne.password,
-    })
+    const response1 = await request(app)
+      .get('/api/user/logout')
+      .set('Cookie', cookieSession)
+      .send({
+        email: userOne.email,
+        password: userOne.password,
+      })
     expect(response1.statusCode).toBe(200)
   })
 })
