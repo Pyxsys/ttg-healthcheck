@@ -147,7 +147,10 @@ const [diskData, setDiskData] = useState({} as DiskLog);
       }
     });
   };
-  lookup();
+  useEffect(() => {
+    lookup();
+  }, []);
+  
 
 return (
   <div id="outer-container">
