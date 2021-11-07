@@ -5,6 +5,18 @@ const Devices = require('../models/device.js')
 const auth = require('../middleware/auth.js')
 const { filterData } = require('./shared/filter')
 
+// get all devices
+router.get('/ids', async (req, res) => {
+    try {
+      const devices = await Devices.find({},{deviceId:1})
+      console.log(devices[0]);
+      res.json(devices)
+    } catch (err) {
+      console.error(err.message)
+      res.status(500).send('Server Error')
+    }
+  })
+
 // get a specific device, based on param option of either deviceId or name
 router.get('/specific-device', auth, async (req, res) => {
   try {
