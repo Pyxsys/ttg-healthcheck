@@ -45,8 +45,12 @@ beforeAll(async () => {
 })
 
 describe('Insert a new user to the database and get data from the change stream', () => {
-  beforeAll(() => {
+  beforeAll(async () => {
     monitorCollection(collectionName)
+    await new Promise((resolve) => {
+      while (numOfMonitoredChangeStream() === 0);
+      resolve()
+    })
   })
 
   it('should receive the inserted data from the websocket', async () => {
@@ -79,7 +83,7 @@ describe('Insert a new user to the database and get data from the change stream'
     } catch (err) {
       expect(err).toBeFalsy()
     }
-  })
+  }, 15000)
 
   afterAll(() => {
     if (testValues.wsClient) {

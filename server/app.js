@@ -16,6 +16,6 @@ app.use('/api/disk-logs', require('./api/diskLogs'))
 app.use('/api/memory-logs', require('./api/memoryLogs'))
 app.use('/api/wifi-logs', require('./api/wifiLogs'))
 app.use('/api/cpu-logs', require('./api/cpuLogs'))
-app.use('/api/daemon_endpoint', require('./api/daemon_endpoint'))
+app.use('/api/daemon', require('./api/daemon').router)
 
 module.exports = app

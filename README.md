@@ -5,15 +5,21 @@
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=Pyxsys_ttg-healthcheck&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=Pyxsys_ttg-healthcheck)
  
 ## Technologies Used
+#### Webapp
 * ReactJS
 * NodeJS (Express Framework)
 * MongoDB (Cloud Database)
-* ... 
+#### Daemon
+* [Python 3.0 (or newer)](https://www.python.org/downloads/)
 
 ## Project Requirements
+#### Webapp
 * [NodeJS (12 or above)](https://nodejs.org/en/download/)
 * MongoDB Account
 * LocalMongo DB instance must be active in order to push code to repo
+#### Daemon
+* [psutil 5.8.0 (or newer)](https://pypi.org/project/psutil/)
+* [requests 2.26.0 (or newer)](https://pypi.org/project/requests/)
 
 ## Installation
 Before starting the installation process, ensure that your computer has all the requirements listed above.
