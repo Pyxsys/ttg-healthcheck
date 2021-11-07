@@ -31,5 +31,8 @@
     "all-test": "concurrently \"npm run test --prefix server\" \"npm run test --prefix client\"",
     "all-test:coverage": "concurrently \"npm run test:coverage --prefix server\" \"npm run test:coverage --prefix client\"",
     "all-test:staged": "concurently \"npm run test:staged --prefix server\" \"npm run test:staged  --prefix client\""
+  },
+  "dependencies": {
+    "react-burger-menu": "^3.0.6"
   }
 }
