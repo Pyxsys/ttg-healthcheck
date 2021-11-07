@@ -47,22 +47,6 @@ const Login = () => {
         });
   };
 
-  /* const logout = async (e: React.ChangeEvent<any>) => {
-    e.preventDefault();
-    await axios
-        .get('api/user/logout')
-        .then((response) => {
-          if (response.data) {
-            setUser({name: '', role: ''});
-            setIsAuthenticated(false);
-            setLoggedIn(false);
-          }
-        })
-        .catch((error) => {
-          console.error(error);
-        });
-  };
-*/
   if (loggedIn) {
     return <Redirect to="/dashboard" />;
   }
