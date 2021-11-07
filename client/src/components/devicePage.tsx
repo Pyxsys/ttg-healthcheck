@@ -1,10 +1,9 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import Navbar from './nav';
 import {Col, Row, Table} from 'react-bootstrap';
 import BootstrapTable from 'react-bootstrap-table-next';
 import filterFactory, {textFilter} from 'react-bootstrap-table2-filter';
 import {Link} from 'react-router-dom';
-import {useState} from 'react';
 import axios from 'axios';
 
 interface Device {

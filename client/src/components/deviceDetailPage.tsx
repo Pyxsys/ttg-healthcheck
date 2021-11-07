@@ -1,8 +1,7 @@
 /* eslint-disable */
-import React from 'react'
 import Navbar from './nav'
 import { Card, Col, Row, Table } from 'react-bootstrap'
-import { useState, useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import axios from 'axios'
 import {
   DeviceLog,
