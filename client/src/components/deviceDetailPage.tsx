@@ -1,90 +1,89 @@
-/* eslint-disable */
-import Navbar from './Navbar'
-import { Card, Col, Row, Table } from 'react-bootstrap'
-import React, { useState, useEffect } from 'react'
-import axios from 'axios'
+import Navbar from './Navbar';
+import {Card, Col, Row, Table} from 'react-bootstrap';
+import React, {useState, useEffect} from 'react';
+import axios from 'axios';
 import {
   DeviceLog,
   MemoryLog,
   WifiLog,
   CpuLog,
   DiskLog,
-} from '../types/deviceTypes.d'
+} from '../types/deviceTypes.d';
 
 const DeviceDetailPage = (props: any) => {
   // will define interfaces here for each type of dat
 
-  const deviceId = props.location.state.id
-  const [deviceData, setDeviceData] = useState({} as DeviceLog)
-  const [memoryData, setMemoryData] = useState({} as MemoryLog)
-  const [wifiData, setWifiData] = useState({} as WifiLog)
-  const [cpuData, setCpuData] = useState({} as CpuLog)
-  const [diskData, setDiskData] = useState({} as DiskLog)
+  const deviceId = props.location.state.id;
+  const [deviceData, setDeviceData] = useState({} as DeviceLog);
+  const [memoryData, setMemoryData] = useState({} as MemoryLog);
+  const [wifiData, setWifiData] = useState({} as WifiLog);
+  const [cpuData, setCpuData] = useState({} as CpuLog);
+  const [diskData, setDiskData] = useState({} as DiskLog);
 
   const lookup = async () => {
     await axios
-      .get('api/device/specific-device', {
-        params: {
-          entry: deviceId,
-        },
-      })
-      .then((response) => {
-        if (response.data) {
-          setDeviceData(response.data as DeviceLog)
-        }
-      })
+        .get('api/device/specific-device', {
+          params: {
+            entry: deviceId,
+          },
+        })
+        .then((response) => {
+          if (response.data) {
+            setDeviceData(response.data as DeviceLog);
+          }
+        });
     await axios
-      .get('api/memory-logs/specific-device', {
-        params: {
-          deviceId: deviceId,
-          limit: 1,
-        },
-      })
-      .then((response) => {
-        if (response.data) {
-          setMemoryData(response.data[0] as MemoryLog)
-        }
-      })
+        .get('api/memory-logs/specific-device', {
+          params: {
+            deviceId: deviceId,
+            limit: 1,
+          },
+        })
+        .then((response) => {
+          if (response.data) {
+            setMemoryData(response.data[0] as MemoryLog);
+          }
+        });
     await axios
-      .get('api/wifi-logs/specific-device', {
-        params: {
-          deviceId: deviceId,
-          limit: 1,
-        },
-      })
-      .then((response) => {
-        if (response.data) {
-          setWifiData(response.data[0] as WifiLog)
-        }
-      })
+        .get('api/wifi-logs/specific-device', {
+          params: {
+            deviceId: deviceId,
+            limit: 1,
+          },
+        })
+        .then((response) => {
+          if (response.data) {
+            setWifiData(response.data[0] as WifiLog);
+          }
+        });
     await axios
-      .get('api/cpu-logs/specific-device', {
-        params: {
-          deviceId: deviceId,
-          limit: 1,
-        },
-      })
-      .then((response) => {
-        if (response.data) {
-          setCpuData(response.data[0] as CpuLog)
-        }
-      })
+        .get('api/cpu-logs/specific-device', {
+          params: {
+            deviceId: deviceId,
+            limit: 1,
+          },
+        })
+        .then((response) => {
+          if (response.data) {
+            setCpuData(response.data[0] as CpuLog);
+          }
+        });
     await axios
-      .get('api/disk-logs/specific-device', {
-        params: {
-          deviceId: deviceId,
-          limit: 1,
-        },
-      })
-      .then((response) => {
-        if (response.data) {
-          setDiskData(response.data[0] as DiskLog)
-        }
-      })
-  }
+        .get('api/disk-logs/specific-device', {
+          params: {
+            deviceId: deviceId,
+            limit: 1,
+          },
+        })
+        .then((response) => {
+          if (response.data) {
+            setDiskData(response.data[0] as DiskLog);
+          }
+        });
+  };
   useEffect(() => {
-    lookup()
-  }, [])
+    lookup();
+  }, []);
 
   return (
     <div id="outer-container">
@@ -488,7 +487,7 @@ const DeviceDetailPage = (props: any) => {
         </Row>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default DeviceDetailPage
+export default DeviceDetailPage;
