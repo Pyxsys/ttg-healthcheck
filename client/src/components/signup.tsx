@@ -12,14 +12,17 @@ interface CollectionEvent {
 }
 
 const Signup = () => {
-  const [realTimeData, setRealTimeData] = useState([] as CollectionEvent[]);
+  const [realTimeDataSignup, setRealTimeDataSignup] = useState(
+    [] as CollectionEvent[],
+  );
+
   const [collectionData, setCollectionData] = useState(
     null as CollectionEvent | null,
   );
 
   useEffect(() => {
     if (collectionData) {
-      setRealTimeData([...realTimeData, collectionData]);
+      setRealTimeDataSignup([...realTimeDataSignup, collectionData]);
     }
   }, [collectionData]);
 
