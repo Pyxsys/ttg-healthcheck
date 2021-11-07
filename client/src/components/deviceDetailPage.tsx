@@ -243,31 +243,31 @@ return (
                     <tbody>
                       <tr>
                         <td className="w-50">Usage</td>
-                        <td className="w-50">{cpuData.usagePercentage}</td>
+                        <td className="w-50">{cpuData?.usagePercentage}</td>
                       </tr>
                       <tr>
                         <td className="w-50">In Use</td>
-                        <td className="w-50"></td>
+                        <td className="w-50">Yes</td>
                       </tr>
                       <tr>
                         <td className="w-50">Number of Processes</td>
-                        <td className="w-50"></td>
+                        <td className="w-50">{cpuData?.numProcesses}</td>
                       </tr>
                       <tr>
                         <td className="w-50">Threads Alive</td>
-                        <td className="w-50"></td>
+                        <td className="w-50">{cpuData?.threadsAlive}</td>
                       </tr>
                       <tr>
                         <td className="w-50">Threads Sleeping</td>
-                        <td className="w-50"></td>
+                        <td className="w-50">{cpuData?.threadsSleeping}</td>
                       </tr>
                       <tr>
                         <td className="w-50">Uptime</td>
-                        <td className="w-50"></td>
+                        <td className="w-50">{cpuData?.uptime}</td>
                       </tr>
                       <tr>
                         <td className="w-50">Timestamp</td>
-                        <td className="w-50"></td>
+                        <td className="w-50">{cpuData?.timestamp}</td>
                       </tr>
                     </tbody>
                   </Table>
@@ -284,31 +284,31 @@ return (
                     <tbody>
                       <tr>
                         <td className="w-50">Usage</td>
-                        <td className="w-50"></td>
+                        <td className="w-50">{memoryData?.usagePercentage}</td>
                       </tr>
                       <tr>
                         <td className="w-50">In Use</td>
-                        <td className="w-50"></td>
+                        <td className="w-50">{memoryData?.inUse}</td>
                       </tr>
                       <tr>
                         <td className="w-50">Available</td>
-                        <td className="w-50"></td>
+                        <td className="w-50">{memoryData?.available}</td>
                       </tr>
                       <tr>
                         <td className="w-50">Cached</td>
-                        <td className="w-50"></td>
+                        <td className="w-50">{memoryData?.cached}</td>
                       </tr>
                       <tr>
                         <td className="w-50">Paged Pool</td>
-                        <td className="w-50"></td>
+                        <td className="w-50">{memoryData?.pagedPool}</td>
                       </tr>
                       <tr>
                         <td className="w-50">non Paged Pool</td>
-                        <td className="w-50"></td>
+                        <td className="w-50">{memoryData?.nonPagedPool}</td>
                       </tr>
                       <tr>
                         <td className="w-50">Timestamp</td>
-                        <td className="w-50"></td>
+                        <td className="w-50">{memoryData?.timestamp}</td>
                       </tr>
                     </tbody>
                   </Table>
@@ -325,23 +325,23 @@ return (
                     <tbody>
                       <tr>
                         <td className="w-50">Active Time</td>
-                        <td className="w-50"></td>
+                        <td className="w-50">{diskData?.activeTimePercent}</td>
                       </tr>
                       <tr>
                         <td className="w-50">Response Time</td>
-                        <td className="w-50"></td>
+                        <td className="w-50">{diskData?.responseTime}</td>
                       </tr>
                       <tr>
                         <td className="w-50">Read Speed</td>
-                        <td className="w-50"></td>
+                        <td className="w-50">{diskData?.readSpeed}</td>
                       </tr>
                       <tr>
                         <td className="w-50">Write Speed</td>
-                        <td className="w-50"></td>
+                        <td className="w-50">{diskData?.writeSpeed}</td>
                       </tr>
                       <tr>
                         <td className="w-50">Timestamp</td>
-                        <td className="w-50"></td>
+                        <td className="w-50">{diskData?.timestamp}</td>
                       </tr>
                     </tbody>
                   </Table>
@@ -358,19 +358,19 @@ return (
                     <tbody>
                       <tr>
                         <td className="w-50">Send Speed</td>
-                        <td className="w-50"></td>
+                        <td className="w-50">{wifiData?.sendSpeed}</td>
                       </tr>
                       <tr>
                         <td className="w-50">Receive Speed</td>
-                        <td className="w-50"></td>
+                        <td className="w-50">{wifiData?.receiveSpeed}</td>
                       </tr>
                       <tr>
                         <td className="w-50">Signal Strength</td>
-                        <td className="w-50"></td>
+                        <td className="w-50">{wifiData?.signalStrength}</td>
                       </tr>
                       <tr>
                         <td className="w-50">Timestamp</td>
-                        <td className="w-50"></td>
+                        <td className="w-50">{wifiData?.timestamp}</td>
                       </tr>
                     </tbody>
                   </Table>
@@ -395,31 +395,31 @@ return (
                       <tbody>
                         <tr>
                           <td className="w-50">Base Speed</td>
-                          <td className="w-50"></td>
+                          <td className="w-50">{deviceData?.cpu?.baseSpeed}</td>
                         </tr>
                         <tr>
                           <td className="w-50">Sockets</td>
-                          <td className="w-50"></td>
+                          <td className="w-50">{deviceData?.cpu?.sockets}</td>
                         </tr>
                         <tr>
                           <td className="w-50">Cores</td>
-                          <td className="w-50"></td>
+                          <td className="w-50">{deviceData?.cpu?.cores}</td>
                         </tr>
                         <tr>
                           <td className="w-50">Processors</td>
-                          <td className="w-50"></td>
+                          <td className="w-50">{deviceData?.cpu?.processors}</td>
                         </tr>
                         <tr>
                           <td className="w-50">Cache Size L1</td>
-                          <td className="w-50"></td>
+                          <td className="w-50">{deviceData?.cpu?.cacheSizeL1}</td>
                         </tr>
                         <tr>
                           <td className="w-50">Cache Size L2</td>
-                          <td className="w-50"></td>
+                          <td className="w-50">{deviceData?.cpu?.cacheSizeL2}</td>
                         </tr>
                         <tr>
                           <td className="w-50">Cache Size L3</td>
-                          <td className="w-50"></td>
+                          <td className="w-50">{deviceData?.cpu?.cacheSizeL3}</td>
                         </tr>
                       </tbody>
                     </Table>
@@ -434,11 +434,11 @@ return (
                       <tbody>
                         <tr>
                           <td className="w-50">Max Size</td>
-                          <td className="w-50"></td>
+                          <td className="w-50">{deviceData?.memory?.maxSize}</td>
                         </tr>
                         <tr>
                           <td className="w-50">Form Factor</td>
-                          <td className="w-50"></td>
+                          <td className="w-50">{deviceData?.memory?.formFactor}</td>
                         </tr>
                       </tbody>
                     </Table>
@@ -453,11 +453,11 @@ return (
                       <tbody>
                         <tr>
                           <td className="w-50">Capactiy</td>
-                          <td className="w-50"></td>
+                          <td className="w-50">{deviceData?.disk?.capacity}</td>
                         </tr>
                         <tr>
                           <td className="w-50">Type</td>
-                          <td className="w-50"></td>
+                          <td className="w-50">{deviceData?.disk?.type}</td>
                         </tr>
                       </tbody>
                     </Table>
@@ -472,23 +472,23 @@ return (
                       <tbody>
                         <tr>
                           <td className="w-50">Adapter Name</td>
-                          <td className="w-50"></td>
+                          <td className="w-50">{deviceData?.wifi?.adapterName}</td>
                         </tr>
                         <tr>
                           <td className="w-50">SSID</td>
-                          <td className="w-50"></td>
+                          <td className="w-50">{deviceData?.wifi?.SSID}</td>
                         </tr>
                         <tr>
                           <td className="w-50">Connection Type</td>
-                          <td className="w-50"></td>
+                          <td className="w-50">{deviceData?.wifi?.connectionType}</td>
                         </tr>
                         <tr>
                           <td className="w-50">IPV4 Address</td>
-                          <td className="w-50"></td>
+                          <td className="w-50">{deviceData?.wifi?.ipv4Address}</td>
                         </tr>
                         <tr>
                           <td className="w-50">IPV6 Address</td>
-                          <td className="w-50"></td>
+                          <td className="w-50">{deviceData?.wifi?.ipv6Address}</td>
                         </tr>
                       </tbody>
                     </Table>
@@ -502,7 +502,7 @@ return (
                       </thead>
                       <tbody>
                         <tr>
-                          <td className="w-100"></td>
+                          <td className="w-100">{deviceData?.hardware?.harwareName}</td>
                         </tr>
                       </tbody>
                     </Table>
