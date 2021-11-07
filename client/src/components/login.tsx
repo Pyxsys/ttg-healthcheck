@@ -108,7 +108,7 @@ const Login = () => {
         });
   };
 
-  const logout = async (e: React.ChangeEvent<any>) => {
+  /* const logout = async (e: React.ChangeEvent<any>) => {
     e.preventDefault();
     await axios
         .get('api/user/logout')
@@ -124,7 +124,7 @@ const Login = () => {
           console.error(error);
         });
   };
-
+*/
   if (loggedIn) {
     return <Redirect to="/dashboard" />;
   }
@@ -171,9 +171,6 @@ const Login = () => {
                   </Form.Group>
                   <Button className="w-100 mt-3" type="submit">
                     Login
-                  </Button>
-                  <Button className="w-100 mt-3" onClick={(e) => logout(e)}>
-                    Log Out
                   </Button>
                   <Link to="/signup">
                     <Button className="w-100 mt-3">Signup</Button>
