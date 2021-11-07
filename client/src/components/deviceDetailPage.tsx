@@ -4,90 +4,15 @@ import Navbar from './nav';
 import {Card, Col, Row, Table} from 'react-bootstrap';
 import {useState, useEffect} from 'react';
 import axios from 'axios';
+import {DeviceLog, MemoryLog, WifiLog, CpuLog, DiskLog} from '../types/deviceTypes.d'
+
 
 const DeviceDetailPage = (props: any) => {
   // will define interfaces here for each type of dat
 
   // const {user} = useAuth();
 
-  interface CpuLog {
-    deviceId: string
-    usagePercentage: number
-    usageSpeed: number
-    numProcesses: number
-    threadsAlive: number
-    threadsSleeping: number
-    uptime: number
-    timestamp: Date
-  }
-
-  interface MemoryLog {
-    deviceId: string
-    usagePercentage: number
-    inUse: number
-    available: number
-    cached: number
-    pagedPool: number
-    nonPagedPool: number
-    timestamp: Date
-  }
-interface DiskLog{
-  deviceId: string,
-  activeTimePercent: number,
-  responseTime: number,
-  readSpeed: number,
-  writeSpeed: number,
-  timestamp: Date,
-}
-
-  interface DeviceLog {
-  deviceId: string,
-  name: string,
-  description: string,
-  connectionType: string,
-  status: string,
-  provider: string,
-  hardware: HardwareStatic,
-  cpu: CpuStatic,
-  memory: MemoryStatic,
-  disk: DiskStatic,
-  wifi: WifiStatic,
-}
-
-interface HardwareStatic {
-  harwareName: string
-}
-interface CpuStatic {
-  baseSpeed: number,
-  sockets: number,
-  cores: number,
-  processors: number,
-  cacheSizeL1: number,
-  cacheSizeL2: number,
-  cacheSizeL3: number,
-}
-interface DiskStatic {
-  capacity: number,
-  type: string
-}
-interface WifiStatic {
-  adapterName:string,
-  SSID: string,
-  connectionType: string,
-  ipv4Address: string,
-  ipv6Address: string,
-}
-interface MemoryStatic {
-  maxSize: number,
-  formFactor: string,
-}
-interface WifiLog{
-  deviceId: string,
-  sendSpeed: number,
-  receiveSpeed: number,
-  signalStrength: string,
-  timestamp: Date,
-}
+  
 const deviceId = props.location.state.id;
 const [deviceData, setDeviceData] = useState({} as DeviceLog);
 const [memoryData, setMemoryData] = useState({} as MemoryLog);

@@ -17,7 +17,6 @@ const Navbar = () => {
         .get('api/user/logout')
         .then((response) => {
           if (response.data) {
-            
             setUser({name: '', role: ''});
             setIsAuthenticated(false);
           }

@@ -37,7 +37,6 @@ export function AuthProvider({children}: any) {
       setUser(data.user);
       setIsAuthenticated(data.isAuthenticated);
       setLoading(false);
-     
     });
   }, []);
 

@@ -67,7 +67,6 @@ const DevicePage = () => {
           .then((response) => {
             if (response.data) {
               cpuData = response.data;
-              
             }
           });
       await axios
@@ -80,7 +79,6 @@ const DevicePage = () => {
           .then((response) => {
             if (response.data) {
               memData = response.data;
-           
             }
           });
       /* await axios

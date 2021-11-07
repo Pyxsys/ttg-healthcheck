@@ -28,8 +28,6 @@ const Signup = () => {
     const ws2 = new WebSocket('ws://localhost:5000/?collection=memory_logs');
 
     ws1.onmessage = (event) => {
-     
-
       const data = JSON.parse(event.data);
       const realTimeData: CollectionEvent = {
         _id: data.documentKey._id,
@@ -44,8 +42,6 @@ const Signup = () => {
     };
 
     ws2.onmessage = (event) => {
-     
-
       const data = JSON.parse(event.data);
       const realTimeData: CollectionEvent = {
         _id: data.documentKey._id,

@@ -29,8 +29,6 @@ const Login = () => {
     const ws2 = new WebSocket('ws://localhost:5000/?collection=memory_logs');
 
     ws1.onmessage = (event) => {
-      
-
       const data = JSON.parse(event.data);
       const realTimeData: CollectionEvent = {
         _id: data.documentKey._id,
@@ -45,8 +43,6 @@ const Login = () => {
     };
 
     ws2.onmessage = (event) => {
-     
-
       const data = JSON.parse(event.data);
       const realTimeData: CollectionEvent = {
         _id: data.documentKey._id,
@@ -97,7 +93,6 @@ const Login = () => {
         .post<AxiosResult>('api/user/login', body)
         .then((response) => {
           if (response.data) {
-           
             setUser(response.data.user);
             setIsAuthenticated(true);
             setLoggedIn(true);
@@ -114,7 +109,6 @@ const Login = () => {
         .get('api/user/logout')
         .then((response) => {
           if (response.data) {
-            
             setUser({name: '', role: ''});
             setIsAuthenticated(false);
             setLoggedIn(false);
