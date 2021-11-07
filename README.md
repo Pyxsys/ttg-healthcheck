@@ -20,6 +20,7 @@
 #### Daemon
 * [psutil 5.8.0 (or newer)](https://pypi.org/project/psutil/)
 * [requests 2.26.0 (or newer)](https://pypi.org/project/requests/)
+* [coverage 6.1.1 (or newer)](https://pypi.org/project/coverage)
 
 ## Installation
 Before starting the installation process, ensure that your computer has all the requirements listed above.
@@ -43,17 +44,20 @@ Before starting the installation process, ensure that your computer has all the 
 ### Server Tests
 To run these tests, you'll need a MongoDB database on your local machine.
 
-* Visit https://www.mongodb.com/try/download/community to download the Mongo-DB community server.
-* After installation: C:\ -> program files -> mongoDB -> Server -> 5.0 -> Bin and launch mongod.
+* If you want to download MongoDB locally, visit https://github.com/Pyxsys/ttg-healthcheck/wiki/How-To-Setup-Local-MongoDB for futher instructions.
 * From your command line go into the server folder of the project and run `npm run test` or `npm run test:coverage` if you wish to see the coverage.
 
 ### Client Tests
 
 * From your command line go into the client folder of the project and run `npm run test` or `npm run test:coverage` if you wish to see the coverage.
 
-### All Tests
+### Server & Client Tests concurently
 
 * If you want to run all the test from the root of the project by running `npm run all-test` or `npm run all-test:coverage` if you wish to see the coverage.
+
+### Daemon Tests
+
+* From you command line, go to the daemon folder of the project and run `coverage run --branch -m unittest -v`
 
 ## Coding Convention
 To enforce the coding style of the project, we have integrated eslint and prettier in our project. You can use the following command to format the code to our coding covention: `npm run all-lint:fix` from the root of the project. In addition, we have integrated a script that will check the code prior to committing the code to ensure we maintain the correct standard.
