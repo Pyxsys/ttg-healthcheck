@@ -1,66 +1,70 @@
 import {Button, Form, Container, Col, Row} from 'react-bootstrap';
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import {Link, Redirect} from 'react-router-dom';
 import axios from 'axios';
 import {useAuth} from '../context/authContext';
 import '../App.scss';
-
+/*
 interface CollectionEvent {
   _id: string
   collection?: string
   operation?: string
   updatedFields?: any
 }
-
+*/
 const Login = () => {
-  const [realTimeData, setRealTimeData] = useState([] as CollectionEvent[]);
-  const [collectionData, setCollectionData] = useState(
-    null as CollectionEvent | null,
-  );
+  /*
+ const [realTimeData, setRealTimeData] = useState([] as CollectionEvent[]);
+ const [collectionData, setCollectionData] = useState(
+   null as CollectionEvent | null,
+ );
 
-  useEffect(() => {
-    if (collectionData) {
-      setRealTimeData([...realTimeData, collectionData]);
-    }
-  }, [collectionData]);
 
-  useEffect(() => {
-    const ws1 = new WebSocket('ws://localhost:5000/?collection=cpu_logs');
-    const ws2 = new WebSocket('ws://localhost:5000/?collection=memory_logs');
+ useEffect(() => {
+   if (collectionData) {
+     setRealTimeData([...realTimeData, collectionData]);
+   }
+ }, [collectionData]);
 
-    ws1.onmessage = (event) => {
-      const data = JSON.parse(event.data);
-      const realTimeData: CollectionEvent = {
-        _id: data.documentKey._id,
-        collection: 'cpu',
-        operation: data.operationType,
-        updatedFields:
-          data.operationType === 'update' ?
-            data.updateDescription.updatedFields :
-            data.fullDocument,
-      };
-      setCollectionData(realTimeData);
-    };
 
-    ws2.onmessage = (event) => {
-      const data = JSON.parse(event.data);
-      const realTimeData: CollectionEvent = {
-        _id: data.documentKey._id,
-        collection: 'memory',
-        operation: data.operationType,
-        updatedFields:
-          data.operationType === 'update' ?
-            data.updateDescription.updatedFields :
-            data.fullDocument,
-      };
-      setCollectionData(realTimeData);
-    };
+ useEffect(() => {
+   const ws1 = new WebSocket('ws://localhost:5000/?collection=cpu_logs');
+   const ws2 = new WebSocket('ws://localhost:5000/?collection=memory_logs');
 
-    return () => {
-      ws1.close();
-      ws2.close();
-    };
-  }, []);
+   ws1.onmessage = (event) => {
+     const data = JSON.parse(event.data);
+     const realTimeData: CollectionEvent = {
+       _id: data.documentKey._id,
+       collection: 'cpu',
+       operation: data.operationType,
+       updatedFields:
+         data.operationType === 'update' ?
+           data.updateDescription.updatedFields :
+           data.fullDocument,
+     };
+     setCollectionData(realTimeData);
+   };
+
+   ws2.onmessage = (event) => {
+     const data = JSON.parse(event.data);
+     const realTimeData: CollectionEvent = {
+       _id: data.documentKey._id,
+       collection: 'memory',
+       operation: data.operationType,
+       updatedFields:
+         data.operationType === 'update' ?
+           data.updateDescription.updatedFields :
+           data.fullDocument,
+     };
+     setCollectionData(realTimeData);
+   };
+
+   return () => {
+     ws1.close();
+     ws2.close();
+   };
+ }, []);
+ */
 
   interface AxiosResult {
     message: string

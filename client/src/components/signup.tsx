@@ -1,17 +1,20 @@
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import {Link, Redirect} from 'react-router-dom';
 import axios from 'axios';
 import {useAuth} from '../context/authContext';
 import {Button, Col, Container, Form, Row} from 'react-bootstrap';
 
+/*
 interface CollectionEvent {
   _id: string
   collection?: string
   operation?: string
   updatedFields?: any
 }
+*/
 
 const Signup = () => {
+  /*
   const [realTimeDataSignup, setRealTimeDataSignup] = useState(
     [] as CollectionEvent[],
   );
@@ -25,6 +28,7 @@ const Signup = () => {
       setRealTimeDataSignup([...realTimeDataSignup, collectionData]);
     }
   }, [collectionData]);
+
 
   useEffect(() => {
     const ws1 = new WebSocket('ws://localhost:5000/?collection=cpu_logs');
@@ -63,6 +67,7 @@ const Signup = () => {
       ws2.close();
     };
   }, []);
+  */
 
   interface AxiosResult {
     message: string
