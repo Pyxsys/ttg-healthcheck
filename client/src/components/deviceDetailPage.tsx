@@ -202,7 +202,7 @@ return (
                     </Card.Header>
                     <Card.Body>
                       <div className="row h-100">
-                        <div className="col-12 my-auto">{cpuData.usagePercentage}%</div>
+                        <div className="col-12 my-auto">{cpuData?.usagePercentage}%</div>
                       </div>
                     </Card.Body>
                   </Card>
@@ -212,7 +212,7 @@ return (
                     </Card.Header>
                     <Card.Body>
                       <div className="row h-100">
-                        <div className="col-12 my-auto">{memoryData.usagePercentage}%</div>
+                        <div className="col-12 my-auto">{memoryData?.usagePercentage}%</div>
                       </div>
                     </Card.Body>
                   </Card>
@@ -222,7 +222,7 @@ return (
                     </Card.Header>
                     <Card.Body>
                       <div className="row h-100">
-                        <div className="col-12 my-auto">{diskData.activeTimePercent}%</div>
+                        <div className="col-12 my-auto">{diskData?.activeTimePercent}%</div>
                       </div>
                     </Card.Body>
                   </Card>
@@ -243,7 +243,7 @@ return (
                     <tbody>
                       <tr>
                         <td className="w-50">Usage</td>
-                        <td className="w-50">{cpuData?.usagePercentage}</td>
+                        <td className="w-50">{cpuData?.usagePercentage}%</td>
                       </tr>
                       <tr>
                         <td className="w-50">In Use</td>
@@ -284,7 +284,7 @@ return (
                     <tbody>
                       <tr>
                         <td className="w-50">Usage</td>
-                        <td className="w-50">{memoryData?.usagePercentage}</td>
+                        <td className="w-50">{memoryData?.usagePercentage}%</td>
                       </tr>
                       <tr>
                         <td className="w-50">In Use</td>
@@ -325,7 +325,7 @@ return (
                     <tbody>
                       <tr>
                         <td className="w-50">Active Time</td>
-                        <td className="w-50">{diskData?.activeTimePercent}</td>
+                        <td className="w-50">{diskData?.activeTimePercent}%</td>
                       </tr>
                       <tr>
                         <td className="w-50">Response Time</td>
