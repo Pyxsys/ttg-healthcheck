@@ -4,71 +4,7 @@ import axios from 'axios';
 import {useAuth} from '../context/authContext';
 import {Button, Col, Container, Form, Row} from 'react-bootstrap';
 
-/*
-interface CollectionEvent {
-  _id: string
-  collection?: string
-  operation?: string
-  updatedFields?: any
-}
-*/
-
 const Signup = () => {
-  /*
-  const [realTimeDataSignup, setRealTimeDataSignup] = useState(
-    [] as CollectionEvent[],
-  );
-
-  const [collectionData, setCollectionData] = useState(
-    null as CollectionEvent | null,
-  );
-
-  useEffect(() => {
-    if (collectionData) {
-      setRealTimeDataSignup([...realTimeDataSignup, collectionData]);
-    }
-  }, [collectionData]);
-
-
-  useEffect(() => {
-    const ws1 = new WebSocket('ws://localhost:5000/?collection=cpu_logs');
-    const ws2 = new WebSocket('ws://localhost:5000/?collection=memory_logs');
-
-    ws1.onmessage = (event) => {
-      const data = JSON.parse(event.data);
-      const realTimeData: CollectionEvent = {
-        _id: data.documentKey._id,
-        collection: 'cpu',
-        operation: data.operationType,
-        updatedFields:
-          data.operationType === 'update' ?
-            data.updateDescription.updatedFields :
-            data.fullDocument,
-      };
-      setCollectionData(realTimeData);
-    };
-
-    ws2.onmessage = (event) => {
-      const data = JSON.parse(event.data);
-      const realTimeData: CollectionEvent = {
-        _id: data.documentKey._id,
-        collection: 'memory',
-        operation: data.operationType,
-        updatedFields:
-          data.operationType === 'update' ?
-            data.updateDescription.updatedFields :
-            data.fullDocument,
-      };
-      setCollectionData(realTimeData);
-    };
-
-    return () => {
-      ws1.close();
-      ws2.close();
-    };
-  }, []);
-  */
-
   interface AxiosResult {
     message: string
     user: {

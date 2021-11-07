@@ -8,10 +8,10 @@ import axios from 'axios';
 
 interface Device {
   id: string
-  // location: string,
+  // location should go here
   cpuUsage: number
   memoryUsage: number
-  // diskUsage: number,
+  // diskUsage should go here
   uptime: number
 }
 
@@ -45,8 +45,6 @@ const DevicePage = () => {
   const [deviceData, setDeviceData] = useState([] as Device[]);
   let cpuData: CpuLog[];
   let memData: MemoryLog[];
-  // let diskData: Object[];
-  // let locationData: Object[];
   let idData: IdLog[];
 
   useEffect(() => {
@@ -80,20 +78,7 @@ const DevicePage = () => {
               memData = response.data;
             }
           });
-      /* await axios
-          .get('api/diskLogs/timestamp', {
-            params: {
-              query: {
-                startTimeStamp: new Date(Date.now() - 20000),
-                endTimeStamp: Date.now(),
-              },
-            },
-          }).then((response) => {
-            if (response.data) {
-              diskData = response.data;
-            }
-          });
-          */
+
       const tempDeviceData: Device[] = [];
       idData.forEach((e) => {
         const id = e.deviceId;
@@ -145,60 +130,7 @@ const DevicePage = () => {
       sort: true,
     },
   ];
-  /*
-  const columns = [
-    {
-      dataField: '_id',
-      text: 'PID',
-      filter: textFilter(),
-      formatter: idFormatter,
-    },
-    {
-      dataField: 'name',
-      text: 'Name',
-      filter: textFilter(),
-      sort: true,
-    },
-    {
-      dataField: 'status',
-      text: 'Status',
-      sort: true,
-    },
-    {
-      dataField: 'hardware',
-      text: 'Hardware',
-      sort: true,
-    },
-  ];
-  */
-  /*
-  const fakeData = [
-    {
-      id: 1,
-      location: 'Location 1',
-      cpu_usage: '18%',
-      memory_usage: '32%',
-      disk_usage: '23%',
-      uptime: '30 ms',
-    },
-    {
-      id: 2,
-      location: 'Location 2',
-      cpu_usage: '20%',
-      memory_usage: '40%',
-      disk_usage: '30%',
-      uptime: '40 ms',
-    },
-    {
-      id: 3,
-      location: 'Location 3',
-      cpu_usage: '20%',
-      memory_usage: '40%',
-      disk_usage: '30%',
-      uptime: '40 ms',
-    },
-  ];
-*/
+
   return (
     <div id="outer-container">
       <Navbar />

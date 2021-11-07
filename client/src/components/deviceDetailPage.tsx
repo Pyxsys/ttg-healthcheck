@@ -14,8 +14,6 @@ import {
 const DeviceDetailPage = (props: any) => {
   // will define interfaces here for each type of dat
 
-  // const {user} = useAuth();
-
   const deviceId = props.location.state.id
   const [deviceData, setDeviceData] = useState({} as DeviceLog)
   const [memoryData, setMemoryData] = useState({} as MemoryLog)
