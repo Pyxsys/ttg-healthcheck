@@ -1,9 +1,9 @@
 const mongoose = require('mongoose')
 const { HardwareSchema } = require('./hardware')
-const { CpuSchema, CpuLogsSchema } = require('./cpu')
-const { DiskSchema, DiskLogsSchema } = require('./disk')
-const { MemorySchema, MemoryLogsSchema } = require('./memory')
-const { WifiSchema, WifiLogsSchema } = require('./wifi')
+const { CpuSchema } = require('./cpu')
+const { DiskSchema } = require('./disk')
+const { MemorySchema } = require('./memory')
+const { WifiSchema } = require('./wifi')
 
 const DeviceSchema = new mongoose.Schema({
   deviceId: {
