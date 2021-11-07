@@ -202,7 +202,7 @@ return (
                     </Card.Header>
                     <Card.Body>
                       <div className="row h-100">
-                        <div className="col-12 my-auto">15%</div>
+                        <div className="col-12 my-auto">{cpuData.usagePercentage}%</div>
                       </div>
                     </Card.Body>
                   </Card>
@@ -212,7 +212,7 @@ return (
                     </Card.Header>
                     <Card.Body>
                       <div className="row h-100">
-                        <div className="col-12 my-auto">35%</div>
+                        <div className="col-12 my-auto">{memoryData.usagePercentage}%</div>
                       </div>
                     </Card.Body>
                   </Card>
@@ -222,7 +222,7 @@ return (
                     </Card.Header>
                     <Card.Body>
                       <div className="row h-100">
-                        <div className="col-12 my-auto">25%</div>
+                        <div className="col-12 my-auto">{diskData.activeTimePercent}%</div>
                       </div>
                     </Card.Body>
                   </Card>
