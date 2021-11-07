@@ -37,8 +37,7 @@ export function AuthProvider({children}: any) {
       setUser(data.user);
       setIsAuthenticated(data.isAuthenticated);
       setLoading(false);
-      console.log(data.user);
-      console.log(data.isAuthenticated);
+     
     });
   }, []);
 

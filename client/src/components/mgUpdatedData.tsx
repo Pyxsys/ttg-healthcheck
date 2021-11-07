@@ -27,7 +27,7 @@ const Login = () => {
     const ws2 = new WebSocket('ws://localhost:5000/?collection=memory_logs');
 
     ws1.onmessage = (event) => {
-      console.log('event from cpu: ', JSON.parse(event.data));
+     
 
       const data = JSON.parse(event.data);
       const realTimeData: CollectionEvent = {
@@ -43,7 +43,7 @@ const Login = () => {
     };
 
     ws2.onmessage = (event) => {
-      console.log('event from mem: ', JSON.parse(event.data));
+     
 
       const data = JSON.parse(event.data);
       const realTimeData: CollectionEvent = {

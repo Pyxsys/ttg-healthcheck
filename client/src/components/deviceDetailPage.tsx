@@ -102,7 +102,6 @@ const [diskData, setDiskData] = useState({} as DiskLog);
       },
     }).then((response) => {
       if (response.data) {
-        console.log(response.data);
         setDeviceData(response.data as DeviceLog);
       }
     });
