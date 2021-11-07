@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import Navbar from './nav';
+import Navbar from './Navbar';
 import {Col, Row, Table} from 'react-bootstrap';
 import BootstrapTable from 'react-bootstrap-table-next';
 import filterFactory, {textFilter} from 'react-bootstrap-table2-filter';
