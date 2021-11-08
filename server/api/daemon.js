@@ -1,8 +1,6 @@
-/* eslint-disable new-cap */
 const express = require('express')
 const router = express.Router()
 const cpu = require('../models/cpu.js')
-const process = require('../models/process.js')
 
 // receive report from daemon
 router.post('/', async (req, res) => {
@@ -13,8 +11,7 @@ router.post('/', async (req, res) => {
     await newCpuLog.save()
     res.status(200).send()
   } catch (err) {
-    console.error(err.message)
-    res.status(500).send('Server Error')
+    res.status(500).send('Server Error ' + err.message)
   }
 })
 

@@ -22,14 +22,15 @@ const DeviceDetailPage = (props: any) => {
 
   const lookup = async () => {
     await axios
-        .get('api/device/specific-device', {
+        .get('api/device/', {
           params: {
-            entry: deviceId,
+            deviceId: deviceId,
+            limit: 1,
           },
         })
         .then((response) => {
           if (response.data) {
-            setDeviceData(response.data as DeviceLog);
+            setDeviceData(response.data[0] as DeviceLog);
           }
         });
     await axios

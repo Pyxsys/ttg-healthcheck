@@ -41,7 +41,7 @@ router.post('/register', async (req, res) => {
         user: { name: name, role: role },
       })
   } catch (err) {
-    console.error(err.message)
+    console.log(err.message)
     res.status(500).send('Server Error')
   }
 })
@@ -75,7 +75,7 @@ router.post('/login', async (req, res) => {
         user: { name: user.name, role: user.role },
       })
   } catch (err) {
-    console.error(err.message)
+    console.log(err.message)
     res.status(500).send('Server error')
   }
 })

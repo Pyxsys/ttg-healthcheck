@@ -84,4 +84,10 @@ const filterData = (req) => {
   return [query, options]
 }
 
-module.exports = { filterData }
+const validateTimestamp = (start, end) => {
+  if (!start || !end) {
+    throw new Error('StartTimeStamp or endTimestamp not found')
+  }
+}
+
+module.exports = { filterData, validateTimestamp }
