@@ -7,7 +7,7 @@ describe('Filter out attributes from Query', () => {
       limit: '1',
     }
     const [query, options] = filterData(req)
-    expect(query).toEqual({ deviceId: '1' })
+    expect(query).toEqual({ deviceId: ['1'] })
     expect(options).toEqual({ limit: [1] })
   })
 
@@ -18,7 +18,7 @@ describe('Filter out attributes from Query', () => {
       orderValue: '-1',
     }
     const [query, options] = filterData(req)
-    expect(query).toEqual({ deviceId: '1' })
+    expect(query).toEqual({ deviceId: ['1'] })
     expect(options).toEqual({ sort: { timestamp: [-1] } })
   })
 })

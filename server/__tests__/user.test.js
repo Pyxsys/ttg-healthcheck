@@ -119,12 +119,6 @@ describe('Log in given a username and password', () => {
     })
     expect(response.statusCode).toBe(500)
   })
-  it('Should be able to access authenticated route', async () => {
-    const response = await request(app)
-      .get('/api/user/authenticate')
-      .set('Cookie', cookieSession)
-    expect(response.statusCode).toBe(200)
-  })
 })
 
 describe('Log out', () => {
