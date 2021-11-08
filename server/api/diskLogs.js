@@ -8,6 +8,9 @@ const auth = require('../middleware/auth.js')
 router.get('/specific-device', auth, async (req, res) => {
   try {
     let limit = req.query.limit
+    if (!req.query.deviceId) {
+      throw new Error('DeviceId not found')
+    }
     const id = String(req.query.deviceId)
     let query = { deviceId: id }
     if (limit) {
@@ -29,6 +32,9 @@ router.get('/specific-device', auth, async (req, res) => {
 router.get('/timestamp', auth, async (req, res) => {
   try {
     let optionalId = req.query.deviceId
+    if (!req.query.startTimeStamp || !req.query.endTimeStamp) {
+      throw new Error('StartTimeStamp or endTimestamp not found')
+    }
     const startTimeStamp = String(req.query.startTimeStamp)
     const endTimeStamp = String(req.query.endTimeStamp)
     if (optionalId) {
@@ -60,17 +66,12 @@ router.get('/timestamp', auth, async (req, res) => {
 
 // get multiple entries given an attribute with the ability to add a limit and order by filter
 router.get('/specific-attribute', auth, async (req, res) => {
-  try {
-    let [query, options] = filterData(req.query)
-    await Disk.DiskLogs.find({ $and: [query] }, {}, options).exec(
-      (err, diskLogs) => {
-        return res.status(200).json(diskLogs)
-      }
-    )
-  } catch (err) {
-    console.error(err.message)
-    res.status(500).send('Server error')
-  }
+  let [query, options] = filterData(req.query)
+  await Disk.DiskLogs.find({ $and: [query] }, {}, options).exec(
+    (err, diskLogs) => {
+      return res.status(200).json(diskLogs)
+    }
+  )
 })
 
 module.exports = router

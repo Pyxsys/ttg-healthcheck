@@ -2,10 +2,8 @@ const request = require('supertest')
 const connectDB = require('../db/db_connection')
 const app = require('../app')
 const CPU = require('../models/cpu.js')
-const Device = require('../models/device.js')
 const mongoose = require('mongoose')
-const { response } = require('express')
-const { CpuLogs } = require('../models/cpu.js')
+
 
 const testUser = {
   name: 'test',
@@ -106,7 +104,6 @@ describe('Check CPU Logs from DB with timestamps', () => {
 
 describe('Check CPU Logs from DB with specific attributes', () => {
   const conditionalCPULogTest = (bool) => (bool ? test : test.skip)
-
   it('Should retrieve the contents of a post to the DB for a specific timestamp and a deviceID', async () => {
     const response = await request(app)
       .get(
@@ -115,15 +112,6 @@ describe('Check CPU Logs from DB with specific attributes', () => {
       .set('Cookie', cookieSession)
     expect(response.statusCode).toBe(200)
   })
-  //TODO Make the request result in 404
-  /*it('Should retrieve the contents of a post to the DB for a specific timestamp and a deviceID', async () => {
-    const response = await request(app)
-      .get(
-        '/api/cpu-logs/specific-attribute/'
-      )
-      .set('Cookie', cookieSession)
-    expect(response.statusCode).toBe(404)
-  })*/
 })
 
 afterAll(async () => {
