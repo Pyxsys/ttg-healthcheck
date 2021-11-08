@@ -1,15 +1,7 @@
 const request = require('supertest')
-const connectDB = require('../db/db_connection')
 const app = require('../app')
 const CPU = require('../models/cpu.js')
-const mongoose = require('mongoose')
-
-const testUser = {
-  name: 'test',
-  password: process.env.PASSWORD,
-  email: 'test1@gmail.com',
-  role: 'user',
-}
+const { setupLogTests, teardownLogTests } = require('./api_common.test')
 
 let cookieSession = ''
 
@@ -23,36 +15,14 @@ const mockPayload = {
 }
 
 beforeAll(async () => {
-  await connectDB() // connect to local_db
+  cookieSession = await setupLogTests()
   await CPU.CpuLogs.deleteMany() //clear logs
-  // register user
-  await request(app).post('/api/user/register').send({
-    name: testUser.name,
-    password: testUser.password,
-    email: testUser.email,
-    role: testUser.role,
-  })
-  // login user and store cookie
-  await request(app)
-    .post('/api/user/login')
-    .send({
-      email: testUser.email,
-      password: testUser.password,
-    })
-    .then((res) => {
-      cookieSession = res.headers['set-cookie'][0]
-        .split(',')
-        .map((item) => item.split(';')[0])
-        .join(';')
-    })
 
   //add device
   await request(app).post('/api/daemon').send(mockPayload)
 })
 
 describe('Check CPU Logs from DB with DeviceID', () => {
-  const conditionalCPULogTest = (bool) => (bool ? test : test.skip)
-
   it('Should save the contents of a post to the DB', async () => {
     const response = await request(app)
       .get(
@@ -62,7 +32,7 @@ describe('Check CPU Logs from DB with DeviceID', () => {
     expect(response.statusCode).toBe(200)
   })
 
-  it('Should save the contents of a post to the DB', async () => {
+  it('Should return error 500', async () => {
     const response = await request(app)
       .get('/api/cpu-logs/specific-device?limit=2')
       .set('Cookie', cookieSession)
@@ -71,8 +41,6 @@ describe('Check CPU Logs from DB with DeviceID', () => {
 })
 
 describe('Check CPU Logs from DB with timestamps', () => {
-  const conditionalCPULogTest = (bool) => (bool ? test : test.skip)
-
   it('Should retrieve the contents of a post to the DB for a specific timestamp', async () => {
     const response = await request(app)
       .get(
@@ -102,7 +70,6 @@ describe('Check CPU Logs from DB with timestamps', () => {
 })
 
 describe('Check CPU Logs from DB with specific attributes', () => {
-  const conditionalCPULogTest = (bool) => (bool ? test : test.skip)
   it('Should retrieve the contents of a post to the DB for a specific timestamp and a deviceID', async () => {
     const response = await request(app)
       .get(
@@ -114,6 +81,5 @@ describe('Check CPU Logs from DB with specific attributes', () => {
 })
 
 afterAll(async () => {
-  // Closing the DB connection allows Jest to exit successfully.
-  await mongoose.connection.close()
+  await teardownLogTests()
 })

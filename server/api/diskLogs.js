@@ -23,8 +23,7 @@ router.get('/specific-device', auth, async (req, res) => {
         return res.status(200).json(diskLogs)
       })
   } catch (err) {
-    console.error(err.message)
-    res.status(500).send('Server error')
+    res.status(500).send('Server Error ' + err.message)
   }
 })
 
@@ -59,8 +58,7 @@ router.get('/timestamp', auth, async (req, res) => {
       })
     }
   } catch (err) {
-    console.error(err.message)
-    res.status(500).send('Server error')
+    res.status(500).send('Server Error ' + err.message)
   }
 })
 

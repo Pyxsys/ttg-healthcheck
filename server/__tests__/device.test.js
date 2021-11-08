@@ -1,8 +1,7 @@
 const request = require('supertest')
-const connectDB = require('../db/db_connection')
 const Device = require('../models/device.js')
 const app = require('../app')
-const mongoose = require('mongoose')
+const { setupLogTests, teardownLogTests } = require('./api_common.test')
 
 const mockPayload = {
   deviceId: 'B3C2D-C033-7B87-4B31-244BFE931F1E',
@@ -14,39 +13,11 @@ const mockPayload = {
   ],
 }
 
-const testUser = {
-  name: 'test',
-  password: process.env.PASSWORD,
-  email: 'test1@gmail.com',
-  role: 'user',
-}
-
 let cookieSession = ''
 
 beforeAll(async () => {
-  await connectDB() // connect to local_db
+  cookieSession = await setupLogTests()
   await Device.deleteMany()
-
-  // register user
-  await request(app).post('/api/user/register').send({
-    name: testUser.name,
-    password: testUser.password,
-    email: testUser.email,
-    role: testUser.role,
-  })
-  // login user and store cookie
-  await request(app)
-    .post('/api/user/login')
-    .send({
-      email: testUser.email,
-      password: testUser.password,
-    })
-    .then((res) => {
-      cookieSession = res.headers['set-cookie'][0]
-        .split(',')
-        .map((item) => item.split(';')[0])
-        .join(';')
-    })
 
   //add device
   await request(app).post('/api/daemon').send(mockPayload)
@@ -68,8 +39,6 @@ describe('Retrieve a specific device given name or id', () => {
   })
 })
 
-afterAll((done) => {
-  // Closing the DB connection allows Jest to exit successfully.
-  mongoose.connection.close()
-  done()
+afterAll(async () => {
+  await teardownLogTests()
 })
