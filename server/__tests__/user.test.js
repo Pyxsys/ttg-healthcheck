@@ -1,4 +1,3 @@
-
 const request = require('supertest')
 const connectDB = require('../db/db_connection')
 const User = require('../models/user.js')
@@ -146,4 +145,3 @@ afterAll((done) => {
   mongoose.connection.close()
   done()
 })
-

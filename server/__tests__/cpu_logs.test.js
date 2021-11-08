@@ -50,7 +50,7 @@ const mockPayload = {
   ],
 }
 
-describe('Check CPU Logs from DB', () => {
+describe('Check CPU Logs from DB with DeviceID', () => {
   const conditionalCPULogTest = (bool) => (bool ? test : test.skip)
 
   it('Should save the contents of a post to the DB', async () => {
@@ -62,19 +62,65 @@ describe('Check CPU Logs from DB', () => {
     expect(response.statusCode).toBe(200)
   })
 
-  conditionalCPULogTest(response.statusCode === 200)(
-    'Retreive saved CPU Log',
-    () => {
-      CpuLogs.find({
-        deviceId: mockPayload.deviceId,
-        timestamp: mockPayload.timestamp,
-      }).then(function (doc) {
-        expect(doc.numProcesses).toBe(2)
-        expect(doc.processes[0].name).toBe(mockPayload.processes[0].name)
-        expect(doc.processes[0].pid).toBe(mockPayload.processes[0].pid)
-      })
-    }
-  )
+  it('Should save the contents of a post to the DB', async () => {
+    const response = await request(app)
+      .get('/api/cpu-logs/specific-device?limit=2')
+      .set('Cookie', cookieSession)
+    expect(response.statusCode).toBe(404)
+  })
+})
+
+describe('Check CPU Logs from DB with timestamps', () => {
+  const conditionalCPULogTest = (bool) => (bool ? test : test.skip)
+
+  it('Should retrieve the contents of a post to the DB for a specific timestamp', async () => {
+    const response = await request(app)
+      .get(
+        '/api/cpu-logs/timestamp?startTimeStamp=2021-10-24 09:45:55.966088+00:00&endTimeStamp=2021-10-24 09:49:55.966088+00:00'
+      )
+      .set('Cookie', cookieSession)
+    expect(response.statusCode).toBe(200)
+  })
+
+  it('Should not retrieve the contents of a post to the DB incorrect information (1 timestamp only)', async () => {
+    const response = await request(app)
+      .get(
+        '/api/cpu-logs/timestamp?startTimeStamp=2021-10-24 09:45:55.966088+00:00'
+      )
+      .set('Cookie', cookieSession)
+    expect(response.statusCode).toBe(404)
+  })
+
+  it('Should retrieve the contents of a post to the DB for a specific timestamp and a deviceID', async () => {
+    const response = await request(app)
+      .get(
+        '/api/cpu-logs/timestamp?deviceId=B3C2D-C033-7B87-4B31-244BFE931F1E&startTimeStamp=2021-10-24 09:45:55.966088+00:00&endTimeStamp=2021-10-24 09:49:55.966088+00:00'
+      )
+      .set('Cookie', cookieSession)
+    expect(response.statusCode).toBe(200)
+  })
+})
+
+describe('Check CPU Logs from DB with specific attributes', () => {
+  const conditionalCPULogTest = (bool) => (bool ? test : test.skip)
+
+  it('Should retrieve the contents of a post to the DB for a specific timestamp and a deviceID', async () => {
+    const response = await request(app)
+      .get(
+        '/api/cpu-logs/specific-attribute?usagePercentage=0&usageSpeed=0&numProcesses=0&threadsAlive=1&threadsSleeping=0&uptime=0'
+      )
+      .set('Cookie', cookieSession)
+    expect(response.statusCode).toBe(200)
+  })
+  //TODO Make the request result in 404
+  /*it('Should retrieve the contents of a post to the DB for a specific timestamp and a deviceID', async () => {
+    const response = await request(app)
+      .get(
+        '/api/cpu-logs/specific-attribute/'
+      )
+      .set('Cookie', cookieSession)
+    expect(response.statusCode).toBe(404)
+  })*/
 })
 
 afterAll((done) => {
@@ -82,55 +128,3 @@ afterAll((done) => {
   mongoose.connection.close()
   done()
 })
-
-/*
-  describe('Check CPU Logs from DB', () => {
-    const conditionalCPULogTest = (bool) => (bool ? test : test.skip)
-  
-    test('Should save the contents of a post to the DB', async () => {
-      const response = await request(app)
-        .get('/api/cpuLogs/timestamp?name=python&pid=12345')
-  
-      expect(response.statusCode).toBe(200)
-    })
-  
-    conditionalCPULogTest(response.statusCode === 200)(
-      'Retreive saved CPU Log',
-      () => {
-        CpuLogs.find({
-          deviceId: mockPayload.deviceId,
-          timestamp: mockPayload.timestamp,
-        }).then(function (doc) {
-          expect(doc.numProcesses).toBe(2)
-          expect(doc.processes[0].name).toBe(mockPayload.processes[0].name)
-          expect(doc.processes[0].pid).toBe(mockPayload.processes[0].pid)
-        })
-      }
-    )
-  })
-
-  describe('Check CPU Logs from DB', () => {
-    const conditionalCPULogTest = (bool) => (bool ? test : test.skip)
-  
-    test('Should save the contents of a post to the DB', async () => {
-      const response = await request(app)
-        .get('/api/cpuLogs/specific-attribute?name=python&pid=12345')
-  
-      expect(response.statusCode).toBe(200)
-    })
-  
-    conditionalCPULogTest(response.statusCode === 200)(
-      'Retreive saved CPU Log',
-      () => {
-        CpuLogs.find({
-          deviceId: mockPayload.deviceId,
-          timestamp: mockPayload.timestamp,
-        }).then(function (doc) {
-          expect(doc.numProcesses).toBe(2)
-          expect(doc.processes[0].name).toBe(mockPayload.processes[0].name)
-          expect(doc.processes[0].pid).toBe(mockPayload.processes[0].pid)
-        })
-      }
-    )
-  })
-  */

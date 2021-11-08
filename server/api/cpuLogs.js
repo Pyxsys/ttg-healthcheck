@@ -7,6 +7,9 @@ const auth = require('../middleware/auth.js')
 // get X number of entries for single device (limit, deviceId)
 router.get('/specific-device', auth, async (req, res) => {
   try {
+    if (!req.query.limit || !req.query.deviceId) {
+      return res.status(404).send('Page Not Found')
+    }
     let limit = req.query.limit
     const id = String(req.query.deviceId)
     let query = { deviceId: id }
@@ -29,8 +32,13 @@ router.get('/specific-device', auth, async (req, res) => {
 router.get('/timestamp', auth, async (req, res) => {
   try {
     let optionalId = req.query.deviceId
+    if (!req.query.startTimeStamp || !req.query.endTimeStamp) {
+      return res.status(404).send('Page Not Found')
+    }
+
     const startTimeStamp = String(req.query.startTimeStamp)
     const endTimeStamp = String(req.query.endTimeStamp)
+
     if (optionalId) {
       optionalId = String(req.query.deviceId)
       await Cpu.CpuLogs.find({
@@ -61,6 +69,9 @@ router.get('/timestamp', auth, async (req, res) => {
 // get multiple entries given an attribute with the ability to add a limit and order by filter
 router.get('/specific-attribute', auth, async (req, res) => {
   try {
+    if (!req.query) {
+      return res.status(404).send('Page Not Found')
+    }
     let [query, options] = filterData(req.query)
     await Cpu.CpuLogs.find({ $and: [query] }, {}, options).exec(
       (err, cpuLogs) => {
