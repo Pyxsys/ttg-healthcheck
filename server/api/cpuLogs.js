@@ -7,8 +7,8 @@ const auth = require('../middleware/auth.js')
 // get X number of entries for single device (limit, deviceId)
 router.get('/specific-device', auth, async (req, res) => {
   try {
-    if (!req.query.limit || !req.query.deviceId) {
-      return res.status(404).send('Page Not Found')
+    if (!req.query.deviceId) {
+      throw new Error('DeviceId not found')
     }
     let limit = req.query.limit
     const id = String(req.query.deviceId)
@@ -23,8 +23,7 @@ router.get('/specific-device', auth, async (req, res) => {
         return res.status(200).json(cpuLogs)
       })
   } catch (err) {
-    console.error(err.message)
-    res.status(500).send('Server error')
+    res.status(500).send('Server Error ' + err.message)
   }
 })
 
@@ -33,7 +32,7 @@ router.get('/timestamp', auth, async (req, res) => {
   try {
     let optionalId = req.query.deviceId
     if (!req.query.startTimeStamp || !req.query.endTimeStamp) {
-      return res.status(404).send('Page Not Found')
+      throw new Error('StartTimeStamp or endTimestamp not found')
     }
 
     const startTimeStamp = String(req.query.startTimeStamp)
@@ -61,27 +60,18 @@ router.get('/timestamp', auth, async (req, res) => {
       })
     }
   } catch (err) {
-    console.error(err.message)
-    res.status(500).send('Server error')
+    res.status(500).send('Server Error ' + err.message)
   }
 })
 
 // get multiple entries given an attribute with the ability to add a limit and order by filter
 router.get('/specific-attribute', auth, async (req, res) => {
-  try {
-    if (!req.query) {
-      return res.status(404).send('Page Not Found')
+  let [query, options] = filterData(req.query)
+  await Cpu.CpuLogs.find({ $and: [query] }, {}, options).exec(
+    (err, cpuLogs) => {
+      return res.status(200).json(cpuLogs)
     }
-    let [query, options] = filterData(req.query)
-    await Cpu.CpuLogs.find({ $and: [query] }, {}, options).exec(
-      (err, cpuLogs) => {
-        return res.status(200).json(cpuLogs)
-      }
-    )
-  } catch (err) {
-    console.error(err.message)
-    res.status(500).send('Server error')
-  }
+  )
 })
 
 module.exports = router
