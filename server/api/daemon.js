@@ -1,8 +1,6 @@
-/* eslint-disable new-cap */
 const express = require('express')
 const router = express.Router()
 const cpu = require('../models/cpu.js')
-const process = require('../models/process.js')
 
 // receive report from daemon
 router.post('/', async (req, res) => {

@@ -16,7 +16,6 @@ const testUser = {
 
 let cookieSession = ''
 
-
 const mockPayload = {
   deviceId: 'B3C2D-C033-7B87-4B31-244BFE931F1E',
   timestamp: '2021-10-24 09:47:55.966088',
@@ -25,7 +24,6 @@ const mockPayload = {
     { name: 'celebid', pid: 12344 },
   ],
 }
-
 
 beforeAll(async () => {
   await connectDB() // connect to local_db
@@ -51,7 +49,6 @@ beforeAll(async () => {
         .join(';')
     })
 
-    
   //add device
   await request(app).post('/api/daemon').send(mockPayload)
 })
@@ -129,8 +126,7 @@ describe('Check CPU Logs from DB with specific attributes', () => {
   })*/
 })
 
-
-afterAll( async () => {
+afterAll(async () => {
   // Closing the DB connection allows Jest to exit successfully.
   await mongoose.connection.close()
 })

@@ -2,14 +2,18 @@ const mongoose = require('mongoose')
 const { exitProcess } = require('../destroyProcess')
 
 // connect to database
-const connectDB = async () => {
+const connectDB = async (printLog) => {
   try {
     await mongoose
       .connect(process.env.MONGODB_URL, {
         useNewUrlParser: true,
         useUnifiedTopology: true,
       })
-      .then(() => console.log('MongoDB connected...'))
+      .then(() => {
+        if (printLog) {
+          console.log('MongoDB connected...')
+        }
+      })
   } catch (err) {
     exitProcess(err.message, 1)
   }

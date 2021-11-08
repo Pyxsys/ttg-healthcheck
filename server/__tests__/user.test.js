@@ -67,6 +67,7 @@ describe('Test signup cases', () => {
     })
     expect(response.statusCode).toBe(400)
   })
+
   it('should respond with a 500 status code when a param is missing', async () => {
     const response = await request(app).post('/api/user/register').send({
       name: userOne.name,
@@ -85,6 +86,7 @@ describe('Log in given a username and password', () => {
     })
     expect(response.statusCode).toBe(200)
   })
+
   it('Should respond with a 400 status code when email does not exists', async () => {
     const response = await request(app).post('/api/user/login').send({
       email: 'a324@test.com',
@@ -92,6 +94,7 @@ describe('Log in given a username and password', () => {
     })
     expect(response.statusCode).toBe(400)
   })
+
   it('Should respond with a 400 status code when password is wrong', async () => {
     const response = await request(app).post('/api/user/login').send({
       email: userOne.email,
@@ -99,6 +102,7 @@ describe('Log in given a username and password', () => {
     })
     expect(response.statusCode).toBe(400)
   })
+
   it('Should specify json in the content type header', async () => {
     const response = await request(app).post('/api/user/login').send({
       email: userOne.email,
@@ -108,6 +112,7 @@ describe('Log in given a username and password', () => {
       expect.stringContaining('json')
     )
   })
+
   it('Should log in the user based on credentials', async () => {
     const response = await request(app).post('/api/user/login').send({
       email: userOne.email,
@@ -115,6 +120,7 @@ describe('Log in given a username and password', () => {
     })
     expect(response.body.message).toBeDefined()
   })
+
   it('should respond with a 500 status code when a param is missing', async () => {
     const response = await request(app).post('/api/user/login').send({
       email: userOne.email,

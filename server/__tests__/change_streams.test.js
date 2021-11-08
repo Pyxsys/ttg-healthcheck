@@ -44,7 +44,6 @@ beforeAll(async () => {
   await User.deleteMany()
 })
 
-/*
 describe('Insert a new user to the database and get data from the change stream', () => {
   beforeAll(async () => {
     monitorCollection(collectionName)
@@ -94,7 +93,6 @@ describe('Insert a new user to the database and get data from the change stream'
     closeMonitoredCollection()
   })
 })
-*/
 
 describe('Closes the collection change streams', () => {
   afterEach(async () => {
