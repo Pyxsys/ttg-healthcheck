@@ -70,7 +70,7 @@ describe('Log in given a username and password', () => {
   it('Should respond with a 400 status code when password is wrong', async () => {
     const response = await request(app).post('/api/user/login').send({
       email: userOne.email,
-      password: 'a',
+      password: process.env.PASSWORD + 'a',
     })
     expect(response.statusCode).toBe(400)
   })
