@@ -1,39 +1,12 @@
 const request = require('supertest')
-const connectDB = require('../db/db_connection')
 const app = require('../app')
-const mongoose = require('mongoose')
+const { setupLogTests } = require('./api_common.test')
 
-const testUser = {
-  name: 'test',
-  password: process.env.PASSWORD,
-  email: 'test2@gmail.com',
-  role: 'user',
-}
 
 let cookieSession = ''
 
 beforeAll(async () => {
-  await connectDB() // connect to local_db
-  // register user
-  await request(app).post('/api/user/register').send({
-    name: testUser.name,
-    password: testUser.password,
-    email: testUser.email,
-    role: testUser.role,
-  })
-  // login user and store cookie
-  await request(app)
-    .post('/api/user/login')
-    .send({
-      email: testUser.email,
-      password: testUser.password,
-    })
-    .then((res) => {
-      cookieSession = res.headers['set-cookie'][0]
-        .split(',')
-        .map((item) => item.split(';')[0])
-        .join(';')
-    })
+  cookieSession = await setupLogTests()
 })
 
 describe('Authentication test', () => {
@@ -57,8 +30,6 @@ describe('Authentication test', () => {
   })
 })
 
-afterAll((done) => {
-  // Closing the DB connection allows Jest to exit successfully.
-  mongoose.connection.close()
-  done()
+afterAll(async () => {
+  await teardownLogTests()
 })
