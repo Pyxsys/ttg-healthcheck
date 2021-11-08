@@ -1,7 +1,7 @@
 const express = require('express')
 const router = express.Router()
 const Disk = require('../models/disk.js')
-const { filterData } = require('./shared/filter')
+const { filterData, validateTimestamp } = require('./shared/filter')
 const auth = require('../middleware/auth.js')
 
 // get X number of entries for single device (limit, deviceId)
@@ -31,9 +31,7 @@ router.get('/specific-device', auth, async (req, res) => {
 router.get('/timestamp', auth, async (req, res) => {
   try {
     let optionalId = req.query.deviceId
-    if (!req.query.startTimeStamp || !req.query.endTimeStamp) {
-      throw new Error('StartTimeStamp or endTimestamp not found')
-    }
+    validateTimestamp(req.query.startTimeStamp, req.query.endTimeStamp)
     const startTimeStamp = String(req.query.startTimeStamp)
     const endTimeStamp = String(req.query.endTimeStamp)
     if (optionalId) {
