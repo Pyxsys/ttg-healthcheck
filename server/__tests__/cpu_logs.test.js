@@ -16,6 +16,17 @@ const testUser = {
 
 let cookieSession = ''
 
+
+const mockPayload = {
+  deviceId: 'B3C2D-C033-7B87-4B31-244BFE931F1E',
+  timestamp: '2021-10-24 09:47:55.966088',
+  processes: [
+    { name: 'python', pid: 12345 },
+    { name: 'celebid', pid: 12344 },
+  ],
+}
+
+
 beforeAll(async () => {
   await connectDB() // connect to local_db
   await CPU.CpuLogs.deleteMany() //clear logs
@@ -39,16 +50,11 @@ beforeAll(async () => {
         .map((item) => item.split(';')[0])
         .join(';')
     })
-})
 
-const mockPayload = {
-  deviceId: 'B3C2D-C033-7B87-4B31-244BFE931F1E',
-  timestamp: '2021-10-24 09:47:55.966088',
-  processes: [
-    { name: 'python', pid: 12345 },
-    { name: 'celebid', pid: 12344 },
-  ],
-}
+    
+  //add device
+  await request(app).post('/api/daemon').send(mockPayload)
+})
 
 describe('Check CPU Logs from DB with DeviceID', () => {
   const conditionalCPULogTest = (bool) => (bool ? test : test.skip)
@@ -66,7 +72,7 @@ describe('Check CPU Logs from DB with DeviceID', () => {
     const response = await request(app)
       .get('/api/cpu-logs/specific-device?limit=2')
       .set('Cookie', cookieSession)
-    expect(response.statusCode).toBe(404)
+    expect(response.statusCode).toBe(500)
   })
 })
 
@@ -88,7 +94,7 @@ describe('Check CPU Logs from DB with timestamps', () => {
         '/api/cpu-logs/timestamp?startTimeStamp=2021-10-24 09:45:55.966088+00:00'
       )
       .set('Cookie', cookieSession)
-    expect(response.statusCode).toBe(404)
+    expect(response.statusCode).toBe(500)
   })
 
   it('Should retrieve the contents of a post to the DB for a specific timestamp and a deviceID', async () => {
@@ -123,8 +129,8 @@ describe('Check CPU Logs from DB with specific attributes', () => {
   })*/
 })
 
-afterAll((done) => {
+
+afterAll( async () => {
   // Closing the DB connection allows Jest to exit successfully.
-  mongoose.connection.close()
-  done()
+  await mongoose.connection.close()
 })
