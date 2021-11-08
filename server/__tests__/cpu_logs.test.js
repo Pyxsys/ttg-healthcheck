@@ -49,20 +49,20 @@ describe('Check CPU Logs from DB with timestamps', () => {
 })
 
 describe('Check CPU Logs from DB with DeviceID', () => {
-  it('Should save the contents of a post to the DB', async () => {
-    const cpu = '/api/cpu-logs/specific-device?deviceId=B3C2D-C033-7B87-4B31-244BFE931F1E&limit=2'
-    const response = await request(app)
-      .get(cpu)
-      .set('Cookie', cookieSession)
-    expect(response.statusCode).toBe(200)
-  })
-
   it('Should return error 500', async () => {
     const cpu = '/api/cpu-logs/specific-device?limit=2'
     const response = await request(app)
       .get(cpu)
       .set('Cookie', cookieSession)
     expect(response.statusCode).toBe(500)
+  })
+  
+  it('Should save the contents of a post to the DB', async () => {
+    const cpu = '/api/cpu-logs/specific-device?deviceId=B3C2D-C033-7B87-4B31-244BFE931F1E&limit=2'
+    const response = await request(app)
+      .get(cpu)
+      .set('Cookie', cookieSession)
+    expect(response.statusCode).toBe(200)
   })
 })
 
