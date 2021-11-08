@@ -47,12 +47,13 @@ beforeAll(async () => {
 
 describe('Sign up given a username and password', () => {
   it('should respond with a 200 status code, Should specify json in the content type header & Should log in the user based on credentials ', async () => {
-    await request(app).post('/api/user/register').send({
+    const response = await request(app).post('/api/user/register').send({
       name: userOne.name,
       password: userOne.password,
       email: userOne.email,
       role: userOne.role,
     })
+    expect(response.statusCode).toBe(200)
   })
 })
 
@@ -82,6 +83,7 @@ describe('Log in given a username and password', () => {
       email: userOne.email,
       password: userOne.password,
     })
+    expect(response.statusCode).toBe(200)
   })
   it('Should respond with a 400 status code when email does not exists', async () => {
     const response = await request(app).post('/api/user/login').send({
