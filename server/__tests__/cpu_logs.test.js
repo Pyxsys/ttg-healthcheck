@@ -4,7 +4,6 @@ const app = require('../app')
 const CPU = require('../models/cpu.js')
 const mongoose = require('mongoose')
 
-
 const testUser = {
   name: 'test',
   password: process.env.PASSWORD,
