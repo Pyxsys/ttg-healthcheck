@@ -48,31 +48,58 @@ jobs:
       with:
         python-version: ${{ matrix.python-version }}
         
-    - name: Run frontend tests
+    - name: Client Test
       run: |
         cd client
         npm ci
         npm run test:coveralls
 
-    - name: Run backend tests
+    - name: Server Test
       run: |
         cd server
         npm ci
         mongo mydb_test --eval 'db.createUser({user:"travis",pwd:"test",roles:["readWrite"]});'
         npm run test:coveralls
             
-    - name: Run python tests
+    - name: Python Test
       run: |
         pip install -r daemon/requirements.txt
         cd daemon
         coverage run --branch -m unittest -v
         coverage report
-        
-  finish:
-    needs: test
-    runs-on: ubuntu-latest
-    steps:
-    - name: Coveralls
+
+    - name: Client Coveralls
       uses: coverallsapp/github-action@master
       with:
         github-token: ${{ secrets.GITHUB_TOKEN }}
+        parallel: true
+        flag-name: Client Test
+
+    - name: Server Coveralls
+      uses: coverallsapp/github-action@master
+      with:
+        github-token: ${{ secrets.GITHUB_TOKEN }}
+        parallel: true
+        flag-name: Server Test
+
+    - name: Python Coveralls
+      uses: AndreMiras/coveralls-python-action@develop
+      with:
+        github-token: ${{ secrets.github_token }}
+        parallel: true
+        flag-name: Python Test
+
+  coveralls_finish:
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+    - name: Python Coveralls Finished
+      uses: AndreMiras/coveralls-python-action@develop
+      with:
+        parallel-finished: true
+
+    - name: Server/Client Coveralls Finished
+      uses: coverallsapp/github-action@master
+      with:
+        github-token: ${{ secrets.github_token }}
+        parallel-finished: true
