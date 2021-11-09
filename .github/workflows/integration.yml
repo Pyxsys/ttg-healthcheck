@@ -90,12 +90,13 @@ jobs:
         flag-name: Python Test
 
   coveralls_finish:
-    needs: test
+    needs: integration
     runs-on: ubuntu-latest
     steps:
     - name: Python Coveralls Finished
       uses: AndreMiras/coveralls-python-action@develop
       with:
+        github-token: ${{ secrets.github_token }}
         parallel-finished: true
 
     - name: Server/Client Coveralls Finished
