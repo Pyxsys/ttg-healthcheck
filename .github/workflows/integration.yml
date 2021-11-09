@@ -90,7 +90,7 @@ jobs:
         flag-name: Python Test
 
   coveralls_finish:
-    needs: integration
+    needs: [Client_Test, Server_Test, Python_Test]
     runs-on: ubuntu-latest
     steps:
     - name: Python Coveralls Finished
