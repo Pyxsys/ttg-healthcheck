@@ -50,13 +50,18 @@ class SysReport:
 
     def add_system_process_info(self):
         process_list = list()
+        process_buffer = list()
 
+        #Initialize start time for process diagnostic scan
         for proc in psutil.process_iter():
+            proc.cpu_percent()
+            process_buffer.append(proc)
 
+        time.sleep(0.1)
+
+        for proc in process_buffer:
             process_info_dictionary = proc.as_dict(attrs=['name', 'pid', 'status'])
-            
-            process_info_dictionary['cpu_percent'] = proc.cpu_percent(interval=0.1) / psutil.cpu_count()
-
+            process_info_dictionary['cpu_percent'] = proc.cpu_percent() / psutil.cpu_count()
             process_list.append(process_info_dictionary)
 
         self.set_section("processes", process_list)
