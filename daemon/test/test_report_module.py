@@ -1,6 +1,7 @@
 from datetime import datetime
 import sys
 import unittest
+from unittest.case import expectedFailure
 
 # Include src directory for imports
 sys.path.append('../')
@@ -58,6 +59,24 @@ class TestSystemReportClass(unittest.TestCase):
         self.test_report.add_device_uuid()
         actual_result=self.test_report.get_section("deviceId")
         self.assertRegex(actual_result,'^[a-zA-Z0-9]{8}(?:-[a-zA-Z0-9]{4}){3}-[a-zA-Z0-9]{12}$')
+
+    def testAddingStaticMemoryInfoToReport(self):
+        expected_result = ('total', 'form_factors')
+        
+        self.test_report.add_startup_memory_info()
+        section=self.test_report.get_section("memory_")
+        actual_result = tuple(section)
+
+        self.assertTupleEqual(actual_result, expected_result)
+
+    def testFetchingTotalMemory(self):
+        actual_result=SysReport.fetch_total_memory()
+        self.assertGreater(actual_result, 0)
+
+    def testFetchingMemoryFormFactorList(self):
+        actual_result = SysReport.fetch_memory_form_factor()
+        for x in actual_result:     #Ensure results are not empty
+            self.assertTrue(x)
 
         
 if __name__ == '__main__':
