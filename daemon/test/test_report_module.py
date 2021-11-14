@@ -27,36 +27,36 @@ class TestSystemReportClass(unittest.TestCase):
 
     def testSysReportInitialization(self):
         expected_result={}
-        actual_result=self.test_report.getReport()
+        actual_result=self.test_report.get_report()
         self.assertEqual(expected_result, actual_result)
 
     def testAddingEmptySectionToReport(self):
         expected_result={"new_section": {}}
-        self.test_report.setSection("new_section", {})
-        actual_result=self.test_report.getReport()
+        self.test_report.set_section("new_section", {})
+        actual_result=self.test_report.get_report()
         self.assertEqual(expected_result, actual_result)
 
     def testSettingSection(self):
         expected_result=self.mock_dictionary
-        self.test_report.setSection("names", self.mock_dictionary["names"])
-        actual_result=self.test_report.getReport()
+        self.test_report.set_section("names", self.mock_dictionary["names"])
+        actual_result=self.test_report.get_report()
         self.assertEqual(expected_result, actual_result)
 
     def testAddingProcessesToReport(self):
         expected_result='python.exe'
-        self.test_report.addSystemProcessInfo()
+        self.test_report.add_system_process_info()
         
-        process_list=self.test_report.getSection("processes")
+        process_list=self.test_report.get_section("processes")
         self.assertTrue(x.name == 'python.exe' for x in process_list)
 
     def testAddingTimestampToReport(self):
-        self.test_report.addTimestamp()
-        actual_result=self.test_report.getSection("timestamp")
+        self.test_report.add_timestamp()
+        actual_result=self.test_report.get_section("timestamp")
         self.assertIsNotNone(actual_result)
 
     def testAddingDeviceIdToReport(self):
-        self.test_report.addDeviceUUID()
-        actual_result=self.test_report.getSection("deviceId")
+        self.test_report.add_device_uuid()
+        actual_result=self.test_report.get_section("deviceId")
         self.assertRegex(actual_result,'^[a-zA-Z0-9]{8}(?:-[a-zA-Z0-9]{4}){3}-[a-zA-Z0-9]{12}$')
 
         

@@ -12,43 +12,43 @@ class Runner:
         with open(path, "r") as config_file:
             self.configs = json.load(config_file)
 
-    def getConfig(self):
+    def get_config(self):
         return self.configs
 
-    def getReport(self):
+    def get_report(self):
         return self.report.report_message
 
-    def sendReport(self):
-        url = self.getConfig()['destination'] + self.api_endpoint
-        return requests.post(url, json=self.getReport())
+    def send_report(self):
+        url = self.get_config()['destination'] + self.api_endpoint
+        return requests.post(url, json=self.get_report())
 
-    def genReport(self):
+    def gen_report(self):
         self.report=SysReport()
-        self.report.addDeviceUUID()
-        self.report.addTimestamp()
-        self.report.addSystemProcessInfo()
+        self.report.add_device_uuid()
+        self.report.add_timestamp()
+        self.report.add_system_process_info()
 
     def sleep(self):
-        time.sleep(self.getConfig()['report_delay'])
+        time.sleep(self.get_config()['report_delay'])
 
 class SysReport:
     # Initializes instance attributes.
     def __init__(self):
         self.report_message = {}
 
-    def getReport(self):
+    def get_report(self):
         return self.report_message
 
-    def setSection(self, section, msg):
+    def set_section(self, section, msg):
         self.report_message[section] = msg
 
-    def getSection(self, section):
+    def get_section(self, section):
         return self.report_message[section]
 
-    def printReport(self):
+    def print_report(self):
         print(json.dumps(self.report_message, indent=4, sort_keys=True))
 
-    def addSystemProcessInfo(self):
+    def add_system_process_info(self):
         process_list = list()
 
         for proc in psutil.process_iter():
@@ -59,12 +59,12 @@ class SysReport:
 
             process_list.append(process_info_dictionary)
 
-        self.setSection("processes", process_list)
+        self.set_section("processes", process_list)
 
-    def addTimestamp(self):
-        self.setSection("timestamp",datetime.now().isoformat())
+    def add_timestamp(self):
+        self.set_section("timestamp",datetime.now().isoformat())
 
-    def addDeviceUUID(self):
+    def add_device_uuid(self):
         os_type = sys.platform.lower()
         pattern = '[a-zA-Z0-9]{8}(?:-[a-zA-Z0-9]{4}){3}-[a-zA-Z0-9]{12}'
         flags=re.MULTILINE
@@ -78,16 +78,16 @@ class SysReport:
         uuid=re.findall(pattern, extract.read(), flags)[0]
         extract.close()
 
-        self.setSection("deviceId", uuid)
+        self.set_section("deviceId", uuid)
 
 def main(config):
     start=datetime.now()
     print("Starting new report routine at", start)
     runner=Runner(config)
     print("\tWriting report...")
-    runner.genReport()
+    runner.gen_report()
     print("\tSending report to server...")
-    runner.sendReport()
+    runner.send_report()
     elapsed=datetime.now()-start
     print("Ending report routine. \nTime elapsed:", elapsed.total_seconds(), "sec")
     print("Process will now sleep...")
