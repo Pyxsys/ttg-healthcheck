@@ -22,10 +22,14 @@ class Runner:
         url = self.get_config()['destination'] + self.api_endpoint
         return requests.post(url, json=self.get_report())
 
-    def gen_report(self):
+    def init_report(self):
         self.report=SysReport()
         self.report.add_device_uuid()
         self.report.add_timestamp()
+    
+    #produces recurring report 
+    def gen_report(self):
+        self.init_report()
         self.report.add_system_process_info()
 
     def sleep(self):
