@@ -110,15 +110,21 @@ jobs:
         
     - name: Install Dependencies
       run: |
-        npm ci --prefix server
-        npm ci --prefix client
+        cd server
+        npm ci 
+        cd ../client
+        npm ci 
 
     - name: Run Server and Client
       run: |
-        npm start & --prefix server
-        npm start & --prefix client
+        cd server
+        npm start & 
+        cd ../client
+        npm start &
 
     - name: Run Client Test
-      run: npm run test:coverage --prefix client
+      run:  |
+        cd client
+        npm run test:coverage
             
 
