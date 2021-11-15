@@ -111,10 +111,7 @@ jobs:
     - name: Run client tests
       run: |
         npm ci --prefix server
-        npm start --prefix server &
-        npm ci --prefix client
-        npm run build --prefix client
-        npm start & wait-on http://localhost:3000 --prefix client
+        npm start --prefix server & npx wait-on http://localhost:5000 & npm ci --prefix client & npm run build --prefix client & npm start --prefix client & npx wait-on http://localhost:3000
         npm run test:coverage --prefix client
             
             
