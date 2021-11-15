@@ -7,7 +7,12 @@ chrome.setDefaultService(new chrome.ServiceBuilder(path).build());
 describe('LoginTest', () => {
   let driver: WebDriver;
   beforeAll(async () => {
-    driver = await new Builder().forBrowser('chrome').build();
+    driver = await new Builder()
+        .forBrowser('chrome')
+        .setChromeOptions(
+            new chrome.Options().addArguments(['--headless', '--no-sandbox']),
+        )
+        .build();
   });
   afterEach(async () => {
     await driver.close();
