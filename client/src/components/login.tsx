@@ -17,21 +17,21 @@ const Login = () => {
   const {setUser, setIsAuthenticated} = useAuth();
   const [loggedIn, setLoggedIn] = useState(false);
 
-  const [formData1, setFormData1] = useState({
-    email1: '',
-    password1: '',
+  const [formData, setFormData] = useState({
+    email: '',
+    password: '',
   });
 
-  const {email1, password1} = formData1;
+  const {email, password} = formData;
 
   const onChange1 = (e: React.ChangeEvent<any>) =>
-    setFormData1({...formData1, [e.target.name]: e.target.value});
+    setFormData({...formData, [e.target.name]: e.target.value});
 
   const onSubmit = async (e: React.ChangeEvent<any>) => {
     e.preventDefault();
     const body = {
-      email: formData1.email1,
-      password: formData1.password1,
+      email: formData.email,
+      password: formData.password,
     };
     await axios
         .post<AxiosResult>('api/user/login', body)
@@ -72,11 +72,11 @@ const Login = () => {
                   <Form.Group>
                     <Form.Label className="ml-0 mb-3">Email Address</Form.Label>
                     <Form.Control
-                      className="mb-3"
+                      className="mb-3 email"
                       type="email"
                       placeholder="Email ID"
-                      name="email1"
-                      value={email1}
+                      name="email"
+                      value={email}
                       onChange={(e) => onChange1(e)}
                     />
                   </Form.Group>
@@ -86,12 +86,12 @@ const Login = () => {
                       className="mb-3"
                       type="password"
                       placeholder="Password"
-                      name="password1"
-                      value={password1}
+                      name="password"
+                      value={password}
                       onChange={(e) => onChange1(e)}
                     />
                   </Form.Group>
-                  <Button className="w-100 mt-3" type="submit">
+                  <Button className="w-100 mt-3 login-button" type="submit">
                     Login
                   </Button>
                   <Link to="/signup">
