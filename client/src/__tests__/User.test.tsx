@@ -5,7 +5,12 @@ const path = require('chromedriver').path;
 chrome.setDefaultService(new chrome.ServiceBuilder(path).build());
 let driver: WebDriver;
 beforeEach(async () => {
-  driver = await new Builder().forBrowser('chrome').build();
+  driver = await new Builder()
+      .forBrowser('chrome')
+      .setChromeOptions(
+          new chrome.Options().addArguments(['--headless', '--no-sandbox']),
+      )
+      .build();
   await driver.get('http://127.0.0.1:3000/');
 });
 afterEach(async () => {
