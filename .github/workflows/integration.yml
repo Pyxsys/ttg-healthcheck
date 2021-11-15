@@ -115,7 +115,7 @@ jobs:
     - name: Run Server
       run: |
         cd server
-        npm start & wait-on http://localhost:5000
+        # npm start &
 
     - name: Install Client Dependencies
       run: |
@@ -124,7 +124,7 @@ jobs:
     - name: Run Client
       run: |
         cd Ccient
-        npm start & wait-on http://localhost:3000
+        npm start &
 
     - name: Run Client Test
       run: npm run test:coverage --prefix client
