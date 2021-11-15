@@ -49,9 +49,9 @@ jobs:
         mongo mydb_test --eval 'db.createUser({user:"travis",pwd:"test",roles:["readWrite"]});'
         npm run test:coverage
 
-  Deamon_Test:
+  Daemon_Test:
     # The type of runner that the job will run on
-    name: Deamon_Test
+    name: Daemon_Test
     runs-on: ubuntu-latest
 
     strategy:
@@ -108,23 +108,14 @@ jobs:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
         
-    - name: Install Dependencies
+    - name: Run client tests
       run: |
-        cd server
-        npm ci 
-        cd ../client
-        npm ci 
-
-    - name: Run Server and Client
-      run: |
-        cd server
-        npm start & 
-        cd ../client
+        npm ci --prefix server
         npm start &
-
-    - name: Run Client Test
-      run:  |
-        cd client
-        npm run test:coverage
+        npm ci --prefix client
+        npm run build --prefix client
+        npm start & wait-on http://localhost:3000 --prefix client
+        npm run test:coverage --prefix client
+            
             
 
