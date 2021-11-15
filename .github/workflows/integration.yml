@@ -18,6 +18,7 @@ jobs:
 
   Server_Test:
     # The type of runner that the job will run on
+    name: Server_Test
     runs-on: ubuntu-latest
 
     strategy:
@@ -50,6 +51,7 @@ jobs:
 
   Deamon_Test:
     # The type of runner that the job will run on
+    name: Deamon_Test
     runs-on: ubuntu-latest
 
     strategy:
@@ -81,6 +83,7 @@ jobs:
     
   Client_Test:
     # The type of runner that the job will run on
+    name: Client_Test
     runs-on: ubuntu-latest
 
     strategy:
