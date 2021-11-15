@@ -48,12 +48,14 @@ jobs:
       with:
         python-version: ${{ matrix.python-version }}
         
-    - name: Run frontend tests
+    - name: Run backend
       run: |
         cd server
         npm ci
-        npm start
-        cd ..
+        npm start & npx wait-on http://localhost:5000
+
+    - name: Run frontend tests
+      run: |
         cd client
         npm ci
         npm run build --if-present
