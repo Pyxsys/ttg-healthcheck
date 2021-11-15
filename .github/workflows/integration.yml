@@ -113,18 +113,18 @@ jobs:
         cd server
         npm ci
     - name: Run Server
-      run: npm start --prefix server
-      with: 
-        wait-on: http://localhost:5000
+      run: |
+        cd server
+        npm start & wait-on http://localhost:5000
 
     - name: Install Client Dependencies
       run: |
         cd client
         npm ci
     - name: Run Client
-      run: npm start --prefix client
-      with: 
-        wait-on: http://localhost:3000
+      run: |
+        cd Ccient
+        npm start & wait-on http://localhost:3000
 
     - name: Run Client Test
       run: npm run test:coverage --prefix client
