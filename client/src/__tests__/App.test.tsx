@@ -4,7 +4,7 @@ const path = require('chromedriver').path;
 
 chrome.setDefaultService(new chrome.ServiceBuilder(path).build());
 let driver: WebDriver;
-beforeAll(async () => {
+beforeEach(async () => {
   driver = await new Builder()
       .forBrowser('chrome')
       .setChromeOptions(
