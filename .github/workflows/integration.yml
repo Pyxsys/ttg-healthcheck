@@ -111,7 +111,7 @@ jobs:
     - name: Run client tests
       run: |
         npm ci --prefix server
-        npm start &
+        npm start --prefix server &
         npm ci --prefix client
         npm run build --prefix client
         npm start & wait-on http://localhost:3000 --prefix client
