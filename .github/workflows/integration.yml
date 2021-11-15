@@ -15,15 +15,77 @@ on:
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  # This workflow contains a single job called "build"
-  build:
+
+  Server_Test:
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
 
     strategy:
       matrix:
         node-version: [14.x] # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
+        mongodb-version: [3.6]
+
+    steps:
+    - name: Start MongoDB v${{ matrix.mongodb-version }}
+      uses: supercharge/mongodb-github-action@1.6.0
+      with:
+          mongodb-version: ${{ matrix.mongodb-version }}
+          mongodb-replica-set: rs0
+
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Set up Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v2
+      with:
+        node-version: ${{ matrix.node-version }}
+        cache: 'npm'
+
+    - name: Run backend tests
+      run: |
+        cd server
+        npm ci
+        mongo mydb_test --eval 'db.createUser({user:"travis",pwd:"test",roles:["readWrite"]});'
+        npm run test:coverage
+
+  Deamon_Test:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
         python-version: [3.6]
+        mongodb-version: [3.6]
+
+    steps:
+    - name: Start MongoDB v${{ matrix.mongodb-version }}
+      uses: supercharge/mongodb-github-action@1.6.0
+      with:
+          mongodb-version: ${{ matrix.mongodb-version }}
+          mongodb-replica-set: rs0
+
+    - name: Checkout repository
+      uses: actions/checkout@v2
+    
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v2
+      with:
+        python-version: ${{ matrix.python-version }}
+
+    - name: Run python tests
+      run: |
+        pip install -r daemon/requirements.txt
+        cd daemon
+        coverage run --branch -m unittest -v
+        coverage report
+    
+  Client_Test:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [14.x] # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
         mongodb-version: [3.6]
 
     # Steps represent a sequence of tasks that will be executed as part of the job
@@ -42,37 +104,26 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
-    
-    - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v2
-      with:
-        python-version: ${{ matrix.python-version }}
         
-    - name: Run backend
+    - name: Install Server Dependencies
       run: |
         cd server
         npm ci
-        npm start & npx wait-on http://localhost:5000
+    - name: Run Server
+      with: 
+        start: npm start --prefix server
+        wait-on: http://localhost:5000
 
-    - name: Run frontend tests
+    - name: Install Client Dependencies
       run: |
         cd client
         npm ci
-        npm run build --if-present
-        npm start & npx wait-on http://localhost:3000
-        npm run test:coverage
+    - name: Run Client
+      with: 
+        start: npm start --prefix client
+        wait-on: http://localhost:3000
 
-    - name: Run backend tests
-      run: |
-        cd server
-        npm ci
-        mongo mydb_test --eval 'db.createUser({user:"travis",pwd:"test",roles:["readWrite"]});'
-        npm run test:coverage
+    - name: Run Client Test
+      run: npm run test:coverage --prefix client
             
-    - name: Run python tests
-      run: |
-        pip install -r daemon/requirements.txt
-        cd daemon
-        coverage run --branch -m unittest -v
-        coverage report
-    
+
