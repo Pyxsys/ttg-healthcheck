@@ -4,7 +4,7 @@ const path = require('chromedriver').path;
 
 chrome.setDefaultService(new chrome.ServiceBuilder(path).build());
 
-describe('LoginTest', () => {
+describe('sampleTest', () => {
   let driver: WebDriver;
   beforeAll(async () => {
     driver = await new Builder()
