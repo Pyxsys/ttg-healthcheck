@@ -108,23 +108,15 @@ jobs:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
         
-    - name: Install Server Dependencies
+    - name: Install Dependencies
       run: |
-        cd server
-        npm ci
-    - name: Run Server
-      run: |
-        cd server
-        # npm start &
+        npm ci --prefix server
+        npm ci --prefix client
 
-    - name: Install Client Dependencies
+    - name: Run Server and Client
       run: |
-        cd client
-        npm ci
-    - name: Run Client
-      run: |
-        cd Ccient
-        npm start &
+        npm start & --prefix server
+        npm start & --prefix client
 
     - name: Run Client Test
       run: npm run test:coverage --prefix client
