@@ -111,8 +111,7 @@ jobs:
     - name: Build front-end
       run: |
         cd client
-        npm ci
-        npm run build & 
+        npm ci & 
         
     - name: Run backend
       run: |
