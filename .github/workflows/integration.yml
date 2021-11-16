@@ -108,20 +108,14 @@ jobs:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
 
-    - name: Run Server
-      run: |
-        cd server
-        npm ci 
-        npm start & 
-      
-    - name: Run Client
+    - name: Install Dependencies
       run: |
         cd client
-        npm install 
-        npm start & 
-        wait-on: http://localhost:3000 &
-
-    - name: Run Client Test
-      run: |
-        cd client
-        npm run test:coverage
+        npm install
+        cd ../server
+        npm install
+        
+    - name: Cypress Run
+      uses: cypress-io/github-action@v2
+      with:
+        start: npm run dev

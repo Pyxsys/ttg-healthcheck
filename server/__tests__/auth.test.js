@@ -2,7 +2,6 @@ const request = require('supertest')
 const app = require('../app')
 const { setupLogTests, teardownLogTests } = require('./api_common.test')
 
-
 let cookieSession = ''
 
 beforeAll(async () => {

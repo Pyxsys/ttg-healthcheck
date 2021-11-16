@@ -14,7 +14,9 @@ describe('Check memory Logs from DB with DeviceID', () => {
   const memory_1 =
     '/api/memory-logs/specific-device?deviceId=B3C2D-C033-7B87-4B31-244BFE931F1E&limit=2'
   it('Should save the contents of a post to the DB', async () => {
-    const response = await request(app).get(memory_1).set('Cookie', cookieSession)
+    const response = await request(app)
+      .get(memory_1)
+      .set('Cookie', cookieSession)
     expect(response.statusCode).toBe(200)
   })
 
@@ -29,7 +31,8 @@ describe('Check memory Logs from DB with DeviceID', () => {
 
 describe('Check memory Logs from DB with timestamps', () => {
   it('Should retrieve the contents of a post to the DB for a specific timestamp', async () => {
-    const memory_1 = '/api/memory-logs/timestamp?startTimeStamp=2021-10-24 09:45:55.966088+00:00&endTimeStamp=2021-10-24 09:49:55.966088+00:00'
+    const memory_1 =
+      '/api/memory-logs/timestamp?startTimeStamp=2021-10-24 09:45:55.966088+00:00&endTimeStamp=2021-10-24 09:49:55.966088+00:00'
     const response = await request(app)
       .get(memory_1)
       .set('Cookie', cookieSession)
@@ -37,7 +40,8 @@ describe('Check memory Logs from DB with timestamps', () => {
   })
 
   it('Should not retrieve the contents of a post to the DB incorrect information (1 timestamp only)', async () => {
-    const memory_1 = '/api/memory-logs/timestamp?startTimeStamp=2021-10-24 09:45:55.966088+00:00'
+    const memory_1 =
+      '/api/memory-logs/timestamp?startTimeStamp=2021-10-24 09:45:55.966088+00:00'
     const response = await request(app)
       .get(memory_1)
       .set('Cookie', cookieSession)
@@ -45,7 +49,8 @@ describe('Check memory Logs from DB with timestamps', () => {
   })
 
   it('Should retrieve the contents of a post to the DB for a specific timestamp and a deviceID', async () => {
-    const memory_1 = '/api/memory-logs/timestamp?deviceId=B3C2D-C033-7B87-4B31-244BFE931F1E&startTimeStamp=2021-10-24 09:45:55.966088+00:00&endTimeStamp=2021-10-24 09:49:55.966088+00:00'
+    const memory_1 =
+      '/api/memory-logs/timestamp?deviceId=B3C2D-C033-7B87-4B31-244BFE931F1E&startTimeStamp=2021-10-24 09:45:55.966088+00:00&endTimeStamp=2021-10-24 09:49:55.966088+00:00'
     const response = await request(app)
       .get(memory_1)
       .set('Cookie', cookieSession)
@@ -55,7 +60,8 @@ describe('Check memory Logs from DB with timestamps', () => {
 
 describe('Check memory Logs from DB with specific attributes', () => {
   it('Should retrieve the contents of a post to the DB for a specific timestamp and a deviceID', async () => {
-    const memory_1 = '/api/memory-logs/specific-attribute?usagePercentage=0&usageSpeed=0&numProcesses=0&threadsAlive=1&threadsSleeping=0&uptime=0'
+    const memory_1 =
+      '/api/memory-logs/specific-attribute?usagePercentage=0&usageSpeed=0&numProcesses=0&threadsAlive=1&threadsSleeping=0&uptime=0'
     const response = await request(app)
       .get(memory_1)
       .set('Cookie', cookieSession)
