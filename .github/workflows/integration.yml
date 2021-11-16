@@ -111,12 +111,17 @@ jobs:
     - name: Build front-end
       run: |
         cd client
-        npm ci & 
+        npm i &
         
     - name: Run backend
       run: |
         cd server
         npm ci 
         npm start & 
-            
+      
+    - name: Run client tests
+      run: |
+        cd client
+        npm start & wait-on http://localhost:3000 
+        npm run test:coverage 
 
