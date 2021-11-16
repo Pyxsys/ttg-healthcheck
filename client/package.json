@@ -88,5 +88,8 @@
       "last 1 safari version"
     ]
   },
-  "proxy": "http://localhost:5000/"
+  "proxy": "http://localhost:5000/",
+  "optionalDependencies": {
+    "fsevents": "^2.3.2"
+  }
 }
