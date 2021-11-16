@@ -107,18 +107,18 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
-        
-    - name: Run backend
-      run: |
-        cd server
-        npm ci 
-        npm start & 
 
     - name: Build front-end
       run: |
         cd client
         npm ci
         npm run build & 
+        
+    - name: Run backend
+      run: |
+        cd server
+        npm ci 
+        npm start & 
             
     - name: Run front-end
       run: |
