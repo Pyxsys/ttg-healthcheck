@@ -108,17 +108,20 @@ jobs:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
 
-    - name: Run backend
+    - name: Run Server
       run: |
         cd server
         npm ci 
         npm start & 
       
-    - name: Run client tests
+    - name: Run Client
       run: |
         cd client
         npm install 
         npm start &
         wait-on: http://localhost:3000 &
-        npm run test:coverage 
 
+    - name: Run Client Test
+      run: |
+        cd client
+        npm run test:coverage
