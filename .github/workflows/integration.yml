@@ -119,7 +119,7 @@ jobs:
         cd client
         npm install 
         npm start & 
-        wait-on: 'npx wait-on --timeout 10000 http://localhost:3000' &
+        wait-on: 'npx wait-on --timeout 120000 http://localhost:3000' &
         npm run test:coverage
 
 
