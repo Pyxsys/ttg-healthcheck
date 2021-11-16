@@ -114,14 +114,12 @@ jobs:
         npm ci 
         npm start & 
       
-    - name: Run Client
+    - name: Run Client test
       run: |
         cd client
         npm install 
         npm start & 
-        wait-on: http://localhost:3000 &
-
-    - name: Run Client Test
-      run: |
-        cd client
+        wait-on: 'npx wait-on --timeout 10000 http://localhost:3000' &
         npm run test:coverage
+
+
