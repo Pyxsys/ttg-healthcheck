@@ -119,6 +119,6 @@ jobs:
         cd client
         npm install 
         npm start
-        wait-on: http://10.1.0.39/
+        wait-on: http://10.1.0.39/ &
         npm run test:coverage 
 
