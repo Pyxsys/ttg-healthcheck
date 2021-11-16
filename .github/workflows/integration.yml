@@ -118,7 +118,8 @@ jobs:
       run: |
         cd client
         npm install 
-        npm start & wait-on: http://localhost:3000 
+        npm start & 
+        wait-on: http://localhost:3000 &
 
     - name: Run Client Test
       run: |
