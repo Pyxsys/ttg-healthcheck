@@ -108,11 +108,22 @@ jobs:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
         
-    - name: Run client tests
+    - name: Run backend
       run: |
-        npm ci --prefix server
-        npm start --prefix server & npx wait-on http://localhost:5000 & npm ci --prefix client & npm run build --prefix client & npm start --prefix client & npx wait-on http://localhost:3000
-        npm run test:coverage --prefix client
+        cd server
+        npm ci 
+        npm start & 
+
+    - name: Build front-end
+      run: |
+        cd client
+        npm ci
+        npm run build & 
             
-            
+    - name: Run front-end
+      run: |
+        cd client
+        npm start
+        wait-on: 'http://localhost:3000'
+        npm run test:coverage 
 
