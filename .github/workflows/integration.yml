@@ -118,6 +118,7 @@ jobs:
       run: |
         cd client
         npm install 
-        npm start & wait-on http://localhost:3000 
+        npm start
+        wait-on: http://10.1.0.39/
         npm run test:coverage 
 
