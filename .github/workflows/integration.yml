@@ -109,7 +109,7 @@ jobs:
         npm install --prefix server
 
     - name: Run Server
-      run: nohup npm start --prefix server
+      run: npm start --prefix server &
         
     - name: Cypress Run
       uses: cypress-io/github-action@v2
