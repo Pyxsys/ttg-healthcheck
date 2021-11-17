@@ -88,11 +88,12 @@ const Signup = () => {
     e.preventDefault();
     const regex = /^[A-Za-z0-9]+$/;
     // check if name does not include symbols and that length is less than 45
-    const nameValid = regex.test(name) && name.length < 45;
+    const nameValid = regex.test(name) && name.length < 45 && name.length > 0;
     // check if password is less than 45 characters
-    const passwordValid = password.length < 45;
+    const passwordValid = password.length < 45 && password.length > 0;
+    console.log(password.length);
     // check if password 2 matches password
-    const passwordMatch = password === password2;
+    const passwordMatch = password === password2 && password2.length > 0;
     // check if all is valid
     const allValid = passwordMatch && passwordValid && nameValid;
     // only if allValid will the function continue
