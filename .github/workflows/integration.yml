@@ -81,19 +81,17 @@ jobs:
         coverage run --branch -m unittest -v
         coverage report
     
-  Client_Test:
+  E2E_Test:
     # The type of runner that the job will run on
-    name: Client_Test
+    name: E2E_Test
     runs-on: ubuntu-latest
 
     strategy:
       matrix:
         node-version: [14.x] # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
-        mongodb-version: [3.6]
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-
     - name: Checkout repository
       uses: actions/checkout@v2
 
@@ -116,3 +114,5 @@ jobs:
       with:
         start: npm start --prefix client
         wait-on: http://localhost:3000
+
+  # Client_Test to be added
