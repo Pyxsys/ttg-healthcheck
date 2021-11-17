@@ -1,3 +1,4 @@
+/* eslint-disable max-len*/
 import {Button, Form, Container, Col, Row} from 'react-bootstrap';
 import React, {useEffect, useState} from 'react';
 import {Link, Redirect} from 'react-router-dom';
@@ -85,22 +86,42 @@ const Login = () => {
 
   const onSubmit = async (e: React.ChangeEvent<any>) => {
     e.preventDefault();
-    const body = {
-      email: formData1.email1,
-      password: formData1.password1,
-    };
-    await axios
-        .post<AxiosResult>('api/user/login', body)
-        .then((response) => {
-          if (response.data) {
-            setUser(response.data.user);
-            setIsAuthenticated(true);
-            setLoggedIn(true);
-          }
-        })
-        .catch((error) => {
-          console.error(error);
-        });
+    // check that email is not empty and less than 80 characters
+    const emailValid = formData1.email1.length < 80 && formData1.email1.length > 0;
+    // check that password is not empty and less than 45 characters
+    const passwordValid = formData1.password1.length < 45 && formData1.password1.length > 0;
+    // check that all conditions are true
+    const allValid = emailValid && passwordValid;
+    if (allValid) {
+      const body = {
+        email: formData1.email1,
+        password: formData1.password1,
+      };
+      await axios
+          .post<AxiosResult>('api/user/login', body)
+          .then((response) => {
+            if (response.data) {
+              setUser(response.data.user);
+              setIsAuthenticated(true);
+              setLoggedIn(true);
+            }
+          })
+          .catch((error) => {
+            console.error(error);
+          });
+    } else {
+      // call to incorrect input handler
+      handleIncorrectInput(emailValid, passwordValid);
+    }
+  };
+  const handleIncorrectInput = (emailValid: boolean, passwordValid: boolean) => {
+    // since the specific conditions are passed as parameters, you can use that information to display whatever it is that you like, depending on the situation.
+    if (!emailValid) {
+      // do whatever
+    }
+    if (!passwordValid) {
+      // do whatever
+    }
   };
 
   /* const logout = async (e: React.ChangeEvent<any>) => {
