@@ -6,16 +6,6 @@ const testUser = {
   role: 'user',
 };
 
-describe('Landing Page Test', () => {
-  it('open the landing page and verify the url', () => {
-    // open the landing page
-    cy.visit('/');
-
-    // assert the url is correct
-    cy.url().should('include', 'localhost:3000');
-  });
-});
-
 describe('Login Page', () => {
   it('log in user with credentials and click submit then verify we are in /dashboard page', () => {
     // open the landing page
