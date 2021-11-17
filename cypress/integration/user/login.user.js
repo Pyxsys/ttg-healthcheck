@@ -9,7 +9,6 @@ const testUser = {
 
 describe('Login Page', () => {
   it('log in user with credentials and click submit then verify we are in /dashboard page', () => {
-    cy.wait(15000);
     // open the landing page
     cy.visit('/');
 
