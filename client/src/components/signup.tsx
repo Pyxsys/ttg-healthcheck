@@ -1,3 +1,4 @@
+/* eslint-disable max-len*/
 import React, {useEffect, useState} from 'react';
 import {Link, Redirect} from 'react-router-dom';
 import axios from 'axios';
@@ -94,6 +95,7 @@ const Signup = () => {
     const passwordMatch = password === password2;
     // check if all is valid
     const allValid = passwordMatch && passwordValid && nameValid;
+    // only if allValid will the function continue
     if (allValid) {
       const newUser = {
         name,
@@ -124,10 +126,21 @@ const Signup = () => {
         console.error(err);
       }
     } else {
-
+      handleIncorrectInput(nameValid, passwordValid, passwordMatch);
     }
   };
-
+  const handleIncorrectInput = (nameValid: boolean, passwordValid: boolean, passwordMatch: boolean) => {
+    // since the specific conditions are passed as parameters, you can use that information to display whatever it is that you like, depending on the situation.
+    if (!nameValid) {
+      // do whatever you want here
+    }
+    if (!passwordValid) {
+      // do whatever you want here
+    }
+    if (!passwordMatch) {
+      // do whatever you want here
+    }
+  };
   if (loggedIn) {
     return <Redirect to="/dashboard" />;
   }
