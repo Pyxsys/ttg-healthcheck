@@ -85,7 +85,16 @@ const Signup = () => {
 
   const register = async (e: React.ChangeEvent<any>) => {
     e.preventDefault();
-    if (password === password2) {
+    const regex = /^[A-Za-z0-9]+$/;
+    // check if name does not include symbols and that length is less than 45
+    const nameValid = regex.test(name) && name.length < 45;
+    // check if password is less than 45 characters
+    const passwordValid = password.length < 45;
+    // check if password 2 matches password
+    const passwordMatch = password === password2;
+    // check if all is valid
+    const allValid = passwordMatch && passwordValid && nameValid;
+    if (allValid) {
       const newUser = {
         name,
         email,
@@ -114,6 +123,8 @@ const Signup = () => {
       } catch (err) {
         console.error(err);
       }
+    } else {
+
     }
   };
 
