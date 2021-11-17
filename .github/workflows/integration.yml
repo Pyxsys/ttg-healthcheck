@@ -93,11 +93,6 @@ jobs:
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-    - name: Start MongoDB v${{ matrix.mongodb-version }}
-      uses: supercharge/mongodb-github-action@1.6.0
-      with:
-          mongodb-version: ${{ matrix.mongodb-version }}
-          mongodb-replica-set: rs0
 
     - name: Checkout repository
       uses: actions/checkout@v2
@@ -112,9 +107,12 @@ jobs:
       run: |
         npm ci --prefix client
         npm install --prefix server
+
+    - name: Run Server
+      run: nohup npm start --prefix server
         
     - name: Cypress Run
       uses: cypress-io/github-action@v2
       with:
-        start: npm run dev
+        start: npm start --prefix client
         wait-on: http://localhost:3000
