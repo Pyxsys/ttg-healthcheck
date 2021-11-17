@@ -2,7 +2,7 @@
 const testUser = {
   name: 'test',
   password: 'test',
-  email: 'test@gmail.com',
+  email: 'selenium@gmail.com',
   role: 'user',
 };
 
