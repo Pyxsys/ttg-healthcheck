@@ -1,4 +1,5 @@
-import React, {useState} from 'react';
+/* eslint-disable max-len*/
+import React, {useEffect, useState} from 'react';
 import {Link, Redirect} from 'react-router-dom';
 import axios from 'axios';
 import {useAuth} from '../context/authContext';
@@ -29,7 +30,18 @@ const Signup = () => {
 
   const register = async (e: React.ChangeEvent<any>) => {
     e.preventDefault();
-    if (password === password2) {
+    const regex = /^[A-Za-z0-9]+$/;
+    // check if name does not include symbols and that length is less than 45
+    const nameValid = regex.test(name) && name.length < 45 && name.length > 0;
+    // check if password is less than 45 characters
+    const passwordValid = password.length < 45 && password.length > 0;
+    console.log(password.length);
+    // check if password 2 matches password
+    const passwordMatch = password === password2 && password2.length > 0;
+    // check if all is valid
+    const allValid = passwordMatch && passwordValid && nameValid;
+    // only if allValid will the function continue
+    if (allValid) {
       const newUser = {
         name,
         email,
@@ -58,9 +70,26 @@ const Signup = () => {
       } catch (err) {
         console.error(err);
       }
+    } else {
+      handleIncorrectInput(nameValid, passwordValid, passwordMatch);
     }
   };
-
+  const handleIncorrectInput = (
+      nameValid: boolean,
+      passwordValid: boolean,
+      passwordMatch: boolean,
+  ) => {
+    // since the specific conditions are passed as parameters, you can use that information to display whatever it is that you like, depending on the situation.
+    if (!nameValid) {
+      // do whatever you want here
+    }
+    if (!passwordValid) {
+      // do whatever you want here
+    }
+    if (!passwordMatch) {
+      // do whatever you want here
+    }
+  };
   if (loggedIn) {
     return <Redirect to="/dashboard" />;
   }
