@@ -34,6 +34,8 @@ const Signup = () => {
     const regex = /^[A-Za-z0-9 -]+$/;
     // check if name does not include symbols and that length is less than 45
     const nameValid = regex.test(name) && name.length < 45 && name.length > 0;
+    // check that email is not empty and less than 80 characters
+    const emailValid = email.length < 80 && email.length > 0;
     // check if password is less than 45 characters
     const passwordValid = password.length < 45 && password.length > 0;
     // check if password 2 matches password
@@ -71,11 +73,12 @@ const Signup = () => {
         console.error(err);
       }
     } else {
-      handleIncorrectInput(nameValid, passwordValid, passwordMatch);
+      handleIncorrectInput(nameValid, emailValid, passwordValid, passwordMatch);
     }
   };
   const handleIncorrectInput = (
       nameValid: boolean,
+      emailValid: boolean,
       passwordValid: boolean,
       passwordMatch: boolean,
   ) => {
@@ -85,6 +88,10 @@ const Signup = () => {
       notificationService.error(
           'Invalid Name! Name must not include symbols and the length must be less than 45 characters!',
       );
+    }
+    if (!emailValid) {
+      // do whatever you want here
+      notificationService.error('Invalid Email!');
     }
     if (!passwordValid) {
       // do whatever you want here
