@@ -5,6 +5,7 @@ import {Link, Redirect} from 'react-router-dom';
 import axios from 'axios';
 import {useAuth} from '../context/authContext';
 import '../App.scss';
+import {notificationService} from '../services/notification.service';
 
 const Login = () => {
   interface AxiosResult {
@@ -66,18 +67,19 @@ const Login = () => {
   ) => {
     // since the specific conditions are passed as parameters, you can use that information to display whatever it is that you like, depending on the situation.
     if (!emailValid) {
-      // do whatever
+      notificationService.error(
+          'Invalid Email! The email you entered is incorrect or an account for this email does not exist!',
+      );
     }
     if (!passwordValid) {
-      // do whatever
+      notificationService.error(
+          'Invalid Password! The password you entered is incorrect!',
+      );
     }
   };
 
   if (loggedIn) {
-    return <Redirect to="/dashboard" />;
-  }
-
-  if (loggedIn) {
+    notificationService.success('Logged in succesfully!');
     return <Redirect to="/dashboard" />;
   }
   return (

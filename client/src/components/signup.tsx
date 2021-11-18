@@ -1,9 +1,10 @@
 /* eslint-disable max-len*/
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import {Link, Redirect} from 'react-router-dom';
 import axios from 'axios';
 import {useAuth} from '../context/authContext';
 import {Button, Col, Container, Form, Row} from 'react-bootstrap';
+import {notificationService} from '../services/notification.service';
 
 const Signup = () => {
   interface AxiosResult {
@@ -30,12 +31,11 @@ const Signup = () => {
 
   const register = async (e: React.ChangeEvent<any>) => {
     e.preventDefault();
-    const regex = /^[A-Za-z0-9]+$/;
+    const regex = /^[A-Za-z0-9 -]+$/;
     // check if name does not include symbols and that length is less than 45
     const nameValid = regex.test(name) && name.length < 45 && name.length > 0;
     // check if password is less than 45 characters
     const passwordValid = password.length < 45 && password.length > 0;
-    console.log(password.length);
     // check if password 2 matches password
     const passwordMatch = password === password2 && password2.length > 0;
     // check if all is valid
@@ -82,15 +82,24 @@ const Signup = () => {
     // since the specific conditions are passed as parameters, you can use that information to display whatever it is that you like, depending on the situation.
     if (!nameValid) {
       // do whatever you want here
+      notificationService.error(
+          'Invalid Name! Name must not include symbols and the length must be less than 45 characters!',
+      );
     }
     if (!passwordValid) {
       // do whatever you want here
+      notificationService.error(
+          'Invalid Password! Name length must be less than 45 characters!',
+      );
     }
     if (!passwordMatch) {
       // do whatever you want here
+      notificationService.error('Passwords do not match!');
     }
   };
   if (loggedIn) {
+    notificationService.success('New account succesfully created!');
+    notificationService.success('Logged in succesfully!');
     return <Redirect to="/dashboard" />;
   }
   return (
