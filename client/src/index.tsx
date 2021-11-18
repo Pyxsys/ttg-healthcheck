@@ -11,7 +11,7 @@ ReactDOM.render(
       <AuthProvider>
         <App />
       </AuthProvider>
-      <ToastContainer bodyClassName="h-0" />
+      <ToastContainer />
     </div>,
     document.getElementById('root'),
 );
