@@ -4,11 +4,15 @@ import './index.scss';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import {AuthProvider} from './context/authContext';
+import {ToastContainer} from 'react-toastify';
 
 ReactDOM.render(
-    <AuthProvider>
-      <App />
-    </AuthProvider>,
+    <div className="app">
+      <AuthProvider>
+        <App />
+      </AuthProvider>
+      <ToastContainer />
+    </div>,
     document.getElementById('root'),
 );
 
