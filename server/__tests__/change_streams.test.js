@@ -23,9 +23,9 @@ const testValues = {
 }
 
 const testUser = {
-  name: process.env.USERNAME,
+  name: 'test',
   password: process.env.PASSWORD,
-  email: process.env.EMAIL,
+  email: 'test2@gmail.com',
   role: 'user',
 }
 
@@ -84,7 +84,6 @@ describe('Insert a new user to the database and get data from the change stream'
       expect(err).toBeFalsy()
     }
   }, 15000)
-
   afterAll(() => {
     if (testValues.wsClient) {
       testValues.wsClient.close()
