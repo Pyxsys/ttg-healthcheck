@@ -31,15 +31,16 @@ const Login = () => {
 
   const onSubmit = async (e: React.ChangeEvent<any>) => {
     e.preventDefault();
-    // check that email is not empty and less than 80 characters
-    const emailValid =
+
+    // Login: check that email is not empty and less than 80 characters
+    const emailValid_Login =
       formData1.email1.length < 80 && formData1.email1.length > 0;
-    // check that password is not empty and less than 45 characters
-    const passwordValid =
+    // Login: check that password is not empty and less than 45 characters
+    const passwordValid_Login =
       formData1.password1.length < 45 && formData1.password1.length > 0;
-    // check that all conditions are true
-    const allValid = emailValid && passwordValid;
-    if (allValid) {
+    const allValid_Login = emailValid_Login && passwordValid_Login;
+
+    if (allValid_Login) {
       const body = {
         email: formData1.email1,
         password: formData1.password1,
@@ -49,17 +50,17 @@ const Login = () => {
             .post<AxiosResult>('api/user/login', body)
             .catch((error) => {
               if (error.response) {
-              // Request made and server responded
+              // Login: Request made and server responded
                 notificationService.error(
                     'Invalid Email or Password! Either the email or password you have entered is invalid!',
                 );
               } else if (error.request) {
-              // The request was made but no response was received
+              // Login: The request was made but no response was received
                 notificationService.error(
                     'The request was made but no response was received!',
                 );
               } else {
-              // Something happened in setting up the request that triggered an Error
+              // Login: Something happened in setting up the request that triggered an Error
                 notificationService.error(
                     'Something happened in setting up the request that triggered an Error!',
                 );
@@ -80,20 +81,20 @@ const Login = () => {
         notificationService.error('You wrong');
       }
     } else {
-      handleIncorrectInput(emailValid, passwordValid);
+      handleIncorrectInput(emailValid_Login, passwordValid_Login);
     }
   };
   const handleIncorrectInput = (
-      emailValid: boolean,
-      passwordValid: boolean,
+      emailValid_Login: boolean,
+      passwordValid_Login: boolean,
   ) => {
-    // since the specific conditions are passed as parameters, you can use that information to display whatever it is that you like, depending on the situation.
-    if (!emailValid) {
+    // Login: since the specific conditions are passed as parameters, you can use that information to display whatever it is that you like, depending on the situation.
+    if (!emailValid_Login) {
       notificationService.error(
           'Invalid Email!\n The email you have entered is either empty or too long!',
       );
     }
-    if (!passwordValid) {
+    if (!passwordValid_Login) {
       notificationService.error(
           'Invalid Password!\n The password you have entered is either empty or too long!',
       );
