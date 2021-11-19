@@ -80,13 +80,18 @@ const filterData = (req) => {
     options.sort = {
       [orderBy]: orderValue,
     }
+  } else {
+    options.sort = {
+      timestamp: [-1],
+    }
+
   }
   return [query, options]
 }
 
 const validateTimestamp = (start, end) => {
   if (!start || !end) {
-    throw new Error('StartTimeStamp or endTimestamp not found')
+    throw new Error('must include startTimeStamp and endTimestamp')
   }
 }
 
