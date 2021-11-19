@@ -65,7 +65,7 @@ const Signup = () => {
         setIsAuthenticated(true);
         setLoggedIn(true);
       }
-    } 
+    }
   };
   if (loggedIn) {
     notificationService.success('New account succesfully created!');

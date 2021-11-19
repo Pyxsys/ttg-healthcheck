@@ -56,34 +56,4 @@ const handleIncorrectInput = (
   }
   return allValid;
 };
-/*
-const handleIncorrectInputSignup = (
-    nameValid: boolean,
-    emailValid: boolean,
-    passwordValid: boolean,
-    passwordMatch: boolean,
-) => {
-  if (!nameValid) {
-    // do whatever you want here
-    notificationService.error(
-        'Invalid Name! Name must not include symbols and the length must be less than 45 characters!',
-    );
-  }
-  if (!emailValid) {
-    // do whatever you want here
-    notificationService.error('Invalid Email!');
-  }
-  if (!passwordValid) {
-    // do whatever you want here
-    notificationService.error(
-        'Invalid Password! Name length must be less than 45 characters!',
-    );
-  }
-  if (!passwordMatch) {
-    // do whatever you want here
-    notificationService.error('Passwords do not match!');
-  }
-  return nameValid && emailValid && passwordValid && passwordMatch;
-};
-*/
 export default handleIncorrectInput;
