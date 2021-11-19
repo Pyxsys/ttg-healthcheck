@@ -1,4 +1,5 @@
 import {notificationService} from '../../services/notification.service';
+import axios from 'axios';
 
 const handleIncorrectInput = (
     email: string,
@@ -57,4 +58,56 @@ const handleIncorrectInput = (
   }
   return allValid;
 };
-export default handleIncorrectInput;
+
+const sendRequest = async (
+    email: string,
+    password: string,
+    name?: string,
+    password2?: string,
+) => {
+  interface AxiosResult {
+    message: string
+    user: {
+      name: string
+      role: string
+    }
+  }
+  const login = name == 'login';
+  let responseError = 'An account with the following email already exists! ';
+  if (login) {
+    responseError = 'Invalid Email or Password! Either the email or password you have entered is invalid!';
+  }
+  const body = {
+    name: name,
+    email: email,
+    password: password,
+    password2: password2,
+  };
+  let type = 'register';
+  if (login) {
+    type = 'login';
+  }
+  return await axios
+      .post<AxiosResult>('api/user/' + type, body)
+      .catch((error) => {
+        if (error.response) {
+        // Request made and server responded
+          notificationService.error(
+              responseError,
+          );
+        } else if (error.request) {
+        // The request was made but no response was received
+          notificationService.error(
+              'The request was made but no response was received!',
+          );
+        } else {
+        // Something happened in setting up the request that triggered an Error
+          notificationService.error(
+              'Something happened in setting up the request that triggered an Error!',
+          );
+        }
+        return error;
+      });
+};
+export {handleIncorrectInput};
+export {sendRequest};
