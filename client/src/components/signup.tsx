@@ -72,10 +72,6 @@ const Signup = () => {
               }
               return error;
             });
-        if (res.status == 400) {
-          console.log('Response: ', res);
-          return;
-        }
         if (res.data) {
           setUser(res.data.user);
           setIsAuthenticated(true);
@@ -83,13 +79,18 @@ const Signup = () => {
         }
       } catch (error) {
         console.log(error);
-        notificationService.error('You wrong');
+        notificationService.error('The Email or ');
       }
     } else {
-      handleIncorrectInput(nameValid, emailValid, passwordValid, passwordMatch);
+      handleIncorrectInputSignup(
+          nameValid,
+          emailValid,
+          passwordValid,
+          passwordMatch,
+      );
     }
   };
-  const handleIncorrectInput = (
+  const handleIncorrectInputSignup = (
       nameValid: boolean,
       emailValid: boolean,
       passwordValid: boolean,

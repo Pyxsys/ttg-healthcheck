@@ -39,6 +39,7 @@ const Login = () => {
       formData1.password1.length < 45 && formData1.password1.length > 0;
     // check that all conditions are true
     const allValid = emailValid && passwordValid;
+
     if (allValid) {
       const body = {
         email: formData1.email1,
@@ -80,10 +81,10 @@ const Login = () => {
         notificationService.error('You wrong');
       }
     } else {
-      handleIncorrectInput(emailValid, passwordValid);
+      handleIncorrectInputLogin(emailValid, passwordValid);
     }
   };
-  const handleIncorrectInput = (
+  const handleIncorrectInputLogin = (
       emailValid: boolean,
       passwordValid: boolean,
   ) => {
