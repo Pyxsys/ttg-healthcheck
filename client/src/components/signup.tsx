@@ -1,21 +1,12 @@
 /* eslint-disable max-len*/
 import React, {useState} from 'react';
 import {Link, Redirect} from 'react-router-dom';
-import axios from 'axios';
 import {useAuth} from '../context/authContext';
 import {Button, Col, Container, Form, Row} from 'react-bootstrap';
 import {notificationService} from '../services/notification.service';
-import handleIncorrectInput from './shared/inputValidation';
+import {handleIncorrectInput, sendRequest} from './shared/inputValidation';
 
 const Signup = () => {
-  interface AxiosResult {
-    message: string
-    user: {
-      name: string
-      role: string
-    }
-  }
-
   const {setUser, setIsAuthenticated} = useAuth();
   const [loggedIn, setLoggedIn] = useState(false);
   const [formData, setFormData] = useState({
@@ -33,33 +24,7 @@ const Signup = () => {
   const register = async (e: React.ChangeEvent<any>) => {
     e.preventDefault();
     if (handleIncorrectInput(email, password, name, password2)) {
-      const body = {
-        name: formData.name,
-        email: formData.email,
-        password: formData.password,
-        password2: formData.password2,
-      };
-      const res = await axios
-          .post<AxiosResult>('api/user/register', body)
-          .catch((error) => {
-            if (error.response) {
-            // Request made and server responded
-              notificationService.error(
-                  'An account with the following email already exists! ',
-              );
-            } else if (error.request) {
-            // The request was made but no response was received
-              notificationService.error(
-                  'The request was made but no response was received!',
-              );
-            } else {
-            // Something happened in setting up the request that triggered an Error
-              notificationService.error(
-                  'Something happened in setting up the request that triggered an Error!',
-              );
-            }
-            return error;
-          });
+      const res = sendRequest(email, password, name, password2) as any;
       if (res.data) {
         setUser(res.data.user);
         setIsAuthenticated(true);
