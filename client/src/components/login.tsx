@@ -6,6 +6,7 @@ import axios from 'axios';
 import {useAuth} from '../context/authContext';
 import '../App.scss';
 import {notificationService} from '../services/notification.service';
+const {handleIncorrectInputLogin} = require('./shared/inputValidation');
 
 const Login = () => {
   interface AxiosResult {
@@ -79,22 +80,6 @@ const Login = () => {
       }
     } else {
       handleIncorrectInputLogin(emailValid, passwordValid);
-    }
-  };
-  const handleIncorrectInputLogin = (
-      emailValid: boolean,
-      passwordValid: boolean,
-  ) => {
-    // since the specific conditions are passed as parameters, you can use that information to display whatever it is that you like, depending on the situation.
-    if (!emailValid) {
-      notificationService.error(
-          'Invalid Email!\n The email you have entered is either empty or too long!',
-      );
-    }
-    if (!passwordValid) {
-      notificationService.error(
-          'Invalid Password!\n The password you have entered is either empty or too long!',
-      );
     }
   };
 

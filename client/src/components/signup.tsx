@@ -5,6 +5,7 @@ import axios from 'axios';
 import {useAuth} from '../context/authContext';
 import {Button, Col, Container, Form, Row} from 'react-bootstrap';
 import {notificationService} from '../services/notification.service';
+const {handleIncorrectInputSignup} = require('./shared/inputValidation');
 
 const Signup = () => {
   interface AxiosResult {
@@ -83,33 +84,6 @@ const Signup = () => {
           passwordValid,
           passwordMatch,
       );
-    }
-  };
-  const handleIncorrectInputSignup = (
-      nameValid: boolean,
-      emailValid: boolean,
-      passwordValid: boolean,
-      passwordMatch: boolean,
-  ) => {
-    if (!nameValid) {
-      // do whatever you want here
-      notificationService.error(
-          'Invalid Name! Name must not include symbols and the length must be less than 45 characters!',
-      );
-    }
-    if (!emailValid) {
-      // do whatever you want here
-      notificationService.error('Invalid Email!');
-    }
-    if (!passwordValid) {
-      // do whatever you want here
-      notificationService.error(
-          'Invalid Password! Name length must be less than 45 characters!',
-      );
-    }
-    if (!passwordMatch) {
-      // do whatever you want here
-      notificationService.error('Passwords do not match!');
     }
   };
   if (loggedIn) {
