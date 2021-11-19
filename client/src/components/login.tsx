@@ -2,21 +2,12 @@
 import {Button, Form, Container, Col, Row} from 'react-bootstrap';
 import React, {useState} from 'react';
 import {Link, Redirect} from 'react-router-dom';
-import axios from 'axios';
 import {useAuth} from '../context/authContext';
 import '../App.scss';
 import {notificationService} from '../services/notification.service';
-import handleIncorrectInput from './shared/inputValidation';
+import {handleIncorrectInput, sendRequest} from './shared/inputValidation';
 
 const Login = () => {
-  interface AxiosResult {
-    message: string
-    user: {
-      name: string
-      role: string
-    }
-  }
-
   const {setUser, setIsAuthenticated} = useAuth();
   const [loggedIn, setLoggedIn] = useState(false);
 
@@ -33,32 +24,8 @@ const Login = () => {
   const onSubmit = async (e: React.ChangeEvent<any>) => {
     e.preventDefault();
     if (handleIncorrectInput(formData1.email1, formData1.password1)) {
-      const body = {
-        email: formData1.email1,
-        password: formData1.password1,
-      };
       try {
-        const res = await axios
-            .post<AxiosResult>('api/user/login', body)
-            .catch((error) => {
-              if (error.response) {
-              // Request made and server responded
-                notificationService.error(
-                    'Invalid Email or Password! Either the email or password you have entered is invalid!',
-                );
-              } else if (error.request) {
-              // The request was made but no response was received
-                notificationService.error(
-                    'The request was made but no response was received!',
-                );
-              } else {
-              // Something happened in setting up the request that triggered an Error
-                notificationService.error(
-                    'Something happened in setting up the request that triggered an Error!',
-                );
-              }
-              return error;
-            });
+        const res = sendRequest(formData1.email1, formData1.password1, 'login') as any;
         if (res.data) {
           setUser(res.data.user);
           setIsAuthenticated(true);
