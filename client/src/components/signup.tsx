@@ -44,33 +44,46 @@ const Signup = () => {
     const allValid = passwordMatch && passwordValid && nameValid;
     // only if allValid will the function continue
     if (allValid) {
-      const newUser = {
-        name,
-        email,
-        password,
-        password2,
+      const body = {
+        name: formData.name,
+        email: formData.email,
+        password: formData.password,
+        password2: formData.password2,
       };
       try {
-        const config = {
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        };
-        const body = JSON.stringify(newUser);
-        await axios
-            .post<AxiosResult>('/api/user/register', body, config)
-            .then((response) => {
-              if (response.data) {
-                setUser(response.data.user);
-                setIsAuthenticated(true);
-                setLoggedIn(true);
-              }
-            })
+        const res = await axios
+            .post<AxiosResult>('api/user/register', body)
             .catch((error) => {
-              console.error(error);
+              if (error.response) {
+              // Request made and server responded
+                notificationService.error(
+                    'An account with the following email already exists! ',
+                );
+              } else if (error.request) {
+              // The request was made but no response was received
+                notificationService.error(
+                    'The request was made but no response was received!',
+                );
+              } else {
+              // Something happened in setting up the request that triggered an Error
+                notificationService.error(
+                    'Something happened in setting up the request that triggered an Error!',
+                );
+              }
+              return error;
             });
-      } catch (err) {
-        console.error(err);
+        if (res.status == 400) {
+          console.log('Response: ', res);
+          return;
+        }
+        if (res.data) {
+          setUser(res.data.user);
+          setIsAuthenticated(true);
+          setLoggedIn(true);
+        }
+      } catch (error) {
+        console.log(error);
+        notificationService.error('You wrong');
       }
     } else {
       handleIncorrectInput(nameValid, emailValid, passwordValid, passwordMatch);
@@ -82,7 +95,6 @@ const Signup = () => {
       passwordValid: boolean,
       passwordMatch: boolean,
   ) => {
-    // since the specific conditions are passed as parameters, you can use that information to display whatever it is that you like, depending on the situation.
     if (!nameValid) {
       // do whatever you want here
       notificationService.error(
@@ -123,7 +135,7 @@ const Signup = () => {
             <Col>
               <h1 className="text-center">SIGNUP</h1>
               <Row className="mb-4">
-                <Form onSubmit={(e) => register(e)}>
+                <Form onSubmit={(e: any) => register(e)}>
                   <Form.Group>
                     <Form.Label className="ml-0 mb-3">Name</Form.Label>
                     <Form.Control
@@ -132,7 +144,7 @@ const Signup = () => {
                       placeholder="Enter name"
                       name="name"
                       value={name}
-                      onChange={(e) => onChange(e)}
+                      onChange={(e: any) => onChange(e)}
                     />
                   </Form.Group>
                   <Form.Group>
@@ -143,7 +155,7 @@ const Signup = () => {
                       placeholder="Enter email"
                       name="email"
                       value={email}
-                      onChange={(e) => onChange(e)}
+                      onChange={(e: any) => onChange(e)}
                     />
                   </Form.Group>
                   <Form.Group>
@@ -154,7 +166,7 @@ const Signup = () => {
                       placeholder="password"
                       name="password"
                       value={password}
-                      onChange={(e) => onChange(e)}
+                      onChange={(e: any) => onChange(e)}
                     />
                   </Form.Group>
                   <Form.Group>
@@ -165,7 +177,7 @@ const Signup = () => {
                       placeholder="password"
                       name="password2"
                       value={password2}
-                      onChange={(e) => onChange(e)}
+                      onChange={(e: any) => onChange(e)}
                     />
                   </Form.Group>
                   <Button className="w-100 mt-3" type="submit">

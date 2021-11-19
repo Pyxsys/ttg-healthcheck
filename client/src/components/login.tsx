@@ -45,8 +45,27 @@ const Login = () => {
         password: formData1.password1,
       };
       try {
-        const res = await axios.post<AxiosResult>('api/user/login', body);
-        console.log('Status: ');
+        const res = await axios
+            .post<AxiosResult>('api/user/login', body)
+            .catch((error) => {
+              if (error.response) {
+              // Request made and server responded
+                notificationService.error(
+                    'Invalid Email or Password! Either the email or password you have entered is invalid!',
+                );
+              } else if (error.request) {
+              // The request was made but no response was received
+                notificationService.error(
+                    'The request was made but no response was received!',
+                );
+              } else {
+              // Something happened in setting up the request that triggered an Error
+                notificationService.error(
+                    'Something happened in setting up the request that triggered an Error!',
+                );
+              }
+              return error;
+            });
         if (res.status == 400) {
           console.log('Response: ', res);
           return;
@@ -71,12 +90,12 @@ const Login = () => {
     // since the specific conditions are passed as parameters, you can use that information to display whatever it is that you like, depending on the situation.
     if (!emailValid) {
       notificationService.error(
-          'Invalid Email! The email you have entered is either empty or too long!',
+          'Invalid Email!\n The email you have entered is either empty or too long!',
       );
     }
     if (!passwordValid) {
       notificationService.error(
-          'Invalid Password! The password you have entered is either empty or too long!',
+          'Invalid Password!\n The password you have entered is either empty or too long!',
       );
     }
   };
@@ -99,7 +118,7 @@ const Login = () => {
             <Col>
               <h1 className="text-center">LOGIN</h1>
               <Row className="mb-4">
-                <Form onSubmit={(e) => onSubmit(e)}>
+                <Form onSubmit={(e: any) => onSubmit(e)}>
                   <Form.Group>
                     <Form.Label className="ml-0 mb-3">Email Address</Form.Label>
                     <Form.Control
@@ -108,7 +127,7 @@ const Login = () => {
                       placeholder="Email ID"
                       name="email1"
                       value={email1}
-                      onChange={(e) => onChange1(e)}
+                      onChange={(e: any) => onChange1(e)}
                     />
                   </Form.Group>
                   <Form.Group>
@@ -119,7 +138,7 @@ const Login = () => {
                       placeholder="Password"
                       name="password1"
                       value={password1}
-                      onChange={(e) => onChange1(e)}
+                      onChange={(e: any) => onChange1(e)}
                     />
                   </Form.Group>
                   <Button className="w-100 mt-3" type="submit">
