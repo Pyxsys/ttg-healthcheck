@@ -6,7 +6,7 @@ import axios from 'axios';
 import {useAuth} from '../context/authContext';
 import '../App.scss';
 import {notificationService} from '../services/notification.service';
-const {handleIncorrectInput} = require('./shared/inputValidation');
+import handleIncorrectInput from './shared/inputValidation';
 
 const Login = () => {
   interface AxiosResult {

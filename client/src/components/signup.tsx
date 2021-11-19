@@ -5,7 +5,7 @@ import axios from 'axios';
 import {useAuth} from '../context/authContext';
 import {Button, Col, Container, Form, Row} from 'react-bootstrap';
 import {notificationService} from '../services/notification.service';
-const {handleIncorrectInput} = require('./shared/inputValidation');
+import handleIncorrectInput from './shared/inputValidation';
 
 const Signup = () => {
   interface AxiosResult {
