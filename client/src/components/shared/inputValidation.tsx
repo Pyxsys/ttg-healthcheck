@@ -7,14 +7,15 @@ const handleIncorrectInput = (
     password2?: string,
 ) => {
   const regex = /^[A-Za-z0-9 -]+$/;
-  let nameValid;
-  let passwordValid;
-  let emailValid;
+  let nameValid = false;
+  let passwordValid = false;
+  let emailValid = false;
   let passwordMatch = false;
+  const login = name == 'login';
   // check if name does not include symbols and that length is less than 45
   if (name) {
     nameValid = regex.test(name) && name.length < 45 && name.length > 0;
-  } else {
+  } else if (login) {
     nameValid = true;
   }
   // check that email is not empty and less than 80 characters
@@ -28,7 +29,7 @@ const handleIncorrectInput = (
   // check if password 2 matches password
   if (password2) {
     passwordMatch = password === password2 && password2.length > 0;
-  } else {
+  } else if (login) {
     passwordMatch = true;
   }
   // check if all is valid
