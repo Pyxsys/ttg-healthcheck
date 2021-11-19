@@ -3,7 +3,6 @@ import React, {useState} from 'react';
 import {Link, Redirect} from 'react-router-dom';
 import axios from 'axios';
 import {useAuth} from '../context/authContext';
-import '../App.scss';
 
 const Login = () => {
   interface AxiosResult {
