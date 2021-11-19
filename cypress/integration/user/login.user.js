@@ -1,4 +1,3 @@
-/* eslint-disable jest/expect-expect */
 const testUser = {
   name: 'test',
   password: 'test',
@@ -7,7 +6,7 @@ const testUser = {
 };
 
 describe('Login Page', () => {
-  it('log in user with credentials and click submit then verify we are in /dashboard page', () => {
+  it('Given valid email and password, redirect to /dashboard on syccessful login', () => {
     // open the landing page
     cy.visit('/');
 
@@ -17,6 +16,5 @@ describe('Login Page', () => {
 
     // assert we are in /dashboard
     cy.url().should('include', 'dashboard');
-
   });
 });

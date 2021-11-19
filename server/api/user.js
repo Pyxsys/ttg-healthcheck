@@ -96,4 +96,19 @@ router.get('/logout', auth, (req, res) => {
     .json({ message: 'Successfully logged out' })
 })
 
+router.post('/delete', async (req, res) => {
+  try {
+    const { email} = req.body
+    // Verify email
+    const user = await User.deleteOne({ email: email })
+    return res
+      .status(200)
+      .json({
+        message: 'User deleted successfully',
+      })
+  } catch (err) {
+    res.status(500).send('Server error')
+  }
+})
+
 module.exports = router
