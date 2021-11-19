@@ -24,7 +24,7 @@ const Signup = () => {
   const register = async (e: React.ChangeEvent<any>) => {
     e.preventDefault();
     if (handleIncorrectInput(email, password, name, password2)) {
-      const res = sendRequest(email, password, name, password2) as any;
+      const res = await sendRequest(email, password, name, password2) as any;
       if (res.data) {
         setUser(res.data.user);
         setIsAuthenticated(true);
