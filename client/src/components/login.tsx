@@ -44,20 +44,23 @@ const Login = () => {
         email: formData1.email1,
         password: formData1.password1,
       };
-      await axios
-          .post<AxiosResult>('api/user/login', body)
-          .then((response) => {
-            if (response.data) {
-              setUser(response.data.user);
-              setIsAuthenticated(true);
-              setLoggedIn(true);
-            }
-          })
-          .catch((error) => {
-            console.error(error);
-          });
+      try {
+        const res = await axios.post<AxiosResult>('api/user/login', body);
+        console.log('Status: ');
+        if (res.status == 400) {
+          console.log('Response: ', res);
+          return;
+        }
+        if (res.data) {
+          setUser(res.data.user);
+          setIsAuthenticated(true);
+          setLoggedIn(true);
+        }
+      } catch (error) {
+        console.log(error);
+        notificationService.error('You wrong');
+      }
     } else {
-      // call to incorrect input handler
       handleIncorrectInput(emailValid, passwordValid);
     }
   };
@@ -68,12 +71,12 @@ const Login = () => {
     // since the specific conditions are passed as parameters, you can use that information to display whatever it is that you like, depending on the situation.
     if (!emailValid) {
       notificationService.error(
-          'Invalid Email! The email you entered is incorrect or an account for this email does not exist!',
+          'Invalid Email! The email you have entered is either empty or too long!',
       );
     }
     if (!passwordValid) {
       notificationService.error(
-          'Invalid Password! The password you entered is incorrect!',
+          'Invalid Password! The password you have entered is either empty or too long!',
       );
     }
   };
