@@ -50,36 +50,31 @@ const Signup = () => {
         password: formData.password,
         password2: formData.password2,
       };
-      try {
-        const res = await axios
-            .post<AxiosResult>('api/user/register', body)
-            .catch((error) => {
-              if (error.response) {
-              // Request made and server responded
-                notificationService.error(
-                    'An account with the following email already exists! ',
-                );
-              } else if (error.request) {
-              // The request was made but no response was received
-                notificationService.error(
-                    'The request was made but no response was received!',
-                );
-              } else {
-              // Something happened in setting up the request that triggered an Error
-                notificationService.error(
-                    'Something happened in setting up the request that triggered an Error!',
-                );
-              }
-              return error;
-            });
-        if (res.data) {
-          setUser(res.data.user);
-          setIsAuthenticated(true);
-          setLoggedIn(true);
-        }
-      } catch (error) {
-        console.log(error);
-        notificationService.error('The Email or ');
+      const res = await axios
+          .post<AxiosResult>('api/user/register', body)
+          .catch((error) => {
+            if (error.response) {
+            // Request made and server responded
+              notificationService.error(
+                  'An account with the following email already exists! ',
+              );
+            } else if (error.request) {
+            // The request was made but no response was received
+              notificationService.error(
+                  'The request was made but no response was received!',
+              );
+            } else {
+            // Something happened in setting up the request that triggered an Error
+              notificationService.error(
+                  'Something happened in setting up the request that triggered an Error!',
+              );
+            }
+            return error;
+          });
+      if (res.data) {
+        setUser(res.data.user);
+        setIsAuthenticated(true);
+        setLoggedIn(true);
       }
     } else {
       handleIncorrectInputSignup(

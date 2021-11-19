@@ -67,18 +67,15 @@ const Login = () => {
               }
               return error;
             });
-        if (res.status == 400) {
-          console.log('Response: ', res);
-          return;
-        }
         if (res.data) {
           setUser(res.data.user);
           setIsAuthenticated(true);
           setLoggedIn(true);
         }
       } catch (error) {
-        console.log(error);
-        notificationService.error('You wrong');
+        notificationService.error(
+            'Invalid Email or Password! Either the email or password you have entered is invalid!',
+        );
       }
     } else {
       handleIncorrectInputLogin(emailValid, passwordValid);
