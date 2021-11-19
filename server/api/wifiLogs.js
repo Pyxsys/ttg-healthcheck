@@ -23,7 +23,7 @@ router.get('/specific-device', auth, async (req, res) => {
         return res.status(200).json(wifiLogs)
       })
   } catch (err) {
-    res.status(500).send('Server Error ' + err.message)
+    res.status(500).send('Server Error: ' + err.message)
   }
 })
 
@@ -58,7 +58,7 @@ router.get('/timestamp', auth, async (req, res) => {
       })
     }
   } catch (err) {
-    res.status(500).send('Server Error ' + err.message)
+    res.status(500).send('Server Error: ' + err.message)
   }
 })
 
