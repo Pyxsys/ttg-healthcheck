@@ -6,7 +6,7 @@ import axios from 'axios';
 import {useAuth} from '../context/authContext';
 import '../App.scss';
 import {notificationService} from '../services/notification.service';
-const {handleIncorrectInputLogin} = require('./shared/inputValidation');
+const {handleIncorrectInput} = require('./shared/inputValidation');
 
 const Login = () => {
   interface AxiosResult {
@@ -32,16 +32,7 @@ const Login = () => {
 
   const onSubmit = async (e: React.ChangeEvent<any>) => {
     e.preventDefault();
-    // check that email is not empty and less than 80 characters
-    const emailValid =
-      formData1.email1.length < 80 && formData1.email1.length > 0;
-    // check that password is not empty and less than 45 characters
-    const passwordValid =
-      formData1.password1.length < 45 && formData1.password1.length > 0;
-    // check that all conditions are true
-    const allValid = emailValid && passwordValid;
-
-    if (allValid) {
+    if (handleIncorrectInput(formData1.email1, formData1.password1)) {
       const body = {
         email: formData1.email1,
         password: formData1.password1,
@@ -78,8 +69,6 @@ const Login = () => {
             'Invalid Email or Password! Either the email or password you have entered is invalid!',
         );
       }
-    } else {
-      handleIncorrectInputLogin(emailValid, passwordValid);
     }
   };
 
