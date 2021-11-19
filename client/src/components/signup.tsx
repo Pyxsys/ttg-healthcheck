@@ -5,7 +5,7 @@ import axios from 'axios';
 import {useAuth} from '../context/authContext';
 import {Button, Col, Container, Form, Row} from 'react-bootstrap';
 import {notificationService} from '../services/notification.service';
-const {handleIncorrectInputSignup} = require('./shared/inputValidation');
+const {handleIncorrectInput} = require('./shared/inputValidation');
 
 const Signup = () => {
   interface AxiosResult {
@@ -32,19 +32,7 @@ const Signup = () => {
 
   const register = async (e: React.ChangeEvent<any>) => {
     e.preventDefault();
-    const regex = /^[A-Za-z0-9 -]+$/;
-    // check if name does not include symbols and that length is less than 45
-    const nameValid = regex.test(name) && name.length < 45 && name.length > 0;
-    // check that email is not empty and less than 80 characters
-    const emailValid = email.length < 80 && email.length > 0;
-    // check if password is less than 45 characters
-    const passwordValid = password.length < 45 && password.length > 0;
-    // check if password 2 matches password
-    const passwordMatch = password === password2 && password2.length > 0;
-    // check if all is valid
-    const allValid = passwordMatch && passwordValid && nameValid;
-    // only if allValid will the function continue
-    if (allValid) {
+    if (handleIncorrectInput(email, password, name, password2)) {
       const body = {
         name: formData.name,
         email: formData.email,
@@ -77,14 +65,7 @@ const Signup = () => {
         setIsAuthenticated(true);
         setLoggedIn(true);
       }
-    } else {
-      handleIncorrectInputSignup(
-          nameValid,
-          emailValid,
-          passwordValid,
-          passwordMatch,
-      );
-    }
+    } 
   };
   if (loggedIn) {
     notificationService.success('New account succesfully created!');
