@@ -35,7 +35,7 @@ const cpuMockPayload3 = {
 
 beforeAll(async () => {
   cookieSession = await setupLogTests()
-  await CPU.CpuLogs.deleteMany() //clear logs
+  await CPU.CpuLogs.deleteMany()
 
   //add devices
   await request(app).post('/api/daemon').send(cpuMockPayload1)
@@ -44,7 +44,7 @@ beforeAll(async () => {
 })
 
 describe('Get CPU Logs from DB between timestamps', () => {
-  it('should retrieve 2 CPU between yesterday and tomorrow with the total usage percentage being 93.84', async () => {
+  it('should retrieve 2 CPUs between yesterday and tomorrow with the total usage percentage being 93.84', async () => {
     const d = new Date()
     const query = {
       startTimeStamp: d.setDate(d.getDate() - 1),

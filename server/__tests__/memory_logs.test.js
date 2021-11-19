@@ -7,59 +7,55 @@ let cookieSession = ''
 
 beforeAll(async () => {
   cookieSession = await setupLogTests()
-  await memory.MemoryLogs.deleteMany() //clear logs
+  await memory.MemoryLogs.deleteMany()
 })
 
-describe('Check memory Logs from DB with DeviceID', () => {
-  const memory_1 =
-    '/api/memory-logs/specific-device?deviceId=B3C2D-C033-7B87-4B31-244BFE931F1E&limit=2'
-  it('Should save the contents of a post to the DB', async () => {
-    const response = await request(app).get(memory_1).set('Cookie', cookieSession)
+describe('Get Memory Logs from DB between timestamps', () => {
+  it('should retrieve 0 Memory between yesterday and tomorrow', async () => {
+    const d = new Date()
+    const query = {
+      startTimeStamp: d.setDate(d.getDate() - 1),
+      endTimeStamp: d.setDate(d.getDate() + 1),
+    }
+
+    const response = await request(app)
+      .get('/api/memory-logs/timestamp')
+      .query(query)
+      .set('Cookie', cookieSession)
+
+    const results = response.body.Results
     expect(response.statusCode).toBe(200)
+    expect(results.length).toBe(0)
   })
 
-  it('Should return error 500', async () => {
-    const memory_1 = '/api/memory-logs/specific-device?limit=2'
-    const response = await request(app)
-      .get(memory_1)
-      .set('Cookie', cookieSession)
-    expect(response.statusCode).toBe(500)
-  })
-})
+  it('should not retrieve any Memory with 1 timestamp only)', async () => {
+    const query = {
+      startTimeStamp: new Date(),
+    }
 
-describe('Check memory Logs from DB with timestamps', () => {
-  it('Should retrieve the contents of a post to the DB for a specific timestamp', async () => {
-    const memory_1 = '/api/memory-logs/timestamp?startTimeStamp=2021-10-24 09:45:55.966088+00:00&endTimeStamp=2021-10-24 09:49:55.966088+00:00'
     const response = await request(app)
-      .get(memory_1)
+      .get('/api/memory-logs/timestamp')
+      .query(query)
       .set('Cookie', cookieSession)
-    expect(response.statusCode).toBe(200)
-  })
 
-  it('Should not retrieve the contents of a post to the DB incorrect information (1 timestamp only)', async () => {
-    const memory_1 = '/api/memory-logs/timestamp?startTimeStamp=2021-10-24 09:45:55.966088+00:00'
-    const response = await request(app)
-      .get(memory_1)
-      .set('Cookie', cookieSession)
-    expect(response.statusCode).toBe(500)
-  })
-
-  it('Should retrieve the contents of a post to the DB for a specific timestamp and a deviceID', async () => {
-    const memory_1 = '/api/memory-logs/timestamp?deviceId=B3C2D-C033-7B87-4B31-244BFE931F1E&startTimeStamp=2021-10-24 09:45:55.966088+00:00&endTimeStamp=2021-10-24 09:49:55.966088+00:00'
-    const response = await request(app)
-      .get(memory_1)
-      .set('Cookie', cookieSession)
-    expect(response.statusCode).toBe(200)
+    expect(response.statusCode).toBe(501)
   })
 })
 
-describe('Check memory Logs from DB with specific attributes', () => {
-  it('Should retrieve the contents of a post to the DB for a specific timestamp and a deviceID', async () => {
-    const memory_1 = '/api/memory-logs/specific-attribute?usagePercentage=0&usageSpeed=0&numProcesses=0&threadsAlive=1&threadsSleeping=0&uptime=0'
+describe('Get Memory Logs from DB with specified attributes', () => {
+  it('should retrieve 0 Memory with the specified usagePercentage of 68.89', async () => {
+    const query = {
+      responseTime: 68.89,
+    }
+
     const response = await request(app)
-      .get(memory_1)
+      .get('/api/memory-logs')
+      .query(query)
       .set('Cookie', cookieSession)
+
+    const results = response.body.Results
     expect(response.statusCode).toBe(200)
+    expect(results.length).toBe(0)
   })
 })
 
