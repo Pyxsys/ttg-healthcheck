@@ -32,4 +32,5 @@ const DeviceSchema = new mongoose.Schema({
   wifi: WifiSchema,
 })
 
-module.exports = Devices = mongoose.model('devices', DeviceSchema)
+const Devices = mongoose.model('devices', DeviceSchema)
+module.exports = Devices
