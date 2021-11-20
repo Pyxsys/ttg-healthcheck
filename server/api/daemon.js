@@ -1,32 +1,83 @@
 const express = require('express')
 const router = express.Router()
-const cpu = require('../models/cpu.js')
+const { CpuLogs } = require('../models/cpu.js')
 const Device = require('../models/device.js')
 
-/*
- * Insert static Device information to the datbase.
- *
- * If there already exists a device with the same deviceID
- * attribute, then update the existing device with the
- * new information.
- */
+// receive device report from daemon
 router.post('/device', async (req, res) => {
-  const payload = Object(req.body)
-  const key = { deviceId: String(payload.deviceId) }
-  await Device.updateOne(key, payload, { upsert: true })
-  return res.status(200).send()
+  try {
+    const payload = req.body
+    verifyDeviceIdFormat(payload.deviceId)
+    const newDevice = processDeviceInfo(payload)
+
+    const filter = { deviceId: payload.deviceId.toString() }
+    const flags = { upsert: true }
+    await Device.findOneAndUpdate(filter, newDevice, flags)
+
+    res.status(200).send()
+  } catch (err) {
+    res.status(501).send('Server Error: ' + err.message)
+  }
 })
 
 // receive report from daemon
 router.post('/', async (req, res) => {
-  const payload = req.body
-  const newCpuLog = processCpuLogInfo(payload)
+  try {
+    const payload = req.body
+    verifyDeviceIdFormat(payload.deviceId)
+    const newCpuLog = processCpuLogInfo(payload)
 
-  await newCpuLog.save()
-  return res.status(200).send()
+    await newCpuLog.save()
+    res.status(200).send()
+  } catch (err) {
+    res.status(501).send('Server Error: ' + err.message)
+  }
 })
 
-// Helper Functions
+/*
+ * ==================
+ * Helper Functions
+ * ==================
+ */
+
+const verifyDeviceIdFormat = (deviceId) => {
+  const pattern = '^[0-9A-Z]{8}(?:-[0-9A-Z]{4}){3}-[0-9A-Z]{12}$'
+  const regex = new RegExp(pattern, 'i')
+
+  if (!regex.test(deviceId)) {
+    throw new Error('deviceId [' + deviceId + '] is invalid')
+  } else return true
+}
+
+const processDeviceInfo = (payload) => {
+  const {
+    deviceId,
+    name,
+    description,
+    connectionType,
+    status,
+    provider,
+    hardware,
+    cpu,
+    memory_,
+    disk,
+    wifi,
+  } = payload
+
+  return {
+    deviceId,
+    name,
+    description,
+    connectionType,
+    status,
+    provider,
+    hardware,
+    cpu,
+    memory: memory_,
+    disk,
+    wifi,
+  }
+}
 
 const sumProcessCpuUsage = (processes) => {
   let sum = 0
@@ -61,7 +112,7 @@ const processCpuLogInfo = (payload) => {
   const threadsSleeping = sleepingProcs
   const uptime = 0
 
-  return new cpu.CpuLogs({
+  return new CpuLogs({
     deviceId,
     usagePercentage,
     usageSpeed,
@@ -76,5 +127,7 @@ const processCpuLogInfo = (payload) => {
 
 module.exports = {
   router,
+  verifyDeviceIdFormat,
+  processDeviceInfo,
   processCpuLogInfo,
 }

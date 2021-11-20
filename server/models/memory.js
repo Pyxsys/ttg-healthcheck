@@ -4,9 +4,9 @@ const MemorySchema = new mongoose.Schema({
   maxSize: {
     type: Number,
   },
-  formFactor: {
-    type: String,
-  },
+  formFactor: [{
+      type: String,
+    }],
 })
 
 const MemoryLogsSchema = new mongoose.Schema({

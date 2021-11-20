@@ -6,7 +6,7 @@ const { setupLogTests, teardownLogTests } = require('./api_common.test')
 let cookieSession = ''
 
 const cpuMockPayload1 = {
-  deviceId: '01234-5678-9ABC-DEF0',
+  deviceId: 'TEST1C2D-C033-7B87-4B31-244BFX931D14',
   timestamp: new Date(),
   processes: [
     { name: 'python', pid: 12345, cpu_percent: 12.14 },
@@ -15,7 +15,7 @@ const cpuMockPayload1 = {
   ],
 }
 const cpuMockPayload2 = {
-  deviceId: '0FEDC-BA98-7654-3210',
+  deviceId: 'TEST2C2D-C033-7B87-4B31-244BFX931D14',
   timestamp: new Date(),
   processes: [
     { name: 'python', pid: 12345, cpu_percent: 23.75 },
@@ -24,7 +24,7 @@ const cpuMockPayload2 = {
   ],
 }
 const cpuMockPayload3 = {
-  deviceId: '0FEDC-BA98-7654-3210',
+  deviceId: 'TEST2C2D-C033-7B87-4B31-244BFX931D14',
   timestamp: new Date('06-06-2020T12:00:00'),
   processes: [
     { name: 'python', pid: 12345, cpu_percent: 10.96 },

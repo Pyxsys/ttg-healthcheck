@@ -3,20 +3,24 @@ const connectDB = require('../db/db_connection')
 const app = require('../app')
 const mongoose = require('mongoose')
 const Device = require('../models/device.js')
-const CPU = require('../models/cpu.js')
+const { CpuLogs } = require('../models/cpu.js')
 const daemonFunctions = require('../api/daemon')
 
 const deviceMockPayload = {
-  deviceId: '01234-5678-9ABC-DEF0',
+  deviceId: 'TEST3C2D-C033-7B87-4B31-244BFX931D14',
   name: 'test device',
   description: 'Device used for testing purposes. It is not real',
   connectionType: 'medium',
   status: 'active',
   provider: 'test_provider',
+  memory_: {
+    maxSize: 1024,
+    formFactor: ['DIMM', 'DIMM'],
+  },
 }
 
 const cpuMockPayload = {
-  deviceId: 'B3C2D-C033-7B87-4B31-244BFE931F1E',
+  deviceId: 'TEST3C2D-C033-7B87-4B31-244BFX931D14',
   timestamp: '2021-10-24 09:47:55.966088',
   processes: [
     { name: 'python', pid: 12345, status: 'running', cpu_percent: 1.768 },
@@ -25,32 +29,56 @@ const cpuMockPayload = {
 }
 
 beforeAll(async () => {
-  // Connect to local DB
-  await connectDB()
+  await connectDB() // connect to local_db
+  await Device.deleteMany() //clear devices
+  await CpuLogs.deleteMany() //clear logs
+})
 
-  // Clear DB
-  await CPU.CpuLogs.deleteMany()
-  await Device.deleteMany()
+describe('Test helper functions', () => {
+  it('Verify good deviceId is of correct format', () => {
+    const result = daemonFunctions.verifyDeviceIdFormat(
+      deviceMockPayload.deviceId
+    )
+    expect(result).toBe(true)
+  })
+
+  it('Verify bad deviceId throws error', () => {
+    expect(() => daemonFunctions.verifyDeviceIdFormat(null)).toThrow(
+      'deviceId [' + null + '] is invalid'
+    )
+  })
+})
+
+describe('Test Device formatters', () => {
+  const doc = daemonFunctions.processDeviceInfo(deviceMockPayload)
+
+  //process values
+  it('Process data is consistent', () => {
+    expect(doc.deviceId).toBe(deviceMockPayload.deviceId)
+    expect(doc.memory.maxSize).toBe(deviceMockPayload.memory_.maxSize)
+    expect(doc.memory.formFactor[0]).toBe(
+      deviceMockPayload.memory_.formFactor[0]
+    )
+  })
 })
 
 describe('Test CPU log formatter', () => {
   const doc = daemonFunctions.processCpuLogInfo(cpuMockPayload)
-
   //computed values
   it('Sum of processes', () => {
     expect(doc.numProcesses).toBe(2)
   })
 
   it('Sum of CPU usage', () => {
-    expect(doc.usagePercentage === 2.23).toBe(true)
+    expect(doc.usagePercentage).toBe(2.23)
   })
 
   it('Running processes', () => {
-    expect(doc.threadsAlive === 1).toBe(true)
+    expect(doc.threadsAlive).toBe(1)
   })
 
   it('Sleeping processes', () => {
-    expect(doc.threadsSleeping === 1).toBe(true)
+    expect(doc.threadsSleeping).toBe(1)
   })
 
   //process values
@@ -65,34 +93,54 @@ describe('Test CPU log formatter', () => {
 })
 
 describe('Save daemon device to DB', () => {
-  it('should insert the device to the DB', async () => {
-    const response = await request(app)
-      .post('/api/daemon/device')
-      .send(deviceMockPayload)
+  const devicePath = '/api/daemon/device'
 
+  it('should insert the device to the DB', async () => {
+    const response = await request(app).post(devicePath).send(deviceMockPayload)
     expect(response.statusCode).toBe(200)
+
     const devices = await Device.find()
     expect(devices.length).toBe(1)
     expect(devices[0].name).toBe('test device')
   })
-  
-  it('should update the device in the DB', async () => {
-    const response = await request(app)
-      .post('/api/daemon/device')
-      .send({...deviceMockPayload, name: 'another name'})
 
+  it('should update the device in the DB', async () => {
+    const updatedDevice = { ...deviceMockPayload, name: 'another name' }
+    const response = await request(app).post(devicePath).send(updatedDevice)
     expect(response.statusCode).toBe(200)
+
     const devices = await Device.find()
     expect(devices.length).toBe(1)
     expect(devices[0].name).toBe('another name')
   })
+
+  it('should not insert a device with incorrect deviceId to the DB', async () => {
+    const invalidDevice = { ...deviceMockPayload, deviceId: 'invalid' }
+    const response = await request(app).post(devicePath).send(invalidDevice)
+    expect(response.statusCode).toBe(501)
+
+    const devices = await Device.find()
+    expect(devices.length).toBe(1)
+  })
 })
 
 describe('Save daemon payload to DB', () => {
-  it('Should save the contents of a post to the DB', async () => {
-    const response = await request(app).post('/api/daemon').send(cpuMockPayload)
-
+  const logPath = '/api/daemon'
+  it('Should save the CPU log to the DB', async () => {
+    const response = await request(app).post(logPath).send(cpuMockPayload)
     expect(response.statusCode).toBe(200)
+
+    const cpus = await CpuLogs.find()
+    expect(cpus.length).toBe(1)
+  })
+
+  it('Should not insert the CPU Log with incorrect deviceId to the DB', async () => {
+    const invalidCPU = { ...cpuMockPayload, deviceId: 'invalid' }
+    const response = await request(app).post(logPath).send(invalidCPU)
+    expect(response.statusCode).toBe(501)
+
+    const cpus = await CpuLogs.find()
+    expect(cpus.length).toBe(1)
   })
 })
 
