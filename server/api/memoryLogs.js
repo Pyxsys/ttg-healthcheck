@@ -1,7 +1,7 @@
 const express = require('express')
 const router = express.Router()
 const Memory = require('../models/memory.js')
-const { filterData, filterTimestampQuery } = require('./shared/filter')
+const { filterData, filterTimestampQuery } = require('./common/filter')
 const auth = require('../middleware/auth.js')
 
 // get Memory Logs with any attribute of the MemoryLogs Model

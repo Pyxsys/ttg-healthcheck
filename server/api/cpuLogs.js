@@ -1,7 +1,7 @@
 const express = require('express')
 const router = express.Router()
 const Cpu = require('../models/cpu.js')
-const { filterData, filterTimestampQuery } = require('./shared/filter')
+const { filterData, filterTimestampQuery } = require('./common/filter')
 const auth = require('../middleware/auth.js')
 
 // get CPU Logs with any attribute of the CpuLogs Model

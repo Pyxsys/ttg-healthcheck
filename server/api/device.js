@@ -3,7 +3,7 @@ const express = require('express')
 const router = express.Router()
 const Devices = require('../models/device.js')
 const auth = require('../middleware/auth.js')
-const { filterData } = require('./shared/filter')
+const { filterData } = require('./common/filter')
 
 // get all device id
 router.get('/ids', auth, async (req, res) => {
