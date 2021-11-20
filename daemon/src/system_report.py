@@ -18,8 +18,8 @@ class Runner:
     def get_report(self):
         return self.report.report_message
 
-    def send_report(self):
-        url = self.get_config()['destination'] + self.api_endpoint
+    def send_report(self, path=''):
+        url = self.get_config()['destination'] + Runner.api_endpoint + path
         return requests.post(url, json=self.get_report())
 
     def init_report(self):
@@ -165,7 +165,7 @@ def send_initial_device_report(config):
     print("\tWriting startup report...")
     runner.gen_startup_report()
     print("\tSending startup report to server...")
-    runner.send_report()
+    runner.send_report('/device')
     elapsed=datetime.now()-start
     print("Ending startup report routine. \nTime elapsed:", elapsed.total_seconds(), "sec")
     del runner
