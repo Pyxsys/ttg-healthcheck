@@ -1,7 +1,10 @@
-import {Button, Form, Container, Col, Row} from 'react-bootstrap';
+// 3rd Party
 import React, {useState} from 'react';
-import {Link, Redirect} from 'react-router-dom';
 import axios from 'axios';
+import {Link, Redirect} from 'react-router-dom';
+import {Button, Form, Container, Col, Row} from 'react-bootstrap';
+
+// Custom
 import {useAuth} from '../context/authContext';
 import '../App.scss';
 

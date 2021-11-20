@@ -1,18 +1,14 @@
+// 3rd Party
 import React, {useState} from 'react';
-import {Link, Redirect} from 'react-router-dom';
 import axios from 'axios';
-import {useAuth} from '../context/authContext';
+import {Link, Redirect} from 'react-router-dom';
 import {Button, Col, Container, Form, Row} from 'react-bootstrap';
 
-const Signup = () => {
-  interface AxiosResult {
-    message: string
-    user: {
-      name: string
-      role: string
-    }
-  }
+// Custom
+import {useAuth} from '../context/authContext';
+import {UserResponse} from '../types/users';
 
+const Signup = () => {
   const {setUser, setIsAuthenticated} = useAuth();
   const [loggedIn, setLoggedIn] = useState(false);
   const [formData, setFormData] = useState({
@@ -44,7 +40,7 @@ const Signup = () => {
         };
         const body = JSON.stringify(newUser);
         await axios
-            .post<AxiosResult>('/api/user/register', body, config)
+            .post<UserResponse>('/api/user/register', body, config)
             .then((response) => {
               if (response.data) {
                 setUser(response.data.user);
