@@ -1,100 +1,53 @@
+// 3rd Party
 import React, {useEffect, useState} from 'react';
-import Navbar from './Navbar';
+import axios from 'axios';
+import {Link} from 'react-router-dom';
 import {Col, Row, Table} from 'react-bootstrap';
 import BootstrapTable from 'react-bootstrap-table-next';
 import filterFactory, {textFilter} from 'react-bootstrap-table2-filter';
-import {Link} from 'react-router-dom';
-import axios from 'axios';
 
-interface Device {
-  id: string
-  // location should go here
-  cpuUsage: number
-  memoryUsage: number
-  // diskUsage should go here
-  uptime: number
-}
+// Custom
+import Navbar from './Navbar';
+import {IResponse} from '../types/common';
+import {CpuLog, MemoryLog} from '../types/queries';
+import {DevicesColumns} from '../types/tables';
 
-interface CpuLog {
-  deviceId: string
-  usagePercentage: number
-  usageSpeed: number
-  numProcesses: number
-  threadsAlive: number
-  threadsSleeping: number
-  uptime: number
-  timestamp: Date
-}
-
-interface MemoryLog {
-  deviceId: string
-  usagePercentage: number
-  inUse: number
-  available: number
-  cached: number
-  pagedPool: number
-  nonPagedPool: number
-  timestamp: Date
-}
-interface IdLog {
-  _id: string
-  deviceId: string
-}
 
 const DevicePage = () => {
-  const [deviceData, setDeviceData] = useState([] as Device[]);
-  let cpuData: CpuLog[];
-  let memData: MemoryLog[];
-  let idData: IdLog[];
+  const [deviceData, setDeviceData] = useState([] as DevicesColumns[]);
+
+  const queryTable = async () => {
+    // Query log information from year 2020 to today
+    // We should change this so we do not query 1000's of records
+    const timestampParams = {
+      startTimeStamp: new Date('2020'),
+      endTimeStamp: new Date(),
+    };
+
+    const deviceResponse = await axios.get<IResponse<string>>('api/device/ids');
+    const deviceIds = deviceResponse.data.Results;
+
+    const cpuResponse = await axios.get<IResponse<CpuLog>>('api/cpu-logs/timestamp', {params: timestampParams});
+    const cpuUsages = cpuResponse.data.Results;
+
+    const memoryResponse = await axios.get<IResponse<MemoryLog>>('api/memory-logs/timestamp', {params: timestampParams});
+    const memoryUsages = memoryResponse.data.Results;
+
+    const device: DevicesColumns[] = deviceIds.map((id) => {
+      const cpu = cpuUsages?.find((cpuUsage) => cpuUsage?.deviceId == id);
+      const mem = memoryUsages?.find((memoryUsage) => memoryUsage?.deviceId == id);
+      return {
+        id: id,
+        cpuUsage: cpu?.usagePercentage as number,
+        memoryUsage: mem?.usagePercentage as number,
+        uptime: cpu?.uptime as number,
+      };
+    });
+    setDeviceData(device);
+  };
 
   useEffect(() => {
-    const lookup = async () => {
-      await axios.get('api/device/ids').then((response) => {
-        if (response.data) {
-          idData = response.data;
-        }
-      });
-      await axios
-          .get('api/cpu-logs/timestamp', {
-            params: {
-              startTimeStamp: new Date(Date.now() - 2000000000),
-              endTimeStamp: Date.now(),
-            },
-          })
-          .then((response) => {
-            if (response.data) {
-              cpuData = response.data;
-            }
-          });
-      await axios
-          .get('api/memory-logs/timestamp', {
-            params: {
-              startTimeStamp: new Date(Date.now() - 2000000000),
-              endTimeStamp: Date.now(),
-            },
-          })
-          .then((response) => {
-            if (response.data) {
-              memData = response.data;
-            }
-          });
-
-      const tempDeviceData: Device[] = [];
-      idData.forEach((e) => {
-        const id = e.deviceId;
-        const device: Device = {
-          id: id,
-          cpuUsage: cpuData?.find((l) => l?.deviceId == id)
-              ?.usagePercentage as number,
-          memoryUsage: memData?.find((l) => l?.deviceId == id)
-              ?.usagePercentage as number,
-          uptime: cpuData?.find((l) => l?.deviceId == id)?.uptime as number,
-        };
-        tempDeviceData.push(device);
-      });
-      setDeviceData(tempDeviceData);
-    };
-    lookup();
+    queryTable();
   }, []);
 
   const idFormatter = (cell: {} | null | undefined) => {

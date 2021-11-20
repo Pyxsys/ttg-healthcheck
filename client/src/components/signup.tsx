@@ -1,8 +1,10 @@
-/* eslint-disable max-len*/
+// 3rd Party
 import React, {useState} from 'react';
 import {Link, Redirect} from 'react-router-dom';
-import {useAuth} from '../context/authContext';
 import {Button, Col, Container, Form, Row} from 'react-bootstrap';
+
+// Custom
+import {useAuth} from '../context/authContext';
 import {notificationService} from '../services/notification.service';
 import {handleIncorrectInput, sendRequest} from './shared/inputValidation';
 

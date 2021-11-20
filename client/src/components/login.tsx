@@ -1,11 +1,13 @@
-/* eslint-disable max-len*/
-import {Button, Form, Container, Col, Row} from 'react-bootstrap';
+// 3rd Party
 import React, {useState} from 'react';
 import {Link, Redirect} from 'react-router-dom';
+import {Button, Form, Container, Col, Row} from 'react-bootstrap';
+
+// Custom
 import {useAuth} from '../context/authContext';
-import '../App.scss';
 import {notificationService} from '../services/notification.service';
 import {handleIncorrectInput, sendRequest} from './shared/inputValidation';
+import '../App.scss';
 
 const Login = () => {
   const {setUser, setIsAuthenticated} = useAuth();
