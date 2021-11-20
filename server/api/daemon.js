@@ -64,18 +64,6 @@ const processDeviceInfo = (payload) => {
     wifi,
   } = payload
 
-  // const name = null
-  // const description = null
-  // const connectionType = null
-  // const status = null
-  // const provider = null
-
-  // const hardware = null
-  // const cpu = null
-  // const memory = memory_
-  // const disk = null
-  // const wifi = null
-
   return {
     deviceId,
     name,

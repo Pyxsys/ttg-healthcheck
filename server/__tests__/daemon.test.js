@@ -6,24 +6,6 @@ const Device = require('../models/device.js')
 const { CpuLogs } = require('../models/cpu.js')
 const daemonFunctions = require('../api/daemon')
 
-// const mockDevicePayload = {
-//   deviceId: 'TEST3C2D-C033-7B87-4B31-244BFX931D14',
-//   timestamp: '2021-10-24 09:47:55.966088',
-//   memory_: {
-//     maxSize: 1024,
-//     formFactor: ['DIMM', 'DIMM']
-//   }
-// }
-
-// const mockLogPayload = {
-//   deviceId: 'TEST3C2D-C033-7B87-4B31-244BFX931D14',
-//   timestamp: '2021-10-24 09:47:55.966088',
-//   processes: [
-//     { name: 'python', pid: 12345, status: 'running', cpu_percent: 1.768 },
-//     { name: 'celebid', pid: 12344, status: 'idle', cpu_percent: 0.462 },
-//   ],
-// }
-
 const deviceMockPayload = {
   deviceId: 'TEST3C2D-C033-7B87-4B31-244BFX931D14',
   name: 'test device',
