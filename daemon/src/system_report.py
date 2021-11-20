@@ -114,7 +114,7 @@ class SysReport:
         uuid=re.findall(pattern, extract.read(), flags)[0]
         extract.close()
 
-        self.set_section("deviceId", uuid)
+        self.set_section("deviceId", uuid.upper())
 
     def add_startup_memory_info(self):
         memory_dictionary = dict()
