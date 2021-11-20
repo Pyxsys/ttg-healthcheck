@@ -8,11 +8,21 @@ const api = require('../api/daemon')
 
 beforeAll(async () => {
   await connectDB() // connect to local_db
+  await Device.deleteMany() //clear devices
   await CPU.CpuLogs.deleteMany() //clear logs
 })
 
-const mockPayload = {
-  deviceId: 'B3C2D-C033-7B87-4B31-244BFE931F1E',
+const mockDevicePayload = {
+  deviceId: 'TEST3C2D-C033-7B87-4B31-244BFX931D14',
+  timestamp: '2021-10-24 09:47:55.966088',
+  memory_: {
+    maxSize: 1024,
+    formFactor: ['DIMM', 'DIMM']
+  }
+}
+
+const mockLogPayload = {
+  deviceId: 'TEST3C2D-C033-7B87-4B31-244BFX931D14',
   timestamp: '2021-10-24 09:47:55.966088',
   processes: [
     { name: 'python', pid: 12345, status: 'running', cpu_percent: 1.768 },
@@ -32,8 +42,21 @@ describe('Test helper functions', () => {
     .toThrow('deviceId [' + null + '] is invalid')
   })
 })
+
+describe('Test Device formatters', () => {
+  const doc = api.processDeviceInfo(mockDevicePayload)
+
+  //process values
+  it('Process data is consistent', () => {
+    expect(doc.deviceId).toBe(mockDevicePayload.deviceId)
+    expect(doc.memory.maxSize).toBe(mockDevicePayload.memory_.maxSize)
+    expect(doc.memory.formFactor[0]).toBe(mockDevicePayload.memory_.formFactor[0])
+  })
+
+})
+
 describe('Test CPU log formatter', () => {
-  const doc = api.processCpuLogInfo(mockPayload)
+  const doc = api.processCpuLogInfo(mockLogPayload)
 
   //computed values
   it('Sum of processes', () => {
@@ -54,21 +77,35 @@ describe('Test CPU log formatter', () => {
 
   //process values
   it('Process data is consistent', () => {
-    expect(doc.processes[0].name).toBe(mockPayload.processes[0].name)
-    expect(doc.processes[0].pid).toBe(mockPayload.processes[0].pid)
-    expect(doc.processes[0].status).toBe(mockPayload.processes[0].status)
+    expect(doc.processes[0].name).toBe(mockLogPayload.processes[0].name)
+    expect(doc.processes[0].pid).toBe(mockLogPayload.processes[0].pid)
+    expect(doc.processes[0].status).toBe(mockLogPayload.processes[0].status)
     expect(doc.processes[0].cpu_percent).toBe(
-      mockPayload.processes[0].cpu_percent
+      mockLogPayload.processes[0].cpu_percent
     )
   })
 })
 
 describe('Save daemon payload to DB', () => {
-  it('Should save the contents of a post to the DB', async () => {
-    const response = await request(app).post('/api/daemon').send(mockPayload)
 
+  const devicePath = '/api/daemon/device'
+  const logPath = '/api/daemon'
+
+  it('Should save the contents of a device post to DB', async () => {
+    const response = await request(app).post(devicePath).send(mockDevicePayload)
     expect(response.statusCode).toBe(200)
   })
+
+  it('Should fail for contents of a bad device post to DB', async () => {
+    const response = await request(app).post(devicePath).send({bad:'bad'})
+    expect(response.statusCode).toBe(500)
+  })
+  
+  it('Should save the contents of a post to the DB', async () => {
+    const response = await request(app).post(logPath).send(mockLogPayload)
+    expect(response.statusCode).toBe(200)
+  })
+  
 })
 
 afterAll((done) => {
