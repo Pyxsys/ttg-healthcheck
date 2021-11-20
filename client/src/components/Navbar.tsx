@@ -1,12 +1,15 @@
+// 3rd Party
 import React from 'react';
+import axios from 'axios';
 import {Nav} from 'react-bootstrap';
 import {IconContext} from 'react-icons';
 import {MdOutlineSpaceDashboard, MdAnalytics, MdLogout} from 'react-icons/md';
 import {DiRasberryPi} from 'react-icons/di';
 import {CgProfile} from 'react-icons/cg';
-import axios from 'axios';
-import {useAuth} from '../context/authContext';
 import {slide as Menu} from 'react-burger-menu';
+
+// Custom
+import {useAuth} from '../context/authContext';
 
 const Navbar = () => {
   const {setUser, setIsAuthenticated} = useAuth();

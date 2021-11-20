@@ -1,29 +1,14 @@
 const express = require('express')
 const router = express.Router()
-const {CpuLogs} = require('../models/cpu.js')
+const { CpuLogs } = require('../models/cpu.js')
 const Device = require('../models/device.js')
-
-// receive report from daemon
-router.post('/', async (req, res) => {
-  try {
-    const payload = req.body
-    verifyDeviceIdFormat(payload.deviceId)
-    let newCpuLog = processCpuLogInfo(payload)
-
-    await newCpuLog.save()
-    res.status(200).send()
-  } catch (err) {
-    res.status(500).send('Server Error: ' + err.message)
-  }
-})
 
 // receive device report from daemon
 router.post('/device', async (req, res) => {
   try {
     const payload = req.body
     verifyDeviceIdFormat(payload.deviceId)
-
-    let newDevice = processDeviceInfo(payload)
+    const newDevice = processDeviceInfo(payload)
 
     const filter = { deviceId: payload.deviceId.toString() }
     const flags = { upsert: true }
@@ -31,12 +16,32 @@ router.post('/device', async (req, res) => {
 
     res.status(200).send()
   } catch (err) {
-    res.status(500).send('Server Error: ' + err.message)
+    res.status(501).send('Server Error: ' + err.message)
   }
 })
 
-function verifyDeviceIdFormat(deviceId) {
-  const pattern = '^[0-9A-Z]{8}(?:\-[0-9A-Z]{4}){3}\-[0-9A-Z]{12}$'
+// receive report from daemon
+router.post('/', async (req, res) => {
+  try {
+    const payload = req.body
+    verifyDeviceIdFormat(payload.deviceId)
+    const newCpuLog = processCpuLogInfo(payload)
+
+    await newCpuLog.save()
+    res.status(200).send()
+  } catch (err) {
+    res.status(501).send('Server Error: ' + err.message)
+  }
+})
+
+/*
+ * ==================
+ * Helper Functions
+ * ==================
+ */
+
+const verifyDeviceIdFormat = (deviceId) => {
+  const pattern = '^[0-9A-Z]{8}(?:-[0-9A-Z]{4}){3}-[0-9A-Z]{12}$'
   const regex = new RegExp(pattern, 'i')
 
   if (!regex.test(deviceId)) {
@@ -44,20 +49,32 @@ function verifyDeviceIdFormat(deviceId) {
   } else return true
 }
 
-function processDeviceInfo(payload) {
-  const { deviceId, memory_ } = payload
+const processDeviceInfo = (payload) => {
+  const {
+    deviceId,
+    name,
+    description,
+    connectionType,
+    status,
+    provider,
+    hardware,
+    cpu,
+    memory_,
+    disk,
+    wifi,
+  } = payload
 
-  const name = null
-  const description = null
-  const connectionType = null
-  const status = null
-  const provider = null
+  // const name = null
+  // const description = null
+  // const connectionType = null
+  // const status = null
+  // const provider = null
 
-  const hardware = null
-  const cpu = null
-  const memory = memory_
-  const disk = null
-  const wifi = null
+  // const hardware = null
+  // const cpu = null
+  // const memory = memory_
+  // const disk = null
+  // const wifi = null
 
   return {
     deviceId,
@@ -68,15 +85,15 @@ function processDeviceInfo(payload) {
     provider,
     hardware,
     cpu,
-    memory,
+    memory: memory_,
     disk,
     wifi,
   }
 }
 
-function sumProcessCpuUsage(processes) {
+const sumProcessCpuUsage = (processes) => {
   let sum = 0
-  processes.forEach(function (proc) {
+  processes.forEach((proc) => {
     if (proc.name !== 'System Idle Process') {
       sum += proc.cpu_percent
     }
@@ -84,7 +101,7 @@ function sumProcessCpuUsage(processes) {
   return sum
 }
 
-function processCpuLogInfo(payload) {
+const processCpuLogInfo = (payload) => {
   //load values
   const { deviceId, timestamp, processes } = payload
 

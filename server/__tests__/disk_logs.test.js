@@ -1,70 +1,41 @@
 const request = require('supertest')
 const app = require('../app')
 const disk = require('../models/disk.js')
-const { setupLogTests, teardownLogTests } = require('./api_common.test')
+const { setupLogTests, teardownLogTests, successTimestampLogTest, failureTimestampLogTest } = require('./api_common.test')
 
 let cookieSession = ''
 
 beforeAll(async () => {
   cookieSession = await setupLogTests()
-  await disk.DiskLogs.deleteMany() //clear logs
+  await disk.DiskLogs.deleteMany()
 })
 
-describe('Check disk Logs from DB with DeviceID', () => {
-  it('Should save the contents of a post to the DB', async () => {
-    const response = await request(app)
-      .get(
-        '/api/disk-logs/specific-device?deviceId=B3C2D-C033-7B87-4B31-244BFE931F1E&limit=2'
-      )
-      .set('Cookie', cookieSession)
-    expect(response.statusCode).toBe(200)
+describe('Get Disk Logs from DB between timestamps', () => {
+  const diskApi = '/api/disk-logs/timestamp'
+
+  it('should retrieve 0 Disks between yesterday and tomorrow', async () => {
+    await successTimestampLogTest(diskApi, cookieSession)
   })
 
-  it('Should return error 500', async () => {
-    const response = await request(app)
-      .get('/api/disk-logs/specific-device?limit=2')
-      .set('Cookie', cookieSession)
-    expect(response.statusCode).toBe(500)
+  it('should not retrieve any Disks with 1 timestamp only)', async () => {
+    await failureTimestampLogTest(diskApi, cookieSession)
   })
 })
 
-describe('Check disk Logs from DB with timestamps', () => {
-  it('Should retrieve the contents of a post to the DB for a specific timestamp', async () => {
-    const response = await request(app)
-      .get(
-        '/api/disk-logs/timestamp?startTimeStamp=2021-10-24 09:45:55.966088+00:00&endTimeStamp=2021-10-24 09:49:55.966088+00:00'
-      )
-      .set('Cookie', cookieSession)
-    expect(response.statusCode).toBe(200)
-  })
+describe('Get Disk Logs from DB with specified attributes', () => {
+  it('should retrieve 0 Disks with the specified responseTime of 565', async () => {
+    const query = {
+      responseTime: 565,
+    }
 
-  it('Should not retrieve the contents of a post to the DB incorrect information (1 timestamp only)', async () => {
     const response = await request(app)
-      .get(
-        '/api/disk-logs/timestamp?startTimeStamp=2021-10-24 09:45:55.966088+00:00'
-      )
+      .get('/api/disk-logs')
+      .query(query)
       .set('Cookie', cookieSession)
-    expect(response.statusCode).toBe(500)
-  })
 
-  it('Should retrieve the contents of a post to the DB for a specific timestamp and a deviceID', async () => {
-    const response = await request(app)
-      .get(
-        '/api/disk-logs/timestamp?deviceId=B3C2D-C033-7B87-4B31-244BFE931F1E&startTimeStamp=2021-10-24 09:45:55.966088+00:00&endTimeStamp=2021-10-24 09:49:55.966088+00:00'
-      )
-      .set('Cookie', cookieSession)
+    const results = response.body.Results
     expect(response.statusCode).toBe(200)
-  })
-})
-
-describe('Check disk Logs from DB with specific attributes', () => {
-  it('Should retrieve the contents of a post to the DB for a specific timestamp and a deviceID', async () => {
-    const response = await request(app)
-      .get(
-        '/api/disk-logs/specific-attribute?usagePercentage=0&usageSpeed=0&numProcesses=0&threadsAlive=1&threadsSleeping=0&uptime=0'
-      )
-      .set('Cookie', cookieSession)
-    expect(response.statusCode).toBe(200)
+    expect(results.length).toBe(0)
   })
 })
 

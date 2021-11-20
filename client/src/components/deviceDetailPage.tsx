@@ -1,89 +1,50 @@
-import Navbar from './Navbar';
-import {Card, Col, Row, Table} from 'react-bootstrap';
+// 3rd Party
 import React, {useState, useEffect} from 'react';
 import axios from 'axios';
-import {
-  DeviceLog,
-  MemoryLog,
-  WifiLog,
-  CpuLog,
-  DiskLog,
-} from '../types/deviceTypes.d';
+import {Card, Col, Row, Table} from 'react-bootstrap';
+
+// Custom
+import Navbar from './Navbar';
+import {IResponse} from '../types/common';
+import {Device, MemoryLog, WifiLog, CpuLog, DiskLog} from '../types/queries';
 
 const DeviceDetailPage = (props: any) => {
-  // will define interfaces here for each type of dat
-
   const deviceId = props.location.state.id;
-  const [deviceData, setDeviceData] = useState({} as DeviceLog);
+  const [deviceData, setDeviceData] = useState({} as Device);
   const [memoryData, setMemoryData] = useState({} as MemoryLog);
   const [wifiData, setWifiData] = useState({} as WifiLog);
   const [cpuData, setCpuData] = useState({} as CpuLog);
   const [diskData, setDiskData] = useState({} as DiskLog);
 
-  const lookup = async () => {
-    await axios
-        .get('api/device/', {
-          params: {
-            deviceId: deviceId,
-            limit: 1,
-          },
-        })
-        .then((response) => {
-          if (response.data) {
-            setDeviceData(response.data[0] as DeviceLog);
-          }
-        });
-    await axios
-        .get('api/memory-logs/specific-device', {
-          params: {
-            deviceId: deviceId,
-            limit: 1,
-          },
-        })
-        .then((response) => {
-          if (response.data) {
-            setMemoryData(response.data[0] as MemoryLog);
-          }
-        });
-    await axios
-        .get('api/wifi-logs/specific-device', {
-          params: {
-            deviceId: deviceId,
-            limit: 1,
-          },
-        })
-        .then((response) => {
-          if (response.data) {
-            setWifiData(response.data[0] as WifiLog);
-          }
-        });
-    await axios
-        .get('api/cpu-logs/specific-device', {
-          params: {
-            deviceId: deviceId,
-            limit: 1,
-          },
-        })
-        .then((response) => {
-          if (response.data) {
-            setCpuData(response.data[0] as CpuLog);
-          }
-        });
-    await axios
-        .get('api/disk-logs/specific-device', {
-          params: {
-            deviceId: deviceId,
-            limit: 1,
-          },
-        })
-        .then((response) => {
-          if (response.data) {
-            setDiskData(response.data[0] as DiskLog);
-          }
-        });
+  const queryLogs = async () => {
+    const queryParams = {
+      deviceId: deviceId,
+      limit: 1,
+    };
+
+    const deviceResponse = await axios.get<IResponse<Device>>('api/device', {params: queryParams});
+    const devices = deviceResponse.data.Results;
+    setDeviceData(devices[0] || null);
+
+    const cpuResponse = await axios.get<IResponse<CpuLog>>('api/cpu-logs', {params: queryParams});
+    const cpuLogs = cpuResponse.data.Results;
+    setCpuData(cpuLogs[0] || null);
+
+    const memoryResponse = await axios.get<IResponse<MemoryLog>>('api/memory-logs', {params: queryParams});
+    const memoryLogs = memoryResponse.data.Results;
+    setMemoryData(memoryLogs[0] || null);
+
+    const diskResponse = await axios.get<IResponse<DiskLog>>('api/disk-logs', {params: queryParams});
+    const diskLogs = diskResponse.data.Results;
+    setDiskData(diskLogs[0] || null);
+
+    const wifiResponse = await axios.get<IResponse<WifiLog>>('api/wifi-logs', {params: queryParams});
+    const wifiLogs = wifiResponse.data.Results;
+    setWifiData(wifiLogs[0] || null);
   };
+
   useEffect(() => {
-    lookup();
+    queryLogs();
   }, []);
 
   return (
