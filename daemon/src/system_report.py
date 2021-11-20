@@ -122,10 +122,12 @@ class SysReport:
         memory_dictionary["formFactor"] = SysReport.fetch_memory_form_factor()
         self.set_section("memory_", memory_dictionary)
 
-    def fetch_total_memory():
+    @classmethod
+    def fetch_total_memory(cls):
         return psutil.virtual_memory().total
 
-    def fetch_memory_form_factor():
+    @classmethod
+    def fetch_memory_form_factor(cls):
         os_type = sys.platform.lower()
         flags = re.MULTILINE
         ff_list = list()
