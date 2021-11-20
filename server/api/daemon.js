@@ -31,7 +31,6 @@ router.post('/', async (req, res) => {
 
     await newCpuLog.save()
     await newWifiLog.save()
-    await newCpuLog.save()
     res.status(200).send()
   } catch (err) {
     res.status(501).send('Server Error: ' + err.message)
