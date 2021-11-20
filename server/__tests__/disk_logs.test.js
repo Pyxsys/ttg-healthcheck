@@ -1,7 +1,7 @@
 const request = require('supertest')
 const app = require('../app')
 const disk = require('../models/disk.js')
-const { setupLogTests, teardownLogTests } = require('./api_common.test')
+const { setupLogTests, teardownLogTests, successTimestampLogTest, failureTimestampLogTest } = require('./api_common.test')
 
 let cookieSession = ''
 
@@ -11,34 +11,14 @@ beforeAll(async () => {
 })
 
 describe('Get Disk Logs from DB between timestamps', () => {
+  const diskApi = '/api/disk-logs/timestamp'
+
   it('should retrieve 0 Disks between yesterday and tomorrow', async () => {
-    const d = new Date()
-    const query = {
-      startTimeStamp: d.setDate(d.getDate() - 1),
-      endTimeStamp: d.setDate(d.getDate() + 1),
-    }
-
-    const response = await request(app)
-      .get('/api/disk-logs/timestamp')
-      .query(query)
-      .set('Cookie', cookieSession)
-
-    const results = response.body.Results
-    expect(response.statusCode).toBe(200)
-    expect(results.length).toBe(0)
+    await successTimestampLogTest(diskApi, cookieSession)
   })
 
   it('should not retrieve any Disks with 1 timestamp only)', async () => {
-    const query = {
-      startTimeStamp: new Date(),
-    }
-
-    const response = await request(app)
-      .get('/api/disk-logs/timestamp')
-      .query(query)
-      .set('Cookie', cookieSession)
-
-    expect(response.statusCode).toBe(501)
+    await failureTimestampLogTest(diskApi, cookieSession)
   })
 })
 

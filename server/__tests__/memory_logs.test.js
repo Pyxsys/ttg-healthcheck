@@ -1,7 +1,7 @@
 const request = require('supertest')
 const app = require('../app')
 const memory = require('../models/memory.js')
-const { setupLogTests, teardownLogTests } = require('./api_common.test')
+const { setupLogTests, teardownLogTests, failureTimestampLogTest, successTimestampLogTest } = require('./api_common.test')
 
 let cookieSession = ''
 
@@ -11,34 +11,14 @@ beforeAll(async () => {
 })
 
 describe('Get Memory Logs from DB between timestamps', () => {
+  const memoryApi = '/api/memory-logs/timestamp'
+
   it('should retrieve 0 Memory between yesterday and tomorrow', async () => {
-    const d = new Date()
-    const query = {
-      startTimeStamp: d.setDate(d.getDate() - 1),
-      endTimeStamp: d.setDate(d.getDate() + 1),
-    }
-
-    const response = await request(app)
-      .get('/api/memory-logs/timestamp')
-      .query(query)
-      .set('Cookie', cookieSession)
-
-    const results = response.body.Results
-    expect(response.statusCode).toBe(200)
-    expect(results.length).toBe(0)
+    await successTimestampLogTest(memoryApi, cookieSession)
   })
 
   it('should not retrieve any Memory with 1 timestamp only)', async () => {
-    const query = {
-      startTimeStamp: new Date(),
-    }
-
-    const response = await request(app)
-      .get('/api/memory-logs/timestamp')
-      .query(query)
-      .set('Cookie', cookieSession)
-
-    expect(response.statusCode).toBe(501)
+    await failureTimestampLogTest(memoryApi, cookieSession)
   })
 })
 

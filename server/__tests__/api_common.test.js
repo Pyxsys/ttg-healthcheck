@@ -67,4 +67,44 @@ const teardownLogTests = async () => {
   await mongoose.connection.close()
 }
 
-module.exports = { setupLogTests, teardownLogTests }
+/*
+ * ==============================
+ * Remove When Daemon is complete.
+ * ==============================
+ */
+const successTimestampLogTest = async (api, cookieSession) => {
+  const d = new Date()
+  const query = {
+    startTimeStamp: d.setDate(d.getDate() - 1),
+    endTimeStamp: d.setDate(d.getDate() + 1),
+  }
+  const response = await request(app)
+    .get(api)
+    .query(query)
+    .set('Cookie', cookieSession)
+  expect(response.statusCode).toBe(200)
+  expect(response.body.Results.length).toBe(0)
+}
+
+/*
+ * ==============================
+ * Remove When Daemon is complete.
+ * ==============================
+ */
+const failureTimestampLogTest = async (api, cookieSession) => {
+  const query = {
+    startTimeStamp: new Date(),
+  }
+  const response = await request(app)
+    .get(api)
+    .query(query)
+    .set('Cookie', cookieSession)
+  expect(response.statusCode).toBe(501)
+}
+
+module.exports = {
+  setupLogTests,
+  teardownLogTests,
+  successTimestampLogTest,
+  failureTimestampLogTest,
+}
