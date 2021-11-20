@@ -3,7 +3,7 @@ const connectDB = require('../db/db_connection')
 const app = require('../app')
 const mongoose = require('mongoose')
 
-const { filterData } = require('../api/shared/filter')
+const { filterData } = require('../api/common/filter')
 
 describe('Filter out attributes from Query', () => {
   it('should filter out the keyword limit and sort by -timestamp by default', () => {

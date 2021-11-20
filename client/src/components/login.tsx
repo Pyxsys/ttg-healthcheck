@@ -6,7 +6,7 @@ import {Button, Form, Container, Col, Row} from 'react-bootstrap';
 // Custom
 import {useAuth} from '../context/authContext';
 import {notificationService} from '../services/notification.service';
-import {handleIncorrectInput, sendRequest} from './shared/inputValidation';
+import {handleIncorrectInput, sendRequest} from './common/inputValidation';
 import '../App.scss';
 
 const Login = () => {
