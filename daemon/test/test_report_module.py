@@ -61,7 +61,7 @@ class TestSystemReportClass(unittest.TestCase):
         self.assertRegex(actual_result,'^[a-zA-Z0-9]{8}(?:-[a-zA-Z0-9]{4}){3}-[a-zA-Z0-9]{12}$')
 
     def testAddingStaticMemoryInfoToReport(self):
-        expected_result = ('total', 'form_factors')
+        expected_result = ('maxSize', 'formFactor')
         
         self.test_report.add_startup_memory_info()
         section=self.test_report.get_section("memory_")

@@ -96,8 +96,8 @@ class SysReport:
 
     def add_startup_memory_info(self):
         memory_dictionary = dict()
-        memory_dictionary["total"] = SysReport.fetch_memory_form_factor()
-        memory_dictionary["form_factors"] = SysReport.fetch_memory_form_factor()
+        memory_dictionary["maxSize"] = SysReport.fetch_total_memory()
+        memory_dictionary["formFactor"] = SysReport.fetch_memory_form_factor()
         self.set_section("memory_", memory_dictionary)
 
     def fetch_total_memory():
