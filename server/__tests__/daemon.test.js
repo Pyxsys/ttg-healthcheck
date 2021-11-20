@@ -20,6 +20,18 @@ const mockPayload = {
   ],
 }
 
+describe('Test helper functions', () => {
+
+  it('Verify good deviceId is of correct format', () => {
+    const result = api.verifyDeviceIdFormat(mockDevicePayload.deviceId)
+    expect(result).toBe(true)
+  })
+
+  it('Verify bad deviceId throws error', () => {
+    expect( () => { api.verifyDeviceIdFormat(null) })
+    .toThrow('deviceId [' + null + '] is invalid')
+  })
+})
 describe('Test CPU log formatter', () => {
   const doc = api.processCpuLogInfo(mockPayload)
 

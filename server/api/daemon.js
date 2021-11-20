@@ -6,6 +6,7 @@ const cpu = require('../models/cpu.js')
 router.post('/', async (req, res) => {
   try {
     const payload = req.body
+    verifyDeviceIdFormat(payload.deviceId)
     let newCpuLog = processCpuLogInfo(payload)
 
     await newCpuLog.save()
@@ -15,6 +16,15 @@ router.post('/', async (req, res) => {
   }
 })
 
+function verifyDeviceIdFormat(deviceId){
+  const pattern = '^[a-zA-Z0-9]{8}(?:-[a-zA-Z0-9]{4}){3}-[a-zA-Z0-9]{12}$'
+  const regex = new RegExp(pattern, 'i')
+
+  if (!regex.test(deviceId)){
+    throw new Error('deviceId [' + deviceId + '] is invalid')
+  }
+  else return true
+}
 function sumProcessCpuUsage(processes) {
   let sum = 0
   processes.forEach(function (proc) {
@@ -63,5 +73,6 @@ function processCpuLogInfo(payload) {
 
 module.exports = {
   router,
+  verifyDeviceIdFormat,
   processCpuLogInfo,
 }
