@@ -40,6 +40,28 @@ class Runner:
     def sleep(self):
         time.sleep(self.get_config()['report_delay'])
 
+    def send_initial_device_report(self):
+        start=datetime.now()
+        print("Starting new device report startup routine at", start)
+        print("\tWriting startup report...")
+        self.gen_startup_report()
+        print("\tSending startup report to server...")
+        self.send_report('/device')
+        elapsed=datetime.now()-start
+        print("Ending startup report routine. \nTime elapsed:", elapsed.total_seconds(), "sec")
+
+    def send_recurring_device_report(self):
+        start=datetime.now()
+        print("Starting new report routine at", start)
+        print("\tWriting report...")
+        self.gen_report()
+        print("\tSending report to server...")
+        self.send_report()
+        elapsed=datetime.now()-start
+        print("Ending report routine. \nTime elapsed:", elapsed.total_seconds(), "sec")
+        print("Process will now sleep...")
+        self.sleep()
+
 class SysReport:
     # Initializes instance attributes.
     def __init__(self):
@@ -158,31 +180,17 @@ class SysReport:
 
         return ff_list
 
-def send_initial_device_report(config):
-    start=datetime.now()
-    print("Starting new device report startup routine at", start)
+def main(config, mode):
     runner=Runner(config)
-    print("\tWriting startup report...")
-    runner.gen_startup_report()
-    print("\tSending startup report to server...")
-    runner.send_report('/device')
-    elapsed=datetime.now()-start
-    print("Ending startup report routine. \nTime elapsed:", elapsed.total_seconds(), "sec")
-    del runner
 
-def main(config):
-    start=datetime.now()
-    print("Starting new report routine at", start)
-    runner=Runner(config)
-    print("\tWriting report...")
-    runner.gen_report()
-    print("\tSending report to server...")
-    runner.send_report()
-    elapsed=datetime.now()-start
-    print("Ending report routine. \nTime elapsed:", elapsed.total_seconds(), "sec")
-    print("Process will now sleep...")
-    runner.sleep()
+    if mode == "0":
+        runner.send_initial_device_report()
+    elif mode == "1":
+        runner.send_recurring_device_report()
+    else:
+        print("Invalid run mode \"", mode, "\".")
+        
     del runner
 
 if __name__ == "__main__":
-    main(sys.argv[1])
+    main(sys.argv[1], sys.argv[2])
