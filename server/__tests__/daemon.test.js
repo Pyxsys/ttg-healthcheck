@@ -61,7 +61,7 @@ describe('Test helper functions', () => {
   })
 
   it('Verify bad deviceId throws error', () => {
-    expect(daemonFunctions.verifyDeviceIdFormat(null)).toThrow(
+    expect(() => daemonFunctions.verifyDeviceIdFormat(null)).toThrow(
       'deviceId [' + null + '] is invalid'
     )
   })

@@ -4,7 +4,7 @@ const app = require('../app')
 const { setupLogTests, teardownLogTests } = require('./api_common.test')
 
 const deviceMockPayload1 = {
-  deviceId: '01234-5678-9ABC-DEF0',
+  deviceId: 'TEST1C2D-C033-7B87-4B31-244BFX931D14',
   name: 'test device',
   description: 'Device used for testing purposes. It is not real',
   connectionType: 'medium',
@@ -13,7 +13,7 @@ const deviceMockPayload1 = {
 }
 
 const deviceMockPayload2 = {
-  deviceId: '0FEDC-BA98-7654-3210',
+  deviceId: 'TEST2C2D-C033-7B87-4B31-244BFX931D14',
   name: 'second device',
   description: 'Another device used for testing purposes. It is still not real',
   connectionType: 'string',
