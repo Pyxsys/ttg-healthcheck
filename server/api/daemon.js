@@ -1,6 +1,6 @@
 const express = require('express')
 const router = express.Router()
-const cpu = require('../models/cpu.js')
+const {CpuLogs} = require('../models/cpu.js')
 const Device = require('../models/device.js')
 
 // receive report from daemon
@@ -25,9 +25,9 @@ router.post('/device', async (req, res) => {
 
     let newDevice = processDeviceInfo(payload)
 
-    const filter = { deviceId: payload.deviceId }
+    const filter = { deviceId: payload.deviceId.toString() }
     const flags = { upsert: true }
-    response = await Device.findOneAndUpdate(filter, newDevice, flags)
+    await Device.findOneAndUpdate(filter, newDevice, flags)
 
     res.status(200).send()
   } catch (err) {
@@ -36,7 +36,7 @@ router.post('/device', async (req, res) => {
 })
 
 function verifyDeviceIdFormat(deviceId) {
-  const pattern = '^[a-zA-Z0-9]{8}(?:-[a-zA-Z0-9]{4}){3}-[a-zA-Z0-9]{12}$'
+  const pattern = '^[0-9A-Z]{8}(?:\-[0-9A-Z]{4}){3}\-[0-9A-Z]{12}$'
   const regex = new RegExp(pattern, 'i')
 
   if (!regex.test(deviceId)) {
@@ -107,7 +107,7 @@ function processCpuLogInfo(payload) {
   const threadsSleeping = sleepingProcs
   const uptime = 0
 
-  return new cpu.CpuLogs({
+  return new CpuLogs({
     deviceId,
     usagePercentage,
     usageSpeed,
