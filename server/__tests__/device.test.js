@@ -39,10 +39,9 @@ describe('Get Device Ids', () => {
       .set('Cookie', cookieSession)
 
     const results = response.body.Results
-    const deviceIds = results.map(device => device.deviceId)
     expect(response.statusCode).toBe(200)
-    expect(deviceIds.length).toBe(2)
-    expect(deviceIds).toEqual(expect.arrayContaining([deviceMockPayload1.deviceId, deviceMockPayload2.deviceId]))
+    expect(results.length).toBe(2)
+    expect(results).toEqual(expect.arrayContaining([deviceMockPayload1.deviceId, deviceMockPayload2.deviceId]))
   })
 })
 
