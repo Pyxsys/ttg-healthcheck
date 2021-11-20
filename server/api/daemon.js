@@ -11,7 +11,7 @@ const Device = require('../models/device.js')
  * new information.
  */
 router.post('/device', async (req, res) => {
-  const payload = Object(req.query)
+  const payload = Object(req.body)
   const key = { deviceId: String(payload.deviceId) }
   await Device.updateOne(key, payload, { upsert: true })
   return res.status(200).send()
