@@ -1,5 +1,9 @@
-body {
+@import 'react-toastify/dist/ReactToastify.css';
+
+html, body, #root, #root>div {
+  height: 100%;
   margin: 0;
+
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
     sans-serif;
@@ -10,4 +14,14 @@ body {
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
+}
+
+.background-image-login{
+  background-image: url("assets/updated-login-background-light.png");
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: top;
+  min-height: 100%;
+  height: 100vh;
+  position: relative;
 }

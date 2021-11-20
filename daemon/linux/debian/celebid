@@ -31,7 +31,9 @@ echo "$console_prefix Source config:	$config"
 cd "/"		#move to permanent dir
 umask 0		#reset file mask
 
+python3 $scrubber $config 0
+
 #Main loop
 while true; do
-	python3 $scrubber $config
+	python3 $scrubber $config 1
 done

@@ -44,7 +44,7 @@ In a terminal, from the daemon folder, do the following:
 
 # Unit Testing
 ### Unittest
-From you command line, go to the daemon folder of the project and run `python -m unittest`
+From you command line, go to the daemon folder of the project and run `coverage run --branch -m unittest -v`
 
 #
 *NOTE: you may have to substitute `python` with `python3` when executing commands depending on your system.

@@ -1,11 +1,16 @@
+// 3rd Party
 import React from 'react';
-import {useAuth} from '../context/authContext';
+
+// Custom
+import Navbar from './Navbar';
 
 const Dashboard = () => {
-  const {user} = useAuth();
   return (
-    <div>
-      dashboard, user: {user.name}, role: {user.role}
+    <div id="outer-container">
+      <Navbar />
+      <div id="page-wrap" className="h-100 overflow-auto container">
+        dashboard
+      </div>
     </div>
   );
 };

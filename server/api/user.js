@@ -11,7 +11,7 @@ router.post('/register', async (req, res) => {
   try {
     const role = 'user'
     const { name, password, email } = req.body
-    newUser = new User({
+    const newUser = new User({
       name,
       password,
       email,
@@ -41,8 +41,7 @@ router.post('/register', async (req, res) => {
         user: { name: name, role: role },
       })
   } catch (err) {
-    console.error(err.message)
-    res.status(500).send('Server Error')
+    res.status(500).send('Server Error: ' + err.message)
   }
 })
 
@@ -75,8 +74,7 @@ router.post('/login', async (req, res) => {
         user: { name: user.name, role: user.role },
       })
   } catch (err) {
-    console.error(err.message)
-    res.status(500).send('Server error')
+    res.status(500).send('Server Error: ' + err.message)
   }
 })
 

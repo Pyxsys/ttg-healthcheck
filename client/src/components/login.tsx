@@ -1,90 +1,17 @@
-import React, {useEffect, useState} from 'react';
-import {Redirect} from 'react-router-dom';
-import axios from 'axios';
-import {useAuth} from '../context/authContext';
+// 3rd Party
+import React, {useState} from 'react';
+import {Link, Redirect} from 'react-router-dom';
+import {Button, Form, Container, Col, Row} from 'react-bootstrap';
 
-interface CollectionEvent {
-  _id: string
-  collection?: string
-  operation?: string
-  updatedFields?: any
-}
+// Custom
+import {useAuth} from '../context/authContext';
+import {notificationService} from '../services/notification.service';
+import {handleIncorrectInput, sendRequest} from './common/inputValidation';
+import '../App.scss';
 
 const Login = () => {
-  const [realTimeData, setRealTimeData] = useState([] as CollectionEvent[]);
-  const [collectionData, setCollectionData] = useState(
-    null as CollectionEvent | null,
-  );
-
-  useEffect(() => {
-    if (collectionData) {
-      setRealTimeData([...realTimeData, collectionData]);
-    }
-  }, [collectionData]);
-
-  useEffect(() => {
-    const ws1 = new WebSocket('ws://localhost:5000/?collection=cpu_logs');
-    const ws2 = new WebSocket('ws://localhost:5000/?collection=memory_logs');
-
-    ws1.onmessage = (event) => {
-      console.log('event from cpu: ', JSON.parse(event.data));
-
-      const data = JSON.parse(event.data);
-      const realTimeData: CollectionEvent = {
-        _id: data.documentKey._id,
-        collection: 'cpu',
-        operation: data.operationType,
-        updatedFields:
-          data.operationType === 'update' ?
-            data.updateDescription.updatedFields :
-            data.fullDocument,
-      };
-      setCollectionData(realTimeData);
-    };
-
-    ws2.onmessage = (event) => {
-      console.log('event from mem: ', JSON.parse(event.data));
-
-      const data = JSON.parse(event.data);
-      const realTimeData: CollectionEvent = {
-        _id: data.documentKey._id,
-        collection: 'memory',
-        operation: data.operationType,
-        updatedFields:
-          data.operationType === 'update' ?
-            data.updateDescription.updatedFields :
-            data.fullDocument,
-      };
-      setCollectionData(realTimeData);
-    };
-
-    return () => {
-      ws1.close();
-      ws2.close();
-    };
-  }, []);
-
-  interface AxiosResult {
-    message: string
-    user: {
-      name: string
-      role: string
-    }
-  }
-
   const {setUser, setIsAuthenticated} = useAuth();
   const [loggedIn, setLoggedIn] = useState(false);
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    password: '',
-    password2: '',
-  });
-
-  const {name, email, password, password2} = formData;
-
-  const onChange = (e: React.ChangeEvent<any>) =>
-    setFormData({...formData, [e.target.name]: e.target.value});
 
   const [formData1, setFormData1] = useState({
     email1: '',
@@ -98,191 +25,74 @@ const Login = () => {
 
   const onSubmit = async (e: React.ChangeEvent<any>) => {
     e.preventDefault();
-    const body = {
-      email: formData1.email1,
-      password: formData1.password1,
-    };
-    await axios
-        .post<AxiosResult>('api/user/login', body)
-        .then((response) => {
-          if (response.data) {
-            setUser(response.data.user);
-            setIsAuthenticated(true);
-            setLoggedIn(true);
-          }
-        })
-        .catch((error) => {
-          console.error(error);
-        });
-  };
-
-  const logout = async (e: React.ChangeEvent<any>) => {
-    e.preventDefault();
-    await axios
-        .get('api/user/logout')
-        .then((response) => {
-          if (response.data) {
-            console.log(response.data);
-            setUser({name: '', role: ''});
-            setIsAuthenticated(false);
-            setLoggedIn(false);
-          }
-        })
-        .catch((error) => {
-          console.error(error);
-        });
-  };
-
-  const register = async (e: React.ChangeEvent<any>) => {
-    e.preventDefault();
-    if (password === password2) {
-      const newUser = {
-        name,
-        email,
-        password,
-        password2,
-      };
+    if (handleIncorrectInput(formData1.email1, formData1.password1, 'login')) {
       try {
-        const config = {
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        };
-        const body = JSON.stringify(newUser);
-        await axios
-            .post<AxiosResult>('/api/user/register', body, config)
-            .then((response) => {
-              if (response.data) {
-                setUser(response.data.user);
-                setIsAuthenticated(true);
-                setLoggedIn(true);
-              }
-            })
-            .catch((error) => {
-              console.error(error);
-            });
-      } catch (err) {
-        console.error(err);
+        const res = await sendRequest(formData1.email1, formData1.password1, 'login') as any;
+        if (res.data) {
+          setUser(res.data.user);
+          setIsAuthenticated(true);
+          setLoggedIn(true);
+        }
+      } catch (error) {
+        notificationService.error(
+            'Invalid Email or Password! Either the email or password you have entered is invalid!',
+        );
       }
     }
   };
 
   if (loggedIn) {
+    notificationService.success('Logged in succesfully!');
     return <Redirect to="/dashboard" />;
   }
   return (
     <>
-      <div>
-        <form onSubmit={(e) => onSubmit(e)}>
-          <div>SIGN IN</div>
-          <div>
-            <div>Email address</div>
-            <input
-              type="email"
-              placeholder="Enter email"
-              name="email1"
-              value={email1}
-              onChange={(e) => onChange1(e)}
-            />
-          </div>
-          <div>
-            <div>Password</div>
-            <input
-              type="password"
-              placeholder="password"
-              name="password1"
-              value={password1}
-              onChange={(e) => onChange1(e)}
-            />
-          </div>
-          <button type="submit">Login</button>
-        </form>
-        <button onClick={(e) => logout(e)}>Log Out</button>
-        <br />
-        <br />
-        <form onSubmit={(e) => register(e)}>
-          <div>SIGN UP</div>
-          <div>
-            <div>Name</div>
-            <input
-              type="name"
-              placeholder="Enter name"
-              name="name"
-              value={name}
-              onChange={(e) => onChange(e)}
-            />
-          </div>
-          <div>
-            <div>Email address</div>
-            <input
-              type="email"
-              placeholder="Enter email"
-              name="email"
-              value={email}
-              onChange={(e) => onChange(e)}
-            />
-          </div>
-          <div>
-            <div>Password</div>
-            <input
-              type="password"
-              placeholder="password"
-              name="password"
-              value={password}
-              onChange={(e) => onChange(e)}
-            />
-          </div>
-          <div>
-            <div>Confirm Password</div>
-            <input
-              type="password"
-              placeholder="password"
-              name="password2"
-              value={password2}
-              onChange={(e) => onChange(e)}
-            />
-          </div>
-          <button type="submit">Sign up</button>
-        </form>
-
-        <div
-          style={{
-            display: 'flex',
-            flexDirection: 'column',
-            justifyContent: 'center',
-            marginTop: '1.5rem',
-          }}
+      <div
+        className="align-items-center d-flex
+         justify-content-center background-image-login"
+      >
+        <Container
+          className="w-25 border increase-roundness rounded-lg d-flex
+          justify-content-center bg-secondary"
         >
-          <div>Updated Data From MongoDB</div>
-          <table style={{borderCollapse: 'collapse'}}>
-            <tbody>
-              <tr>
-                <th>Object ID</th>
-                <th>Collection</th>
-                <th>Operation</th>
-                <th>data Changed</th>
-              </tr>
-
-              {realTimeData.map((data, i) => (
-                <tr
-                  key={`${data._id}-${i}`}
-                  style={{borderBottom: 'solid 2px black'}}
-                >
-                  <td>{data._id}</td>
-                  <td>{data.collection}</td>
-                  <td>{data.operation}</td>
-                  <td>
-                    {Object.keys(data.updatedFields).map((col) => (
-                      <div key={col}>
-                        {col} - {data.updatedFields[col]}
-                      </div>
-                    ))}
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+          <Row className="w-75 mb-5 mt-5">
+            <Col>
+              <h1 className="text-center">LOGIN</h1>
+              <Row className="mb-4">
+                <Form onSubmit={(e: any) => onSubmit(e)}>
+                  <Form.Group>
+                    <Form.Label className="ml-0 mb-3">Email Address</Form.Label>
+                    <Form.Control
+                      className="mb-3"
+                      type="email"
+                      placeholder="Email ID"
+                      name="email1"
+                      value={email1}
+                      onChange={(e: any) => onChange1(e)}
+                    />
+                  </Form.Group>
+                  <Form.Group>
+                    <Form.Label className="mb-3">Password</Form.Label>
+                    <Form.Control
+                      className="mb-3"
+                      type="password"
+                      placeholder="Password"
+                      name="password1"
+                      value={password1}
+                      onChange={(e: any) => onChange1(e)}
+                    />
+                  </Form.Group>
+                  <Button className="w-100 mt-3" type="submit">
+                    Login
+                  </Button>
+                  <Link to="/signup">
+                    <Button className="w-100 mt-3">Signup</Button>
+                  </Link>
+                </Form>
+              </Row>
+            </Col>
+          </Row>
+        </Container>
       </div>
     </>
   );
