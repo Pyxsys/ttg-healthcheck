@@ -33,9 +33,9 @@ const DevicePage = () => {
     const memoryResponse = await axios.get<IResponse<MemoryLog>>('api/memory-logs/timestamp', {params: timestampParams});
     const memoryUsages = memoryResponse.data.Results;
 
-    const deviceData: DevicesColumns[] = deviceIds.map((id) => {
-      const cpu = cpuUsages?.find((cpu) => cpu?.deviceId == id);
-      const mem = memoryUsages?.find((memory) => memory?.deviceId == id);
+    const device: DevicesColumns[] = deviceIds.map((id) => {
+      const cpu = cpuUsages?.find((cpuUsage) => cpuUsage?.deviceId == id);
+      const mem = memoryUsages?.find((memoryUsage) => memoryUsage?.deviceId == id);
       return {
         id: id,
         cpuUsage: cpu?.usagePercentage as number,
@@ -43,7 +43,7 @@ const DevicePage = () => {
         uptime: cpu?.uptime as number,
       };
     });
-    setDeviceData(deviceData);
+    setDeviceData(device);
   };
 
   useEffect(() => {
