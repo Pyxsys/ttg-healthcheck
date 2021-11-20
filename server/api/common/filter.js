@@ -68,18 +68,14 @@ const filterData = (query) => {
     options.limit = queryOutput.limit
     delete queryOutput.limit
   }
-  if (queryOutput.orderBy) {
-    var orderBy = queryOutput.orderBy
-    delete queryOutput.orderBy
-  }
-  if (queryOutput.orderValue) {
-    var orderValue = queryOutput.orderValue
-    delete queryOutput.orderValue
-  }
-  if (orderValue && orderBy) {
+  if (queryOutput.orderBy && queryOutput.orderValue) {
+    const orderBy = queryOutput.orderBy
+    const orderValue = queryOutput.orderValue
     options.sort = {
       [orderBy]: orderValue,
     }
+    delete queryOutput.orderValue
+    delete queryOutput.orderBy
   } else {
     options.sort = {
       timestamp: [-1],
