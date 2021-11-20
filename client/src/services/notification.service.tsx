@@ -26,5 +26,4 @@ export const notificationService = {
   error: (message: string) => {
     toast.error(message, toastifyOptions);
   },
-
 };
