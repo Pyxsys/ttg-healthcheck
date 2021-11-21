@@ -42,12 +42,12 @@ const handleIncorrectInput = (
   // since the specific conditions are passed as parameters, you can use that information to display whatever it is that you like, depending on the situation.
   if (!emailValid) {
     notificationService.error(
-        'Invalid Email!\n The email you have entered is either empty or too long!',
+        'Invalid Email! The email you have entered is either empty or too long!',
     );
   }
   if (!passwordValid) {
     notificationService.error(
-        'Invalid Password!\n The password you have entered is either empty or too long!',
+        'Invalid Password! The password you have entered is either empty or too long!',
     );
   }
   if (!nameValid) {
