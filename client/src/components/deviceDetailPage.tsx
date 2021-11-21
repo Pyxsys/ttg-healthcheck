@@ -307,9 +307,9 @@ const DeviceDetailPage = (props: any) => {
                     <Row>
                       <Table className="text-left" responsive="sm" hover>
                         <thead>
-                          <th>
-                            <td className="w-100">CPUs</td>
-                          </th>
+                          <tr>
+                            <th className="w-100">CPUs</th>
+                          </tr>
                         </thead>
                         <tbody>
                           <tr>
@@ -356,9 +356,9 @@ const DeviceDetailPage = (props: any) => {
                     <Row>
                       <Table className="text-left" responsive="sm" hover>
                         <thead>
-                          <th>
-                            <td className="w-100">Memory</td>
-                          </th>
+                          <tr>
+                            <th className="w-100">Memory</th>
+                          </tr>
                         </thead>
                         <tbody>
                           <tr>
@@ -379,9 +379,9 @@ const DeviceDetailPage = (props: any) => {
                     <Row>
                       <Table className="text-left" responsive="sm" hover>
                         <thead>
-                          <th>
-                            <td className="w-100">Disks</td>
-                          </th>
+                          <tr>
+                            <th className="w-100">Disks</th>
+                          </tr>
                         </thead>
                         <tbody>
                           <tr>
@@ -400,9 +400,9 @@ const DeviceDetailPage = (props: any) => {
                     <Row>
                       <Table className="text-left" responsive="sm" hover>
                         <thead>
-                          <th>
-                            <td className="w-100">WIFIs</td>
-                          </th>
+                          <tr>
+                            <th className="w-100">WIFIs</th>
+                          </tr>
                         </thead>
                         <tbody>
                           <tr>
@@ -439,9 +439,9 @@ const DeviceDetailPage = (props: any) => {
                     <Row>
                       <Table className="text-left" responsive="sm" hover>
                         <thead>
-                          <th>
-                            <td className="w-100">Hardware</td>
-                          </th>
+                          <tr>
+                            <th className="w-100">Hardware</th>
+                          </tr>
                         </thead>
                         <tbody>
                           <tr>
