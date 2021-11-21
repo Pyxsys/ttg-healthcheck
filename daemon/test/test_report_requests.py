@@ -16,7 +16,7 @@ class TestRunner(unittest.TestCase):
     def setUpClass(cls):
         cls.test_runner=Runner(sys.path[0] + cls.test_config_path)
         print("\n[config values]:")
-        print(json.dumps(cls.test_runner.getConfig(), indent=4, sort_keys=True))
+        print(json.dumps(cls.test_runner.get_config(), indent=4, sort_keys=True))
 
     @classmethod
     def tearDownClass(cls):
@@ -30,8 +30,8 @@ class TestRunner(unittest.TestCase):
         expected_sections={'deviceId', 'processes', 'timestamp'}
         missing_sections=[]
 
-        self.test_runner.genReport()
-        section_list=list(self.test_runner.getReport().keys())
+        self.test_runner.gen_report()
+        section_list=list(self.test_runner.get_report().keys())
         for section in expected_sections:
             if section not in section_list:
                 missing_sections.append(section)
@@ -41,7 +41,7 @@ class TestRunner(unittest.TestCase):
      'Cannot run test automatically with "localhost" destination.')
     def testConnectionToServer(self):
         expected_result = 500
-        url = self.test_runner.getConfig()['destination'] + Runner.api_endpoint
+        url = self.test_runner.get_config()['destination'] + Runner.api_endpoint
 
         response=requests.post(url)
 
@@ -53,8 +53,8 @@ class TestRunner(unittest.TestCase):
     def testSendingReportToServer(self):
         expected_result = 200
 
-        self.test_runner.genReport()
-        response=self.test_runner.sendReport()
+        self.test_runner.gen_report()
+        response=self.test_runner.send_report()
 
         actual_result = response.status_code
         self.assertEqual(expected_result, actual_result)
@@ -64,7 +64,7 @@ class TestRunner(unittest.TestCase):
         expected_result = json.load(config_file)['report_delay']
         config_file.close()
 
-        actual_result = self.test_runner.getConfig()['report_delay']
+        actual_result = self.test_runner.get_config()['report_delay']
 
         self.assertEqual(expected_result, actual_result)
 

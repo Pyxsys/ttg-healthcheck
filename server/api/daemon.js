@@ -1,23 +1,87 @@
 const express = require('express')
 const router = express.Router()
-const cpu = require('../models/cpu.js')
+const { CpuLogs } = require('../models/cpu.js')
+const Device = require('../models/device.js')
+
+// receive device report from daemon
+router.post('/device', async (req, res) => {
+  try {
+    const payload = req.body
+    verifyDeviceIdFormat(payload.deviceId)
+    const newDevice = processDeviceInfo(payload)
+
+    const filter = { deviceId: payload.deviceId.toString() }
+    const flags = { upsert: true }
+    await Device.findOneAndUpdate(filter, newDevice, flags)
+
+    res.status(200).send()
+  } catch (err) {
+    res.status(501).send('Server Error: ' + err.message)
+  }
+})
 
 // receive report from daemon
 router.post('/', async (req, res) => {
   try {
     const payload = req.body
-    let newCpuLog = processCpuLogInfo(payload)
+    verifyDeviceIdFormat(payload.deviceId)
+    const newCpuLog = processCpuLogInfo(payload)
 
     await newCpuLog.save()
     res.status(200).send()
   } catch (err) {
-    res.status(500).send('Server Error ' + err.message)
+    res.status(501).send('Server Error: ' + err.message)
   }
 })
 
-function sumProcessCpuUsage(processes) {
+/*
+ * ==================
+ * Helper Functions
+ * ==================
+ */
+
+const verifyDeviceIdFormat = (deviceId) => {
+  const pattern = '^[0-9A-Z]{8}(?:-[0-9A-Z]{4}){3}-[0-9A-Z]{12}$'
+  const regex = new RegExp(pattern, 'i')
+
+  if (!regex.test(deviceId)) {
+    throw new Error('deviceId [' + deviceId + '] is invalid')
+  } else return true
+}
+
+const processDeviceInfo = (payload) => {
+  const {
+    deviceId,
+    name,
+    description,
+    connectionType,
+    status,
+    provider,
+    hardware,
+    cpu,
+    memory_,
+    disk,
+    wifi,
+  } = payload
+
+  return {
+    deviceId,
+    name,
+    description,
+    connectionType,
+    status,
+    provider,
+    hardware,
+    cpu,
+    memory: memory_,
+    disk,
+    wifi,
+  }
+}
+
+const sumProcessCpuUsage = (processes) => {
   let sum = 0
-  processes.forEach(function (proc) {
+  processes.forEach((proc) => {
     if (proc.name !== 'System Idle Process') {
       sum += proc.cpu_percent
     }
@@ -25,7 +89,7 @@ function sumProcessCpuUsage(processes) {
   return sum
 }
 
-function processCpuLogInfo(payload) {
+const processCpuLogInfo = (payload) => {
   //load values
   const { deviceId, timestamp, processes } = payload
 
@@ -48,7 +112,7 @@ function processCpuLogInfo(payload) {
   const threadsSleeping = sleepingProcs
   const uptime = 0
 
-  return new cpu.CpuLogs({
+  return new CpuLogs({
     deviceId,
     usagePercentage,
     usageSpeed,
@@ -63,5 +127,7 @@ function processCpuLogInfo(payload) {
 
 module.exports = {
   router,
+  verifyDeviceIdFormat,
+  processDeviceInfo,
   processCpuLogInfo,
 }

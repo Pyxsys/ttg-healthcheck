@@ -5,67 +5,140 @@ const { setupLogTests, teardownLogTests } = require('./api_common.test')
 
 let cookieSession = ''
 
-const mockPayload = {
-  deviceId: 'B3C2D-C033-7B87-4B31-244BFE931F1E',
-  timestamp: '2021-10-24 09:47:55.966088',
+const cpuMockPayload1 = {
+  deviceId: 'TEST1C2D-C033-7B87-4B31-244BFX931D14',
+  timestamp: new Date(),
   processes: [
-    { name: 'python', pid: 12345 },
-    { name: 'celebid', pid: 12344 },
+    { name: 'python', pid: 12345, cpu_percent: 12.14 },
+    { name: 'celebid', pid: 12344, cpu_percent: 23.66 },
+    { name: 'System Idle Process', pid: 12343, cpu_percent: 64.2 },
+  ],
+}
+const cpuMockPayload2 = {
+  deviceId: 'TEST2C2D-C033-7B87-4B31-244BFX931D14',
+  timestamp: new Date(),
+  processes: [
+    { name: 'python', pid: 12345, cpu_percent: 23.75 },
+    { name: 'celebid', pid: 12344, cpu_percent: 34.29 },
+    { name: 'System Idle Process', pid: 12343, cpu_percent: 41.96 },
+  ],
+}
+const cpuMockPayload3 = {
+  deviceId: 'TEST2C2D-C033-7B87-4B31-244BFX931D14',
+  timestamp: new Date('06-06-2020T12:00:00'),
+  processes: [
+    { name: 'python', pid: 12345, cpu_percent: 10.96 },
+    { name: 'celebid', pid: 12344, cpu_percent: 6.86 },
+    { name: 'System Idle Process', pid: 12343, cpu_percent: 82.19 },
   ],
 }
 
 beforeAll(async () => {
   cookieSession = await setupLogTests()
-  await CPU.CpuLogs.deleteMany() //clear logs
+  await CPU.CpuLogs.deleteMany()
 
-  //add device
-  await request(app).post('/api/daemon').send(mockPayload)
+  //add devices
+  await request(app).post('/api/daemon').send(cpuMockPayload1)
+  await request(app).post('/api/daemon').send(cpuMockPayload2)
+  await request(app).post('/api/daemon').send(cpuMockPayload3)
 })
 
-describe('Check CPU Logs from DB with timestamps', () => {
-  it('Should retrieve the contents of a post to the DB for a specific timestamp', async () => {
-    const cpu =
-      '/api/cpu-logs/timestamp?startTimeStamp=2021-10-24 09:45:55.966088+00:00&endTimeStamp=2021-10-24 09:49:55.966088+00:00'
-    const response = await request(app).get(cpu).set('Cookie', cookieSession)
+describe('Get CPU Logs from DB between timestamps', () => {
+  it('should retrieve 2 CPUs between yesterday and tomorrow with the total usage percentage being 93.84', async () => {
+    const d = new Date()
+    const query = {
+      startTimeStamp: d.setDate(d.getDate() - 1),
+      endTimeStamp: d.setDate(d.getDate() + 1),
+    }
+
+    const response = await request(app)
+      .get('/api/cpu-logs/timestamp')
+      .query(query)
+      .set('Cookie', cookieSession)
+
+    const results = response.body.Results
     expect(response.statusCode).toBe(200)
+    expect(results.length).toBe(2)
+    expect(results[0].usagePercentage + results[1].usagePercentage).toBe(93.84)
   })
 
-  it('Should retrieve the contents of a post to the DB for a specific timestamp and a deviceID', async () => {
-    const cpu =
-      '/api/cpu-logs/timestamp?deviceId=B3C2D-C033-7B87-4B31-244BFE931F1E&startTimeStamp=2021-10-24 09:45:55.966088+00:00&endTimeStamp=2021-10-24 09:49:55.966088+00:00'
-    const response = await request(app).get(cpu).set('Cookie', cookieSession)
+  it('should retrieve no CPUs between 1990 and 1991', async () => {
+    const query = {
+      startTimeStamp: new Date('01-01-1990'),
+      endTimeStamp: new Date('01-01-1991'),
+    }
+
+    const response = await request(app)
+      .get('/api/cpu-logs/timestamp')
+      .query(query)
+      .set('Cookie', cookieSession)
+
     expect(response.statusCode).toBe(200)
+    expect(response.body.Results.length).toBe(0)
   })
 
-  it('Should not retrieve the contents of a post to the DB incorrect information (1 timestamp only)', async () => {
-    const cpu =
-      '/api/cpu-logs/timestamp?startTimeStamp=2021-10-24 09:45:55.966088+00:00'
-    const response = await request(app).get(cpu).set('Cookie', cookieSession)
-    expect(response.statusCode).toBe(500)
+  it('Should retrieve the specified CPU from deviceId between today and yesterday with the usage percentage being 35.8', async () => {
+    const d = new Date()
+    const query = {
+      deviceId: cpuMockPayload1.deviceId,
+      startTimeStamp: d.setDate(d.getDate() - 1),
+      endTimeStamp: d.setDate(d.getDate() + 1),
+    }
+
+    const response = await request(app)
+      .get('/api/cpu-logs/timestamp')
+      .query(query)
+      .set('Cookie', cookieSession)
+
+    const results = response.body.Results
+    expect(response.statusCode).toBe(200)
+    expect(results.length).toBe(1)
+    expect(results[0].usagePercentage).toBe(35.8)
+  })
+
+  it('should not retrieve any CPUs with 1 timestamp only)', async () => {
+    const query = {
+      startTimeStamp: new Date(),
+    }
+
+    const response = await request(app)
+      .get('/api/cpu-logs/timestamp')
+      .query(query)
+      .set('Cookie', cookieSession)
+
+    expect(response.statusCode).toBe(501)
   })
 })
 
-describe('Check CPU Logs from DB with DeviceID', () => {
-  it('Should return error 500', async () => {
-    const cpu = '/api/cpu-logs/specific-device?limit=2'
-    const response = await request(app).get(cpu).set('Cookie', cookieSession)
-    expect(response.statusCode).toBe(500)
+describe('Get CPU Logs from DB with specified attributes', () => {
+  it('should retrieve 2 CPUs with a specified deviceId', async () => {
+    const query = {
+      deviceId: cpuMockPayload2.deviceId,
+    }
+
+    const response = await request(app)
+      .get('/api/cpu-logs')
+      .query(query)
+      .set('Cookie', cookieSession)
+
+    const results = response.body.Results
+    expect(response.statusCode).toBe(200)
+    expect(results.length).toBe(2)
   })
 
-  it('Should save the contents of a post to the DB', async () => {
-    const cpu =
-      '/api/cpu-logs/specific-device?deviceId=B3C2D-C033-7B87-4B31-244BFE931F1E&limit=2'
-    const response = await request(app).get(cpu).set('Cookie', cookieSession)
-    expect(response.statusCode).toBe(200)
-  })
-})
+  it('should retrieve 1 CPU with the specified usagePercentage of 17.82', async () => {
+    const query = {
+      usagePercentage: 17.82,
+    }
 
-describe('Check CPU Logs from DB with specific attributes', () => {
-  it('Should retrieve the contents of a post to the DB for a specific timestamp and a deviceID', async () => {
-    const cpu =
-      '/api/cpu-logs/specific-attribute?usagePercentage=0&usageSpeed=0&numProcesses=0&threadsAlive=1&threadsSleeping=0&uptime=0'
-    const response = await request(app).get(cpu).set('Cookie', cookieSession)
+    const response = await request(app)
+      .get('/api/cpu-logs')
+      .query(query)
+      .set('Cookie', cookieSession)
+
+    const results = response.body.Results
     expect(response.statusCode).toBe(200)
+    expect(results.length).toBe(1)
   })
 })
 

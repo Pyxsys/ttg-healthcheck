@@ -1,4 +1,7 @@
+// 3rd Party
 import React from 'react';
+
+// Custom
 import Navbar from './Navbar';
 
 const Dashboard = () => {

@@ -1,18 +1,15 @@
-import {Button, Form, Container, Col, Row} from 'react-bootstrap';
+// 3rd Party
 import React, {useState} from 'react';
 import {Link, Redirect} from 'react-router-dom';
-import axios from 'axios';
+import {Button, Form, Container, Col, Row} from 'react-bootstrap';
+
+// Custom
 import {useAuth} from '../context/authContext';
+import {notificationService} from '../services/notification.service';
+import {handleIncorrectInput, sendRequest} from './common/inputValidation';
+import '../App.scss';
 
 const Login = () => {
-  interface AxiosResult {
-    message: string
-    user: {
-      name: string
-      role: string
-    }
-  }
-
   const {setUser, setIsAuthenticated} = useAuth();
   const [loggedIn, setLoggedIn] = useState(false);
 
@@ -28,29 +25,24 @@ const Login = () => {
 
   const onSubmit = async (e: React.ChangeEvent<any>) => {
     e.preventDefault();
-    const body = {
-      email: formData.email,
-      password: formData.password,
-    };
-    await axios
-        .post<AxiosResult>('api/user/login', body)
-        .then((response) => {
-          if (response.data) {
-            setUser(response.data.user);
-            setIsAuthenticated(true);
-            setLoggedIn(true);
-          }
-        })
-        .catch((error) => {
-          console.error(error);
-        });
+    if (handleIncorrectInput(formData.email, formData.password, 'login')) {
+      try {
+        const res = await sendRequest(formData.email, formData.password, 'login') as any;
+        if (res.data) {
+          setUser(res.data.user);
+          setIsAuthenticated(true);
+          setLoggedIn(true);
+        }
+      } catch (error) {
+        notificationService.error(
+            'Invalid Email or Password! Either the email or password you have entered is invalid!',
+        );
+      }
+    }
   };
 
   if (loggedIn) {
-    return <Redirect to="/dashboard" />;
-  }
-
-  if (loggedIn) {
+    notificationService.success('Logged in succesfully!');
     return <Redirect to="/dashboard" />;
   }
   return (
@@ -67,16 +59,16 @@ const Login = () => {
             <Col>
               <h1 className="text-center">LOGIN</h1>
               <Row className="mb-4">
-                <Form onSubmit={(e) => onSubmit(e)}>
+                <Form onSubmit={(e: any) => onSubmit(e)}>
                   <Form.Group>
                     <Form.Label className="ml-0 mb-3">Email Address</Form.Label>
                     <Form.Control
                       className="mb-3 email"
                       type="email"
                       placeholder="Email ID"
-                      name="email"
+                      name="email1"
                       value={email}
-                      onChange={(e) => onChange1(e)}
+                      onChange={(e: any) => onChange1(e)}
                     />
                   </Form.Group>
                   <Form.Group>
@@ -85,9 +77,9 @@ const Login = () => {
                       className="mb-3"
                       type="password"
                       placeholder="Password"
-                      name="password"
+                      name="password1"
                       value={password}
-                      onChange={(e) => onChange1(e)}
+                      onChange={(e: any) => onChange1(e)}
                     />
                   </Form.Group>
                   <Button className="w-100 mt-3 login-button" type="submit">

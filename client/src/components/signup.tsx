@@ -1,18 +1,14 @@
+// 3rd Party
 import React, {useState} from 'react';
 import {Link, Redirect} from 'react-router-dom';
-import axios from 'axios';
-import {useAuth} from '../context/authContext';
 import {Button, Col, Container, Form, Row} from 'react-bootstrap';
 
-const Signup = () => {
-  interface AxiosResult {
-    message: string
-    user: {
-      name: string
-      role: string
-    }
-  }
+// Custom
+import {useAuth} from '../context/authContext';
+import {notificationService} from '../services/notification.service';
+import {handleIncorrectInput, sendRequest} from './common/inputValidation';
 
+const Signup = () => {
   const {setUser, setIsAuthenticated} = useAuth();
   const [loggedIn, setLoggedIn] = useState(false);
   const [formData, setFormData] = useState({
@@ -29,39 +25,18 @@ const Signup = () => {
 
   const register = async (e: React.ChangeEvent<any>) => {
     e.preventDefault();
-    if (password === password2) {
-      const newUser = {
-        name,
-        email,
-        password,
-        password2,
-      };
-      try {
-        const config = {
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        };
-        const body = JSON.stringify(newUser);
-        await axios
-            .post<AxiosResult>('/api/user/register', body, config)
-            .then((response) => {
-              if (response.data) {
-                setUser(response.data.user);
-                setIsAuthenticated(true);
-                setLoggedIn(true);
-              }
-            })
-            .catch((error) => {
-              console.error(error);
-            });
-      } catch (err) {
-        console.error(err);
+    if (handleIncorrectInput(email, password, name, password2)) {
+      const res = await sendRequest(email, password, name, password2) as any;
+      if (res.data) {
+        setUser(res.data.user);
+        setIsAuthenticated(true);
+        setLoggedIn(true);
       }
     }
   };
-
   if (loggedIn) {
+    notificationService.success('New account succesfully created!');
+    notificationService.success('Logged in succesfully!');
     return <Redirect to="/dashboard" />;
   }
   return (
@@ -78,7 +53,7 @@ const Signup = () => {
             <Col>
               <h1 className="text-center">SIGNUP</h1>
               <Row className="mb-4">
-                <Form onSubmit={(e) => register(e)}>
+                <Form onSubmit={(e: any) => register(e)}>
                   <Form.Group>
                     <Form.Label className="ml-0 mb-3">Name</Form.Label>
                     <Form.Control
@@ -87,7 +62,7 @@ const Signup = () => {
                       placeholder="Enter name"
                       name="name"
                       value={name}
-                      onChange={(e) => onChange(e)}
+                      onChange={(e: any) => onChange(e)}
                     />
                   </Form.Group>
                   <Form.Group>
@@ -98,7 +73,7 @@ const Signup = () => {
                       placeholder="Enter email"
                       name="email"
                       value={email}
-                      onChange={(e) => onChange(e)}
+                      onChange={(e: any) => onChange(e)}
                     />
                   </Form.Group>
                   <Form.Group>
@@ -109,7 +84,7 @@ const Signup = () => {
                       placeholder="password"
                       name="password"
                       value={password}
-                      onChange={(e) => onChange(e)}
+                      onChange={(e: any) => onChange(e)}
                     />
                   </Form.Group>
                   <Form.Group>
@@ -120,7 +95,7 @@ const Signup = () => {
                       placeholder="password"
                       name="password2"
                       value={password2}
-                      onChange={(e) => onChange(e)}
+                      onChange={(e: any) => onChange(e)}
                     />
                   </Form.Group>
                   <Button className="w-100 mt-3" type="submit">

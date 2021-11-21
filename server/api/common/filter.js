@@ -51,43 +51,57 @@ const numberAttributes = [
   'writeSpeed',
 ]
 
-const filterData = (req) => {
-  let options = {}
-  let query = {}
-  let queryObj = Object(req)
-  for (let k in queryObj) {
-    queryObj[k] = queryObj[k].split(',')
+const filterData = (query) => {
+  const options = {}
+  const queryOutput = {}
+
+  for (let k in query) {
+    query[k] = query[k].split(',')
     if (stringAttributes.includes(k)) {
-      query[String(k)] = queryObj[k]
+      queryOutput[String(k)] = query[k]
     }
     if (numberAttributes.includes(k)) {
-      query[String(k)] = queryObj[k].map(Number)
+      queryOutput[String(k)] = query[k].map(Number)
     }
   }
-  if (query.limit) {
-    options.limit = query.limit
-    delete query.limit
+  if (queryOutput.limit) {
+    options.limit = queryOutput.limit
+    delete queryOutput.limit
   }
-  if (query.orderBy) {
-    var orderBy = query.orderBy
-    delete query.orderBy
-  }
-  if (query.orderValue) {
-    var orderValue = query.orderValue
-    delete query.orderValue
-  }
-  if (orderValue && orderBy) {
+  if (queryOutput.orderBy && queryOutput.orderValue) {
+    const orderBy = queryOutput.orderBy
+    const orderValue = queryOutput.orderValue
     options.sort = {
       [orderBy]: orderValue,
     }
+    delete queryOutput.orderValue
+    delete queryOutput.orderBy
+  } else {
+    options.sort = {
+      timestamp: [-1],
+    }
+
   }
-  return [query, options]
+  return [queryOutput, options]
 }
 
 const validateTimestamp = (start, end) => {
   if (!start || !end) {
-    throw new Error('StartTimeStamp or endTimestamp not found')
+    throw new Error('must include startTimeStamp and endTimestamp')
   }
 }
 
-module.exports = { filterData, validateTimestamp }
+const filterTimestampQuery = (query) => {
+  const [filteredQuery, options] = filterData(query)
+  validateTimestamp(query.startTimeStamp, query.endTimeStamp)
+  const queryOutput = {
+    ...filteredQuery,
+    timestamp: {
+      $gte: String(query.startTimeStamp),
+      $lte: String(query.endTimeStamp),
+    },
+  }
+  return [queryOutput, options]
+}
+
+module.exports = { filterData, validateTimestamp, filterTimestampQuery }
