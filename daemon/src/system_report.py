@@ -91,14 +91,17 @@ class SysReport:
         time.sleep(0.1)
 
         for proc in process_buffer:
-            process_info_dictionary = proc.as_dict(attrs=['name', 'pid', 'status'])
-            process_info_dictionary['cpu_percent']      = round(proc.cpu_percent() / psutil.cpu_count(), 7)
-            process_info_dictionary['memory_percent']   = round(proc.memory_percent(), 7)
-            process_info_dictionary['rss'] = proc.memory_info()[0]
-            process_info_dictionary['vms'] = proc.memory_info()[1]
+            try:
+                process_info_dictionary = proc.as_dict(attrs=['name', 'pid', 'status'])
+                process_info_dictionary['cpu_percent']      = round(proc.cpu_percent() / psutil.cpu_count(), 7)
+                process_info_dictionary['memory_percent']   = round(proc.memory_percent(), 7)
+                process_info_dictionary['rss'] = proc.memory_info()[0]
+                process_info_dictionary['vms'] = proc.memory_info()[1]
 
-            process_list.append(process_info_dictionary)
-
+                process_list.append(process_info_dictionary)
+            except psutil.NoSuchProcess: 
+                continue
+                
         self.set_section("processes", process_list)
 
     def add_timestamp(self):
