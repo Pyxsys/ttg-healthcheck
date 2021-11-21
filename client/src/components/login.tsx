@@ -13,21 +13,25 @@ const Login = () => {
   const {setUser, setIsAuthenticated} = useAuth();
   const [loggedIn, setLoggedIn] = useState(false);
 
-  const [formData, setFormData] = useState({
-    email: '',
-    password: '',
+  const [formData1, setFormData1] = useState({
+    email1: '',
+    password1: '',
   });
 
-  const {email, password} = formData;
+  const {email1, password1} = formData1;
 
   const onChange1 = (e: React.ChangeEvent<any>) =>
-    setFormData({...formData, [e.target.name]: e.target.value});
+    setFormData1({...formData1, [e.target.name]: e.target.value});
 
   const onSubmit = async (e: React.ChangeEvent<any>) => {
     e.preventDefault();
-    if (handleIncorrectInput(formData.email, formData.password, 'login')) {
+    if (handleIncorrectInput(formData1.email1, formData1.password1, 'login')) {
       try {
-        const res = await sendRequest(formData.email, formData.password, 'login') as any;
+        const res = (await sendRequest(
+            formData1.email1,
+            formData1.password1,
+            'login',
+        )) as any;
         if (res.data) {
           setUser(res.data.user);
           setIsAuthenticated(true);
@@ -63,11 +67,11 @@ const Login = () => {
                   <Form.Group>
                     <Form.Label className="ml-0 mb-3">Email Address</Form.Label>
                     <Form.Control
-                      className="mb-3 email"
+                      className="mb-3"
                       type="email"
                       placeholder="Email ID"
                       name="email1"
-                      value={email}
+                      value={email1}
                       onChange={(e: any) => onChange1(e)}
                     />
                   </Form.Group>
@@ -78,11 +82,11 @@ const Login = () => {
                       type="password"
                       placeholder="Password"
                       name="password1"
-                      value={password}
+                      value={password1}
                       onChange={(e: any) => onChange1(e)}
                     />
                   </Form.Group>
-                  <Button className="w-100 mt-3 login-button" type="submit">
+                  <Button className="w-100 mt-3" type="submit">
                     Login
                   </Button>
                   <Link to="/signup">
