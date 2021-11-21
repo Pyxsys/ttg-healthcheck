@@ -92,7 +92,11 @@ class SysReport:
 
         for proc in process_buffer:
             process_info_dictionary = proc.as_dict(attrs=['name', 'pid', 'status'])
-            process_info_dictionary['cpu_percent'] = proc.cpu_percent() / psutil.cpu_count()
+            process_info_dictionary['cpu_percent']      = round(proc.cpu_percent() / psutil.cpu_count(), 7)
+            process_info_dictionary['memory_percent']   = round(proc.memory_percent(), 7)
+            process_info_dictionary['rss'] = proc.memory_info()[0]
+            process_info_dictionary['vms'] = proc.memory_info()[1]
+
             process_list.append(process_info_dictionary)
 
         self.set_section("processes", process_list)
@@ -121,6 +125,13 @@ class SysReport:
         memory_dictionary["maxSize"] = SysReport.fetch_total_memory()
         memory_dictionary["formFactor"] = SysReport.fetch_memory_form_factor()
         self.set_section("memory_", memory_dictionary)
+
+    def add_memory_usage_info(self):
+        tmp_dict = psutil.virtual_memory()._asdict()
+        memory_dictionary = {key: tmp_dict[key] for key in tmp_dict.keys() & {'available', 'used', 'free', 'percent'}}
+
+        self.set_section("memory", memory_dictionary)
+
 
     @classmethod
     def fetch_total_memory(cls):
