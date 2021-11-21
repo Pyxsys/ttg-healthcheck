@@ -102,7 +102,7 @@ router.delete('/delete/:id', auth, async (req, res) => {
     // check admin role
     if (user.role == 'admin') {
       // verify email
-      const user_email = await User.deleteOne({ email: email })
+      await User.deleteOne({ email: email })
       // delete user
       return res.status(200).json({
         message: 'User deleted successfully',
