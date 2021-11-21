@@ -51,6 +51,8 @@ const Login = () => {
   }
   return (
     <>
+      <div className="login-header"></div>
+      <div className="login-form-container"></div>
       <div
         className="align-items-center d-flex
          justify-content-center background-image-login"

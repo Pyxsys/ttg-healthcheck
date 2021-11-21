@@ -1,24 +1,60 @@
 // Set new color palette.
 $primary: #3f4651;
-$secondary: #F8F9FA;
+$secondary: #f8f9fa;
+$third: #373e4a;
+$fourth: #2f3641;
 
 .App {
   text-align: center;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+// Login page
+.login-header {
+  background-color: $third;
+  position: relative;
+  height: 40vh;
+  width: 100%;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
+.login-header:after {
+  border-right: solid 15px transparent;
+  border-left: solid 15px transparent;
+  border-top: solid 15px $third;
+  transform: translateX(-50%);
+  position: absolute;
+  z-index: 1;
+  content: '';
+  top: 100%;
+  left: 50%;
+  height: 0;
+  width: 0;
+}
+
+.login-form-container {
+  background-color: $fourth;
+  position: relative;
+  height: 60vh;
+  width: 100%;
+}
+
+@media screen and (max-width: 950px) {
+  .login-header {
+    height: 25vh;
+  }
+  .login-form-container {
+    height: 75vh;
   }
 }
 
-.increase-roundness{
+.increase-roundness {
   border-radius: 50px;
+}
+
+* {
+  -webkit-transition: all 1s ease;
+  -moz-transition: all 1s ease;
+  -o-transition: all 1s ease;
+  transition: all 1s ease;
 }
 
 .App-header {
@@ -45,7 +81,8 @@ $secondary: #F8F9FA;
   }
 }
 
-html, body {
+html,
+body {
   margin: 0;
   height: 100%;
 }
