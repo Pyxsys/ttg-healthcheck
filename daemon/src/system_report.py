@@ -31,6 +31,7 @@ class Runner:
     def gen_report(self):
         self.init_report()
         self.report.add_system_process_info()
+        self.report.add_memory_usage_info()
     
     #produces startup device report
     def gen_startup_report(self):
