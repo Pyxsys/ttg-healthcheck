@@ -6,7 +6,7 @@ const Device = require('../models/device.js')
 const { CpuLogs } = require('../models/cpu.js')
 const daemonFunctions = require('../api/daemon')
 
-const deviceMockPayload = {
+const mockStartupPayload = {
   deviceId: 'TEST3C2D-C033-7B87-4B31-244BFX931D14',
   name: 'test device',
   description: 'Device used for testing purposes. It is not real',
@@ -19,7 +19,7 @@ const deviceMockPayload = {
   },
 }
 
-const cpuMockPayload = {
+const mockLogPayload = {
   deviceId: 'TEST3C2D-C033-7B87-4B31-244BFX931D14',
   timestamp: '2021-10-24 09:47:55.966088',
   processes: [
@@ -37,7 +37,7 @@ beforeAll(async () => {
 describe('Test helper functions', () => {
   it('Verify good deviceId is of correct format', () => {
     const result = daemonFunctions.verifyDeviceIdFormat(
-      deviceMockPayload.deviceId
+      mockStartupPayload.deviceId
     )
     expect(result).toBe(true)
   })
@@ -50,20 +50,20 @@ describe('Test helper functions', () => {
 })
 
 describe('Test Device formatters', () => {
-  const doc = daemonFunctions.processDeviceInfo(deviceMockPayload)
+  const doc = daemonFunctions.processDeviceInfo(mockStartupPayload)
 
   //process values
   it('Process data is consistent', () => {
-    expect(doc.deviceId).toBe(deviceMockPayload.deviceId)
-    expect(doc.memory.maxSize).toBe(deviceMockPayload.memory_.maxSize)
+    expect(doc.deviceId).toBe(mockStartupPayload.deviceId)
+    expect(doc.memory.maxSize).toBe(mockStartupPayload.memory_.maxSize)
     expect(doc.memory.formFactor[0]).toBe(
-      deviceMockPayload.memory_.formFactor[0]
+      mockStartupPayload.memory_.formFactor[0]
     )
   })
 })
 
 describe('Test CPU log formatter', () => {
-  const doc = daemonFunctions.processCpuLogInfo(cpuMockPayload)
+  const doc = daemonFunctions.processCpuLogInfo(mockLogPayload)
   //computed values
   it('Sum of processes', () => {
     expect(doc.numProcesses).toBe(2)
@@ -83,11 +83,11 @@ describe('Test CPU log formatter', () => {
 
   //process values
   it('Process data is consistent', () => {
-    expect(doc.processes[0].name).toBe(cpuMockPayload.processes[0].name)
-    expect(doc.processes[0].pid).toBe(cpuMockPayload.processes[0].pid)
-    expect(doc.processes[0].status).toBe(cpuMockPayload.processes[0].status)
+    expect(doc.processes[0].name).toBe(mockLogPayload.processes[0].name)
+    expect(doc.processes[0].pid).toBe(mockLogPayload.processes[0].pid)
+    expect(doc.processes[0].status).toBe(mockLogPayload.processes[0].status)
     expect(doc.processes[0].cpu_percent).toBe(
-      cpuMockPayload.processes[0].cpu_percent
+      mockLogPayload.processes[0].cpu_percent
     )
   })
 })
@@ -96,7 +96,7 @@ describe('Save daemon device to DB', () => {
   const devicePath = '/api/daemon/device'
 
   it('should insert the device to the DB', async () => {
-    const response = await request(app).post(devicePath).send(deviceMockPayload)
+    const response = await request(app).post(devicePath).send(mockStartupPayload)
     expect(response.statusCode).toBe(200)
 
     const devices = await Device.find()
@@ -105,7 +105,7 @@ describe('Save daemon device to DB', () => {
   })
 
   it('should update the device in the DB', async () => {
-    const updatedDevice = { ...deviceMockPayload, name: 'another name' }
+    const updatedDevice = { ...mockStartupPayload, name: 'another name' }
     const response = await request(app).post(devicePath).send(updatedDevice)
     expect(response.statusCode).toBe(200)
 
@@ -115,7 +115,7 @@ describe('Save daemon device to DB', () => {
   })
 
   it('should not insert a device with incorrect deviceId to the DB', async () => {
-    const invalidDevice = { ...deviceMockPayload, deviceId: 'invalid' }
+    const invalidDevice = { ...mockStartupPayload, deviceId: 'invalid' }
     const response = await request(app).post(devicePath).send(invalidDevice)
     expect(response.statusCode).toBe(501)
 
@@ -127,7 +127,7 @@ describe('Save daemon device to DB', () => {
 describe('Save daemon payload to DB', () => {
   const logPath = '/api/daemon'
   it('Should save the CPU log to the DB', async () => {
-    const response = await request(app).post(logPath).send(cpuMockPayload)
+    const response = await request(app).post(logPath).send(mockLogPayload)
     expect(response.statusCode).toBe(200)
 
     const cpus = await CpuLogs.find()
@@ -135,7 +135,7 @@ describe('Save daemon payload to DB', () => {
   })
 
   it('Should not insert the CPU Log with incorrect deviceId to the DB', async () => {
-    const invalidCPU = { ...cpuMockPayload, deviceId: 'invalid' }
+    const invalidCPU = { ...mockLogPayload, deviceId: 'invalid' }
     const response = await request(app).post(logPath).send(invalidCPU)
     expect(response.statusCode).toBe(501)
 
