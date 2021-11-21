@@ -1,7 +1,7 @@
 // 3rd Party
 import React, {useState} from 'react';
 import {Link, Redirect} from 'react-router-dom';
-import {Button, Form, Container, Col, Row} from 'react-bootstrap';
+import {Button, Form, Container, Row} from 'react-bootstrap';
 
 // Custom
 import {useAuth} from '../context/authContext';
@@ -56,45 +56,50 @@ const Login = () => {
          justify-content-center background-image-login"
       >
         <Container
-          className="w-25 border increase-roundness rounded-lg d-flex
-          justify-content-center bg-secondary"
+          style={{width: 'fit-content'}}
+          className="border increase-roundness rounded-lg
+          justify-content-center bg-secondary d-flex"
         >
-          <Row className="w-75 mb-5 mt-5">
-            <Col>
-              <h1 className="text-center">LOGIN</h1>
-              <Row className="mb-4">
-                <Form onSubmit={(e: any) => onSubmit(e)}>
-                  <Form.Group>
-                    <Form.Label className="ml-0 mb-3">Email Address</Form.Label>
-                    <Form.Control
-                      className="mb-3"
-                      type="email"
-                      placeholder="Email ID"
-                      name="email1"
-                      value={email1}
-                      onChange={(e: any) => onChange1(e)}
-                    />
-                  </Form.Group>
-                  <Form.Group>
-                    <Form.Label className="mb-3">Password</Form.Label>
-                    <Form.Control
-                      className="mb-3"
-                      type="password"
-                      placeholder="Password"
-                      name="password1"
-                      value={password1}
-                      onChange={(e: any) => onChange1(e)}
-                    />
-                  </Form.Group>
-                  <Button className="w-100 mt-3" type="submit">
-                    Login
-                  </Button>
-                  <Link to="/signup">
-                    <Button className="w-100 mt-3">Signup</Button>
-                  </Link>
-                </Form>
-              </Row>
-            </Col>
+          <Row className="mb-5 mt-5">
+            <div className="col d-flex px-5">
+              <div className="flex-col">
+                <h1 className="text-center">LOGIN</h1>
+                <Row className="mb-4">
+                  <Form onSubmit={(e: any) => onSubmit(e)}>
+                    <Form.Group>
+                      <Form.Label className="ml-0 mb-3">
+                        Email Address
+                      </Form.Label>
+                      <Form.Control
+                        className="mb-3 input-lg"
+                        type="email"
+                        placeholder="Email ID"
+                        name="email1"
+                        value={email1}
+                        onChange={(e: any) => onChange1(e)}
+                      />
+                    </Form.Group>
+                    <Form.Group>
+                      <Form.Label className="mb-3">Password</Form.Label>
+                      <Form.Control
+                        className="mb-3"
+                        type="password"
+                        placeholder="Password"
+                        name="password1"
+                        value={password1}
+                        onChange={(e: any) => onChange1(e)}
+                      />
+                    </Form.Group>
+                    <Button className="w-100 mt-3" type="submit">
+                      Login
+                    </Button>
+                    <Link to="/signup">
+                      <Button className="bt-lg w-100 mt-3">Signup</Button>
+                    </Link>
+                  </Form>
+                </Row>
+              </div>
+            </div>
           </Row>
         </Container>
       </div>

@@ -80,7 +80,6 @@ const filterData = (query) => {
     options.sort = {
       timestamp: [-1],
     }
-
   }
   return [queryOutput, options]
 }

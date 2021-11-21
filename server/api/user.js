@@ -96,14 +96,12 @@ router.get('/logout', auth, (req, res) => {
 
 router.post('/delete', async (req, res) => {
   try {
-    const { email} = req.body
+    const { email } = req.body
     // Verify email
     const user = await User.deleteOne({ email: email })
-    return res
-      .status(200)
-      .json({
-        message: 'User deleted successfully',
-      })
+    return res.status(200).json({
+      message: 'User deleted successfully',
+    })
   } catch (err) {
     res.status(500).send('Server error')
   }

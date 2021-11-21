@@ -1,7 +1,12 @@
 const request = require('supertest')
 const app = require('../app')
 const memory = require('../models/memory.js')
-const { setupLogTests, teardownLogTests, failureTimestampLogTest, successTimestampLogTest } = require('./api_common.test')
+const {
+  setupLogTests,
+  teardownLogTests,
+  failureTimestampLogTest,
+  successTimestampLogTest,
+} = require('./api_common.test')
 
 let cookieSession = ''
 
