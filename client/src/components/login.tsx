@@ -54,11 +54,11 @@ const Login = () => {
     <>
       <div className="home-header-container">
         <div className="home-logo"></div>
-        <div className="home-header-subtitle">
-          Dear user, log in to manage pi devices!
-        </div>
       </div>
       <div className="home-form-container">
+        <div className="mb-4 home-header-subtitle">
+          Log in to launch your dashboard
+        </div>
         <div className="home-form">
           <Form onSubmit={(e: any) => onSubmit(e)}>
             <Form.Group>

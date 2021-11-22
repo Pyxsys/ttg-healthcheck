@@ -44,9 +44,6 @@ const Signup = () => {
     <>
       <div className="home-header-container">
         <div className="home-logo"></div>
-        <div className="home-header-subtitle">
-          Maintain your Pi devices with confidence.
-        </div>
       </div>
       <div className="home-form-container">
         <div className="home-form">

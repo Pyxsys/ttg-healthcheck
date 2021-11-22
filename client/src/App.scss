@@ -1,9 +1,8 @@
 // Set new color palette.
-$primary: #3f4651;
+$primary: #393f49;
 $secondary: #f8f9fa;
-$third: #373e4a;
-$fourth: #2f3641;
-$fifth: #949494;
+$third: #b1b1b1;
+$fourth: #30353d;
 
 html,
 body {
@@ -13,7 +12,7 @@ body {
 
 // home pages (login,register)
 .home-header-container {
-  background-color: $third;
+  background-color: $primary;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -27,7 +26,7 @@ body {
 .home-header-container:after {
   border-right: solid 15px transparent;
   border-left: solid 15px transparent;
-  border-top: solid 15px $third;
+  border-top: solid 15px $primary;
   transform: translateX(-50%);
   position: absolute;
   z-index: 1;
@@ -49,7 +48,8 @@ body {
 }
 
 .home-header-subtitle {
-  color: $fifth;
+  opacity: 80%;
+  color: $secondary;
   font-size: 14px;
 }
 
@@ -60,7 +60,7 @@ body {
   flex-direction: column;
   height: 60vh;
   width: 100%;
-  padding-top: 100px;
+  padding-top: 80px;
 }
 
 @media screen and (max-width: 950px) {
@@ -107,13 +107,12 @@ body {
   padding: 12px !important;
   font-weight: 500 !important;
   font-size: 15px !important;
-  opacity: 80%;
-  border: 1px solid $fifth !important;
+  border: 1px solid #b1b1b1ab !important;
   background-color: $fourth !important;
 }
 
 .home-button:hover {
-  background-color: $third !important;
+  background-color: $primary !important;
 }
 //
 .increase-roundness {
