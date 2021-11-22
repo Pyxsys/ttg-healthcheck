@@ -3,20 +3,23 @@ $primary: #3f4651;
 $secondary: #f8f9fa;
 $third: #373e4a;
 $fourth: #2f3641;
+$fifth: #949494;
 
-.App {
-  text-align: center;
+html,
+body {
+  margin: 0;
+  height: 100%;
 }
 
 // Login page
-.login-header {
+.login-header-container {
   background-color: $third;
   position: relative;
   height: 40vh;
   width: 100%;
 }
 
-.login-header:after {
+.login-header-container:after {
   border-right: solid 15px transparent;
   border-left: solid 15px transparent;
   border-top: solid 15px $third;
@@ -30,6 +33,26 @@ $fourth: #2f3641;
   width: 0;
 }
 
+.login-header-title {
+  color: $secondary;
+  font-weight: 600;
+  font-size: 40px;
+  letter-spacing: 1px;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.login-header-subtitle {
+  color: $fifth;
+  font-size: 13px;
+  position: absolute;
+  left: 50%;
+  top: 65%;
+  transform: translate(-50%, -50%);
+}
+
 .login-form-container {
   background-color: $fourth;
   position: relative;
@@ -38,7 +61,7 @@ $fourth: #2f3641;
 }
 
 @media screen and (max-width: 950px) {
-  .login-header {
+  .login-header-container {
     height: 25vh;
   }
   .login-form-container {
@@ -46,15 +69,38 @@ $fourth: #2f3641;
   }
 }
 
-.increase-roundness {
-  border-radius: 50px;
-}
-
-* {
+.login-header-container {
   -webkit-transition: all 1s ease;
   -moz-transition: all 1s ease;
   -o-transition: all 1s ease;
   transition: all 1s ease;
+}
+
+.login-form-container {
+  -webkit-transition: all 1s ease;
+  -moz-transition: all 1s ease;
+  -o-transition: all 1s ease;
+  transition: all 1s ease;
+}
+
+.login-form {
+  width: 330px;
+  position: absolute;
+  left: 50%;
+  top: 35%;
+  transform: translate(-50%, -50%);
+}
+
+.login-space-input {
+  margin-bottom: 15px !important;
+}
+
+.login-input-size {
+  padding: 12px !important;
+}
+
+.increase-roundness {
+  border-radius: 50px;
 }
 
 .App-header {
@@ -79,12 +125,6 @@ $fourth: #2f3641;
   to {
     transform: rotate(360deg);
   }
-}
-
-html,
-body {
-  margin: 0;
-  height: 100%;
 }
 
 /* Position and sizing of burger button */

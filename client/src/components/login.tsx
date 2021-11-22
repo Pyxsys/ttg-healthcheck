@@ -1,7 +1,7 @@
 // 3rd Party
 import React, {useState} from 'react';
 import {Link, Redirect} from 'react-router-dom';
-import {Button, Form, Container, Row} from 'react-bootstrap';
+import {Button, Form, InputGroup} from 'react-bootstrap';
 
 // Custom
 import {useAuth} from '../context/authContext';
@@ -51,59 +51,51 @@ const Login = () => {
   }
   return (
     <>
-      <div className="login-header"></div>
-      <div className="login-form-container"></div>
-      <div
-        className="align-items-center d-flex
-         justify-content-center background-image-login"
-      >
-        <Container
-          style={{width: 'fit-content'}}
-          className="border increase-roundness rounded-lg
-          justify-content-center bg-secondary d-flex"
-        >
-          <Row className="mb-5 mt-5">
-            <div className="col d-flex px-5">
-              <div className="flex-col">
-                <h1 className="text-center">LOGIN</h1>
-                <Row className="mb-4">
-                  <Form onSubmit={(e: any) => onSubmit(e)}>
-                    <Form.Group>
-                      <Form.Label className="ml-0 mb-3">
-                        Email Address
-                      </Form.Label>
-                      <Form.Control
-                        className="mb-3 input-lg"
-                        type="email"
-                        placeholder="Email ID"
-                        name="email1"
-                        value={email1}
-                        onChange={(e: any) => onChange1(e)}
-                      />
-                    </Form.Group>
-                    <Form.Group>
-                      <Form.Label className="mb-3">Password</Form.Label>
-                      <Form.Control
-                        className="mb-3"
-                        type="password"
-                        placeholder="Password"
-                        name="password1"
-                        value={password1}
-                        onChange={(e: any) => onChange1(e)}
-                      />
-                    </Form.Group>
-                    <Button className="w-100 mt-3" type="submit">
-                      Login
-                    </Button>
-                    <Link to="/signup">
-                      <Button className="bt-lg w-100 mt-3">Signup</Button>
-                    </Link>
-                  </Form>
-                </Row>
-              </div>
-            </div>
-          </Row>
-        </Container>
+      <div className="login-header-container">
+        <div className="login-header-title">PI-HEALTH</div>
+        <div className="login-header-subtitle">
+          Dear user, log in to manage pi devices!
+        </div>
+      </div>
+      <div className="login-form-container">
+        <div className="login-form">
+          <Form onSubmit={(e: any) => onSubmit(e)}>
+            <Form.Group className="login-space-input">
+              <InputGroup className="mb-2">
+                <InputGroup.Text>@</InputGroup.Text>
+                <Form.Control
+                  size="sm"
+                  className="login-input-size"
+                  type="email"
+                  placeholder="Email"
+                  name="email1"
+                  value={email1}
+                  onChange={(e: any) => onChange1(e)}
+                />
+              </InputGroup>
+            </Form.Group>
+            <Form.Group>
+              <InputGroup className="mb-2">
+                <InputGroup.Text>@</InputGroup.Text>
+                <Form.Control
+                  size="sm"
+                  className="login-input-size"
+                  type="password"
+                  placeholder="Password"
+                  name="password1"
+                  value={password1}
+                  onChange={(e: any) => onChange1(e)}
+                />
+              </InputGroup>
+            </Form.Group>
+            <Button className="w-100 mt-3 login-input-size" type="submit">
+              Login
+            </Button>
+            <Link to="/signup">
+              <Button className="w-100 mt-3 login-input-size">Signup</Button>
+            </Link>
+          </Form>
+        </div>
       </div>
     </>
   );
