@@ -14,7 +14,12 @@ body {
 // Login page
 .login-header-container {
   background-color: $third;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
   position: relative;
+  gap: 14px;
   height: 40vh;
   width: 100%;
 }
@@ -34,42 +39,37 @@ body {
 }
 
 .logo-container {
-  width: 330px;
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
+  @media (min-width: 280px) {
+    width: 90%;
+  }
+  @media (min-width: 376px) {
+    width: 330px;
+  }
 }
 
 .login-logo {
-  content: url('assets/brains.png');
-  float: left;
-  width: 85px;
-  height: 85px;
-}
-
-.login-header-title {
-  float: left;
-  color: $secondary;
-  font-weight: 600;
-  font-size: 43px;
-  letter-spacing: 0px;
+  content: url('assets/brainlogo.png');
+  @media (min-width: 280px) {
+    width: 90%;
+  }
+  @media (min-width: 376px) {
+    width: 330px;
+  }
 }
 
 .login-header-subtitle {
   color: $fifth;
-  font-size: 13px;
-  position: absolute;
-  left: 50%;
-  top: 72%;
-  transform: translate(-50%, -50%);
+  font-size: 14px;
 }
 
 .login-form-container {
   background-color: $fourth;
-  position: relative;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
   height: 60vh;
   width: 100%;
+  padding-top: 100px;
 }
 
 @media screen and (max-width: 950px) {
@@ -96,22 +96,28 @@ body {
 }
 
 .login-form {
-  width: 330px;
-  position: absolute;
-  left: 50%;
-  top: 35%;
-  transform: translate(-50%, -50%);
+  @media (min-width: 280px) {
+    width: 90%;
+  }
+  @media (min-width: 376px) {
+    width: 330px;
+  }
 }
 
-.login-space-input {
+.login-form-spacing {
   margin-bottom: 15px !important;
 }
 
-.login-input-size {
-  padding: 12px !important;
+.login-input {
+  padding: 13px !important;
+  border: none !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  -webkit-box-shadow: none !important;
 }
 
-.login-button-color {
+.login-button {
+  padding: 12px !important;
   font-weight: 500 !important;
   font-size: 15px !important;
   opacity: 80%;
@@ -119,10 +125,10 @@ body {
   background-color: $fourth !important;
 }
 
-.login-button-color:hover {
+.login-button:hover {
   background-color: $third !important;
 }
-
+//
 .increase-roundness {
   border-radius: 50px;
 }
