@@ -54,7 +54,10 @@ const Login = () => {
   return (
     <>
       <div className="login-header-container">
-        <div className="login-header-title">PI-HEALTH</div>
+        <div className="logo-container">
+          <div className="login-logo"></div>
+          <div className="login-header-title">Cerebellum</div>
+        </div>
         <div className="login-header-subtitle">
           Dear user, log in to manage pi devices!
         </div>
