@@ -2,8 +2,7 @@
 import React, {useState} from 'react';
 import {Link, Redirect} from 'react-router-dom';
 import {Button, Form, InputGroup} from 'react-bootstrap';
-import {FaUserAlt} from 'react-icons/fa';
-import {FaKey} from 'react-icons/fa';
+import {FaUserAlt, FaKey} from 'react-icons/fa';
 
 // Custom
 import {useAuth} from '../context/authContext';
@@ -53,25 +52,23 @@ const Login = () => {
   }
   return (
     <>
-      <div className="login-header-container">
-        <div className="logo-container">
-          <div className="login-logo"></div>
-        </div>
-        <div className="login-header-subtitle">
+      <div className="home-header-container">
+        <div className="home-logo"></div>
+        <div className="home-header-subtitle">
           Dear user, log in to manage pi devices!
         </div>
       </div>
-      <div className="login-form-container">
-        <div className="login-form">
+      <div className="home-form-container">
+        <div className="home-form">
           <Form onSubmit={(e: any) => onSubmit(e)}>
-            <Form.Group className="login-form-spacing">
-              <InputGroup className="mb-2">
+            <Form.Group>
+              <InputGroup>
                 <InputGroup.Text>
                   <FaUserAlt />
                 </InputGroup.Text>
                 <Form.Control
                   size="sm"
-                  className="login-input"
+                  className="home-input"
                   type="email"
                   placeholder="Email"
                   name="email1"
@@ -80,14 +77,14 @@ const Login = () => {
                 />
               </InputGroup>
             </Form.Group>
-            <Form.Group>
-              <InputGroup className="mb-2">
+            <Form.Group className="mt-3">
+              <InputGroup>
                 <InputGroup.Text>
                   <FaKey />
                 </InputGroup.Text>
                 <Form.Control
                   size="sm"
-                  className="login-input"
+                  className="home-input"
                   type="password"
                   placeholder="Password"
                   name="password1"
@@ -96,11 +93,11 @@ const Login = () => {
                 />
               </InputGroup>
             </Form.Group>
-            <Button className="w-100 mt-3 login-button" type="submit">
+            <Button className="w-100 mt-3 home-button" type="submit">
               Login
             </Button>
             <Link to="/signup">
-              <Button className="w-100 mt-3 login-button">Signup</Button>
+              <Button className="w-100 mt-3 home-button">Register</Button>
             </Link>
           </Form>
         </div>

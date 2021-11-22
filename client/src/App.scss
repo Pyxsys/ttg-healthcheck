@@ -11,8 +11,8 @@ body {
   height: 100%;
 }
 
-// Login page
-.login-header-container {
+// home pages (login,register)
+.home-header-container {
   background-color: $third;
   display: flex;
   align-items: center;
@@ -24,7 +24,7 @@ body {
   width: 100%;
 }
 
-.login-header-container:after {
+.home-header-container:after {
   border-right: solid 15px transparent;
   border-left: solid 15px transparent;
   border-top: solid 15px $third;
@@ -38,16 +38,7 @@ body {
   width: 0;
 }
 
-.logo-container {
-  @media (min-width: 280px) {
-    width: 90%;
-  }
-  @media (min-width: 376px) {
-    width: 330px;
-  }
-}
-
-.login-logo {
+.home-logo {
   content: url('assets/brainlogo.png');
   @media (min-width: 280px) {
     width: 90%;
@@ -57,12 +48,12 @@ body {
   }
 }
 
-.login-header-subtitle {
+.home-header-subtitle {
   color: $fifth;
   font-size: 14px;
 }
 
-.login-form-container {
+.home-form-container {
   background-color: $fourth;
   display: flex;
   align-items: center;
@@ -73,29 +64,29 @@ body {
 }
 
 @media screen and (max-width: 950px) {
-  .login-header-container {
+  .home-header-container {
     height: 25vh;
   }
-  .login-form-container {
+  .home-form-container {
     height: 75vh;
   }
 }
 
-.login-header-container {
+.home-header-container {
   -webkit-transition: all 0.5s ease;
   -moz-transition: all 0.5s ease;
   -o-transition: all 0.5s ease;
   transition: all 0.5s ease;
 }
 
-.login-form-container {
+.home-form-container {
   -webkit-transition: all 0.5s ease;
   -moz-transition: all 0.5s ease;
   -o-transition: all 0.5s ease;
   transition: all 0.5s ease;
 }
 
-.login-form {
+.home-form {
   @media (min-width: 280px) {
     width: 90%;
   }
@@ -104,11 +95,7 @@ body {
   }
 }
 
-.login-form-spacing {
-  margin-bottom: 15px !important;
-}
-
-.login-input {
+.home-input {
   padding: 13px !important;
   border: none !important;
   border-radius: 0 !important;
@@ -116,7 +103,7 @@ body {
   -webkit-box-shadow: none !important;
 }
 
-.login-button {
+.home-button {
   padding: 12px !important;
   font-weight: 500 !important;
   font-size: 15px !important;
@@ -125,36 +112,12 @@ body {
   background-color: $fourth !important;
 }
 
-.login-button:hover {
+.home-button:hover {
   background-color: $third !important;
 }
 //
 .increase-roundness {
   border-radius: 50px;
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
-}
-
-.App-link {
-  color: #61dafb;
-}
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
 }
 
 /* Position and sizing of burger button */
