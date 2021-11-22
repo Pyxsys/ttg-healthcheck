@@ -2,6 +2,8 @@
 import React, {useState} from 'react';
 import {Link, Redirect} from 'react-router-dom';
 import {Button, Form, InputGroup} from 'react-bootstrap';
+import {FaUserAlt} from 'react-icons/fa';
+import {FaKey} from 'react-icons/fa';
 
 // Custom
 import {useAuth} from '../context/authContext';
@@ -62,7 +64,9 @@ const Login = () => {
           <Form onSubmit={(e: any) => onSubmit(e)}>
             <Form.Group className="login-space-input">
               <InputGroup className="mb-2">
-                <InputGroup.Text>@</InputGroup.Text>
+                <InputGroup.Text>
+                  <FaUserAlt />
+                </InputGroup.Text>
                 <Form.Control
                   size="sm"
                   className="login-input-size"
@@ -76,7 +80,9 @@ const Login = () => {
             </Form.Group>
             <Form.Group>
               <InputGroup className="mb-2">
-                <InputGroup.Text>@</InputGroup.Text>
+                <InputGroup.Text>
+                  <FaKey />
+                </InputGroup.Text>
                 <Form.Control
                   size="sm"
                   className="login-input-size"
@@ -88,11 +94,16 @@ const Login = () => {
                 />
               </InputGroup>
             </Form.Group>
-            <Button className="w-100 mt-3 login-input-size" type="submit">
+            <Button
+              className="w-100 mt-3 login-input-size login-button-color"
+              type="submit"
+            >
               Login
             </Button>
             <Link to="/signup">
-              <Button className="w-100 mt-3 login-input-size">Signup</Button>
+              <Button className="w-100 mt-3 login-input-size login-button-color">
+                Signup
+              </Button>
             </Link>
           </Form>
         </div>

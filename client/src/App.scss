@@ -37,7 +37,7 @@ body {
   color: $secondary;
   font-weight: 600;
   font-size: 40px;
-  letter-spacing: 1px;
+  letter-spacing: 0.5px;
   position: absolute;
   left: 50%;
   top: 50%;
@@ -97,6 +97,18 @@ body {
 
 .login-input-size {
   padding: 12px !important;
+}
+
+.login-button-color {
+  font-weight: 500 !important;
+  font-size: 15px !important;
+  opacity: 80%;
+  border: 1px solid $fifth !important;
+  background-color: $fourth !important;
+}
+
+.login-button-color:hover {
+  background-color: $third !important;
 }
 
 .increase-roundness {
