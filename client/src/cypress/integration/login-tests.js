@@ -19,7 +19,7 @@ describe('Test 1: See if certain headers and labels and buttons are visible.', (
     // Assert that the following writing can be seen by the user.
     cy.contains('LOGIN').should('be.visible');
   });
-  it('Test 1.3: Check to see if the Label \'Email Address\' is visible in the application', () => {
+  it('Test 1.2: Check to see if the Label \'Email Address\' is visible in the application', () => {
     // Go to login page
     cy.visit('/');
 
