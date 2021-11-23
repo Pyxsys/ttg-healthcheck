@@ -4,6 +4,7 @@ const app = require('../app')
 const mongoose = require('mongoose')
 const Device = require('../models/device.js')
 const { CpuLogs } = require('../models/cpu.js')
+const { MemoryLogs } = require('../models/memory')
 const daemonFunctions = require('../api/daemon')
 
 const mockStartupPayload = {
@@ -23,15 +24,38 @@ const mockLogPayload = {
   deviceId: 'TEST3C2D-C033-7B87-4B31-244BFX931D14',
   timestamp: '2021-10-24 09:47:55.966088',
   processes: [
-    { name: 'python', pid: 12345, status: 'running', cpu_percent: 1.768 },
-    { name: 'celebid', pid: 12344, status: 'idle', cpu_percent: 0.462 },
+    {
+      name: 'python',
+      pid: 12345,
+      status: 'running',
+      cpu_percent: 1.768,
+      memory_percent: 2.65,
+      rss: 25313280,
+      vms: 10844561,
+    },
+    {
+      name: 'celebid',
+      pid: 12344,
+      status: 'idle',
+      cpu_percent: 0.462,
+      memory_percent: 7.32,
+      rss: 25319245,
+      vms: 17502208,
+    },
   ],
+  memory: {
+    available: 25166790656,
+    free: 25166790656,
+    used: 9103147008,
+    percent: 26.6,
+  },
 }
 
 beforeAll(async () => {
   await connectDB() // connect to local_db
   await Device.deleteMany() //clear devices
   await CpuLogs.deleteMany() //clear logs
+  await MemoryLogs.deleteMany()
 })
 
 describe('Test helper functions', () => {
@@ -92,11 +116,21 @@ describe('Test CPU log formatter', () => {
   })
 })
 
+describe('Test Memory log formatter', () => {
+  const doc = daemonFunctions.processMemoryLogInfo(mockLogPayload)
+
+  it('Sum of Cache memory', () => {
+    expect(doc.cached).toBe(28346769)
+  })
+})
+
 describe('Save daemon device to DB', () => {
   const devicePath = '/api/daemon/device'
 
   it('should insert the device to the DB', async () => {
-    const response = await request(app).post(devicePath).send(mockStartupPayload)
+    const response = await request(app)
+      .post(devicePath)
+      .send(mockStartupPayload)
     expect(response.statusCode).toBe(200)
 
     const devices = await Device.find()
@@ -126,21 +160,35 @@ describe('Save daemon device to DB', () => {
 
 describe('Save daemon payload to DB', () => {
   const logPath = '/api/daemon'
+  const invalidIDLog = { ...mockLogPayload, deviceId: 'invalid' }
+
+  afterEach(async () => {
+    await CpuLogs.deleteMany()
+    await MemoryLogs.deleteMany()
+  })
+
   it('Should save the CPU log to the DB', async () => {
-    const response = await request(app).post(logPath).send(mockLogPayload)
-    expect(response.statusCode).toBe(200)
+    const response_good = await request(app).post(logPath).send(mockLogPayload)
+    expect(response_good.statusCode).toBe(200)
 
     const cpus = await CpuLogs.find()
     expect(cpus.length).toBe(1)
   })
 
-  it('Should not insert the CPU Log with incorrect deviceId to the DB', async () => {
-    const invalidCPU = { ...mockLogPayload, deviceId: 'invalid' }
-    const response = await request(app).post(logPath).send(invalidCPU)
-    expect(response.statusCode).toBe(501)
+  it('Should not insert the Log with incorrect deviceId to the DB', async () => {
+    const response_bad = await request(app).post(logPath).send(invalidIDLog)
+    expect(response_bad.statusCode).toBe(501)
 
     const cpus = await CpuLogs.find()
-    expect(cpus.length).toBe(1)
+    expect(cpus.length).toBe(0)
+  })
+
+  it('Should save the Memory log to the DB', async () => {
+    const response_good = await request(app).post(logPath).send(mockLogPayload)
+    expect(response_good.statusCode).toBe(200)
+
+    const mems = await MemoryLogs.find()
+    expect(mems.length).toBe(1)
   })
 })
 
