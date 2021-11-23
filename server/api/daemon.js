@@ -2,7 +2,7 @@ const express = require('express')
 const router = express.Router()
 const { CpuLogs } = require('../models/cpu.js')
 const Device = require('../models/device.js')
-const wifi = require('../models/wifi.js')
+const wifiModel = require('../models/wifi.js')
 
 // receive device report from daemon
 router.post('/device', async (req, res) => {
@@ -137,7 +137,7 @@ const processWifiLogInfo = (payload) => {
   const receiveSpeed = network[1]
   const signalStrength = 0
 
-  return new wifi.WifiLogs({
+  return new wifiModel.WifiLogs({
     deviceId,
     sendSpeed,
     receiveSpeed,
