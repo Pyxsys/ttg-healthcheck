@@ -1,5 +1,4 @@
 const mongoose = require('mongoose')
-const { ProcessSchema, Processes } = require('./process')
 
 const CpuSchema = new mongoose.Schema({
   baseSpeed: {
@@ -25,11 +24,7 @@ const CpuSchema = new mongoose.Schema({
   },
 })
 
-const CpuLogsSchema = new mongoose.Schema({
-  deviceId: {
-    type: String,
-    required: true,
-  },
+const CpuProcessSchema = new mongoose.Schema({
   usagePercentage: {
     type: Number,
   },
@@ -48,16 +43,9 @@ const CpuLogsSchema = new mongoose.Schema({
   uptime: {
     type: Number,
   },
-  timestamp: {
-    type: Date,
-  },
-  processes: [ProcessSchema],
 })
-
-const CpuLogs = mongoose.model('cpu_logs', CpuLogsSchema)
 
 module.exports = {
   CpuSchema: CpuSchema,
-  CpuLogsSchema: CpuLogsSchema,
-  CpuLogs: CpuLogs,
+  CpuProcessSchema: CpuProcessSchema,
 }

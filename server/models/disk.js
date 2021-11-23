@@ -9,11 +9,7 @@ const DiskSchema = new mongoose.Schema({
   },
 })
 
-const DiskLogsSchema = new mongoose.Schema({
-  deviceId: {
-    type: String,
-    required: true,
-  },
+const DiskProcessSchema = new mongoose.Schema({
   activeTimePercent: {
     type: Number,
   },
@@ -26,15 +22,9 @@ const DiskLogsSchema = new mongoose.Schema({
   writeSpeed: {
     type: Number,
   },
-  timestamp: {
-    type: Date,
-  },
 })
-
-const DiskLogs = mongoose.model('disk_logs', DiskLogsSchema)
 
 module.exports = {
   DiskSchema: DiskSchema,
-  DiskLogsSchema: DiskLogsSchema,
-  DiskLogs: DiskLogs,
+  DiskProcessSchema: DiskProcessSchema,
 }

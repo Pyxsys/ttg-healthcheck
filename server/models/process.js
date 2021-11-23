@@ -1,4 +1,8 @@
 const mongoose = require('mongoose')
+const { CpuProcessSchema } = require('./cpu')
+const { DiskProcessSchema } = require('./disk')
+const { MemoryProcessSchema } = require('./memory')
+const { WifiProcessSchema } = require('./wifi')
 
 const ProcessSchema = new mongoose.Schema({
   name: {
@@ -10,9 +14,10 @@ const ProcessSchema = new mongoose.Schema({
   status: {
     type: String,
   },
-  cpu_percent: {
-    type: Number,
-  },
+  cpu: CpuProcessSchema,
+  memory: MemoryProcessSchema,
+  disk: DiskProcessSchema,
+  wifi: WifiProcessSchema,
 })
 
 module.exports = {

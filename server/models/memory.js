@@ -11,11 +11,7 @@ const MemorySchema = new mongoose.Schema({
   ],
 })
 
-const MemoryLogsSchema = new mongoose.Schema({
-  deviceId: {
-    type: String,
-    required: true,
-  },
+const MemoryProcessSchema = new mongoose.Schema({
   usagePercentage: {
     type: Number,
   },
@@ -28,21 +24,9 @@ const MemoryLogsSchema = new mongoose.Schema({
   cached: {
     type: Number,
   },
-  pagedPool: {
-    type: Number,
-  },
-  nonPagedPool: {
-    type: Number,
-  },
-  timestamp: {
-    type: Date,
-  },
 })
-
-const MemoryLogs = mongoose.model('memory_logs', MemoryLogsSchema)
 
 module.exports = {
   MemorySchema: MemorySchema,
-  MemoryLogsSchema: MemoryLogsSchema,
-  MemoryLogs: MemoryLogs,
+  MemoryProcessSchema: MemoryProcessSchema,
 }

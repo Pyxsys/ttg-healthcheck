@@ -18,11 +18,7 @@ const WifiSchema = new mongoose.Schema({
   },
 })
 
-const WifiLogsSchema = new mongoose.Schema({
-  deviceId: {
-    type: String,
-    required: true,
-  },
+const WifiProcessSchema = new mongoose.Schema({
   sendSpeed: {
     type: Number,
   },
@@ -32,15 +28,9 @@ const WifiLogsSchema = new mongoose.Schema({
   signalStrength: {
     type: String,
   },
-  timestamp: {
-    type: Date,
-  },
 })
-
-const WifiLogs = mongoose.model('wifi_logs', WifiLogsSchema)
 
 module.exports = {
   WifiSchema: WifiSchema,
-  WifiLogsSchema: WifiLogsSchema,
-  WifiLogs: WifiLogs,
+  WifiProcessSchema: WifiProcessSchema,
 }
