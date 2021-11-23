@@ -8,6 +8,7 @@ html,
 body {
   margin: 0;
   height: 100%;
+  width: 100%;
 }
 
 // home pages (login,register)
@@ -19,7 +20,7 @@ body {
   flex-direction: column;
   position: relative;
   gap: 14px;
-  height: 40vh;
+  height: 40%;
   width: 100%;
 }
 
@@ -58,17 +59,17 @@ body {
   display: flex;
   align-items: center;
   flex-direction: column;
-  height: 60vh;
+  height: 60%;
   width: 100%;
-  padding-top: 80px;
+  padding-top: 65px;
 }
 
 @media screen and (max-width: 950px) {
   .home-header-container {
-    height: 25vh;
+    height: 25%;
   }
   .home-form-container {
-    height: 75vh;
+    height: 75%;
   }
 }
 
@@ -96,7 +97,12 @@ body {
 }
 
 .home-input {
-  padding: 13px !important;
+  @media (min-width: 280px) {
+    padding: 11px !important;
+  }
+  @media (min-width: 376px) {
+    padding: 12.5px !important;
+  }
   border: none !important;
   border-radius: 0 !important;
   box-shadow: none !important;
@@ -104,7 +110,12 @@ body {
 }
 
 .home-button {
-  padding: 12px !important;
+  @media (min-width: 280px) {
+    padding: 11px !important;
+  }
+  @media (min-width: 376px) {
+    padding: 12.5px !important;
+  }
   font-weight: 500 !important;
   font-size: 15px !important;
   border: 1px solid #b1b1b1ab !important;
