@@ -41,14 +41,20 @@ const handleIncorrectInput = (
   const allValid = passwordMatch && passwordValid && nameValid && emailValid;
   // since the specific conditions are passed as parameters, you can use that information to display whatever it is that you like, depending on the situation.
   if (!emailValid) {
-    notificationService.error('Invalid Email!\n The email you have entered is either empty or too long!');
+    notificationService.error(
+        'Invalid Email!\n The email you have entered is either empty or too long!',
+    );
   }
   if (!passwordValid) {
-    notificationService.error('Invalid Password!\n The password you have entered is either empty or too long!');
+    notificationService.error(
+        'Invalid Password!\n The password you have entered is either empty or too long!',
+    );
   }
   if (!nameValid) {
     // do whatever you want here
-    notificationService.error('Invalid Name! Name must not include symbols and the length must be less than 45 characters!');
+    notificationService.error(
+        'Invalid Name! Name must not include symbols and the length must be less than 45 characters!',
+    );
   }
   if (!passwordMatch) {
     // do whatever you want here
@@ -66,7 +72,8 @@ const sendRequest = async (
   const login = name == 'login';
   let responseError = 'An account with the following email already exists! ';
   if (login) {
-    responseError = 'Invalid Email or Password! Either the email or password you have entered is invalid!';
+    responseError =
+      'Invalid Email or Password! Either the email or password you have entered is invalid!';
   }
   const body = {
     name: name,
@@ -84,10 +91,14 @@ const sendRequest = async (
       notificationService.error(responseError);
     } else if (error.request) {
       // The request was made but no response was received
-      notificationService.error('The request was made but no response was received!');
+      notificationService.error(
+          'The request was made but no response was received!',
+      );
     } else {
       // Something happened in setting up the request that triggered an Error
-      notificationService.error('Something happened in setting up the request that triggered an Error!');
+      notificationService.error(
+          'Something happened in setting up the request that triggered an Error!',
+      );
     }
     return error;
   });
