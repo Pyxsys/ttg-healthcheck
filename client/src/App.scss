@@ -122,7 +122,7 @@ Note: Beware of modifying this element as it can break the animations - you shou
   table-layout: auto;
 }
 
-// padding for Devices table UUID label
+// hide uneeded sr-only label in device table
 .sr-only {
   border: 0;
   padding: 0;
@@ -137,6 +137,7 @@ Note: Beware of modifying this element as it can break the animations - you shou
   white-space: nowrap; 
 }
 
+// create carets to be used in the table
 .caret {
   display: inline-block;
   width: 0;
@@ -149,6 +150,7 @@ Note: Beware of modifying this element as it can break the animations - you shou
   border-left: 4px solid transparent;
 }
 
+// create carret when clicked
 .dropup .caret, .navbar-fixed-bottom .dropdown .caret {
   border-top: 0;
   border-bottom: 4px dashed;
