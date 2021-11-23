@@ -31,6 +31,7 @@ class Runner:
     def gen_report(self):
         self.init_report()
         self.report.add_system_process_info()
+        self.report.add_system_network_usage()
     
     #produces startup device report
     def gen_startup_report(self):
@@ -96,6 +97,14 @@ class SysReport:
             process_list.append(process_info_dictionary)
 
         self.set_section("processes", process_list)
+
+    def add_system_network_usage(self):
+        network_info = psutil.net_io_counters()
+        #in MB per second
+        megabytes_sent = network_info[0]/(1024*1024)
+        megabytes_recv = network_info[1]/(1024*1024)
+        #send as tuple
+        self.set_section("network", (megabytes_sent, megabytes_recv))
 
     def add_timestamp(self):
         self.set_section("timestamp",datetime.now().isoformat())
