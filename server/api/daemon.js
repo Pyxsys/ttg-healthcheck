@@ -2,6 +2,7 @@ const express = require('express')
 const router = express.Router()
 const { CpuLogs } = require('../models/cpu.js')
 const Device = require('../models/device.js')
+const wifiModel = require('../models/wifi.js')
 
 // receive device report from daemon
 router.post('/device', async (req, res) => {
@@ -26,8 +27,10 @@ router.post('/', async (req, res) => {
     const payload = req.body
     verifyDeviceIdFormat(payload.deviceId)
     const newCpuLog = processCpuLogInfo(payload)
+    const newWifiLog = processWifiLogInfo(payload)
 
     await newCpuLog.save()
+    await newWifiLog.save()
     res.status(200).send()
   } catch (err) {
     res.status(501).send('Server Error: ' + err.message)
@@ -47,6 +50,16 @@ const verifyDeviceIdFormat = (deviceId) => {
   if (!regex.test(deviceId)) {
     throw new Error('deviceId [' + deviceId + '] is invalid')
   } else return true
+}
+
+const sumProcessCpuUsage = (processes) => {
+  let sum = 0
+  processes.forEach((proc) => {
+    if (proc.name !== 'System Idle Process') {
+      sum += proc.cpu_percent
+    }
+  })
+  return sum
 }
 
 const processDeviceInfo = (payload) => {
@@ -79,19 +92,9 @@ const processDeviceInfo = (payload) => {
   }
 }
 
-const sumProcessCpuUsage = (processes) => {
-  let sum = 0
-  processes.forEach((proc) => {
-    if (proc.name !== 'System Idle Process') {
-      sum += proc.cpu_percent
-    }
-  })
-  return sum
-}
-
 const processCpuLogInfo = (payload) => {
   //load values
-  const { deviceId, timestamp, processes } = payload
+  const { deviceId, timestamp, processes,} = payload
 
   //count number of running and stopped processes
   var runningProcs = 0,
@@ -125,9 +128,28 @@ const processCpuLogInfo = (payload) => {
   })
 }
 
+const processWifiLogInfo = (payload) => {
+  //load values
+  const { deviceId, timestamp, network } = payload
+
+  //compute values
+  const sendSpeed = network[0]
+  const receiveSpeed = network[1]
+  const signalStrength = 0
+
+  return new wifiModel.WifiLogs({
+    deviceId,
+    sendSpeed,
+    receiveSpeed,
+    signalStrength,
+    timestamp,
+  })
+}
+
 module.exports = {
   router,
   verifyDeviceIdFormat,
   processDeviceInfo,
   processCpuLogInfo,
+  processWifiLogInfo,
 }

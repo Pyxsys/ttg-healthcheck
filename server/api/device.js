@@ -9,7 +9,7 @@ const { filterData } = require('./common/filter')
 router.get('/ids', auth, async (req, res) => {
   const [query, options] = filterData(Object(req.query))
   const devices = await Devices.find(query, { deviceId: 1 }, options)
-  return res.status(200).json({ Results: devices.map(d => d.deviceId) })
+  return res.status(200).json({ Results: devices.map((d) => d.deviceId) })
 })
 
 // get multiple devices with param options (limit, multiple attributes, orderBy, orderValue)

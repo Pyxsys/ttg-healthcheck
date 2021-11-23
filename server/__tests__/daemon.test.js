@@ -19,13 +19,14 @@ const deviceMockPayload = {
   },
 }
 
-const cpuMockPayload = {
+const dynamicMockPayload = {
   deviceId: 'TEST3C2D-C033-7B87-4B31-244BFX931D14',
   timestamp: '2021-10-24 09:47:55.966088',
   processes: [
     { name: 'python', pid: 12345, status: 'running', cpu_percent: 1.768 },
     { name: 'celebid', pid: 12344, status: 'idle', cpu_percent: 0.462 },
   ],
+  network: [38.4, 21.6],
 }
 
 beforeAll(async () => {
@@ -63,7 +64,7 @@ describe('Test Device formatters', () => {
 })
 
 describe('Test CPU log formatter', () => {
-  const doc = daemonFunctions.processCpuLogInfo(cpuMockPayload)
+  const doc = daemonFunctions.processCpuLogInfo(dynamicMockPayload)
   //computed values
   it('Sum of processes', () => {
     expect(doc.numProcesses).toBe(2)
@@ -83,11 +84,11 @@ describe('Test CPU log formatter', () => {
 
   //process values
   it('Process data is consistent', () => {
-    expect(doc.processes[0].name).toBe(cpuMockPayload.processes[0].name)
-    expect(doc.processes[0].pid).toBe(cpuMockPayload.processes[0].pid)
-    expect(doc.processes[0].status).toBe(cpuMockPayload.processes[0].status)
+    expect(doc.processes[0].name).toBe(dynamicMockPayload.processes[0].name)
+    expect(doc.processes[0].pid).toBe(dynamicMockPayload.processes[0].pid)
+    expect(doc.processes[0].status).toBe(dynamicMockPayload.processes[0].status)
     expect(doc.processes[0].cpu_percent).toBe(
-      cpuMockPayload.processes[0].cpu_percent
+      dynamicMockPayload.processes[0].cpu_percent
     )
   })
 })
@@ -127,7 +128,8 @@ describe('Save daemon device to DB', () => {
 describe('Save daemon payload to DB', () => {
   const logPath = '/api/daemon'
   it('Should save the CPU log to the DB', async () => {
-    const response = await request(app).post(logPath).send(cpuMockPayload)
+    const response = await request(app).post(logPath).send(dynamicMockPayload)
+    console.log(response.text)
     expect(response.statusCode).toBe(200)
 
     const cpus = await CpuLogs.find()
@@ -135,7 +137,7 @@ describe('Save daemon payload to DB', () => {
   })
 
   it('Should not insert the CPU Log with incorrect deviceId to the DB', async () => {
-    const invalidCPU = { ...cpuMockPayload, deviceId: 'invalid' }
+    const invalidCPU = { ...dynamicMockPayload, deviceId: 'invalid' }
     const response = await request(app).post(logPath).send(invalidCPU)
     expect(response.statusCode).toBe(501)
 
