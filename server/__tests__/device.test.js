@@ -41,7 +41,12 @@ describe('Get Device Ids', () => {
     const results = response.body.Results
     expect(response.statusCode).toBe(200)
     expect(results.length).toBe(2)
-    expect(results).toEqual(expect.arrayContaining([deviceMockPayload1.deviceId, deviceMockPayload2.deviceId]))
+    expect(results).toEqual(
+      expect.arrayContaining([
+        deviceMockPayload1.deviceId,
+        deviceMockPayload2.deviceId,
+      ])
+    )
   })
 })
 

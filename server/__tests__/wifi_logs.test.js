@@ -1,7 +1,12 @@
 const request = require('supertest')
 const app = require('../app')
 const wifi = require('../models/wifi.js')
-const { setupLogTests, teardownLogTests, successTimestampLogTest, failureTimestampLogTest } = require('./api_common.test')
+const {
+  setupLogTests,
+  teardownLogTests,
+  successTimestampLogTest,
+  failureTimestampLogTest,
+} = require('./api_common.test')
 
 let cookieSession = ''
 
