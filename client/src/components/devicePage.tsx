@@ -65,18 +65,18 @@ const DevicePage = () => {
     );
   };
 
-  const tableHeaderFormatter = (
+  const uuidHeaderFormatter = (
       column: any,
       colIndex: any,
       {sortElement, filterElement}: any,
   ) => {
     return (
       <div style={{display: 'flex', flexDirection: 'column'}}>
+        {column.text}
         <div style={{display: 'flex', flexDirection: 'row'}}>
-          {column.text}
+          {filterElement}
           {sortElement}
         </div>
-        {filterElement}
       </div>
     );
   };
@@ -90,14 +90,13 @@ const DevicePage = () => {
       }),
       sort: true,
       formatter: idFormatter,
-      headerFormatter: tableHeaderFormatter,
+      headerFormatter: uuidHeaderFormatter,
     },
 
     {
       dataField: 'cpuUsage',
       text: 'CPU',
       sort: true,
-      headerFormatter: tableHeaderFormatter,
     },
     {
       dataField: 'memoryUsage',
