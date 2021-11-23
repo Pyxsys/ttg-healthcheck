@@ -72,8 +72,10 @@ const DevicePage = () => {
   ) => {
     return (
       <div style={{display: 'flex', flexDirection: 'column'}}>
-        {sortElement}
-        {column.text}
+        <div style={{display: 'flex', flexDirection: 'row'}}>
+          {column.text}
+          {sortElement}
+        </div>
         {filterElement}
       </div>
     );
@@ -86,6 +88,7 @@ const DevicePage = () => {
       filter: textFilter({
         placeholder: 'Filter by UUID...',
       }),
+      sort: true,
       formatter: idFormatter,
       headerFormatter: tableHeaderFormatter,
     },
