@@ -94,7 +94,7 @@ const processDeviceInfo = (payload) => {
 
 const processCpuLogInfo = (payload) => {
   //load values
-  const { deviceId, timestamp, processes, network } = payload
+  const { deviceId, timestamp, processes,} = payload
 
   //count number of running and stopped processes
   var runningProcs = 0,
@@ -130,7 +130,7 @@ const processCpuLogInfo = (payload) => {
 
 const processWifiLogInfo = (payload) => {
   //load values
-  const { deviceId, timestamp, processes, network } = payload
+  const { deviceId, timestamp, network } = payload
 
   //compute values
   const sendSpeed = network[0]
