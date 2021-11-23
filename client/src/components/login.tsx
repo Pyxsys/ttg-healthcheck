@@ -27,7 +27,11 @@ const Login = () => {
     e.preventDefault();
     if (handleIncorrectInput(formData1.email1, formData1.password1, 'login')) {
       try {
-        const res = await sendRequest(formData1.email1, formData1.password1, 'login') as any;
+        const res = (await sendRequest(
+            formData1.email1,
+            formData1.password1,
+            'login',
+        )) as any;
         if (res.data) {
           setUser(res.data.user);
           setIsAuthenticated(true);

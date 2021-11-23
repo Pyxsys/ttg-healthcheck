@@ -1,5 +1,4 @@
-
 export interface IResponse<T> {
-  Results: T[];
-  Total: number;
+  Results: T[]
+  Total: number
 }
