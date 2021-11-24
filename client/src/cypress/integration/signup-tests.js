@@ -1,7 +1,8 @@
 /* eslint-disable jest/expect-expect */
+Cypress.env();
 const testUser = {
   name: 'test2',
-  password: 'test',
+  password: Cypress.env('test_password'),
   email: 'selenium@gmail.com',
 };
 
