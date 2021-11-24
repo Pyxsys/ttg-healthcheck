@@ -25,13 +25,10 @@ const MemoryLogsSchema = new mongoose.Schema({
   available: {
     type: Number,
   },
+  free: {
+    type: Number,
+  },
   cached: {
-    type: Number,
-  },
-  pagedPool: {
-    type: Number,
-  },
-  nonPagedPool: {
     type: Number,
   },
   timestamp: {
