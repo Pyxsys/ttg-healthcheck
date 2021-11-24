@@ -120,6 +120,7 @@ const Signup = () => {
             </Link>
           </Form>
         </div>
+        <div className="home-copyright">&#169; SOEN490 TTG-HEALTCHECK</div>
       </div>
     </>
   );

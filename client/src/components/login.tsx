@@ -2,7 +2,7 @@
 import React, {useState} from 'react';
 import {Link, Redirect} from 'react-router-dom';
 import {Button, Form, InputGroup} from 'react-bootstrap';
-import {FaUserAlt, FaKey} from 'react-icons/fa';
+import {FaUserAlt, FaKey, FaBolt} from 'react-icons/fa';
 
 // Custom
 import {useAuth} from '../context/authContext';
@@ -56,10 +56,10 @@ const Login = () => {
         <div className="home-logo"></div>
       </div>
       <div className="home-form-container">
-        <div className="mb-4 home-header-subtitle">
-          Log in to launch your dashboard
-        </div>
         <div className="home-form">
+          <div className="mb-4 home-header-subtitle">
+            <FaBolt /> Log in to launch your dashboard
+          </div>
           <Form onSubmit={(e: any) => onSubmit(e)}>
             <Form.Group>
               <InputGroup>
@@ -101,6 +101,7 @@ const Login = () => {
             </Link>
           </Form>
         </div>
+        <div className="home-copyright">&#169; SOEN490 TTG-HEALTCHECK</div>
       </div>
     </>
   );
