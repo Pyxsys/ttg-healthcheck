@@ -51,10 +51,7 @@ describe('Test 1: See if certain headers and labels and buttons are visible.', (
 
 // Check to see if the buttons try to redirect us to the proper urls.
 describe('Test 2: Check to see if the buttons try to redirect us to the proper urls.', () => {
-  it('Test 2.1: Click on Login button and see if it redirects us to Dashboard.', () => {
-    // TODO
-  });
-  it('Test 2.2: Click on Signup button and see if it redirects us to Signup page.', () => {
+  it('Test 2.1: Click on Signup button and see if it redirects us to Signup page.', () => {
     // Go to login page
     cy.visit('/');
 
