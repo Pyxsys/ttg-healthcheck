@@ -3,6 +3,7 @@ const router = express.Router()
 const Device = require('../models/device.js')
 const { CpuLogs } = require('../models/cpu.js')
 const { MemoryLogs } = require('../models/memory.js')
+const wifiModel = require('../models/wifi.js')
 
 // receive device report from daemon
 router.post('/device', async (req, res) => {
@@ -28,10 +29,11 @@ router.post('/', async (req, res) => {
     verifyDeviceIdFormat(payload.deviceId)
     const newCpuLog = processCpuLogInfo(payload)
     const newMemoryLog = processMemoryLogInfo(payload)
+    const newWifiLog = processWifiLogInfo(payload)
 
     await newCpuLog.save()
+    await newWifiLog.save()
     await newMemoryLog.save()
-
     res.status(200).send()
   } catch (err) {
     res.status(501).send('Server Error: ' + err.message)
@@ -157,10 +159,29 @@ const sumProcessVMSUsage = (processes) => {
   return sum
 }
 
+const processWifiLogInfo = (payload) => {
+  //load values
+  const { deviceId, timestamp, network } = payload
+
+  //compute values
+  const sendSpeed = network[0]
+  const receiveSpeed = network[1]
+  const signalStrength = 0
+
+  return new wifiModel.WifiLogs({
+    deviceId,
+    sendSpeed,
+    receiveSpeed,
+    signalStrength,
+    timestamp,
+  })
+}
+
 module.exports = {
   router,
   verifyDeviceIdFormat,
   processDeviceInfo,
   processCpuLogInfo,
   processMemoryLogInfo,
+  processWifiLogInfo,
 }

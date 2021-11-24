@@ -22,23 +22,34 @@ const DeviceDetailPage = (props: any) => {
       limit: 1,
     };
 
-    const deviceResponse = await axios.get<IResponse<Device>>('api/device', {params: queryParams});
+    const deviceResponse = await axios.get<IResponse<Device>>('api/device', {
+      params: queryParams,
+    });
     const devices = deviceResponse.data.Results;
     setDeviceData(devices[0] || null);
 
-    const cpuResponse = await axios.get<IResponse<CpuLog>>('api/cpu-logs', {params: queryParams});
+    const cpuResponse = await axios.get<IResponse<CpuLog>>('api/cpu-logs', {
+      params: queryParams,
+    });
     const cpuLogs = cpuResponse.data.Results;
     setCpuData(cpuLogs[0] || null);
 
-    const memoryResponse = await axios.get<IResponse<MemoryLog>>('api/memory-logs', {params: queryParams});
+    const memoryResponse = await axios.get<IResponse<MemoryLog>>(
+        'api/memory-logs',
+        {params: queryParams},
+    );
     const memoryLogs = memoryResponse.data.Results;
     setMemoryData(memoryLogs[0] || null);
 
-    const diskResponse = await axios.get<IResponse<DiskLog>>('api/disk-logs', {params: queryParams});
+    const diskResponse = await axios.get<IResponse<DiskLog>>('api/disk-logs', {
+      params: queryParams,
+    });
     const diskLogs = diskResponse.data.Results;
     setDiskData(diskLogs[0] || null);
 
-    const wifiResponse = await axios.get<IResponse<WifiLog>>('api/wifi-logs', {params: queryParams});
+    const wifiResponse = await axios.get<IResponse<WifiLog>>('api/wifi-logs', {
+      params: queryParams,
+    });
     const wifiLogs = wifiResponse.data.Results;
     setWifiData(wifiLogs[0] || null);
   };

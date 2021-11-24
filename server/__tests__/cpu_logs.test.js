@@ -19,6 +19,7 @@ const cpuMockPayload1 = {
     used: 9103147008,
     percent: 26.6,
   },
+  network: [0, 0],
 }
 const cpuMockPayload2 = {
   deviceId: 'TEST2C2D-C033-7B87-4B31-244BFX931D14',
@@ -34,6 +35,7 @@ const cpuMockPayload2 = {
     used: 9103147008,
     percent: 26.6,
   },
+  network: [0, 0],
 }
 const cpuMockPayload3 = {
   deviceId: 'TEST2C2D-C033-7B87-4B31-244BFX931D14',
@@ -49,6 +51,7 @@ const cpuMockPayload3 = {
     used: 9103147008,
     percent: 26.6,
   },
+  network: [0, 0],
 }
 
 beforeAll(async () => {

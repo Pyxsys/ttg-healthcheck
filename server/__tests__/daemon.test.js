@@ -49,6 +49,7 @@ const mockLogPayload = {
     used: 9103147008,
     percent: 26.6,
   },
+  network: [38.4, 21.6],
 }
 
 beforeAll(async () => {

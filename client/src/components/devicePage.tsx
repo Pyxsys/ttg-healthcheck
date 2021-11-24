@@ -12,7 +12,6 @@ import {IResponse} from '../types/common';
 import {CpuLog, MemoryLog} from '../types/queries';
 import {DevicesColumns} from '../types/tables';
 
-
 const DevicePage = () => {
   const [deviceData, setDeviceData] = useState([] as DevicesColumns[]);
 
@@ -27,15 +26,23 @@ const DevicePage = () => {
     const deviceResponse = await axios.get<IResponse<string>>('api/device/ids');
     const deviceIds = deviceResponse.data.Results;
 
-    const cpuResponse = await axios.get<IResponse<CpuLog>>('api/cpu-logs/timestamp', {params: timestampParams});
+    const cpuResponse = await axios.get<IResponse<CpuLog>>(
+        'api/cpu-logs/timestamp',
+        {params: timestampParams},
+    );
     const cpuUsages = cpuResponse.data.Results;
 
-    const memoryResponse = await axios.get<IResponse<MemoryLog>>('api/memory-logs/timestamp', {params: timestampParams});
+    const memoryResponse = await axios.get<IResponse<MemoryLog>>(
+        'api/memory-logs/timestamp',
+        {params: timestampParams},
+    );
     const memoryUsages = memoryResponse.data.Results;
 
     const device: DevicesColumns[] = deviceIds.map((id) => {
       const cpu = cpuUsages?.find((cpuUsage) => cpuUsage?.deviceId == id);
-      const mem = memoryUsages?.find((memoryUsage) => memoryUsage?.deviceId == id);
+      const mem = memoryUsages?.find(
+          (memoryUsage) => memoryUsage?.deviceId == id,
+      );
       return {
         id: id,
         cpuUsage: cpu?.usagePercentage as number,
@@ -58,12 +65,32 @@ const DevicePage = () => {
     );
   };
 
+  const uuidHeaderFormatter = (
+      column: any,
+      colIndex: any,
+      {sortElement, filterElement}: any,
+  ) => {
+    return (
+      <div style={{display: 'flex', flexDirection: 'column'}}>
+        {column.text}
+        <div style={{display: 'flex', flexDirection: 'row'}}>
+          {filterElement}
+          {sortElement}
+        </div>
+      </div>
+    );
+  };
+
   const columns = [
     {
       dataField: 'id',
-      text: 'PID',
-      filter: textFilter(),
+      text: 'UUID',
+      filter: textFilter({
+        placeholder: 'Filter by UUID...',
+      }),
+      sort: true,
       formatter: idFormatter,
+      headerFormatter: uuidHeaderFormatter,
     },
 
     {
