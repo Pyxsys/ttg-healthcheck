@@ -1,7 +1,7 @@
 /* eslint-disable require-jsdoc */
 import React from 'react';
 import './App.scss';
-import {BrowserRouter as Router, Route} from 'react-router-dom';
+import {Route} from 'react-router-dom';
 import PrivateRoute from './routes/privateRoute';
 import Login from './components/login';
 import Dashboard from './components/dashboard';
@@ -9,10 +9,11 @@ import AdminPanel from './components/adminPanel';
 import Signup from './components/signup';
 import DevicePage from './components/devicePage';
 import deviceDetailPage from './components/deviceDetailPage';
+import {AuthProvider} from './context/authContext';
 
 function App() {
   return (
-    <Router>
+    <AuthProvider>
       <Route exact path="/" component={Login}></Route>
       <Route exact path="/signup" component={Signup}></Route>
       <PrivateRoute
@@ -39,7 +40,7 @@ function App() {
         roles={['admin']}
         component={AdminPanel}
       ></PrivateRoute>
-    </Router>
+    </AuthProvider>
   );
 }
 

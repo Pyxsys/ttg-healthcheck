@@ -2,15 +2,15 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.scss';
 import App from './App';
+import {BrowserRouter as Router} from 'react-router-dom';
 import reportWebVitals from './reportWebVitals';
-import {AuthProvider} from './context/authContext';
 import {ToastContainer} from 'react-toastify';
 
 ReactDOM.render(
     <div className="app">
-      <AuthProvider>
+      <Router>
         <App />
-      </AuthProvider>
+      </Router>
       <ToastContainer />
     </div>,
     document.getElementById('root'),
