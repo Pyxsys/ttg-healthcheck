@@ -141,7 +141,7 @@ jobs:
     - name: Cypress Run
       uses: cypress-io/github-action@v2
       with:
-        path: ./client/src
+        project: ./client/src
         start: npm start --prefix client
         wait-on: http://localhost:3000
 
