@@ -4,6 +4,16 @@ $secondary: #f8f9fa;
 $third: #b1b1b1;
 $fourth: #30353d;
 
+$gray-100: #c2c2c2;
+$gray-200: #9b9b9b;
+$gray-300: #888888;
+$gray-400: #727272;
+$gray-500: #5a5a5a;
+$gray-600: #424242;
+$gray-700: #2c2c2c;
+$gray-800: #1d1d1d;
+$gray-900: #101010;
+
 html,
 body {
   margin: 0;
@@ -11,17 +21,84 @@ body {
   width: 100%;
 }
 
+// Custom scrollbar only for computers
+@media only screen and (min-width: 768px) {
+	.cerebellum-scrollbar {
+		&::-webkit-scrollbar,             // The whole scrollbar (background)
+		&::-webkit-scrollbar-track,       // The track where the handle can go
+    &::-webkit-scrollbar-track-piece, // The Track that was selected
+		&::-webkit-scrollbar-thumb,       // The draggable handle
+		&::-webkit-scrollbar-corner {     // The intersection of the horizontal and vertical scrollbar
+			background-color: $gray-600;
+      border-radius: 10px;
+      border: 2px solid transparent;
+      background-clip: padding-box; // <== make the border work
+      &:hover{
+        border: 0;
+      }
+    }
+
+		&::-webkit-scrollbar {
+			width: 12px;
+      height: 10px;
+		}
+    &::-webkit-scrollbar-track-piece:active {
+      background-color: lighten($gray-600, 5%);
+    }
+		&::-webkit-scrollbar-thumb {
+			background-color: $gray-400;
+      &:active {
+        background-color: $gray-200;
+      }
+		}
+	}
+}
+.cerebellum-scrollbar {
+  overflow-y: auto;
+}
+
+
+@media screen and (max-width: 300px),
+screen and (max-height: 650px) {
+  .home-header {
+    min-height: 20% !important;
+  }
+}
+
 // home pages (login,register)
-.home-header-container {
-  min-height: 220px;
+.home-header {
   background-color: $primary;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
-  gap: 14px;
-  height: 40%;
-  width: 100%;
+  min-height: 30%;
+  padding-top: 15px;
+  
+  -webkit-transition: all 0.5s ease;
+  -moz-transition: all 0.5s ease;
+  -o-transition: all 0.5s ease;
+  transition: all 0.5s ease;
+}
+
+.home-content {
+  background-color: $fourth;
+
+}
+
+.home-footer {
+  background-color: $fourth;
+
+}
+
+.bottom-triangle {
+  border-right: solid 15px transparent;
+  border-left: solid 15px transparent;
+  border-top: solid 15px $primary;
+  transform: translateY(15px);
+}
+
+.home-copyright {
+  color: $secondary;
+  opacity: 80%;
+  font-size: 11px;
+  font-weight: 600;
 }
 
 .home-logo {
@@ -43,35 +120,8 @@ body {
   font-weight: 500;
 }
 
-.home-form-container {
-  background-color: $fourth;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  flex-direction: column;
-  height: 60%;
-  min-height: 550px;
-  width: 100%;
-  padding-top: 65px;
-}
-
-@media screen and (max-width: 950px) {
-  .home-header-container {
-    height: 25%;
-  }
-  .home-form-container {
-    height: 75%;
-  }
-}
 
 .home-header-container {
-  -webkit-transition: all 0.5s ease;
-  -moz-transition: all 0.5s ease;
-  -o-transition: all 0.5s ease;
-  transition: all 0.5s ease;
-}
-
-.home-form-container {
   -webkit-transition: all 0.5s ease;
   -moz-transition: all 0.5s ease;
   -o-transition: all 0.5s ease;
@@ -117,15 +167,6 @@ body {
 
 .home-button:hover {
   background-color: $primary !important;
-}
-
-.home-copyright {
-  color: $secondary;
-  opacity: 80%;
-  text-align: center;
-  font-size: 11px;
-  font-weight: 600;
-  margin-bottom: 30px;
 }
 
 //
