@@ -14,6 +14,10 @@ $gray-700: #2c2c2c;
 $gray-800: #1d1d1d;
 $gray-900: #101010;
 
+$screen-w-sm: 280px; 
+$screen-w-md: 376px; 
+$screen-w-lg: 768px; 
+
 html,
 body {
   margin: 0;
@@ -58,33 +62,38 @@ body {
 }
 
 
-@media screen and (max-width: 300px),
-screen and (max-height: 650px) {
-  .home-header {
-    min-height: 20% !important;
-  }
-}
-
-// home pages (login,register)
 .home-header {
   background-color: $primary;
   min-height: 30%;
-  padding-top: 15px;
   
   -webkit-transition: all 0.5s ease;
   -moz-transition: all 0.5s ease;
   -o-transition: all 0.5s ease;
   transition: all 0.5s ease;
+  
+  @media screen and (max-width: 350px),
+  screen and (max-height: 650px) {
+      min-height: 20% !important;
+  }
 }
 
 .home-content {
   background-color: $fourth;
-
 }
 
 .home-footer {
   background-color: $fourth;
 
+}
+
+.home-logo {
+  content: url('assets/brainlogo.png');
+  @media (min-width: $screen-w-sm) {
+    max-width: 100%;
+  }
+  @media (min-width: $screen-w-md) {
+    max-width: 330px;
+  }
 }
 
 .bottom-triangle {
@@ -101,15 +110,6 @@ screen and (max-height: 650px) {
   font-weight: 600;
 }
 
-.home-logo {
-  content: url('assets/brainlogo.png');
-  @media (min-width: 280px) {
-    width: 90%;
-  }
-  @media (min-width: 376px) {
-    width: 330px;
-  }
-}
 
 .home-header-subtitle {
   padding-bottom: 0px;
@@ -120,41 +120,37 @@ screen and (max-height: 650px) {
   font-weight: 500;
 }
 
-
-.home-header-container {
-  -webkit-transition: all 0.5s ease;
-  -moz-transition: all 0.5s ease;
-  -o-transition: all 0.5s ease;
-  transition: all 0.5s ease;
-}
-
 .home-form {
-  @media (min-width: 280px) {
-    width: 90%;
+  @media (min-width: $screen-w-sm) {
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+    width: 100%;
   }
-  @media (min-width: 376px) {
+  @media (min-width: $screen-w-md) {
+    padding-left: 0;
+    padding-right: 0;
     width: 330px;
   }
 }
 
 .home-input {
-  @media (min-width: 280px) {
+  @media (min-width: $screen-w-sm) {
     padding: 12px !important;
   }
-  @media (min-width: 376px) {
+  @media (min-width: $screen-w-md) {
     padding: 13px !important;
   }
   border: none !important;
-  border-radius: 0 !important;
+  border-radius: 0 0.25rem 0.25rem 0 !important;
   box-shadow: none !important;
   -webkit-box-shadow: none !important;
 }
 
 .home-button {
-  @media (min-width: 280px) {
+  @media (min-width: $screen-w-sm) {
     padding: 12px !important;
   }
-  @media (min-width: 376px) {
+  @media (min-width: $screen-w-md) {
     padding: 13px !important;
   }
   opacity: 80%;
@@ -169,10 +165,6 @@ screen and (max-height: 650px) {
   background-color: $primary !important;
 }
 
-//
-.increase-roundness {
-  border-radius: 50px;
-}
 
 /* Position and sizing of burger button */
 .bm-burger-button {

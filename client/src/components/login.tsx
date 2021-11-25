@@ -9,6 +9,7 @@ import {useAuth} from '../context/authContext';
 import {notificationService} from '../services/notification.service';
 import {handleIncorrectInput, sendRequest} from './common/inputValidation';
 import '../App.scss';
+import External from './common/externalPage';
 
 const Login = () => {
   const {setUser, setIsAuthenticated} = useAuth();
@@ -51,59 +52,53 @@ const Login = () => {
     return <Redirect to="/dashboard" />;
   }
   return (
-    <>
-      <div className="home-header-container">
-        <div className="home-logo"></div>
-      </div>
-      <div className="home-form-container">
-        <div className="home-form">
-          <div className="mb-4 home-header-subtitle">
-            <FaBolt /> Log in to launch your dashboard
-          </div>
-          <Form onSubmit={(e: any) => onSubmit(e)}>
-            <Form.Group>
-              <InputGroup>
-                <InputGroup.Text>
-                  <FaUserAlt />
-                </InputGroup.Text>
-                <Form.Control
-                  size="sm"
-                  className="home-input"
-                  type="email"
-                  placeholder="Email"
-                  name="email1"
-                  value={email1}
-                  onChange={(e: any) => onChange1(e)}
-                />
-              </InputGroup>
-            </Form.Group>
-            <Form.Group className="mt-3">
-              <InputGroup>
-                <InputGroup.Text>
-                  <FaKey />
-                </InputGroup.Text>
-                <Form.Control
-                  size="sm"
-                  className="home-input"
-                  type="password"
-                  placeholder="Password"
-                  name="password1"
-                  value={password1}
-                  onChange={(e: any) => onChange1(e)}
-                />
-              </InputGroup>
-            </Form.Group>
-            <Button className="w-100 mt-3 home-button" type="submit">
-              Login
-            </Button>
-            <Link to="/signup">
-              <Button className="w-100 mt-3 home-button">Register</Button>
-            </Link>
-          </Form>
+    <External>
+      <div className="home-form">
+        <div className="pb-4 home-header-subtitle">
+          <FaBolt /> Log in to launch your dashboard
         </div>
-        <div className="home-copyright">&#169; SOEN490 TTG-HEALTCHECK</div>
+        <Form onSubmit={(e: any) => onSubmit(e)}>
+          <Form.Group>
+            <InputGroup>
+              <InputGroup.Text>
+                <FaUserAlt />
+              </InputGroup.Text>
+              <Form.Control
+                size="sm"
+                className="home-input"
+                type="email"
+                placeholder="Email"
+                name="email1"
+                value={email1}
+                onChange={(e: any) => onChange1(e)}
+              />
+            </InputGroup>
+          </Form.Group>
+          <Form.Group className="mt-3">
+            <InputGroup>
+              <InputGroup.Text>
+                <FaKey />
+              </InputGroup.Text>
+              <Form.Control
+                size="sm"
+                className="home-input"
+                type="password"
+                placeholder="Password"
+                name="password1"
+                value={password1}
+                onChange={(e: any) => onChange1(e)}
+              />
+            </InputGroup>
+          </Form.Group>
+          <Button className="w-100 mt-3 home-button" type="submit">
+              Login
+          </Button>
+          <Link to="/signup">
+            <Button className="w-100 mt-3 home-button">Register</Button>
+          </Link>
+        </Form>
       </div>
-    </>
+    </External>
   );
 };
 
