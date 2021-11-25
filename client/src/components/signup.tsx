@@ -1,7 +1,7 @@
 // 3rd Party
 import React, {useState} from 'react';
 import {Link, Redirect} from 'react-router-dom';
-import {Button, Col, Container, Form, Row} from 'react-bootstrap';
+import {Button, Container, Form, Row} from 'react-bootstrap';
 
 // Custom
 import {useAuth} from '../context/authContext';
@@ -46,67 +46,72 @@ const Signup = () => {
            justify-content-center background-image-login"
       >
         <Container
-          className="w-25 border increase-roundness rounded-lg d-flex
+          style={{width: 'fit-content'}}
+          className="border increase-roundness rounded-lg
             justify-content-center bg-secondary"
         >
-          <Row className="w-75 mb-5 mt-5">
-            <Col>
-              <h1 className="text-center">SIGNUP</h1>
-              <Row className="mb-4">
-                <Form onSubmit={(e: any) => register(e)}>
-                  <Form.Group>
-                    <Form.Label className="ml-0 mb-3">Name</Form.Label>
-                    <Form.Control
-                      className="mb-3"
-                      type="name"
-                      placeholder="Enter name"
-                      name="name"
-                      value={name}
-                      onChange={(e: any) => onChange(e)}
-                    />
-                  </Form.Group>
-                  <Form.Group>
-                    <Form.Label className="ml-0 mb-3">Email Address</Form.Label>
-                    <Form.Control
-                      className="mb-3"
-                      type="email"
-                      placeholder="Enter email"
-                      name="email"
-                      value={email}
-                      onChange={(e: any) => onChange(e)}
-                    />
-                  </Form.Group>
-                  <Form.Group>
-                    <Form.Label className="mb-3">Password</Form.Label>
-                    <Form.Control
-                      className="mb-3"
-                      type="password"
-                      placeholder="password"
-                      name="password"
-                      value={password}
-                      onChange={(e: any) => onChange(e)}
-                    />
-                  </Form.Group>
-                  <Form.Group>
-                    <Form.Label className="mb-3">Confirm Password</Form.Label>
-                    <Form.Control
-                      className="mb-3"
-                      type="password"
-                      placeholder="password"
-                      name="password2"
-                      value={password2}
-                      onChange={(e: any) => onChange(e)}
-                    />
-                  </Form.Group>
-                  <Button className="w-100 mt-3" type="submit">
-                    Signup
-                  </Button>
-                  <Link to="/">
-                    <Button className="w-100 mt-3">Back</Button>
-                  </Link>
-                </Form>
-              </Row>
-            </Col>
+          <Row className="mb-5 mt-5">
+            <div className="col d-flex px-5">
+              <div className="flex-col">
+                <h1 className="text-center">SIGNUP</h1>
+                <Row className="mb-4">
+                  <Form onSubmit={(e: any) => register(e)}>
+                    <Form.Group>
+                      <Form.Label className="ml-0 mb-3">Name</Form.Label>
+                      <Form.Control
+                        className="mb-3"
+                        type="name"
+                        placeholder="Enter name"
+                        name="name"
+                        value={name}
+                        onChange={(e: any) => onChange(e)}
+                      />
+                    </Form.Group>
+                    <Form.Group>
+                      <Form.Label className="ml-0 mb-3">
+                        Email Address
+                      </Form.Label>
+                      <Form.Control
+                        className="mb-3"
+                        type="email"
+                        placeholder="Enter email"
+                        name="email"
+                        value={email}
+                        onChange={(e: any) => onChange(e)}
+                      />
+                    </Form.Group>
+                    <Form.Group>
+                      <Form.Label className="mb-3">Password</Form.Label>
+                      <Form.Control
+                        className="mb-3"
+                        type="password"
+                        placeholder="password"
+                        name="password"
+                        value={password}
+                        onChange={(e: any) => onChange(e)}
+                      />
+                    </Form.Group>
+                    <Form.Group>
+                      <Form.Label className="mb-3">Confirm Password</Form.Label>
+                      <Form.Control
+                        className="mb-3"
+                        type="password"
+                        placeholder="password"
+                        name="password2"
+                        value={password2}
+                        onChange={(e: any) => onChange(e)}
+                      />
+                    </Form.Group>
+                    <Button className="w-100 mt-3" type="submit">
+                      Signup
+                    </Button>
+                    <Link to="/">
+                      <Button className="w-100 mt-3">Back</Button>
+                    </Link>
+                  </Form>
+                </Row>
+              </div>
+            </div>
           </Row>
         </Container>
       </div>

@@ -15,18 +15,17 @@ on:
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  # This workflow contains a single job called "build"
-  build:
+
+  Server_Test:
     # The type of runner that the job will run on
+    name: Server_Test
     runs-on: ubuntu-latest
 
     strategy:
       matrix:
         node-version: [14.x] # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
-        python-version: [3.6]
         mongodb-version: [3.6]
 
-    # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
     - name: Start MongoDB v${{ matrix.mongodb-version }}
       uses: supercharge/mongodb-github-action@1.6.0
@@ -42,17 +41,6 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
-    
-    - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v2
-      with:
-        python-version: ${{ matrix.python-version }}
-        
-    - name: Run frontend tests
-      run: |
-        cd client
-        npm ci
-        npm run test:coverage
 
     - name: Run backend tests
       run: |
@@ -60,7 +48,32 @@ jobs:
         npm ci
         mongo mydb_test --eval 'db.createUser({user:"travis",pwd:"test",roles:["readWrite"]});'
         npm run test:coverage
-            
+
+  Daemon_Test:
+    # The type of runner that the job will run on
+    name: Daemon_Test
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        python-version: [3.6]
+        mongodb-version: [3.6]
+
+    steps:
+    - name: Start MongoDB v${{ matrix.mongodb-version }}
+      uses: supercharge/mongodb-github-action@1.6.0
+      with:
+          mongodb-version: ${{ matrix.mongodb-version }}
+          mongodb-replica-set: rs0
+
+    - name: Checkout repository
+      uses: actions/checkout@v2
+    
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v2
+      with:
+        python-version: ${{ matrix.python-version }}
+
     - name: Run python tests
       run: |
         pip install -r daemon/requirements.txt
@@ -68,3 +81,38 @@ jobs:
         coverage run --branch -m unittest -v
         coverage report
     
+  E2E_Test:
+    # The type of runner that the job will run on
+    name: E2E_Test
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [14.x] # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Set up Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v2
+      with:
+        node-version: ${{ matrix.node-version }}
+        cache: 'npm'
+
+    - name: Install Dependencies
+      run: |
+        npm ci --prefix client
+        npm install --prefix server
+
+    - name: Run Server
+      run: npm start --prefix server &
+        
+    - name: Cypress Run
+      uses: cypress-io/github-action@v2
+      with:
+        start: npm start --prefix client
+        wait-on: http://localhost:3000
+
+  # Client_Test to be added

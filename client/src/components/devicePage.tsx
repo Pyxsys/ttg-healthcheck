@@ -2,7 +2,7 @@
 import React, {useEffect, useState} from 'react';
 import axios from 'axios';
 import {Link} from 'react-router-dom';
-import {Col, Row, Table} from 'react-bootstrap';
+import {Col, Row} from 'react-bootstrap';
 import BootstrapTable from 'react-bootstrap-table-next';
 import filterFactory, {textFilter} from 'react-bootstrap-table2-filter';
 
@@ -119,15 +119,13 @@ const DevicePage = () => {
           <Col>
             <div className="">
               <h1 className="text-primary mb-5 mt-5">Devices</h1>
-              <Table responsive>
-                <BootstrapTable
-                  keyField="id"
-                  data={deviceData}
-                  columns={columns}
-                  filter={filterFactory()}
-                  wrapperClasses="table-responsive"
-                />
-              </Table>
+              <BootstrapTable
+                keyField="id"
+                data={deviceData}
+                columns={columns}
+                filter={filterFactory()}
+                wrapperClasses="table-responsive"
+              />
             </div>
           </Col>
         </Row>

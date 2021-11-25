@@ -39,25 +39,29 @@ Before starting the installation process, ensure that your computer has all the 
 ### Client
 * If you want to only run the client web application, run `npm run start` in the client folder.
 
-## Unit Tests
+## Tests
 
-### Server Tests
+### Server Unit Tests
 To run these tests, you'll need a MongoDB database on your local machine.
 
 * If you want to download MongoDB locally, visit https://github.com/Pyxsys/ttg-healthcheck/wiki/How-To-Setup-Local-MongoDB for futher instructions.
 * From your command line go into the server folder of the project and run `npm run test` or `npm run test:coverage` if you wish to see the coverage.
 
-### Client Tests
+### Client Unit Tests
+To run these tests, you'll need to use Cypress. It is already a part of our dev dependencies and only requires `npm install` in the client folder. You will also need to have the Front-End running locally. That can be done by running `npm start` in the client folder.All the tests are found in `cypress -> integration`.
 
-* From your command line go into the client folder of the project and run `npm run test` or `npm run test:coverage` if you wish to see the coverage.
-
-### Server & Client Tests concurently
-
-* If you want to run all the test from the root of the project by running `npm run all-test` or `npm run all-test:coverage` if you wish to see the coverage.
+* From your command line go into `client -> src` and run `npx cypress open`.
+* From there, a Cypress GUI will open up. You can either run all the tests that are in the test folder by click run all or run individual test file by clicking on the file itself.
 
 ### Daemon Tests
 
 * From you command line, go to the daemon folder of the project and run `coverage run --branch -m unittest -v`
+
+### End-To-End Tests
+To run these tests, you'll need to use Cypress. It is already a part of our dev dependencies and only requires `npm install` in the client folder. You will also need to have the application running locally. That can be done by running `npm run dev` in the root of the project. All the tests are found in `cypress -> integration`.
+
+* In the root of the project, run `npx cypress open`.
+* From there, a Cypress GUI will open up. You can either run all the tests that are in the test folder by click run all or run individual test file by clicking on the file itself.
 
 ## Coding Convention
 To enforce the coding style of the project, we have integrated eslint and prettier in our project. You can use the following command to format the code to our coding covention: `npm run all-lint:fix` from the root of the project. In addition, we have integrated a script that will check the code prior to committing the code to ensure we maintain the correct standard.
