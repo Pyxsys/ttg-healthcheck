@@ -272,7 +272,7 @@ class SysReport:
 
     @classmethod
     def fetch_total_disk_capacity(cls):
-        return 0
+        return psutil.disk_usage('/').total
 
 def main(config, mode):
     runner=Runner(config)

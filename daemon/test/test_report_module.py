@@ -106,7 +106,7 @@ class TestSystemReportClass(unittest.TestCase):
 
     def testFetchingTotalDiskCapacity(self):
         actual_result=SysReport.fetch_total_disk_capacity()
-        self.assertGreater(actual_result, 0)
+        self.assertGreater(actual_result, 100)
 
 if __name__ == '__main__':
     unittest.main()
