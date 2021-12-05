@@ -26,14 +26,14 @@ class Runner:
         self.report=SysReport()
         self.report.add_device_uuid()
         self.report.add_timestamp()
-    
-    #produces recurring report 
+
+    #produces recurring report
     def gen_report(self):
         self.init_report()
         self.report.add_system_process_info()
         self.report.add_memory_usage_info()
         self.report.add_system_network_usage()
-    
+
     #produces startup device report
     def gen_startup_report(self):
         self.init_report()
@@ -101,9 +101,9 @@ class SysReport:
                 process_info_dictionary['vms'] = proc.memory_info()[1]
 
                 process_list.append(process_info_dictionary)
-            except psutil.NoSuchProcess: 
+            except psutil.NoSuchProcess:
                 continue
-                
+
         self.set_section("processes", process_list)
 
     def add_system_network_usage(self):
@@ -204,9 +204,9 @@ class SysReport:
             return ff_list
 
         for x in form_factors:
-            if "win" in os_type: 
+            if "win" in os_type:
                 ff_list.append(decoder[x])
-            elif "linux" in os_type: 
+            elif "linux" in os_type:
                 ff_list.append(x[13::]) if not x.strip() else ff_list.append("Unkown")
 
         return ff_list
@@ -225,7 +225,7 @@ class SysReport:
             extract.close()
 
             pattern="(^.+)\s{2}(\d+)"
-            
+
             for m in buffer:
                 temp_dict=dict()
                 groups=re.match(pattern, m)
@@ -233,7 +233,7 @@ class SysReport:
                 temp_dict["size"]=groups.groups()[1]
 
                 command="Powershell.exe -Command \"Get-PhysicalDisk | Where-Object -Property FriendlyName -eq '%s'\"" % (temp_dict["model"])
-                
+
                 extract=os.popen(command)
                 ps_buffer=re.findall(r'(unspecified|HDD|SSD|SCM)', extract.read(), flags)
                 extract.close()
@@ -251,16 +251,15 @@ class SysReport:
             extract.close()
 
             pattern=""
-            rota_map = { 0:'SSD', 1:'HDD' }
-            
+            rota_map = { "0":"SSD", "1":"HDD" }
+
             for m in buffer:
                 temp_dict=dict()
-                groups=re.match(pattern, m)
-                temp_dict["model"]=groups.groups()[2]
-                temp_dict["size"]=groups.groups()[1]
+                temp_dict["model"]=m[2]
+                temp_dict["size"]=m[1]
 
-                command="lsblk -d -o name,rota | grep %s" % (groups.groups()[0])
-                
+                command="lsblk -d -o name,rota | grep %s" % (m[0])
+
                 extract=os.popen(command)
                 ps_buffer=re.findall(r'(0|1)$', extract.read(), flags)
                 extract.close()
@@ -268,7 +267,7 @@ class SysReport:
                 temp_dict["media"]=rota_map[ps_buffer[0]]
 
                 pd_list.append(temp_dict)
-        
+
         return pd_list
 
     @classmethod
@@ -284,7 +283,7 @@ def main(config, mode):
         runner.send_recurring_device_report()
     else:
         print("Invalid run mode \"", mode, "\".")
-        
+
     del runner
 
 if __name__ == "__main__":
