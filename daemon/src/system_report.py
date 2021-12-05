@@ -38,6 +38,7 @@ class Runner:
     def gen_startup_report(self):
         self.init_report()
         self.report.add_startup_memory_info()
+        self.report.add_startup_disk_info()
 
     def sleep(self):
         time.sleep(self.get_config()['report_delay'])

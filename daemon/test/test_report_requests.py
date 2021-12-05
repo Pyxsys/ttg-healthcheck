@@ -37,6 +37,17 @@ class TestRunner(unittest.TestCase):
                 missing_sections.append(section)
         self.assertEqual(len(missing_sections), 0, msg=missing_sections)
 
+    def testRunnerGeneratingStartupReport(self):
+        expected_sections={'deviceId', 'memory_', 'disk_', 'timestamp'}
+        missing_sections=[]
+
+        self.test_runner.gen_startup_report()
+        section_list=list(self.test_runner.get_report().keys())
+        for section in expected_sections:
+            if section not in section_list:
+                missing_sections.append(section)
+        self.assertEqual(len(missing_sections), 0, msg=missing_sections)
+
     @unittest.skipIf("localhost" in json.load(open(sys.path[0] + test_config_path))['destination'],
      'Cannot run test automatically with "localhost" destination.')
     def testConnectionToServer(self):
