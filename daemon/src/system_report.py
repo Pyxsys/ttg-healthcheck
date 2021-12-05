@@ -145,6 +145,11 @@ class SysReport:
 
         self.set_section("memory", memory_dictionary)
 
+    def add_startup_disk_info(self):
+        disk_dictionary = dict()
+        disk_dictionary["capacity"] = SysReport.fetch_total_disk_capacity()
+        disk_dictionary["physical_disk"] = SysReport.fetch_physical_disks()
+        self.set_section("disk_", disk_dictionary)
 
     @classmethod
     def fetch_total_memory(cls):
@@ -205,6 +210,70 @@ class SysReport:
                 ff_list.append(x[13::]) if not x.strip() else ff_list.append("Unkown")
 
         return ff_list
+
+    @classmethod
+    def fetch_physical_disks(cls):
+        pd_list = list()
+        flags = re.MULTILINE
+
+        if psutil.WINDOWS:
+            command="wmic diskdrive get model,size"
+            pattern=".+\s{2}\d+\n?"
+
+            extract=os.popen(command)
+            buffer=re.findall(pattern, extract.read(), flags)
+            extract.close()
+
+            pattern="(^.+)\s{2}(\d+)"
+            
+            for m in buffer:
+                temp_dict=dict()
+                groups=re.match(pattern, m)
+                temp_dict["model"]=groups.groups()[0]
+                temp_dict["size"]=groups.groups()[1]
+
+                command="Powershell.exe -Command \"Get-PhysicalDisk | Where-Object -Property FriendlyName -eq '%s'\"" % (temp_dict["model"])
+                
+                extract=os.popen(command)
+                ps_buffer=re.findall(r'(unspecified|HDD|SSD|SCM)', extract.read(), flags)
+                extract.close()
+
+                temp_dict["media"]=ps_buffer[0]
+
+                pd_list.append(temp_dict)
+
+        elif psutil.LINUX:
+            command="sudo fdisk -l"
+            pattern="^(?:Disk )/(?:\S+/)+(\S+):(?:.*)\ (\d+)\ bytes.+\n^Disk model:\ (.*)(?:\s{2,})\n"
+
+            extract=os.popen(command)
+            buffer=re.findall(pattern, extract.read(), flags)
+            extract.close()
+
+            pattern=""
+            rota_map = { 0:'SSD', 1:'HDD' }
+            
+            for m in buffer:
+                temp_dict=dict()
+                groups=re.match(pattern, m)
+                temp_dict["model"]=groups.groups()[2]
+                temp_dict["size"]=groups.groups()[1]
+
+                command="lsblk -d -o name,rota | grep %s" % (groups.groups()[0])
+                
+                extract=os.popen(command)
+                ps_buffer=re.findall(r'(0|1)$', extract.read(), flags)
+                extract.close()
+
+                temp_dict["media"]=rota_map[ps_buffer[0]]
+
+                pd_list.append(temp_dict)
+        
+        return pd_list
+
+    @classmethod
+    def fetch_total_disk_capacity(cls):
+        return 0
 
 def main(config, mode):
     runner=Runner(config)

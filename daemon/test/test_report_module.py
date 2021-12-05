@@ -87,6 +87,26 @@ class TestSystemReportClass(unittest.TestCase):
         for x in actual_result:     #Ensure results are not empty
             self.assertTrue(x)
 
+    def testAddingStaticDiskInfo(self):
+        expected_result = ('capacity', 'physical_disk')
+
+        self.test_report.add_startup_disk_info()
+        section=self.test_report.get_section("disk_")
+        actual_result = tuple(section)
+
+        self.assertTupleEqual(actual_result, expected_result)
         
+    def testFetchingPhysicalDiskList(self):
+        disk_sub_categories = ('model', 'size', 'media')
+        actual_list = SysReport.fetch_physical_disks()
+        
+        for x in actual_list:
+            actual_result=tuple(x)
+            self.assertTupleEqual(actual_result, disk_sub_categories)
+
+    def testFetchingTotalDiskCapacity(self):
+        actual_result=SysReport.fetch_total_disk_capacity()
+        self.assertGreater(actual_result, 0)
+
 if __name__ == '__main__':
     unittest.main()
