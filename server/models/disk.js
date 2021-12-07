@@ -1,30 +1,18 @@
 const mongoose = require('mongoose')
 
-const DiskSchema = new mongoose.Schema({
-  capacity: {
-    type: Number,
-  },
-  type: {
-    type: String,
-  },
+const DiskStaticSchema = new mongoose.Schema({
+  capacity: Number,
+  type: String,
 })
 
-const DiskProcessSchema = new mongoose.Schema({
-  activeTimePercent: {
-    type: Number,
-  },
-  responseTime: {
-    type: Number,
-  },
-  readSpeed: {
-    type: Number,
-  },
-  writeSpeed: {
-    type: Number,
-  },
+const DiskDynamicSchema = new mongoose.Schema({
+  activeTimePercent: Number,
+  responseTime: Number,
+  readSpeed: Number,
+  writeSpeed: Number,
 })
 
 module.exports = {
-  DiskSchema: DiskSchema,
-  DiskProcessSchema: DiskProcessSchema,
+  DiskStaticSchema,
+  DiskDynamicSchema,
 }

@@ -1,36 +1,20 @@
 const mongoose = require('mongoose')
 
-const WifiSchema = new mongoose.Schema({
-  adapterName: {
-    type: String,
-  },
-  SSID: {
-    type: String,
-  },
-  connectionType: {
-    type: String,
-  },
-  ipv4Address: {
-    type: String,
-  },
-  ipv6Address: {
-    type: String,
-  },
+const WifiStaticSchema = new mongoose.Schema({
+  adapterName: String,
+  SSID: String,
+  connectionType: String,
+  ipv4Address: String,
+  ipv6Address: String,
 })
 
-const WifiProcessSchema = new mongoose.Schema({
-  sendSpeed: {
-    type: Number,
-  },
-  receiveSpeed: {
-    type: Number,
-  },
-  signalStrength: {
-    type: String,
-  },
+const WifiDynamicSchema = new mongoose.Schema({
+  sendSpeed: Number,
+  receiveSpeed: Number,
+  signalStrength: String,
 })
 
 module.exports = {
-  WifiSchema: WifiSchema,
-  WifiProcessSchema: WifiProcessSchema,
+  WifiStaticSchema,
+  WifiDynamicSchema,
 }

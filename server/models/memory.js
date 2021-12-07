@@ -1,32 +1,22 @@
 const mongoose = require('mongoose')
 
-const MemorySchema = new mongoose.Schema({
-  maxSize: {
-    type: Number,
-  },
-  formFactor: [
-    {
-      type: String,
-    },
-  ],
+const MemoryStaticSchema = new mongoose.Schema({
+  maxSize: Number,
+  formFactor: [String],
+})
+
+const MemoryDynamicSchema = new mongoose.Schema({
+  inUse: Number,
+  available: Number,
+  cached: Number,
 })
 
 const MemoryProcessSchema = new mongoose.Schema({
-  usagePercentage: {
-    type: Number,
-  },
-  inUse: {
-    type: Number,
-  },
-  available: {
-    type: Number,
-  },
-  cached: {
-    type: Number,
-  },
+  usagePercentage: Number,
 })
 
 module.exports = {
-  MemorySchema: MemorySchema,
-  MemoryProcessSchema: MemoryProcessSchema,
+  MemoryStaticSchema,
+  MemoryDynamicSchema,
+  MemoryProcessSchema,
 }
