@@ -32,7 +32,8 @@ class Runner:
         self.init_report()
         self.report.add_system_process_info()
         self.report.add_memory_usage_info()
-        self.report.add_system_network_usage()
+        self.report.add_system_network_usage() 
+        self.report.add_disk_usage_info()
 
     #produces startup device report
     def gen_startup_report(self):
@@ -151,6 +152,12 @@ class SysReport:
         disk_dictionary["capacity"] = SysReport.fetch_total_disk_capacity()
         disk_dictionary["physical_disk"] = SysReport.fetch_physical_disks()
         self.set_section("disk_", disk_dictionary)
+
+    def add_disk_usage_info(self):
+        disk_usage=dict()
+        disk_usage['physical_disk_io'] = SysReport.fetch_physical_disk_IO()
+        disk_usage['partitions'] = SysReport.fetch_disk_partition_status()
+        self.set_section("disk", disk_usage)
 
     @classmethod
     def fetch_total_memory(cls):
@@ -274,6 +281,44 @@ class SysReport:
     @classmethod
     def fetch_total_disk_capacity(cls):
         return psutil.disk_usage('/').total
+
+    @classmethod
+    def fetch_physical_disk_IO(cls):
+        disk_dict = dict()
+
+        disk_io_buffer = psutil.disk_io_counters(perdisk=True)
+
+        for disk_io in disk_io_buffer:
+            disk_subdict = dict()
+
+            disk_subdict['read_count'] = disk_io_buffer[disk_io][0]
+            disk_subdict['read_bytes'] = disk_io_buffer[disk_io][1]
+            disk_subdict['read_time'] = disk_io_buffer[disk_io][2]
+            disk_subdict['write_count'] = disk_io_buffer[disk_io][3]
+            disk_subdict['write_bytes'] = disk_io_buffer[disk_io][4]
+            disk_subdict['write_time'] = disk_io_buffer[disk_io][5]
+
+            disk_dict[disk_io] = disk_subdict
+
+        return disk_dict
+
+    @classmethod 
+    def fetch_disk_partition_status(cls):
+        disk_dict = dict()
+
+        for partition_path in psutil.disk_partitions():
+            disk_subdict = dict()
+            disk_buffer = psutil.disk_usage(partition_path.device)
+            
+            disk_subdict['total'] = disk_buffer.total
+            disk_subdict['used'] = disk_buffer.used
+            disk_subdict['free'] = disk_buffer.free
+            disk_subdict['percent'] = disk_buffer.percent
+
+            disk_dict[partition_path.device] = disk_subdict
+
+        return disk_dict
+
 
 def main(config, mode):
     runner=Runner(config)

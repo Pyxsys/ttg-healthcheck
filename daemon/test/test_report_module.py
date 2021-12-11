@@ -108,5 +108,41 @@ class TestSystemReportClass(unittest.TestCase):
         actual_result=SysReport.fetch_total_disk_capacity()
         self.assertGreater(actual_result, 100)
 
+    def testAddingDiskUsageInfo(self):
+        expected_result = ( 'physical_disk_io', 'partitions' )
+
+        self.test_report.add_disk_usage_info()
+        section = self.test_report.get_section("disk")
+        actual_result = tuple(section)
+
+        self.assertTupleEqual(actual_result, expected_result)
+
+    def testFetchingDiskIO(self):
+        expected_attributes={'read_bytes', 'read_count', 'read_time', 'write_bytes', 'write_count', 'write_time'}
+        missing_attributes=[]
+
+        disk_io = SysReport.fetch_physical_disk_IO()
+        for item in disk_io:
+            attribute_list = disk_io[item].keys()
+            
+            for attribute in expected_attributes:
+                if attribute not in attribute_list:
+                    missing_attributes.append(attribute)
+            self.assertEqual(len(missing_attributes), 0, msg=missing_attributes)
+
+    def testFetchingPartition(self):
+        expected_attributes={'total', 'free', 'used', 'percent'}
+        missing_attributes=[]
+
+        partitions = SysReport.fetch_disk_partition_status()
+        for item in partitions:
+            attribute_list = partitions[item].keys()
+            
+            for attribute in expected_attributes:
+                if attribute not in attribute_list:
+                    missing_attributes.append(attribute)
+            self.assertEqual(len(missing_attributes), 0, msg=missing_attributes)
+        
+
 if __name__ == '__main__':
     unittest.main()
