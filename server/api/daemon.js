@@ -1,6 +1,7 @@
 const express = require('express')
 const router = express.Router()
 const Device = require('../models/device.js')
+const DeviceLogs = require('../models/device_logs.js')
 const { CpuLogs } = require('../models/cpu.js')
 const { MemoryLogs } = require('../models/memory.js')
 const wifiModel = require('../models/wifi.js')
@@ -27,13 +28,10 @@ router.post('/', async (req, res) => {
   try {
     const payload = req.body
     verifyDeviceIdFormat(payload.deviceId)
-    const newCpuLog = processCpuLogInfo(payload)
-    const newMemoryLog = processMemoryLogInfo(payload)
-    const newWifiLog = processWifiLogInfo(payload)
+    newDeviceLog = processDeviceLogInfo(payload)
 
-    await newCpuLog.save()
-    await newWifiLog.save()
-    await newMemoryLog.save()
+    await newDeviceLog.save()
+
     res.status(200).send()
   } catch (err) {
     res.status(501).send('Server Error: ' + err.message)
@@ -57,58 +55,34 @@ const verifyDeviceIdFormat = (deviceId) => {
 
 const processCpuLogInfo = (payload) => {
   //load values
-  const { deviceId, timestamp, processes } = payload
-
-  //count number of running and stopped processes
-  var runningProcs = 0,
-    sleepingProcs = 0
-  for (const proc of processes) {
-    if (proc.status === 'running') {
-      runningProcs++
-    } else {
-      sleepingProcs++
-    }
-  }
+  const { processes } = payload
 
   //compute values
-  const usagePercentage = sumProcessCpuUsage(processes)
   const usageSpeed = 0
   const numProcesses = processes.length
-  const threadsAlive = runningProcs
-  const threadsSleeping = sleepingProcs
-  const uptime = 0
+  const threadsSleeping = computeLiveSleepingProcesses(processes)[1]
 
-  return new CpuLogs({
-    deviceId,
-    usagePercentage,
+  return {
     usageSpeed,
     numProcesses,
-    threadsAlive,
     threadsSleeping,
-    uptime,
-    timestamp,
-    processes,
-  })
+  }
 }
 
 const processMemoryLogInfo = (payload) => {
-  const { deviceId, timestamp, memory } = payload
+  //load values
+  const { memory } = payload
 
-  const usagePercentage = memory.percent
+  //compute values
   const inUse = memory.used
   const available = memory.available
-  const free = memory.free
   const cached = sumProcessVMSUsage(payload.processes)
 
-  return new MemoryLogs({
-    deviceId,
-    usagePercentage,
+  return {
     inUse,
     available,
-    free,
     cached,
-    timestamp,
-  })
+  }
 }
 
 const processDeviceInfo = (payload) => {
@@ -141,6 +115,26 @@ const processDeviceInfo = (payload) => {
   }
 }
 
+const processDeviceLogInfo = (payload) => {
+  const { deviceId, timestamp } = payload
+
+  const newCpuLog = processCpuLogInfo(payload)
+  const newMemoryLog = processMemoryLogInfo(payload)
+  //const newDiskLog = processDiskLogInfo(payload)
+  const newWifiLog = processWifiLogInfo(payload)
+  const newProcessLogArray = processProcessLogInfo(payload)
+
+  return new DeviceLogs({
+    deviceId,
+    timestamp,
+    cpu: newCpuLog,
+    memory: newMemoryLog,
+    //disk: newDiskLog,
+    wifi: newWifiLog,
+    processes: newProcessLogArray,
+  })
+}
+
 const sumProcessCpuUsage = (processes) => {
   let sum = 0
   processes.forEach((proc) => {
@@ -159,29 +153,76 @@ const sumProcessVMSUsage = (processes) => {
   return sum
 }
 
+const computeLiveSleepingProcesses = (processes) => {
+  //count number of running and stopped processes
+  var runningProcs = 0,
+    sleepingProcs = 0
+  for (const proc of processes) {
+    if (proc.status === 'running') {
+      runningProcs++
+    } else {
+      sleepingProcs++
+    }
+  }
+
+  return runningProcs, sleepingProcs
+}
+
 const processWifiLogInfo = (payload) => {
   //load values
-  const { deviceId, timestamp, network } = payload
+  const { network } = payload
 
   //compute values
   const sendSpeed = network[0]
   const receiveSpeed = network[1]
   const signalStrength = 0
 
-  return new wifiModel.WifiLogs({
-    deviceId,
+  return {
     sendSpeed,
     receiveSpeed,
     signalStrength,
-    timestamp,
+  }
+}
+
+const processProcessLogInfo = (payload) => {
+  //load values
+  const { processes } = payload
+
+  //compute values
+  processArray = new Array()
+
+  processes.forEach((element) => {
+    processArray.push(processSingleProcess(element))
   })
+
+  return processArray
+}
+
+const processSingleProcess = (process) => {
+  //load values
+  const { name, pid, status, cpu_percent, memory_percent } = process
+
+  return {
+    name,
+    pid,
+    status,
+    cpu: {
+      usagePercentage: cpu_percent,
+    },
+    memory: {
+      usagePercentage: memory_percent,
+    },
+  }
 }
 
 module.exports = {
   router,
   verifyDeviceIdFormat,
   processDeviceInfo,
+  processDeviceLogInfo,
   processCpuLogInfo,
   processMemoryLogInfo,
   processWifiLogInfo,
+  processProcessLogInfo,
+  processSingleProcess,
 }
