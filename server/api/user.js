@@ -94,4 +94,23 @@ router.get('/logout', auth, (req, res) => {
     .json({ message: 'Successfully logged out' })
 })
 
+// delete user
+router.delete('/delete/:id', auth, async (req, res) => {
+  try {
+    const user = await User.findOne({ _id: req.userId })
+    const email = String(req.params.id)
+    // check admin role
+    if (user.role == 'admin') {
+      // verify email
+      await User.deleteOne({ email: email })
+      // delete user
+      return res.status(200).json({
+        message: 'User deleted successfully',
+      })
+    }
+  } catch (err) {
+    res.status(500).send('Server error')
+  }
+})
+
 module.exports = router

@@ -1,7 +1,8 @@
 const express = require('express')
 const router = express.Router()
-const { CpuLogs } = require('../models/cpu.js')
 const Device = require('../models/device.js')
+const { CpuLogs } = require('../models/cpu.js')
+const { MemoryLogs } = require('../models/memory.js')
 const wifiModel = require('../models/wifi.js')
 
 // receive device report from daemon
@@ -27,10 +28,12 @@ router.post('/', async (req, res) => {
     const payload = req.body
     verifyDeviceIdFormat(payload.deviceId)
     const newCpuLog = processCpuLogInfo(payload)
+    const newMemoryLog = processMemoryLogInfo(payload)
     const newWifiLog = processWifiLogInfo(payload)
 
     await newCpuLog.save()
     await newWifiLog.save()
+    await newMemoryLog.save()
     res.status(200).send()
   } catch (err) {
     res.status(501).send('Server Error: ' + err.message)
@@ -52,49 +55,9 @@ const verifyDeviceIdFormat = (deviceId) => {
   } else return true
 }
 
-const sumProcessCpuUsage = (processes) => {
-  let sum = 0
-  processes.forEach((proc) => {
-    if (proc.name !== 'System Idle Process') {
-      sum += proc.cpu_percent
-    }
-  })
-  return sum
-}
-
-const processDeviceInfo = (payload) => {
-  const {
-    deviceId,
-    name,
-    description,
-    connectionType,
-    status,
-    provider,
-    hardware,
-    cpu,
-    memory_,
-    disk,
-    wifi,
-  } = payload
-
-  return {
-    deviceId,
-    name,
-    description,
-    connectionType,
-    status,
-    provider,
-    hardware,
-    cpu,
-    memory: memory_,
-    disk,
-    wifi,
-  }
-}
-
 const processCpuLogInfo = (payload) => {
   //load values
-  const { deviceId, timestamp, processes,} = payload
+  const { deviceId, timestamp, processes } = payload
 
   //count number of running and stopped processes
   var runningProcs = 0,
@@ -128,6 +91,74 @@ const processCpuLogInfo = (payload) => {
   })
 }
 
+const processMemoryLogInfo = (payload) => {
+  const { deviceId, timestamp, memory } = payload
+
+  const usagePercentage = memory.percent
+  const inUse = memory.used
+  const available = memory.available
+  const free = memory.free
+  const cached = sumProcessVMSUsage(payload.processes)
+
+  return new MemoryLogs({
+    deviceId,
+    usagePercentage,
+    inUse,
+    available,
+    free,
+    cached,
+    timestamp,
+  })
+}
+
+const processDeviceInfo = (payload) => {
+  const {
+    deviceId,
+    name,
+    description,
+    connectionType,
+    status,
+    provider,
+    hardware,
+    cpu,
+    memory_,
+    disk,
+    wifi,
+  } = payload
+
+  return {
+    deviceId,
+    name,
+    description,
+    connectionType,
+    status,
+    provider,
+    hardware,
+    cpu,
+    memory: memory_,
+    disk,
+    wifi,
+  }
+}
+
+const sumProcessCpuUsage = (processes) => {
+  let sum = 0
+  processes.forEach((proc) => {
+    if (proc.name !== 'System Idle Process') {
+      sum += proc.cpu_percent
+    }
+  })
+  return sum
+}
+
+const sumProcessVMSUsage = (processes) => {
+  let sum = 0
+  processes.forEach((proc) => {
+    sum += proc.vms
+  })
+  return sum
+}
+
 const processWifiLogInfo = (payload) => {
   //load values
   const { deviceId, timestamp, network } = payload
@@ -151,5 +182,6 @@ module.exports = {
   verifyDeviceIdFormat,
   processDeviceInfo,
   processCpuLogInfo,
+  processMemoryLogInfo,
   processWifiLogInfo,
 }

@@ -69,6 +69,15 @@ class TestSystemReportClass(unittest.TestCase):
 
         self.assertTupleEqual(actual_result, expected_result)
 
+    def testAddingMemoryInfoToReport(self):
+        expected_result = ('used', 'free', 'percent', 'available')
+        
+        self.test_report.add_memory_usage_info()
+        section=self.test_report.get_section("memory")
+        actual_result = tuple(section)
+
+        self.assertCountEqual(actual_result, expected_result)
+
     def testFetchingTotalMemory(self):
         actual_result=SysReport.fetch_total_memory()
         self.assertGreater(actual_result, 0)

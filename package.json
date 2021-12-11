@@ -1,6 +1,7 @@
 {
   "devDependencies": {
     "concurrently": "^6.2.2",
+    "cypress": "^9.0.0",
     "husky": "^4.3.8",
     "lint-staged": "^8.2.1"
   },

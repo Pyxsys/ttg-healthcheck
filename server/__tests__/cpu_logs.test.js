@@ -13,6 +13,12 @@ const cpuMockPayload1 = {
     { name: 'celebid', pid: 12344, cpu_percent: 23.66 },
     { name: 'System Idle Process', pid: 12343, cpu_percent: 64.2 },
   ],
+  memory: {
+    available: 25166790656,
+    free: 25166790656,
+    used: 9103147008,
+    percent: 26.6,
+  },
   network: [0, 0],
 }
 const cpuMockPayload2 = {
@@ -23,6 +29,12 @@ const cpuMockPayload2 = {
     { name: 'celebid', pid: 12344, cpu_percent: 34.29 },
     { name: 'System Idle Process', pid: 12343, cpu_percent: 41.96 },
   ],
+  memory: {
+    available: 25166790656,
+    free: 25166790656,
+    used: 9103147008,
+    percent: 26.6,
+  },
   network: [0, 0],
 }
 const cpuMockPayload3 = {
@@ -33,6 +45,12 @@ const cpuMockPayload3 = {
     { name: 'celebid', pid: 12344, cpu_percent: 6.86 },
     { name: 'System Idle Process', pid: 12343, cpu_percent: 82.19 },
   ],
+  memory: {
+    available: 25166790656,
+    free: 25166790656,
+    used: 9103147008,
+    percent: 26.6,
+  },
   network: [0, 0],
 }
 
