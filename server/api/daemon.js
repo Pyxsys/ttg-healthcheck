@@ -40,50 +40,9 @@ router.post('/', async (req, res) => {
 
 /*
  * ==================
- * Helper Functions
+ * Loading Functions
  * ==================
  */
-
-const verifyDeviceIdFormat = (deviceId) => {
-  const pattern = '^[0-9A-Z]{8}(?:-[0-9A-Z]{4}){3}-[0-9A-Z]{12}$'
-  const regex = new RegExp(pattern, 'i')
-
-  if (!regex.test(deviceId)) {
-    throw new Error('deviceId [' + deviceId + '] is invalid')
-  } else return true
-}
-
-const processCpuLogInfo = (payload) => {
-  //load values
-  const { processes } = payload
-
-  //compute values
-  const usageSpeed = 0
-  const numProcesses = processes.length
-  const threadsSleeping = computeLiveSleepingProcesses(processes)[1]
-
-  return {
-    usageSpeed,
-    numProcesses,
-    threadsSleeping,
-  }
-}
-
-const processMemoryLogInfo = (payload) => {
-  //load values
-  const { memory } = payload
-
-  //compute values
-  const inUse = memory.used
-  const available = memory.available
-  const cached = sumProcessVMSUsage(payload.processes)
-
-  return {
-    inUse,
-    available,
-    cached,
-  }
-}
 
 const processDeviceInfo = (payload) => {
   const {
@@ -135,37 +94,36 @@ const processDeviceLogInfo = (payload) => {
   })
 }
 
-const sumProcessCpuUsage = (processes) => {
-  let sum = 0
-  processes.forEach((proc) => {
-    if (proc.name !== 'System Idle Process') {
-      sum += proc.cpu_percent
-    }
-  })
-  return sum
-}
+const processCpuLogInfo = (payload) => {
+  //load values
+  const { processes } = payload
 
-const sumProcessVMSUsage = (processes) => {
-  let sum = 0
-  processes.forEach((proc) => {
-    sum += proc.vms
-  })
-  return sum
-}
+  //compute values
+  const usageSpeed = 0
+  const numProcesses = processes.length
+  const threadsSleeping = computeLiveSleepingProcesses(processes)[1]
 
-const computeLiveSleepingProcesses = (processes) => {
-  //count number of running and stopped processes
-  var runningProcs = 0,
-    sleepingProcs = 0
-  for (const proc of processes) {
-    if (proc.status === 'running') {
-      runningProcs++
-    } else {
-      sleepingProcs++
-    }
+  return {
+    usageSpeed,
+    numProcesses,
+    threadsSleeping,
   }
+}
 
-  return runningProcs, sleepingProcs
+const processMemoryLogInfo = (payload) => {
+  //load values
+  const { memory } = payload
+
+  //compute values
+  const inUse = memory.used
+  const available = memory.available
+  const cached = sumProcessVMSUsage(payload.processes)
+
+  return {
+    inUse,
+    available,
+    cached,
+  }
 }
 
 const processWifiLogInfo = (payload) => {
@@ -213,6 +171,54 @@ const processSingleProcess = (process) => {
       usagePercentage: memory_percent,
     },
   }
+}
+
+/*
+ * ==================
+ * Helper Functions
+ * ==================
+ */
+
+const verifyDeviceIdFormat = (deviceId) => {
+  const pattern = '^[0-9A-Z]{8}(?:-[0-9A-Z]{4}){3}-[0-9A-Z]{12}$'
+  const regex = new RegExp(pattern, 'i')
+
+  if (!regex.test(deviceId)) {
+    throw new Error('deviceId [' + deviceId + '] is invalid')
+  } else return true
+}
+
+const sumProcessCpuUsage = (processes) => {
+  let sum = 0
+  processes.forEach((proc) => {
+    if (proc.name !== 'System Idle Process') {
+      sum += proc.cpu_percent
+    }
+  })
+  return sum
+}
+
+const sumProcessVMSUsage = (processes) => {
+  let sum = 0
+  processes.forEach((proc) => {
+    sum += proc.vms
+  })
+  return sum
+}
+
+const computeLiveSleepingProcesses = (processes) => {
+  //count number of running and stopped processes
+  var runningProcs = 0,
+    sleepingProcs = 0
+  for (const proc of processes) {
+    if (proc.status === 'running') {
+      runningProcs++
+    } else {
+      sleepingProcs++
+    }
+  }
+
+  return runningProcs, sleepingProcs
 }
 
 module.exports = {
