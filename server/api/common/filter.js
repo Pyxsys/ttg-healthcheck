@@ -1,22 +1,53 @@
 // String attributes list to check with req.query object
 const stringAttributes = [
+  // common
   'orderBy',
+
+  // devices and device_logs
   'deviceId',
+
+  // devices
   'name',
   'description',
   'connectionType',
   'status',
   'provider',
-  'memory.formFactor',
+
+  // hardware static
   'hardware.hardwareName',
+
+  // memory static
+  'memory.formFactor',
+
+  // wifi static
+  'wifi.adapterName',
+  'wifi.SSID',
+  'wifi.connectionType',
+  'wifi.ipv4Address',
+  'wifi.ipv6Address',
+
+  // disk.static
   'disk.type',
+
+  // device_logs
   'timestamp',
+
+  // wifi dynamic
+  'wifi.signalStrength',
+
+  // users
+  'name',
+  'password',
+  'email',
+  'role',
 ]
 
 // Number attributes list to check with req.query object
 const numberAttributes = [
+  // common to all
   'limit',
-  'orderValue',
+
+  // cpu static
   'cpu.baseSpeed',
   'cpu.sockets',
   'cpu.cores',
@@ -24,27 +55,43 @@ const numberAttributes = [
   'cpu.cacheSizeL1',
   'cpu.cacheSizeL2',
   'cpu.cacheSizeL3',
+
+  // wifi static
   'wifi.adapterName',
   'wifi.SSID',
   'wifi.connectionType',
   'wifi.ipv4Address',
   'wifi.ipv6Address',
+
+  // memory static
   'memory.maxSize',
+
+  // disk static
   'disk.capacity',
-  'usagePercentage',
-  'usageSpeed',
-  'numProcesses',
-  'threadsAlive',
-  'threadsSleeping',
-  'uptime',
-  'sendSpeed',
-  'receiveSpeed',
-  'signalStrength',
-  'inUse',
-  'available',
-  'cached',
-  'pagedPool',
-  'nonPagedPool',
+
+  // process schema
+  'processes.pid',
+  'processes.cpu.usagePercentage',
+  'processes.memory.usagePercentage',
+
+  // cpu dynamic
+  'cpu.usageSpeed',
+  'cpu.numProcesses',
+  'cpu.threadsSleeping',
+  'cpu.aggregatedPercentage',
+
+  // wifi dynamic
+  'wifi.sendSpeed',
+  'wifi.receiveSpeed',
+  'wifi.signalStrength',
+
+  // memory dynamic
+  'memory.inUse',
+  'memory.available',
+  'memory.cached',
+  'memory.aggregatedPercentage',
+
+  // disk dynamic
   'activeTimePercent',
   'responseTime',
   'readSpeed',
@@ -90,13 +137,17 @@ const parseQuery = (query) => {
   const paramKeyValue = Object.entries(query)
   const validParams = paramKeyValue.reduce((acc, val) => {
     const key = String(val[0])
-    const value = stringAttributes.includes(key) ? String(val[1]) : (numberAttributes.includes(key) ? Number(val[1]) : null)
+    const value = stringAttributes.includes(key)
+      ? String(val[1])
+      : numberAttributes.includes(key)
+      ? Number(val[1])
+      : null
     if (value && !String(value).includes(' ')) {
       acc[key] = value
     }
     return acc
   }, {})
-  
+
   if (validParams.limit) {
     options.limit = validParams.limit
     delete validParams.limit
@@ -104,7 +155,8 @@ const parseQuery = (query) => {
 
   if (validParams.orderBy) {
     const orderValue = validParams.orderBy.startsWith('-') ? 1 : -1
-    const orderBy = orderValue < 0 ? validParams.orderBy.slice(1) : validParams.orderBy
+    const orderBy =
+      orderValue < 0 ? validParams.orderBy.slice(1) : validParams.orderBy
     options.sort = {
       [orderBy]: orderValue,
     }

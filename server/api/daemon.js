@@ -102,27 +102,31 @@ const processCpuLogInfo = (payload) => {
   const usageSpeed = 0
   const numProcesses = processes.length
   const threadsSleeping = computeLiveSleepingProcesses(processes)[1]
+  const aggregatedPercentage = sumCpuPercentUsage(processes)
 
   return {
     usageSpeed,
     numProcesses,
     threadsSleeping,
+    aggregatedPercentage,
   }
 }
 
 const processMemoryLogInfo = (payload) => {
   //load values
-  const { memory } = payload
+  const { memory, processes } = payload
 
   //compute values
   const inUse = memory.used
   const available = memory.available
-  const cached = sumProcessVMSUsage(payload.processes)
+  const cached = sumProcessVMSUsage(processes)
+  const aggregatedPercentage = sumMemoryPercentUsage(processes)
 
   return {
     inUse,
     available,
     cached,
+    aggregatedPercentage,
   }
 }
 
@@ -219,6 +223,28 @@ const computeLiveSleepingProcesses = (processes) => {
   }
 
   return runningProcs, sleepingProcs
+}
+
+const sumMemoryPercentUsage = (processes) => {
+  const aggregatedPercentage = 0
+
+  processes.forEach((element) => {
+    const process = processSingleProcess(element)
+    aggregatedPercentage += process.memory_percent
+  })
+
+  return aggregatedPercentage
+}
+
+const sumCpuPercentUsage = (processes) => {
+  const aggregatedPercentage = 0
+
+  processes.forEach((element) => {
+    const process = processSingleProcess(element)
+    aggregatedPercentage += process.cpu_percent
+  })
+
+  return aggregatedPercentage
 }
 
 module.exports = {
