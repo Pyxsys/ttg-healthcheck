@@ -55,7 +55,7 @@ const filterData = (query) => {
   const options = {}
   const queryOutput = {}
 
-  for (let k in query) {
+  for (const k in query) {
     query[k] = query[k].split(',')
     if (stringAttributes.includes(k)) {
       queryOutput[String(k)] = query[k]
@@ -82,6 +82,40 @@ const filterData = (query) => {
     }
   }
   return [queryOutput, options]
+}
+
+const parseQuery = (query) => {
+  const options = {}
+
+  const paramKeyValue = Object.entries(query)
+  const validParams = paramKeyValue.reduce((acc, val) => {
+    const key = String(val[0])
+    const value = stringAttributes.includes(key) ? String(val[1]) : (numberAttributes.includes(key) ? Number(val[1]) : null)
+    if (value && !String(value).includes(' ')) {
+      acc[key] = value
+    }
+    return acc
+  }, {})
+  
+  if (validParams.limit) {
+    options.limit = validParams.limit
+    delete validParams.limit
+  }
+
+  if (validParams.orderBy) {
+    const orderValue = validParams.orderBy.startsWith('-') ? 1 : -1
+    const orderBy = orderValue < 0 ? validParams.orderBy.slice(1) : validParams.orderBy
+    options.sort = {
+      [orderBy]: orderValue,
+    }
+    delete validParams.orderValue
+    delete validParams.orderBy
+  } else {
+    options.sort = {
+      timestamp: [-1],
+    }
+  }
+  return [validParams, options]
 }
 
 const validateTimestamp = (start, end) => {
