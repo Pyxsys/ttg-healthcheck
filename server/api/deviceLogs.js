@@ -22,4 +22,23 @@ router.get('/timestamp', auth, async (req, res) => {
   }
 })
 
+// get latest device logs from a list of device Ids
+router.get('/latest', auth, async (req, res) => {
+  const query = Object(req.query)
+  
+  // If query does not have Ids attribute
+  if (!query.Ids) {
+    return res.status(501).json({ Results: [] })
+  }
+
+  const idsArray = String(query.Ids).split(',')
+  const results = await Promise.all(idsArray.map(async id => {
+    const res = await DeviceLogs.find({deviceId: id}, {}, {limit: 1, sort: {timestamp: [-1]}})
+    return res.length > 0 ? res[0] : null
+  }));
+  const nonEmptyResults = results.filter(deviceLog => deviceLog)
+
+  return res.status(200).json({ Results: nonEmptyResults })
+})
+
 module.exports = router
