@@ -14,9 +14,12 @@ $gray-700: #2c2c2c;
 $gray-800: #1d1d1d;
 $gray-900: #101010;
 
-$screen-w-sm: 280px; 
-$screen-w-md: 376px; 
-$screen-w-lg: 768px; 
+$screen-w-sm: 280px;
+$screen-w-md: 376px;
+$screen-w-lg: 768px;
+$screen-w-xlg: 1366px;
+$screen-w-xxlg: 1750px;
+$screen-w-xxxlg: 2520px;
 
 html,
 body {
@@ -27,72 +30,111 @@ body {
 
 // Custom scrollbar only for computers
 @media only screen and (min-width: 768px) {
-	.cerebellum-scrollbar {
-		&::-webkit-scrollbar,             // The whole scrollbar (background)
+  &::-webkit-scrollbar,             // The whole scrollbar (background)
 		&::-webkit-scrollbar-track,       // The track where the handle can go
     &::-webkit-scrollbar-track-piece, // The Track that was selected
 		&::-webkit-scrollbar-thumb,       // The draggable handle
-		&::-webkit-scrollbar-corner {     // The intersection of the horizontal and vertical scrollbar
-			background-color: $gray-600;
-      border-radius: 10px;
-      border: 2px solid transparent;
-      background-clip: padding-box; // <== make the border work
-      &:hover{
-        border: 0;
-      }
+		&::-webkit-scrollbar-corner {
+    // The intersection of the horizontal and vertical scrollbar
+    background-color: $gray-600;
+    border-radius: 10px;
+    background-clip: padding-box; // <== make the border work
+    &:hover {
+      border: 0;
     }
+  }
 
-		&::-webkit-scrollbar {
-			width: 12px;
-      height: 10px;
-		}
-    &::-webkit-scrollbar-track-piece:active {
-      background-color: lighten($gray-600, 5%);
+  &::-webkit-scrollbar {
+    width: 12px;
+    height: 10px;
+  }
+  &::-webkit-scrollbar-track-piece:active {
+    background-color: lighten($gray-600, 5%);
+  }
+  &::-webkit-scrollbar-thumb {
+    background-color: $gray-400;
+    &:active {
+      background-color: $gray-200;
     }
-		&::-webkit-scrollbar-thumb {
-			background-color: $gray-400;
-      &:active {
-        background-color: $gray-200;
-      }
-		}
-	}
+  }
 }
 .cerebellum-scrollbar {
   overflow-y: auto;
 }
 
-
 .home-header {
   background-color: $primary;
-  min-height: 30%;
-  
+
   -webkit-transition: all 0.5s ease;
   -moz-transition: all 0.5s ease;
   -o-transition: all 0.5s ease;
   transition: all 0.5s ease;
-  
-  @media screen and (max-width: 350px),
-  screen and (max-height: 650px) {
-      min-height: 20% !important;
+
+  @media (min-width: $screen-w-sm) {
+    min-height: 200px !important;
+  }
+  @media (min-width: $screen-w-md) {
+    min-height: 220px !important;
+  }
+  @media (min-width: $screen-w-lg) {
+    min-height: 280px !important;
+  }
+  @media (min-width: $screen-w-xlg) {
+    min-height: 330px !important;
+  }
+  @media (min-width: $screen-w-xxlg) {
+    min-height: 370px !important;
+  }
+  @media (min-width: $screen-w-xxxlg) {
+    min-height: 420px !important;
   }
 }
 
 .home-content {
   background-color: $fourth;
+  @media (min-width: $screen-w-sm) {
+    min-height: 400px;
+  }
+  @media (min-width: $screen-w-md) {
+    min-height: 400px;
+  }
+  @media (min-width: $screen-w-lg) {
+    min-height: 400px;
+  }
+  @media (min-width: $screen-w-xlg) {
+    min-height: 450px;
+  }
+  @media (min-width: $screen-w-xxlg) {
+    min-height: 500px;
+  }
+  @media (min-width: $screen-w-xxxlg) {
+    min-height: 550px;
+  }
 }
 
 .home-footer {
   background-color: $fourth;
-
 }
 
 .home-logo {
   content: url('assets/brainlogo.png');
   @media (min-width: $screen-w-sm) {
-    max-width: 100%;
+    width: 100%;
   }
   @media (min-width: $screen-w-md) {
-    max-width: 330px;
+    width: 330px;
+  }
+  @media (min-width: $screen-w-lg) {
+    width: 330px;
+  }
+  @media (min-width: $screen-w-xlg) {
+    width: 340px;
+  }
+  @media (min-width: $screen-w-xxlg) {
+    width: 380px;
+  }
+  @media (min-width: $screen-w-xxxlg) {
+    width: 420px;
   }
 }
 
@@ -110,14 +152,30 @@ body {
   font-weight: 600;
 }
 
-
 .home-header-subtitle {
   padding-bottom: 0px;
   text-align: center;
   color: $secondary;
   opacity: 80%;
-  font-size: 14px;
   font-weight: 500;
+  @media (min-width: $screen-w-sm) {
+    font-size: 13px;
+  }
+  @media (min-width: $screen-w-md) {
+    font-size: 13px;
+  }
+  @media (min-width: $screen-w-lg) {
+    font-size: 13px;
+  }
+  @media (min-width: $screen-w-xlg) {
+    font-size: 13px;
+  }
+  @media (min-width: $screen-w-xxlg) {
+    font-size: 16px;
+  }
+  @media (min-width: $screen-w-xxxlg) {
+    font-size: 18px;
+  }
 }
 
 .home-form {
@@ -131,6 +189,18 @@ body {
     padding-right: 0;
     width: 330px;
   }
+  @media (min-width: $screen-w-lg) {
+    width: 330px;
+  }
+  @media (min-width: $screen-w-xlg) {
+    width: 340px;
+  }
+  @media (min-width: $screen-w-xxlg) {
+    width: 380px;
+  }
+  @media (min-width: $screen-w-xxxlg) {
+    width: 420px;
+  }
 }
 
 .home-input {
@@ -140,10 +210,28 @@ body {
   @media (min-width: $screen-w-md) {
     padding: 13px !important;
   }
+  @media (min-width: $screen-w-lg) {
+    padding: 13px !important;
+  }
+  @media (min-width: $screen-w-xlg) {
+    padding: 13px !important;
+  }
+  @media (min-width: $screen-w-xxlg) {
+    padding: 17px !important;
+    font-size: 17px !important;
+  }
+  @media (min-width: $screen-w-xxxlg) {
+    padding: 19px !important;
+    font-size: 19px !important;
+  }
   border: none !important;
   border-radius: 0 0.25rem 0.25rem 0 !important;
   box-shadow: none !important;
   -webkit-box-shadow: none !important;
+}
+
+.input-group-text {
+  border: none !important;
 }
 
 .home-button {
@@ -153,10 +241,23 @@ body {
   @media (min-width: $screen-w-md) {
     padding: 13px !important;
   }
+  @media (min-width: $screen-w-lg) {
+    padding: 13px !important;
+  }
+  @media (min-width: $screen-w-xlg) {
+    padding: 13px !important;
+  }
+  @media (min-width: $screen-w-xxlg) {
+    padding: 17px !important;
+    font-size: 17px !important;
+  }
+  @media (min-width: $screen-w-xxxlg) {
+    padding: 19px !important;
+    font-size: 19px !important;
+  }
   opacity: 80%;
   color: $secondary !important;
   font-weight: 500 !important;
-  font-size: 15px !important;
   border: 1px solid #b1b1b1ab !important;
   background-color: $fourth !important;
 }
@@ -164,7 +265,6 @@ body {
 .home-button:hover {
   background-color: $primary !important;
 }
-
 
 /* Position and sizing of burger button */
 .bm-burger-button {

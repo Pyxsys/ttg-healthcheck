@@ -91,7 +91,7 @@ const Login = () => {
             </InputGroup>
           </Form.Group>
           <Button className="w-100 mt-3 home-button" type="submit">
-              Login
+            Login
           </Button>
           <Link to="/signup">
             <Button className="w-100 mt-3 home-button">Register</Button>
