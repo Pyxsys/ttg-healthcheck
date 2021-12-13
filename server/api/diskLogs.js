@@ -1,12 +1,12 @@
 const express = require('express')
 const router = express.Router()
 const Disk = require('../models/disk.js')
-const { filterData, filterTimestampQuery } = require('./common/filter')
+const { parseQuery, filterTimestampQuery } = require('./common/filter')
 const auth = require('../middleware/auth.js')
 
 // get Disk Logs with any attribute of the DiskLogs Model
 router.get('/', auth, async (req, res) => {
-  const [query, options] = filterData(Object(req.query))
+  const [query, options] = parseQuery(Object(req.query))
   const results = await Disk.DiskLogs.find({ $and: [query] }, {}, options)
   return res.status(200).json({ Results: results })
 })

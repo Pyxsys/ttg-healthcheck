@@ -3,7 +3,7 @@ const connectDB = require('../db/db_connection')
 const app = require('../app')
 const mongoose = require('mongoose')
 
-const { filterData } = require('../api/common/filter')
+const { parseQuery } = require('../api/common/filter')
 
 describe('Filter out attributes from Query', () => {
   it('should filter out the keyword limit and sort by -timestamp by default', () => {
@@ -11,7 +11,7 @@ describe('Filter out attributes from Query', () => {
       deviceId: '1',
       limit: '1',
     }
-    const [query, options] = filterData(req)
+    const [query, options] = parseQuery(req)
     expect(query).toEqual({ deviceId: ['1'] })
     expect(options).toEqual({ limit: [1], sort: { timestamp: [-1] } })
   })
@@ -22,7 +22,7 @@ describe('Filter out attributes from Query', () => {
       orderBy: 'timestamp',
       orderValue: '-1',
     }
-    const [query, options] = filterData(req)
+    const [query, options] = parseQuery(req)
     expect(query).toEqual({ deviceId: ['1'] })
     expect(options).toEqual({ sort: { timestamp: [-1] } })
   })

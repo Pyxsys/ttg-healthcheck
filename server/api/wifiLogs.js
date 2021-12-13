@@ -1,12 +1,12 @@
 const express = require('express')
 const router = express.Router()
 const Wifi = require('../models/wifi.js')
-const { filterData, filterTimestampQuery } = require('./common/filter')
+const { parseQuery, filterTimestampQuery } = require('./common/filter')
 const auth = require('../middleware/auth.js')
 
 // get Memory Logs with any attribute of the MemoryLogs Model
 router.get('/', auth, async (req, res) => {
-  const [query, options] = filterData(Object(req.query))
+  const [query, options] = parseQuery(Object(req.query))
   const results = await Wifi.WifiLogs.find({ $and: [query] }, {}, options)
   return res.status(200).json({ Results: results })
 })
