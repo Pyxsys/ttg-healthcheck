@@ -14,6 +14,7 @@ const CpuDynamicSchema = new mongoose.Schema({
   usageSpeed: Number,
   numProcesses: Number,
   threadsSleeping: Number,
+  aggregatedPercentage: Number,
 })
 
 const CpuProcessSchema = new mongoose.Schema({

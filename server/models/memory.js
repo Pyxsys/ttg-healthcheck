@@ -9,6 +9,7 @@ const MemoryDynamicSchema = new mongoose.Schema({
   inUse: Number,
   available: Number,
   cached: Number,
+  aggregatedPercentage: Number,
 })
 
 const MemoryProcessSchema = new mongoose.Schema({
