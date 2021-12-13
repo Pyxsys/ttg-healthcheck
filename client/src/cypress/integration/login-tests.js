@@ -1,12 +1,13 @@
 /* eslint-disable jest/expect-expect */
+Cypress.env();
 const testUser = {
   name: 'test2',
-  password: 'test',
+  password: Cypress.env('test_password'),
   email: 'selenium@gmail.com',
 };
 const invalidUser = {
   name: 'random',
-  password: 'wrong',
+  password: Cypress.env('test_password'),
   email: 'invalidemail@gmail.com',
 };
 
@@ -19,7 +20,7 @@ describe('Test 1: See if certain headers and labels and buttons are visible.', (
     // Assert that the following writing can be seen by the user.
     cy.contains('LOGIN').should('be.visible');
   });
-  it('Test 1.3: Check to see if the Label \'Email Address\' is visible in the application', () => {
+  it('Test 1.2: Check to see if the Label \'Email Address\' is visible in the application', () => {
     // Go to login page
     cy.visit('/');
 
@@ -51,10 +52,7 @@ describe('Test 1: See if certain headers and labels and buttons are visible.', (
 
 // Check to see if the buttons try to redirect us to the proper urls.
 describe('Test 2: Check to see if the buttons try to redirect us to the proper urls.', () => {
-  it('Test 2.1: Click on Login button and see if it redirects us to Dashboard.', () => {
-    // TODO
-  });
-  it('Test 2.2: Click on Signup button and see if it redirects us to Signup page.', () => {
+  it('Test 2.1: Click on Signup button and see if it redirects us to Signup page.', () => {
     // Go to login page
     cy.visit('/');
 

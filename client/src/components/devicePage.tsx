@@ -65,12 +65,32 @@ const DevicePage = () => {
     );
   };
 
+  const uuidHeaderFormatter = (
+      column: any,
+      colIndex: any,
+      {sortElement, filterElement}: any,
+  ) => {
+    return (
+      <div style={{display: 'flex', flexDirection: 'column'}}>
+        {column.text}
+        <div style={{display: 'flex', flexDirection: 'row'}}>
+          {filterElement}
+          {sortElement}
+        </div>
+      </div>
+    );
+  };
+
   const columns = [
     {
       dataField: 'id',
-      text: 'PID',
-      filter: textFilter(),
+      text: 'UUID',
+      filter: textFilter({
+        placeholder: 'Filter by UUID...',
+      }),
+      sort: true,
       formatter: idFormatter,
+      headerFormatter: uuidHeaderFormatter,
     },
 
     {
