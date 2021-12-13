@@ -14,7 +14,7 @@ const External = ({children}: { children: JSX.Element }) => {
         <i className="bottom-triangle"></i>
       </div>
 
-      <div className="flex-grow-1 d-flex flex-column align-items-center justify-content-center home-content">
+      <div className="flex-grow-1 d-flex flex-column align-items-center home-content">
         {children}
       </div>
 
