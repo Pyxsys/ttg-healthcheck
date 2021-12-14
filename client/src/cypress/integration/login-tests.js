@@ -17,40 +17,37 @@ const validatePlaceholder = (input, term) => {
 
 // See if certain headers and labels and buttons are visible.
 describe('Test 1: See if certain headers and labels and buttons are visible.', () => {
-  it('Test 1.1: Check to see if the header \'Log in to launch your dashboard\' is visible in the application.', () => {
-    // Go to login page
-    cy.visit('/');
+  beforeaAll(() =>{
+    const loginPage = '/';
+    cy.visit(loginPage);
+  });
 
+  it('Test 1.1: Check to see if the header \'Log in to launch your dashboard\' is visible in the application.', () => {
+    const dashHeader = 'Log in to launch your dashboard';
     // Assert that the following writing can be seen by the user.
-    cy.contains('Log in to launch your dashboard').should('be.visible');
+    cy.contains(dashHeader).should('be.visible');
   });
   it('Test 1.2: Check to see if the placeholder \'Email\' is visible in the application', () => {
-    // Go to login page
-    cy.visit('/');
-
+    const emailInput = 'input[name="email1"]';
+    const emailValue = 'Email';
     // Assert that the following writing can be seen by the user.
-    validatePlaceholder('input[name="email1"]', 'Email');
+    validatePlaceholder(emailInput, emailValue);
   });
   it('Test 1.3: Check to see if the placeholder \'Password\' is visible in the application', () => {
-    // Go to login page
-    cy.visit('/');
-
+    const passwordInput = 'input[name="password1"]';
+    const passwordValue = 'Password';
     // Assert that the following writing can be seen by the user.
-    validatePlaceholder('input[name="password1"]', 'Password');
+    validatePlaceholder(passwordInput, passwordValue);
   });
   it('Test 1.4: Check to see if the button \'Login\' is visible in the application', () => {
-    // Go to login page
-    cy.visit('/');
-
+    const loginButton = 'Login';
     // Assert that the following writing can be seen by the user.
-    cy.contains('Login').should('be.visible');
+    cy.contains(loginButton).should('be.visible');
   });
   it('Test 1.5: Check to see if the button \'Register\' is visible in the application', () => {
-    // Go to login page
-    cy.visit('/');
-
+    const registerButton = 'Register';
     // Assert that the following writing can be seen by the user.
-    cy.contains('Register').should('be.visible');
+    cy.contains(registerButton).should('be.visible');
   });
 });
 
