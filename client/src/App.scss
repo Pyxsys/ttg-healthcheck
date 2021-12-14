@@ -14,12 +14,13 @@ $gray-700: #2c2c2c;
 $gray-800: #1d1d1d;
 $gray-900: #101010;
 
+// Media query sizes
 $screen-w-sm: 280px;
 $screen-w-md: 376px;
 $screen-w-lg: 768px;
 $screen-w-xlg: 1366px;
-$screen-w-xxlg: 1750px;
-$screen-w-xxxlg: 2520px;
+$screen-w-xxlg: 1940px;
+$screen-w-xxxlg: 2350px;
 
 html,
 body {
@@ -28,8 +29,13 @@ body {
   width: 100%;
 }
 
+/*
+**  LOGIN/SIGNUP PAGE
+**
+*/
+
 // Custom scrollbar only for computers
-@media only screen and (min-width: 768px) {
+@media only screen and (min-width: $screen-w-md) {
   &::-webkit-scrollbar,             // The whole scrollbar (background)
 		&::-webkit-scrollbar-track,       // The track where the handle can go
     &::-webkit-scrollbar-track-piece, // The Track that was selected
@@ -37,7 +43,6 @@ body {
 		&::-webkit-scrollbar-corner {
     // The intersection of the horizontal and vertical scrollbar
     background-color: $gray-600;
-    border-radius: 10px;
     background-clip: padding-box; // <== make the border work
     &:hover {
       border: 0;
@@ -45,13 +50,14 @@ body {
   }
 
   &::-webkit-scrollbar {
-    width: 12px;
+    width: 13px;
     height: 10px;
   }
   &::-webkit-scrollbar-track-piece:active {
     background-color: lighten($gray-600, 5%);
   }
   &::-webkit-scrollbar-thumb {
+    border-radius: 10px;
     background-color: $gray-400;
     &:active {
       background-color: $gray-200;
@@ -71,38 +77,38 @@ body {
     min-height: 200px !important;
   }
   @media (min-width: $screen-w-md) {
-    min-height: 220px !important;
+    min-height: 200px !important;
   }
   @media (min-width: $screen-w-lg) {
-    min-height: 280px !important;
+    min-height: 270px !important;
   }
   @media (min-width: $screen-w-xlg) {
-    min-height: 330px !important;
+    min-height: 270px !important;
   }
   @media (min-width: $screen-w-xxlg) {
-    min-height: 370px !important;
+    min-height: 330px !important;
   }
   @media (min-width: $screen-w-xxxlg) {
-    min-height: 420px !important;
+    min-height: 350px !important;
   }
 }
 
 .home-content {
   background-color: $fourth;
   @media (min-width: $screen-w-sm) {
-    min-height: 400px;
+    min-height: 500px;
   }
   @media (min-width: $screen-w-md) {
-    min-height: 400px;
+    min-height: 500px;
   }
   @media (min-width: $screen-w-lg) {
-    min-height: 400px;
+    min-height: 500px;
   }
   @media (min-width: $screen-w-xlg) {
-    min-height: 450px;
+    min-height: 550px;
   }
   @media (min-width: $screen-w-xxlg) {
-    min-height: 500px;
+    min-height: 550px;
   }
   @media (min-width: $screen-w-xxxlg) {
     min-height: 550px;
@@ -156,7 +162,7 @@ body {
   opacity: 80%;
   font-weight: 500;
   @media (min-width: $screen-w-sm) {
-    font-size: 13px;
+    font-size: 12px;
   }
   @media (min-width: $screen-w-md) {
     font-size: 13px;
@@ -168,10 +174,10 @@ body {
     font-size: 13px;
   }
   @media (min-width: $screen-w-xxlg) {
-    font-size: 15px;
+    font-size: 14px;
   }
   @media (min-width: $screen-w-xxxlg) {
-    font-size: 17px;
+    font-size: 16px;
   }
 }
 
@@ -215,12 +221,12 @@ body {
     padding: 13px !important;
   }
   @media (min-width: $screen-w-xxlg) {
-    padding: 16px !important;
-    font-size: 16px !important;
+    padding: 15px !important;
+    font-size: 15px !important;
   }
   @media (min-width: $screen-w-xxxlg) {
-    padding: 18px !important;
-    font-size: 18px !important;
+    padding: 17px !important;
+    font-size: 17px !important;
   }
   border: none !important;
   border-radius: 0 0.25rem 0.25rem 0 !important;
@@ -246,12 +252,12 @@ body {
     padding: 13px !important;
   }
   @media (min-width: $screen-w-xxlg) {
-    padding: 16px !important;
-    font-size: 16px !important;
+    padding: 15px !important;
+    font-size: 15px !important;
   }
   @media (min-width: $screen-w-xxxlg) {
-    padding: 18px !important;
-    font-size: 18px !important;
+    padding: 17px !important;
+    font-size: 17px !important;
   }
   opacity: 80%;
   color: $secondary !important;
