@@ -23,4 +23,4 @@ const DeviceLogsSchema = new mongoose.Schema({
 
 const DeviceLogs = mongoose.model('device_logs', DeviceLogsSchema)
 
-module.exports = DeviceLogs
+module.exports = { DeviceLogs, DeviceLogsSchema }

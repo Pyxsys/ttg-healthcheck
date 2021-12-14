@@ -23,4 +23,5 @@ const DeviceSchema = new mongoose.Schema({
 })
 
 const Devices = mongoose.model('devices', DeviceSchema)
-module.exports = Devices
+
+module.exports = { Devices, DeviceSchema }

@@ -2,11 +2,11 @@ const express = require('express')
 const router = express.Router()
 const { parseQuery, filterTimestampQuery } = require('./common/filter')
 const auth = require('../middleware/auth.js')
-const DeviceLogs = require('../models/device_logs.js')
+const {DeviceLogs, DeviceLogsSchema} = require('../models/device_logs.js')
 
 // get device Logs with any attribute of the DeviceLogs Model
 router.get('/', auth, async (req, res) => {
-  const [query, options] = parseQuery(Object(req.query))
+  const [query, options] = parseQuery(Object(req.query), DeviceLogsSchema)
   const results = await DeviceLogs.find({ $and: [query] }, {}, options)
   return res.status(200).json({ Results: results })
 })

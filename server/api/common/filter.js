@@ -1,120 +1,50 @@
-// String attributes list to check with req.query object
-const stringAttributes = [
-  // common
-  'orderBy',
-
-  // devices and device_logs
-  'deviceId',
-
-  // devices
-  'name',
-  'description',
-  'connectionType',
-  'status',
-  'provider',
-
-  // hardware static
-  'hardware.hardwareName',
-
-  // memory static
-  'memory.formFactor',
-
-  // wifi static
-  'wifi.adapterName',
-  'wifi.SSID',
-  'wifi.connectionType',
-  'wifi.ipv4Address',
-  'wifi.ipv6Address',
-
-  // disk.static
-  'disk.type',
-
-  // device_logs
-  'timestamp',
-
-  // wifi dynamic
-  'wifi.signalStrength',
-
-  // users
-  'name',
-  'password',
-  'email',
-  'role',
-]
-
-// Number attributes list to check with req.query object
-const numberAttributes = [
-  // common to all
-  'limit',
-
-  // cpu static
-  'cpu.baseSpeed',
-  'cpu.sockets',
-  'cpu.cores',
-  'cpu.processors',
-  'cpu.cacheSizeL1',
-  'cpu.cacheSizeL2',
-  'cpu.cacheSizeL3',
-
-  // wifi static
-  'wifi.adapterName',
-  'wifi.SSID',
-  'wifi.connectionType',
-  'wifi.ipv4Address',
-  'wifi.ipv6Address',
-
-  // memory static
-  'memory.maxSize',
-
-  // disk static
-  'disk.capacity',
-
-  // process schema
-  'processes.pid',
-  'processes.cpu.usagePercentage',
-  'processes.memory.usagePercentage',
-
-  // cpu dynamic
-  'cpu.usageSpeed',
-  'cpu.numProcesses',
-  'cpu.threadsSleeping',
-  'cpu.aggregatedPercentage',
-
-  // wifi dynamic
-  'wifi.sendSpeed',
-  'wifi.receiveSpeed',
-  'wifi.signalStrength',
-
-  // memory dynamic
-  'memory.inUse',
-  'memory.available',
-  'memory.cached',
-  'memory.aggregatedPercentage',
-
-  // disk dynamic
-  'activeTimePercent',
-  'responseTime',
-  'readSpeed',
-  'writeSpeed',
-]
-
 // Valid numerical operators other than equal
-const validOperators = [
-  'gt',
-  'gte',
-  'lt',
-  'lte',
-]
+const validOperators = ['gt', 'gte', 'lt', 'lte']
 
-const parseQuery = (query) => {
+/**
+ * Returns the names of the schema's attrubutes including the embedded schemas.
+ * 
+ * @param {Schema} schema MongoDB Schema
+ * @returns an array of the schema attribute names
+ */
+const getAttributes = (schema) => {
+  const attributeNames = Object.values(schema.paths)
+    .map(path =>
+      (path.instance === 'Array' || path.instance === 'Embedded') && path.schema
+        ? getAttributes(path.schema).map(attrPath => `${path.path}.${attrPath}`)
+        : path.path
+    )
+    .filter(name => name !== '__v' && name !== '_id')
+    .reduce((acc, name) => acc.concat(name), [])
+
+  return attributeNames
+}
+
+/**
+ * Parses a query for a given MongoDB schema and returns an array
+ * containing a validated query and the option parameters separated.
+ * 
+ * The query will remove any parameters that do not match the schema
+ * provided. If a parameter is given in the query but not in the schema,
+ * then it will be filtered out. The options will be separated from the
+ * query attributes.
+ * 
+ * @param {Object} query Object containing the attributes and options to query
+ * @param {Schema} schema MongoDB Schema used to limit the type of attributes
+ * @returns the separated valid query and options array
+ */
+const parseQuery = (query, schema) => {
   const options = {}
+
+  const validAttributes = [...getAttributes(schema), 'limit', 'orderBy']
+  console.log(validAttributes);
 
   const paramKeyValue = Object.entries(query)
   const validParams = paramKeyValue.reduce((acc, val) => {
     const keyOperator = String(val[0]).split('_')
     const key = keyOperator[0]
     const operator = keyOperator[1] || ''
-    const value = stringAttributes.includes(key) || numberAttributes.includes(key) ? String(val[1]) : null
+    const value = validAttributes.includes(key) ? String(val[1]) : null
 
     if (value) {
       acc[key] = validOperators.includes(operator) ? {[`$${operator}`]: value} : value
@@ -149,9 +79,10 @@ const validateTimestamp = (start, end) => {
   }
 }
 
-const filterTimestampQuery = (query) => {
-  const [filteredQuery, options] = parseQuery(query)
+const filterTimestampQuery = (query, schema) => {
   validateTimestamp(query.startTimeStamp, query.endTimeStamp)
+
+  const [filteredQuery, options] = parseQuery(query, schema)
   const queryOutput = {
     ...filteredQuery,
     timestamp: {
@@ -162,4 +93,4 @@ const filterTimestampQuery = (query) => {
   return [queryOutput, options]
 }
 
-module.exports = { parseQuery, validateTimestamp, filterTimestampQuery }
+module.exports = { parseQuery, validateTimestamp, filterTimestampQuery, getAttributes }
