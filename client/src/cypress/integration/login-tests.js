@@ -11,6 +11,10 @@ const invalidUser = {
   email: 'invalidemail@gmail.com',
 };
 
+const validatePlaceholder = (input, term) => {
+  cy.get(`${input}`).invoke('attr', 'placeholder').should('contain', `${term}`);
+};
+
 // See if certain headers and labels and buttons are visible.
 describe('Test 1: See if certain headers and labels and buttons are visible.', () => {
   it('Test 1.1: Check to see if the header \'Log in to launch your dashboard\' is visible in the application.', () => {
@@ -25,18 +29,14 @@ describe('Test 1: See if certain headers and labels and buttons are visible.', (
     cy.visit('/');
 
     // Assert that the following writing can be seen by the user.
-    cy.get('input[name="email1"]')
-        .invoke('attr', 'placeholder')
-        .should('contain', 'Email');
+    validatePlaceholder('input[name="email1"]', 'Email');
   });
   it('Test 1.3: Check to see if the placeholder \'Password\' is visible in the application', () => {
     // Go to login page
     cy.visit('/');
 
     // Assert that the following writing can be seen by the user.
-    cy.get('input[name="password1"]')
-        .invoke('attr', 'placeholder')
-        .should('contain', 'Password');
+    validatePlaceholder('input[name="password1"]', 'Password');
   });
   it('Test 1.4: Check to see if the button \'Login\' is visible in the application', () => {
     // Go to login page

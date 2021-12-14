@@ -1,9 +1,8 @@
 /* eslint-disable jest/expect-expect */
 Cypress.env();
-const testUser = {
-  name: 'test2',
-  password: Cypress.env('test_password'),
-  email: 'selenium@gmail.com',
+
+const validatePlaceholder = (input, term) => {
+  cy.get(`${input}`).invoke('attr', 'placeholder').should('contain', `${term}`);
 };
 
 // See if certain headers and labels and buttons are visible.
@@ -13,36 +12,28 @@ describe('Test 1: See if certain headers and labels and buttons are visible.', (
     cy.visit('/signup');
 
     // Assert that the following writing can be seen by the user.
-    cy.get('input[name="name"]')
-        .invoke('attr', 'placeholder')
-        .should('contain', 'Full Name');
+    validatePlaceholder('input[name="name"]', 'Full Name');
   });
   it('Test 1.2: Check to see if the placeholder \'Email\' is visible in the application', () => {
     // Go to login page
     cy.visit('/signup');
 
     // Assert that the following writing can be seen by the user.
-    cy.get('input[name="email"]')
-        .invoke('attr', 'placeholder')
-        .should('contain', 'Email');
+    validatePlaceholder('input[name="email"]', 'Email');
   });
   it('Test 1.3: Check to see if the placeholder \'Choose Password\' is visible in the application', () => {
     // Go to login page
     cy.visit('/signup');
 
     // Assert that the following writing can be seen by the user.
-    cy.get('input[name="password"]')
-        .invoke('attr', 'placeholder')
-        .should('contain', 'Choose Password');
+    validatePlaceholder('input[name="password"]', 'Choose Password');
   });
   it('Test 1.4: Check to see if the placeholder \'Confirm Password\' is visible in the application', () => {
     // Go to login page
     cy.visit('/signup');
 
     // Assert that the following writing can be seen by the user.
-    cy.get('input[name="password2"]')
-        .invoke('attr', 'placeholder')
-        .should('contain', 'Confirm Password');
+    validatePlaceholder('input[name="password2"]', 'Confirm Password');
   });
   it('Test 1.3: Check to see if the button \'Register\' is visible in the application', () => {
     // Go to login page
