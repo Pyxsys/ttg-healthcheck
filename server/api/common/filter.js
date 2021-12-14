@@ -37,7 +37,6 @@ const parseQuery = (query, schema) => {
   const options = {}
 
   const validAttributes = [...getAttributes(schema), 'limit', 'orderBy']
-  console.log(validAttributes);
 
   const paramKeyValue = Object.entries(query)
   const validParams = paramKeyValue.reduce((acc, val) => {
@@ -47,7 +46,7 @@ const parseQuery = (query, schema) => {
     const value = validAttributes.includes(key) ? String(val[1]) : null
 
     if (value) {
-      acc[key] = validOperators.includes(operator) ? {[`$${operator}`]: value} : value
+      acc[key] = validOperators.includes(operator) ? {...acc[key], [`$${operator}`]: value} : value
     }
     return acc
   }, {})
@@ -75,7 +74,7 @@ const parseQuery = (query, schema) => {
 
 const validateTimestamp = (start, end) => {
   if (!start || !end) {
-    throw new Error('must include startTimeStamp and endTimestamp')
+    throw new Error('must include startTimeStamp and endTimeStamp parameters')
   }
 }
 

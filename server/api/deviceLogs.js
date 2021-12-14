@@ -14,7 +14,7 @@ router.get('/', auth, async (req, res) => {
 // get device Logs with any attribute of the DeviceLogs Model and within a timestamp (startTimeStamp, endTimeStamp)
 router.get('/timestamp', auth, async (req, res) => {
   try {
-    const [query, options] = filterTimestampQuery(Object(req.query))
+    const [query, options] = filterTimestampQuery(Object(req.query), DeviceLogsSchema)
     const results = await DeviceLogs.find(query, {}, options)
     return res.status(200).json({ Results: results })
   } catch (err) {
@@ -28,7 +28,7 @@ router.get('/latest', auth, async (req, res) => {
   
   // If query does not have Ids attribute
   if (!query.Ids) {
-    return res.status(501).json({ Results: [] })
+    return res.status(501).send('Server Error: must include Ids parameter')
   }
 
   const idsArray = String(query.Ids).split(',')
