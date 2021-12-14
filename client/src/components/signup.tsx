@@ -8,7 +8,7 @@ import {FaUserAlt, FaKey, FaLock, FaRegEnvelope} from 'react-icons/fa';
 import {useAuth} from '../context/authContext';
 import {notificationService} from '../services/notification.service';
 import {handleIncorrectInput, sendRequest} from './common/inputValidation';
-import External from './common/externalPage';
+import FrontPageWrapper from './common/frontPageWrapper';
 
 const Signup = () => {
   const {setUser, setIsAuthenticated} = useAuth();
@@ -42,7 +42,7 @@ const Signup = () => {
     return <Redirect to="/dashboard" />;
   }
   return (
-    <External>
+    <FrontPageWrapper>
       <div className="home-form">
         <Form onSubmit={(e: any) => register(e)}>
           <Form.Group>
@@ -117,7 +117,7 @@ const Signup = () => {
           </Link>
         </Form>
       </div>
-    </External>
+    </FrontPageWrapper>
   );
 };
 

@@ -4,7 +4,7 @@ import React from 'react';
 // Custom
 import '../../App.scss';
 
-const External = ({children}: { children: JSX.Element }) => {
+const FrontPageWrapper = ({children}: { children: JSX.Element }) => {
   return (
     <div className="h-100 d-flex flex-column">
       <div className="d-flex flex-column align-items-center home-header">
@@ -27,4 +27,4 @@ const External = ({children}: { children: JSX.Element }) => {
   );
 };
 
-export default External;
+export default FrontPageWrapper;

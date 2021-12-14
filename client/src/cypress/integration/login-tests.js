@@ -17,7 +17,7 @@ const validatePlaceholder = (input, term) => {
 
 // See if certain headers and labels and buttons are visible.
 describe('Test 1: See if certain headers and labels and buttons are visible.', () => {
-  beforeaAll(() =>{
+  beforeAll(() =>{
     const loginPage = '/';
     cy.visit(loginPage);
   });

@@ -9,7 +9,7 @@ import {useAuth} from '../context/authContext';
 import {notificationService} from '../services/notification.service';
 import {handleIncorrectInput, sendRequest} from './common/inputValidation';
 import '../App.scss';
-import External from './common/externalPage';
+import FrontPageWrapper from './common/frontPageWrapper';
 
 const Login = () => {
   const {setUser, setIsAuthenticated} = useAuth();
@@ -52,7 +52,7 @@ const Login = () => {
     return <Redirect to="/dashboard" />;
   }
   return (
-    <External>
+    <FrontPageWrapper>
       <div className="home-form">
         <div className="pb-4 home-header-subtitle">
           <FaBolt /> Log in to launch your dashboard
@@ -98,7 +98,7 @@ const Login = () => {
           </Link>
         </Form>
       </div>
-    </External>
+    </FrontPageWrapper>
   );
 };
 
