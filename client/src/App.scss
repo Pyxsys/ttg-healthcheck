@@ -67,29 +67,29 @@ body {
 
 .home-header {
   background-color: $primary;
-
+  // smooth transition when header div changes size
   -webkit-transition: all 0.5s ease;
   -moz-transition: all 0.5s ease;
   -o-transition: all 0.5s ease;
   transition: all 0.5s ease;
 
   @media (min-width: $screen-w-sm) {
-    min-height: 200px !important;
+    min-height: 200px;
   }
   @media (min-width: $screen-w-md) {
-    min-height: 200px !important;
+    min-height: 220px;
   }
   @media (min-width: $screen-w-lg) {
-    min-height: 270px !important;
+    min-height: 300px;
   }
   @media (min-width: $screen-w-xlg) {
-    min-height: 270px !important;
+    min-height: 300px;
   }
   @media (min-width: $screen-w-xxlg) {
-    min-height: 330px !important;
+    min-height: 330px;
   }
   @media (min-width: $screen-w-xxxlg) {
-    min-height: 350px !important;
+    min-height: 350px;
   }
 }
 
@@ -148,6 +148,7 @@ body {
   transform: translateY(15px);
 }
 
+// login/signup footer
 .home-copyright {
   color: $secondary;
   opacity: 80%;
@@ -269,6 +270,11 @@ body {
 .home-button:hover {
   background-color: $primary !important;
 }
+
+/*
+**  NAV
+**
+*/
 
 /* Position and sizing of burger button */
 .bm-burger-button {
