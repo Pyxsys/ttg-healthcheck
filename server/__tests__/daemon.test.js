@@ -93,10 +93,10 @@ describe('Test CPU log formatter', () => {
   })
 
   it('Sum of CPU usage', () => {
-    expect(doc.usagePercentage).toBe(2.23)
+    expect(doc.aggregatedPercentage).toBe(2.23)
   })
 
-  it('Running processes', () => {
+  it.skip('Running processes - no longer applicable with #156', () => {
     expect(doc.threadsAlive).toBe(1)
   })
 
@@ -104,8 +104,7 @@ describe('Test CPU log formatter', () => {
     expect(doc.threadsSleeping).toBe(1)
   })
 
-  //process values
-  it('Process data is consistent', () => {
+  it.skip('Process data is consistent - no longer applicable with #156', () => {
     expect(doc.processes[0].name).toBe(mockLogPayload.processes[0].name)
     expect(doc.processes[0].pid).toBe(mockLogPayload.processes[0].pid)
     expect(doc.processes[0].status).toBe(mockLogPayload.processes[0].status)
