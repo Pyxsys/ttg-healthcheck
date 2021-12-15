@@ -228,8 +228,8 @@ const computeLiveSleepingProcesses = (processes) => {
 const sumMemoryPercentUsage = (processes) => {
   let aggregatedPercentage = 0
 
-  processes.forEach((element) => {
-    aggregatedPercentage += process.memory_percent
+  processes.forEach((proc) => {
+    aggregatedPercentage += proc.memory_percent
   })
 
   return aggregatedPercentage
