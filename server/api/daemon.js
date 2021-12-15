@@ -192,14 +192,14 @@ const verifyDeviceIdFormat = (deviceId) => {
   } else return true
 }
 
-const sumProcessCpuUsage = (processes) => {
-  let sum = 0
+const sumCpuPercentUsage = (processes) => {
+  let aggregatedPercentage = 0
   processes.forEach((proc) => {
     if (proc.name !== 'System Idle Process') {
-      sum += proc.cpu_percent
+      aggregatedPercentage += proc.cpu_percent
     }
   })
-  return sum
+  return aggregatedPercentage
 }
 
 const sumProcessVMSUsage = (processes) => {
@@ -226,22 +226,10 @@ const computeLiveSleepingProcesses = (processes) => {
 }
 
 const sumMemoryPercentUsage = (processes) => {
-  const aggregatedPercentage = 0
+  let aggregatedPercentage = 0
 
   processes.forEach((element) => {
-    const process = processSingleProcess(element)
     aggregatedPercentage += process.memory_percent
-  })
-
-  return aggregatedPercentage
-}
-
-const sumCpuPercentUsage = (processes) => {
-  const aggregatedPercentage = 0
-
-  processes.forEach((element) => {
-    const process = processSingleProcess(element)
-    aggregatedPercentage += process.cpu_percent
   })
 
   return aggregatedPercentage
