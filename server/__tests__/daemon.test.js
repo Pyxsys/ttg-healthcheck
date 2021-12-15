@@ -2,9 +2,8 @@ const request = require('supertest')
 const connectDB = require('../db/db_connection')
 const app = require('../app')
 const mongoose = require('mongoose')
-const Device = require('../models/device.js')
-const { CpuLogs } = require('../models/cpu.js')
-const { MemoryLogs } = require('../models/memory')
+const { Devices } = require('../models/device.js')
+const { DeviceLogs } = require('../models/device_logs')
 const daemonFunctions = require('../api/daemon')
 
 const mockStartupPayload = {
@@ -54,9 +53,8 @@ const mockLogPayload = {
 
 beforeAll(async () => {
   await connectDB() // connect to local_db
-  await Device.deleteMany() //clear devices
-  await CpuLogs.deleteMany() //clear logs
-  await MemoryLogs.deleteMany()
+  await Devices.deleteMany() //clear devices
+  await DeviceLogs.deleteMany() //clear logs
 })
 
 describe('Test helper functions', () => {
@@ -134,7 +132,7 @@ describe('Save daemon device to DB', () => {
       .send(mockStartupPayload)
     expect(response.statusCode).toBe(200)
 
-    const devices = await Device.find()
+    const devices = await Devices.find()
     expect(devices.length).toBe(1)
     expect(devices[0].name).toBe('test device')
   })
@@ -144,7 +142,7 @@ describe('Save daemon device to DB', () => {
     const response = await request(app).post(devicePath).send(updatedDevice)
     expect(response.statusCode).toBe(200)
 
-    const devices = await Device.find()
+    const devices = await Devices.find()
     expect(devices.length).toBe(1)
     expect(devices[0].name).toBe('another name')
   })
@@ -154,7 +152,7 @@ describe('Save daemon device to DB', () => {
     const response = await request(app).post(devicePath).send(invalidDevice)
     expect(response.statusCode).toBe(501)
 
-    const devices = await Device.find()
+    const devices = await Devices.find()
     expect(devices.length).toBe(1)
   })
 })
