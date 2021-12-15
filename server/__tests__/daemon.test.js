@@ -70,6 +70,17 @@ describe('Test helper functions', () => {
       'deviceId [' + null + '] is invalid'
     )
   })
+
+  it('Sum correct amount of running processes', () => {
+    const result = daemonFunctions.computeLiveSleepingProcesses(mockLogPayload.processes)
+    expect(result[0]).toBe(1)
+  })
+
+  it('Sum correct amount of non-running processes', () => {
+    const result = daemonFunctions.computeLiveSleepingProcesses(mockLogPayload.processes)
+    expect(result[1]).toBe(1)
+  })
+
 })
 
 describe('Test Device formatters', () => {

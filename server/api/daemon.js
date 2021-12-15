@@ -212,17 +212,17 @@ const sumProcessVMSUsage = (processes) => {
 
 const computeLiveSleepingProcesses = (processes) => {
   //count number of running and stopped processes
-  var runningProcs = 0,
+  let runningProcs = 0,
     sleepingProcs = 0
-  for (const proc of processes) {
+  processes.forEach((proc) => {
     if (proc.status === 'running') {
       runningProcs++
     } else {
       sleepingProcs++
     }
-  }
+  })
 
-  return runningProcs, sleepingProcs
+  return [runningProcs, sleepingProcs]
 }
 
 const sumMemoryPercentUsage = (processes) => {
@@ -245,4 +245,5 @@ module.exports = {
   processWifiLogInfo,
   processProcessLogInfo,
   processSingleProcess,
+  computeLiveSleepingProcesses,
 }
