@@ -1,10 +1,7 @@
 const express = require('express')
 const router = express.Router()
-const Device = require('../models/device.js')
-const DeviceLogs = require('../models/device_logs.js')
-const { CpuLogs } = require('../models/cpu.js')
-const { MemoryLogs } = require('../models/memory.js')
-const wifiModel = require('../models/wifi.js')
+const { Devices } = require('../models/device.js')
+const { DeviceLogs } = require('../models/device_logs.js')
 
 // receive device report from daemon
 router.post('/device', async (req, res) => {
@@ -15,7 +12,7 @@ router.post('/device', async (req, res) => {
 
     const filter = { deviceId: payload.deviceId.toString() }
     const flags = { upsert: true }
-    await Device.findOneAndUpdate(filter, newDevice, flags)
+    await Devices.findOneAndUpdate(filter, newDevice, flags)
 
     res.status(200).send()
   } catch (err) {
@@ -28,7 +25,7 @@ router.post('/', async (req, res) => {
   try {
     const payload = req.body
     verifyDeviceIdFormat(payload.deviceId)
-    newDeviceLog = processDeviceLogInfo(payload)
+    const newDeviceLog = processDeviceLogInfo(payload)
 
     await newDeviceLog.save()
 
