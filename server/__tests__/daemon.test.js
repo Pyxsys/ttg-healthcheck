@@ -131,6 +131,10 @@ describe('Test Memory log formatter', () => {
   it('Sum of Cache memory', () => {
     expect(doc.cached).toBe(28346769)
   })
+
+  it('Sum of percentage memory', () => {
+    expect(doc.aggregatedPercentage).toBe(9.97)
+  })
 })
 
 describe('Save daemon device to DB', () => {
