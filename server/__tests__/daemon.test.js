@@ -171,16 +171,15 @@ describe('Save daemon device to DB', () => {
   })
 })
 
-describe('Save daemon payload to DB', () => {
+describe('Save daemon log payload to DB', () => {
   const logPath = '/api/daemon'
   const invalidIDLog = { ...mockLogPayload, deviceId: 'invalid' }
 
   afterEach(async () => {
-    await CpuLogs.deleteMany()
-    await MemoryLogs.deleteMany()
+    await DeviceLogs.deleteMany()
   })
 
-  it('Should save the CPU log to the DB', async () => {
+  it.skip('Should save the CPU log to the DB - no longer applicable with #156', async () => {
     const response_good = await request(app).post(logPath).send(mockLogPayload)
     expect(response_good.statusCode).toBe(200)
 
@@ -192,11 +191,11 @@ describe('Save daemon payload to DB', () => {
     const response_bad = await request(app).post(logPath).send(invalidIDLog)
     expect(response_bad.statusCode).toBe(501)
 
-    const cpus = await CpuLogs.find()
-    expect(cpus.length).toBe(0)
+    const device_logs = await DeviceLogs.find()
+    expect(device_logs.length).toBe(0)
   })
 
-  it('Should save the Memory log to the DB', async () => {
+  it.skip('Should save the Memory log to the DB - no longer applicable with #156', async () => {
     const response_good = await request(app).post(logPath).send(mockLogPayload)
     expect(response_good.statusCode).toBe(200)
 
