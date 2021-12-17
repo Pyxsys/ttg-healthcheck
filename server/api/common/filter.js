@@ -36,7 +36,7 @@ const getAttributes = (schema) => {
 const parseQuery = (query, schema) => {
   const options = {}
 
-  const validAttributes = [...getAttributes(schema), 'limit', 'orderBy']
+  const validAttributes = [...getAttributes(schema), 'limit', 'skip', 'orderBy']
 
   const paramKeyValue = Object.entries(query)
   const validParams = paramKeyValue.reduce((acc, val) => {
@@ -54,6 +54,11 @@ const parseQuery = (query, schema) => {
   if (validParams.limit) {
     options.limit = Number(validParams.limit)
     delete validParams.limit
+  }
+  
+  if (validParams.skip) {
+    options.skip = Number(validParams.skip)
+    delete validParams.skip
   }
 
   if (validParams.orderBy) {

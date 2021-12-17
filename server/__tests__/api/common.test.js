@@ -31,15 +31,16 @@ describe('Get the attributes of a Mongo Schema', () => {
 })
 
 describe('Filter out attributes from Query', () => {
-  it('should filter out the keywords limit and orderBy descending', () => {
+  it('should filter out the keywords limit, skip and orderBy descending', () => {
     const req = {
       stringAttribute: 'string',
       limit: '1',
-      orderBy: '-numberAttribute'
+      skip: '1',
+      orderBy: '-numberAttribute',
     }
     const [query, options] = parseQuery(req, SimpleMongoSchema)
     expect(query).toEqual({ stringAttribute: 'string' })
-    expect(options).toEqual({ limit: 1, sort: { numberAttribute: -1 } })
+    expect(options).toEqual({ limit: 1, skip: 1, sort: { numberAttribute: -1 } })
   })
   
   it('should filter out the keywords limit and orderBy ascending', () => {
