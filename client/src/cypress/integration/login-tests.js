@@ -11,53 +11,54 @@ const invalidUser = {
   email: 'invalidemail@gmail.com',
 };
 
+const validatePlaceholder = (input, term) => {
+  cy.get(`${input}`).invoke('attr', 'placeholder').should('contain', `${term}`);
+};
+
 // See if certain headers and labels and buttons are visible.
 describe('Test 1: See if certain headers and labels and buttons are visible.', () => {
-  it('Test 1.1: Check to see if the header \'LOGIN\' is visible in the application.', () => {
-    // Go to login page
-    cy.visit('/');
-
-    // Assert that the following writing can be seen by the user.
-    cy.contains('LOGIN').should('be.visible');
+  before(() => {
+    const loginPage = '/';
+    cy.visit(loginPage);
   });
-  it('Test 1.2: Check to see if the Label \'Email Address\' is visible in the application', () => {
-    // Go to login page
-    cy.visit('/');
 
+  it('Test 1.1: Check to see if the header \'Log in to launch your dashboard\' is visible in the application.', () => {
+    const dashHeader = 'Log in to launch your dashboard';
     // Assert that the following writing can be seen by the user.
-    cy.contains('Email Address').should('be.visible');
+    cy.contains(dashHeader).should('be.visible');
   });
-  it('Test 1.3: Check to see if the Label \'Password\' is visible in the application', () => {
-    // Go to login page
-    cy.visit('/');
-
+  it('Test 1.2: Check to see if the placeholder \'Email\' is visible in the application', () => {
+    const emailInput = 'input[name="email1"]';
+    const emailValue = 'Email';
     // Assert that the following writing can be seen by the user.
-    cy.contains('Password').should('be.visible');
+    validatePlaceholder(emailInput, emailValue);
+  });
+  it('Test 1.3: Check to see if the placeholder \'Password\' is visible in the application', () => {
+    const passwordInput = 'input[name="password1"]';
+    const passwordValue = 'Password';
+    // Assert that the following writing can be seen by the user.
+    validatePlaceholder(passwordInput, passwordValue);
   });
   it('Test 1.4: Check to see if the button \'Login\' is visible in the application', () => {
-    // Go to login page
-    cy.visit('/');
-
+    const loginButton = 'Login';
     // Assert that the following writing can be seen by the user.
-    cy.contains('Login').should('be.visible');
+    cy.contains(loginButton).should('be.visible');
   });
-  it('Test 1.5: Check to see if the button \'Signup\' is visible in the application', () => {
-    // Go to login page
-    cy.visit('/');
-
+  it('Test 1.5: Check to see if the button \'Register\' is visible in the application', () => {
+    const registerButton = 'Register';
     // Assert that the following writing can be seen by the user.
-    cy.contains('Signup').should('be.visible');
+    cy.contains(registerButton).should('be.visible');
   });
 });
 
 // Check to see if the buttons try to redirect us to the proper urls.
 describe('Test 2: Check to see if the buttons try to redirect us to the proper urls.', () => {
-  it('Test 2.1: Click on Signup button and see if it redirects us to Signup page.', () => {
+  it('Test 2.1: Click on Register button and see if it redirects us to Signup page.', () => {
     // Go to login page
     cy.visit('/');
 
     // Click Signup Button.
-    cy.contains('button', 'Signup').click();
+    cy.contains('button', 'Register').click();
     // Assert we are in /signup
     cy.url().should('equal', 'http://localhost:3000/signup');
   });

@@ -1,13 +1,15 @@
 // 3rd Party
 import React, {useState} from 'react';
 import {Link, Redirect} from 'react-router-dom';
-import {Button, Form, Container, Row} from 'react-bootstrap';
+import {Button, Form, InputGroup} from 'react-bootstrap';
+import {FaUserAlt, FaKey, FaBolt} from 'react-icons/fa';
 
 // Custom
 import {useAuth} from '../context/authContext';
 import {notificationService} from '../services/notification.service';
 import {handleIncorrectInput, sendRequest} from './common/inputValidation';
 import '../App.scss';
+import FrontPageWrapper from './common/frontPageWrapper';
 
 const Login = () => {
   const {setUser, setIsAuthenticated} = useAuth();
@@ -50,60 +52,53 @@ const Login = () => {
     return <Redirect to="/dashboard" />;
   }
   return (
-    <>
-      <div
-        className="align-items-center d-flex
-         justify-content-center background-image-login"
-      >
-        <Container
-          style={{width: 'fit-content'}}
-          className="border increase-roundness rounded-lg
-          justify-content-center bg-secondary d-flex"
-        >
-          <Row className="mb-5 mt-5">
-            <div className="col d-flex px-5">
-              <div className="flex-col">
-                <h1 className="text-center">LOGIN</h1>
-                <Row className="mb-4">
-                  <Form onSubmit={(e: any) => onSubmit(e)}>
-                    <Form.Group>
-                      <Form.Label className="ml-0 mb-3">
-                        Email Address
-                      </Form.Label>
-                      <Form.Control
-                        className="mb-3 input-lg"
-                        type="email"
-                        placeholder="Email ID"
-                        name="email1"
-                        value={email1}
-                        onChange={(e: any) => onChange1(e)}
-                      />
-                    </Form.Group>
-                    <Form.Group>
-                      <Form.Label className="mb-3">Password</Form.Label>
-                      <Form.Control
-                        className="mb-3"
-                        type="password"
-                        placeholder="Password"
-                        name="password1"
-                        value={password1}
-                        onChange={(e: any) => onChange1(e)}
-                      />
-                    </Form.Group>
-                    <Button className="w-100 mt-3" type="submit">
-                      Login
-                    </Button>
-                    <Link to="/signup">
-                      <Button className="bt-lg w-100 mt-3">Signup</Button>
-                    </Link>
-                  </Form>
-                </Row>
-              </div>
-            </div>
-          </Row>
-        </Container>
+    <FrontPageWrapper>
+      <div className="home-form">
+        <div className="pb-4 home-header-subtitle">
+          <FaBolt /> Log in to launch your dashboard
+        </div>
+        <Form onSubmit={(e: any) => onSubmit(e)}>
+          <Form.Group>
+            <InputGroup>
+              <InputGroup.Text>
+                <FaUserAlt />
+              </InputGroup.Text>
+              <Form.Control
+                size="sm"
+                className="home-input"
+                type="email"
+                placeholder="Email"
+                name="email1"
+                value={email1}
+                onChange={(e: any) => onChange1(e)}
+              />
+            </InputGroup>
+          </Form.Group>
+          <Form.Group className="mt-3">
+            <InputGroup>
+              <InputGroup.Text>
+                <FaKey />
+              </InputGroup.Text>
+              <Form.Control
+                size="sm"
+                className="home-input"
+                type="password"
+                placeholder="Password"
+                name="password1"
+                value={password1}
+                onChange={(e: any) => onChange1(e)}
+              />
+            </InputGroup>
+          </Form.Group>
+          <Button className="w-100 mt-3 home-button" type="submit">
+            Login
+          </Button>
+          <Link to="/signup">
+            <Button className="w-100 mt-3 home-button">Register</Button>
+          </Link>
+        </Form>
       </div>
-    </>
+    </FrontPageWrapper>
   );
 };
 
