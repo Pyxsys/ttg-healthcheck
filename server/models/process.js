@@ -1,18 +1,13 @@
 const mongoose = require('mongoose')
+const { CpuProcessSchema } = require('./cpu')
+const { MemoryProcessSchema } = require('./memory')
 
 const ProcessSchema = new mongoose.Schema({
-  name: {
-    type: String,
-  },
-  pid: {
-    type: Number,
-  },
-  status: {
-    type: String,
-  },
-  cpu_percent: {
-    type: Number,
-  },
+  name: String,
+  pid: Number,
+  status: String,
+  cpu: CpuProcessSchema,
+  memory: MemoryProcessSchema,
 })
 
 module.exports = {

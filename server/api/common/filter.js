@@ -1,106 +1,75 @@
-// String attributes list to check with req.query object
-const stringAttributes = [
-  'orderBy',
-  'deviceId',
-  'name',
-  'description',
-  'connectionType',
-  'status',
-  'provider',
-  'memory.formFactor',
-  'hardware.hardwareName',
-  'disk.type',
-  'timestamp',
-]
+// Valid numerical operators other than equal
+const validOperators = ['gt', 'gte', 'lt', 'lte']
 
-// Number attributes list to check with req.query object
-const numberAttributes = [
-  'limit',
-  'orderValue',
-  'cpu.baseSpeed',
-  'cpu.sockets',
-  'cpu.cores',
-  'cpu.processors',
-  'cpu.cacheSizeL1',
-  'cpu.cacheSizeL2',
-  'cpu.cacheSizeL3',
-  'wifi.adapterName',
-  'wifi.SSID',
-  'wifi.connectionType',
-  'wifi.ipv4Address',
-  'wifi.ipv6Address',
-  'memory.maxSize',
-  'disk.capacity',
-  'usagePercentage',
-  'usageSpeed',
-  'numProcesses',
-  'threadsAlive',
-  'threadsSleeping',
-  'uptime',
-  'sendSpeed',
-  'receiveSpeed',
-  'signalStrength',
-  'inUse',
-  'available',
-  'cached',
-  'pagedPool',
-  'nonPagedPool',
-  'activeTimePercent',
-  'responseTime',
-  'readSpeed',
-  'writeSpeed',
-]
+/**
+ * Returns the names of the schema's attrubutes including the embedded schemas.
+ * 
+ * @param {Schema} schema MongoDB Schema
+ * @returns an array of the schema attribute names
+ */
+const getAttributes = (schema) => {
+  const attributeNames = Object.values(schema.paths)
+    .map(path =>
+      (path.instance === 'Array' || path.instance === 'Embedded') && path.schema
+        ? getAttributes(path.schema).map(attrPath => `${path.path}.${attrPath}`)
+        : path.path
+    )
+    .filter(name => name !== '__v' && name !== '_id')
+    .reduce((acc, name) => acc.concat(name), [])
 
-const filterData = (query) => {
+  return attributeNames
+}
+
+/**
+ * Parses a query for a given MongoDB schema and returns an array
+ * containing a validated query and the option parameters separated.
+ * 
+ * The query will remove any parameters that do not match the schema
+ * provided. If a parameter is given in the query but not in the schema,
+ * then it will be filtered out. The options will be separated from the
+ * query attributes.
+ * 
+ * @param {Object} query Object containing the attributes and options to query
+ * @param {Schema} schema MongoDB Schema used to limit the type of attributes
+ * @returns the separated valid query and options array
+ */
+const parseQuery = (query, schema) => {
   const options = {}
-  const queryOutput = {}
 
-  for (let k in query) {
-    query[k] = query[k].split(',')
-    if (stringAttributes.includes(k)) {
-      queryOutput[String(k)] = query[k]
+  const validAttributes = [...getAttributes(schema), 'limit', 'orderBy']
+
+  const paramKeyValue = Object.entries(query)
+  const validParams = paramKeyValue.reduce((acc, val) => {
+    const keyOperator = String(val[0]).split('_')
+    const key = keyOperator[0]
+    const operator = keyOperator[1] || ''
+    const value = validAttributes.includes(key) ? String(val[1]) : null
+
+    if (value) {
+      acc[key] = validOperators.includes(operator) ? {...acc[key], [`$${operator}`]: value} : value
     }
-    if (numberAttributes.includes(k)) {
-      queryOutput[String(k)] = query[k].map(Number)
-    }
+    return acc
+  }, {})
+  
+  if (validParams.limit) {
+    options.limit = Number(validParams.limit)
+    delete validParams.limit
   }
-  if (queryOutput.limit) {
-    options.limit = queryOutput.limit
-    delete queryOutput.limit
-  }
-  if (queryOutput.orderBy && queryOutput.orderValue) {
-    const orderBy = queryOutput.orderBy
-    const orderValue = queryOutput.orderValue
+
+  if (validParams.orderBy) {
+    const orderValue = validParams.orderBy.startsWith('-') ? -1 : 1
+    const orderBy = orderValue < 0 ? validParams.orderBy.slice(1) : validParams.orderBy
     options.sort = {
       [orderBy]: orderValue,
     }
-    delete queryOutput.orderValue
-    delete queryOutput.orderBy
+    delete validParams.orderValue
+    delete validParams.orderBy
   } else {
     options.sort = {
-      timestamp: [-1],
+      timestamp: -1,
     }
   }
-  return [queryOutput, options]
+  return [validParams, options]
 }
 
-const validateTimestamp = (start, end) => {
-  if (!start || !end) {
-    throw new Error('must include startTimeStamp and endTimestamp')
-  }
-}
-
-const filterTimestampQuery = (query) => {
-  const [filteredQuery, options] = filterData(query)
-  validateTimestamp(query.startTimeStamp, query.endTimeStamp)
-  const queryOutput = {
-    ...filteredQuery,
-    timestamp: {
-      $gte: String(query.startTimeStamp),
-      $lte: String(query.endTimeStamp),
-    },
-  }
-  return [queryOutput, options]
-}
-
-module.exports = { filterData, validateTimestamp, filterTimestampQuery }
+module.exports = { parseQuery, getAttributes }

@@ -1,7 +1,8 @@
 const request = require('supertest')
-const Device = require('../models/device.js')
-const app = require('../app')
-const { setupLogTests, teardownLogTests } = require('./api_common.test')
+
+const app = require('../../app')
+const { Devices } = require('../../models/device')
+const { setupLogTests, teardownLogTests } = require('./common.test')
 
 const deviceMockPayload1 = {
   deviceId: 'TEST1C2D-C033-7B87-4B31-244BFX931D14',
@@ -25,7 +26,7 @@ let cookieSession = ''
 
 beforeAll(async () => {
   cookieSession = await setupLogTests()
-  await Device.deleteMany()
+  await Devices.deleteMany()
 
   //add device
   await request(app).post('/api/daemon/device').send(deviceMockPayload1)

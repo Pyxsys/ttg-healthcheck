@@ -1,11 +1,11 @@
 const request = require('supertest')
-const connectDB = require('../db/db_connection')
-const app = require('../app')
 const mongoose = require('mongoose')
-const Device = require('../models/device.js')
-const { CpuLogs } = require('../models/cpu.js')
-const { MemoryLogs } = require('../models/memory')
-const daemonFunctions = require('../api/daemon')
+
+const app = require('../../app')
+const connectDB = require('../../db/db_connection')
+const { Devices } = require('../../models/device.js')
+const { DeviceLogs } = require('../../models/device_logs')
+const daemonFunctions = require('../../api/daemon')
 
 const mockStartupPayload = {
   deviceId: 'TEST3C2D-C033-7B87-4B31-244BFX931D14',
@@ -54,9 +54,8 @@ const mockLogPayload = {
 
 beforeAll(async () => {
   await connectDB() // connect to local_db
-  await Device.deleteMany() //clear devices
-  await CpuLogs.deleteMany() //clear logs
-  await MemoryLogs.deleteMany()
+  await Devices.deleteMany() //clear devices
+  await DeviceLogs.deleteMany() //clear logs
 })
 
 describe('Test helper functions', () => {
@@ -72,6 +71,17 @@ describe('Test helper functions', () => {
       'deviceId [' + null + '] is invalid'
     )
   })
+
+  it('Sum correct amount of running processes', () => {
+    const result = daemonFunctions.computeLiveSleepingProcesses(mockLogPayload.processes)
+    expect(result[0]).toBe(1)
+  })
+
+  it('Sum correct amount of non-running processes', () => {
+    const result = daemonFunctions.computeLiveSleepingProcesses(mockLogPayload.processes)
+    expect(result[1]).toBe(1)
+  })
+
 })
 
 describe('Test Device formatters', () => {
@@ -95,10 +105,10 @@ describe('Test CPU log formatter', () => {
   })
 
   it('Sum of CPU usage', () => {
-    expect(doc.usagePercentage).toBe(2.23)
+    expect(doc.aggregatedPercentage).toBe(2.23)
   })
 
-  it('Running processes', () => {
+  it.skip('Running processes - no longer applicable with #156', () => {
     expect(doc.threadsAlive).toBe(1)
   })
 
@@ -106,8 +116,7 @@ describe('Test CPU log formatter', () => {
     expect(doc.threadsSleeping).toBe(1)
   })
 
-  //process values
-  it('Process data is consistent', () => {
+  it.skip('Process data is consistent - no longer applicable with #156', () => {
     expect(doc.processes[0].name).toBe(mockLogPayload.processes[0].name)
     expect(doc.processes[0].pid).toBe(mockLogPayload.processes[0].pid)
     expect(doc.processes[0].status).toBe(mockLogPayload.processes[0].status)
@@ -123,6 +132,10 @@ describe('Test Memory log formatter', () => {
   it('Sum of Cache memory', () => {
     expect(doc.cached).toBe(28346769)
   })
+
+  it('Sum of percentage memory', () => {
+    expect(doc.aggregatedPercentage).toBe(9.97)
+  })
 })
 
 describe('Save daemon device to DB', () => {
@@ -134,7 +147,7 @@ describe('Save daemon device to DB', () => {
       .send(mockStartupPayload)
     expect(response.statusCode).toBe(200)
 
-    const devices = await Device.find()
+    const devices = await Devices.find()
     expect(devices.length).toBe(1)
     expect(devices[0].name).toBe('test device')
   })
@@ -144,7 +157,7 @@ describe('Save daemon device to DB', () => {
     const response = await request(app).post(devicePath).send(updatedDevice)
     expect(response.statusCode).toBe(200)
 
-    const devices = await Device.find()
+    const devices = await Devices.find()
     expect(devices.length).toBe(1)
     expect(devices[0].name).toBe('another name')
   })
@@ -154,21 +167,20 @@ describe('Save daemon device to DB', () => {
     const response = await request(app).post(devicePath).send(invalidDevice)
     expect(response.statusCode).toBe(501)
 
-    const devices = await Device.find()
+    const devices = await Devices.find()
     expect(devices.length).toBe(1)
   })
 })
 
-describe('Save daemon payload to DB', () => {
+describe('Save daemon log payload to DB', () => {
   const logPath = '/api/daemon'
   const invalidIDLog = { ...mockLogPayload, deviceId: 'invalid' }
 
   afterEach(async () => {
-    await CpuLogs.deleteMany()
-    await MemoryLogs.deleteMany()
+    await DeviceLogs.deleteMany()
   })
 
-  it('Should save the CPU log to the DB', async () => {
+  it.skip('Should save the CPU log to the DB - no longer applicable with #156', async () => {
     const response_good = await request(app).post(logPath).send(mockLogPayload)
     expect(response_good.statusCode).toBe(200)
 
@@ -180,11 +192,11 @@ describe('Save daemon payload to DB', () => {
     const response_bad = await request(app).post(logPath).send(invalidIDLog)
     expect(response_bad.statusCode).toBe(501)
 
-    const cpus = await CpuLogs.find()
-    expect(cpus.length).toBe(0)
+    const device_logs = await DeviceLogs.find()
+    expect(device_logs.length).toBe(0)
   })
 
-  it('Should save the Memory log to the DB', async () => {
+  it.skip('Should save the Memory log to the DB - no longer applicable with #156', async () => {
     const response_good = await request(app).post(logPath).send(mockLogPayload)
     expect(response_good.statusCode).toBe(200)
 
