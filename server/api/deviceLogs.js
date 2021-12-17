@@ -1,6 +1,6 @@
 const express = require('express')
 const router = express.Router()
-const { parseQuery, filterTimestampQuery } = require('./common/filter')
+const { parseQuery } = require('./common/filter')
 const auth = require('../middleware/auth.js')
 const {DeviceLogs, DeviceLogsSchema} = require('../models/device_logs.js')
 
@@ -9,17 +9,6 @@ router.get('/', auth, async (req, res) => {
   const [query, options] = parseQuery(Object(req.query), DeviceLogsSchema)
   const results = await DeviceLogs.find({ $and: [query] }, {}, options)
   return res.status(200).json({ Results: results })
-})
-
-// get device Logs with any attribute of the DeviceLogs Model and within a timestamp (startTimeStamp, endTimeStamp)
-router.get('/timestamp', auth, async (req, res) => {
-  try {
-    const [query, options] = filterTimestampQuery(Object(req.query), DeviceLogsSchema)
-    const results = await DeviceLogs.find(query, {}, options)
-    return res.status(200).json({ Results: results })
-  } catch (err) {
-    return res.status(501).send('Server Error: ' + err.message)
-  }
 })
 
 // get latest device logs from a list of device Ids

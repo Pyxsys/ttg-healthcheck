@@ -72,24 +72,4 @@ const parseQuery = (query, schema) => {
   return [validParams, options]
 }
 
-const validateTimestamp = (start, end) => {
-  if (!start || !end) {
-    throw new Error('must include startTimeStamp and endTimeStamp parameters')
-  }
-}
-
-const filterTimestampQuery = (query, schema) => {
-  validateTimestamp(query.startTimeStamp, query.endTimeStamp)
-
-  const [filteredQuery, options] = parseQuery(query, schema)
-  const queryOutput = {
-    ...filteredQuery,
-    timestamp: {
-      $gte: String(query.startTimeStamp),
-      $lte: String(query.endTimeStamp),
-    },
-  }
-  return [queryOutput, options]
-}
-
-module.exports = { parseQuery, validateTimestamp, filterTimestampQuery, getAttributes }
+module.exports = { parseQuery, getAttributes }
