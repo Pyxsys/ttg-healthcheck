@@ -112,11 +112,11 @@ const DevicePage = () => {
               />
               <h4>Change Page</h4>
               <div className="d-flex align-items-center">
-                <i className='hand-cursor pr-2' onClick={()=>setPage(page-1)}>
+                <i className='pe-2' role="button" onClick={()=>setPage(page > 1 ? page-1 : 1)}>
                   <BsChevronLeft />
                 </i>
                 <span>Page {page}</span>
-                <i className='hand-cursor pl-2' onClick={()=>setPage(page+1)}>
+                <i className='ps-2' role="button" onClick={()=>setPage(page+1)}>
                   <BsChevronRight />
                 </i>
               </div>
