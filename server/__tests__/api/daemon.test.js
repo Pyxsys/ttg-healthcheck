@@ -100,20 +100,14 @@ describe('Test Memory log formatter', () => {
 describe('Test Disk log formatter', () => {
   const doc = daemonFunctions.processDiskLogInfo(mockLogPayload1)
 
-  it('Should return average disk percentage at time', () => {
-    expect(doc.activeTimePercent).toBe(0) //tmp should be 70
+  it('Should return correct disk partitionInfo', () => {
+    expect(doc.partitions[0].percent).toBe(70)
+    expect(doc.partitions[0].path).toBe('C:\\')
   })
 
-  it('Should compute average response time accross disks', () => {
-    expect(doc.responseTime).toBe(0) //tmp
-  })
-
-  it('Should compute average read speed accross disks', () => {
-    expect(doc.readSpeed).toBe(0) //tmp
-  })
-
-  it('Should compute average write speed accross disks', () => {
-    expect(doc.writeSpeed).toBe(0) //tmp
+  //TODO
+  it.skip('Should return correct physical disk IO info', () => {
+    expect(doc.disks[0]).toBe(0) //tmp
   })
 })
 

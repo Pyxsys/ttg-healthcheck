@@ -11,10 +11,10 @@ const deviceMockPayload1 = {
   connectionType: 'medium',
   status: 'active',
   provider: 'test_provider',
-  disk_:{
+  disk_: {
     capacity: 10,
     physical_disk: [],
-  }
+  },
 }
 
 const deviceMockPayload2 = {
@@ -24,11 +24,10 @@ const deviceMockPayload2 = {
   connectionType: 'string',
   status: 'active',
   provider: 'test_provider',
-  disk_:{
+  disk_: {
     capacity: 10,
     physical_disk: [],
-  }
-  
+  },
 }
 
 let cookieSession = ''

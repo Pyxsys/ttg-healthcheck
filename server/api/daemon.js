@@ -183,16 +183,12 @@ const processDiskLogInfo = (payload) => {
   const { disk } = payload
 
   //compute values
-  const activeTimePercent = averageDiskUsagePercentage(disk)
-  const responseTime = averageDiskIOResponseTime(disk)
-  const readSpeed = averageDiskReadSpeed(disk)
-  const writeSpeed = averageDiskWriteSpeed(disk)
+  const partitions = processDiskLogPartitionInfo(disk)
+  const disks = processDiskLogIOInfo(disk)
 
   return {
-    activeTimePercent,
-    responseTime,
-    readSpeed,
-    writeSpeed,
+    partitions,
+    disks,
   }
 }
 
@@ -271,48 +267,25 @@ const sumMemoryPercentUsage = (processes) => {
   return aggregatedPercentage
 }
 
-const averageDiskUsagePercentage = (disk) => {
+const processDiskLogPartitionInfo = (disk) => {
   const { partitions } = disk
-  let sumPercentageUsage = 0
-  let amount = 0
-  /*
-  //implementation fails
-  console.log(partitions)
+  let arr = new Array()
 
-  for(var p of partitions.entries()){
-    console.log(p[1] + " ??? " + p[0])
-    sumPercentageUsage += p[1].percent
-    amount++
+  for (var key of Object.keys(partitions)) {
+    arr.push({
+      path: key,
+      percent: partitions[key].percent,
+    })
   }
-  if (amount === 0) { amount++ }
-  return sumPercentageUsage / amount
-  */
-  return 0
+
+  return arr
 }
 
-const averageDiskIOResponseTime = (disk) => {
+const processDiskLogIOInfo = (disk) => {
   const { physical_disk_io } = disk
-  let sumIOCount = 0 //in IO activities
-  let sumIOTime = 0 //in ms
+  let arr = new Array()
 
-  /*
-  //implementation fails
-  physical_disk_io.forEach((d) => {
-    sumIOCount += (d.read_count + d.write_count)
-    sumIOTime += (d.read_time + d.write_time)
-  })
-  
-  return (sumIOTime/sumIOTime)
-  */
-  return 0
-}
-
-const averageDiskReadSpeed = (disk) => {
-  return 0
-}
-
-const averageDiskWriteSpeed = (disk) => {
-  return 0
+  return arr
 }
 
 module.exports = {
