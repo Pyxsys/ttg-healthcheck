@@ -111,15 +111,15 @@ const mockStartupPayload = {
     formFactor: ['DIMM', 'DIMM'],
   },
   disk_: {
-    capacity: 1000000000,    
+    capacity: 1000000000,
     physical_disk: [
-        {
-            media: "SSD",
-            model: "TST  DISK10T2B0B-00TS70",
-            size: 1000000000
-        }
-    ]
-  }
+      {
+        media: 'SSD',
+        model: 'TST  DISK10T2B0B-00TS70',
+        size: 1000000000,
+      },
+    ],
+  },
 }
 
 const mockLogPayload1 = {
@@ -154,24 +154,24 @@ const mockLogPayload1 = {
   network: [38.4, 21.6],
   disk: {
     partitions: {
-        "C:\\": {
-            free: 317964967936,
-            percent: 70.0,
-            total: 1000000000,
-            used: 681584918528
-        }
+      'C:\\': {
+        free: 317964967936,
+        percent: 70.0,
+        total: 1000000000,
+        used: 681584918528,
+      },
     },
     physical_disk_io: {
-        PhysicalDrive0: {
-            read_bytes: 8347789,
-            read_count: 4109294,
-            read_time: 238205985280,
-            write_bytes: 3069,
-            write_count: 267098048512,
-            write_time: 4240
-        }
-    }
-  }
+      PhysicalDrive0: {
+        read_bytes: 8347789,
+        read_count: 4109294,
+        read_time: 238205985280,
+        write_bytes: 3069,
+        write_count: 267098048512,
+        write_time: 4240,
+      },
+    },
+  },
 }
 
 const mockLogPayload2 = {
@@ -206,24 +206,24 @@ const mockLogPayload2 = {
   network: [38.4, 21.6],
   disk: {
     partitions: {
-        "C:\\": {
-            free: 317964967936,
-            percent: 70.0,
-            total: 1000000000,
-            used: 681584918528
-        }
+      'C:\\': {
+        free: 317964967936,
+        percent: 70.0,
+        total: 1000000000,
+        used: 681584918528,
+      },
     },
     physical_disk_io: {
-        PhysicalDrive0: {
-            read_bytes: 8347789,
-            read_count: 4109294,
-            read_time: 238205985280,
-            write_bytes: 3069,
-            write_count: 267098048512,
-            write_time: 4240
-        }
-    }
-  }
+      PhysicalDrive0: {
+        read_bytes: 8347789,
+        read_count: 4109294,
+        read_time: 238205985280,
+        write_bytes: 3069,
+        write_count: 267098048512,
+        write_time: 4240,
+      },
+    },
+  },
 }
 
 const testUser = {

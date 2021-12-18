@@ -56,10 +56,7 @@ const processDeviceInfo = (payload) => {
     wifi,
   } = payload
 
-  let disk =  {
-    capacity: disk_.capacity,
-    type: disk_.physical_disk[0].media,
-  }
+  let disk = processDiskStaticInfo(disk_)
 
   return {
     deviceId,
@@ -160,6 +157,25 @@ const processProcessLogInfo = (payload) => {
   })
 
   return processArray
+}
+
+const processDiskStaticInfo = (disks) => {
+  const { capacity, physical_disk } = disks
+  let arr = new Array()
+
+  physical_disk.forEach((disk) => {
+    let tempDisk = {
+      type: disk.media,
+      model: disk.model,
+      size: disk.size,
+    }
+    arr.push(tempDisk)
+  })
+
+  return {
+    capacity,
+    disks: arr,
+  }
 }
 
 const processDiskLogInfo = (payload) => {
