@@ -52,9 +52,14 @@ const processDeviceInfo = (payload) => {
     hardware,
     cpu,
     memory_,
-    disk,
+    disk_,
     wifi,
   } = payload
+
+  let disk =  {
+    capacity: disk_.capacity,
+    type: disk_.physical_disk[0].media,
+  }
 
   return {
     deviceId,
