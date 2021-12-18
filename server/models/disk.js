@@ -1,15 +1,30 @@
 const mongoose = require('mongoose')
 
-const DiskStaticSchema = new mongoose.Schema({
-  capacity: Number,
+const DiskStaticSubSchema = mongoose.Schema({
   type: String,
+  model: String,
+  size: Number,
 })
 
-const DiskDynamicSchema = new mongoose.Schema({
-  activeTimePercent: Number,
+const DiskStaticSchema = new mongoose.Schema({
+  capacity: Number,
+  disks: [DiskStaticSubSchema],
+})
+
+const DiskDynamicPartitionSubSchema = mongoose.Schema({
+  path: String,
+  percent: Number,
+})
+
+const DiskDynamicPhysicalSubSchema = mongoose.Schema({
   responseTime: Number,
   readSpeed: Number,
   writeSpeed: Number,
+})
+
+const DiskDynamicSchema = new mongoose.Schema({
+  partitions: [DiskDynamicPartitionSubSchema],
+  disks: [DiskDynamicPhysicalSubSchema],
 })
 
 module.exports = {
