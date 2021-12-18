@@ -146,7 +146,7 @@ const processProcessLogInfo = (payload) => {
   const { processes } = payload
 
   //compute values
-  processArray = new Array()
+  const processArray = new Array()
 
   processes.forEach((element) => {
     processArray.push(processSingleProcess(element))
