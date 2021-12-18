@@ -12,6 +12,24 @@ export interface Device {
   wifi: WifiStatic
 }
 
+export interface DeviceLog {
+  deviceId: string
+  timestamp: Date
+  cpu: CpuDynamic
+  memory: MemoryDynamic
+  disk: DiskDynamic
+  wifi: WifiDynamic
+  processes: Process[]
+}
+
+export interface Process {
+  name: string
+  pid: number
+  status: string
+  cpu: CpuProcess
+  memory: MemoryProcess
+}
+
 export interface HardwareStatic {
   harwareName: string
 }
@@ -44,41 +62,37 @@ export interface WifiStatic {
   ipv6Address: string
 }
 
-export interface CpuLog {
-  deviceId: string
-  usagePercentage: number
+export interface CpuDynamic {
   usageSpeed: number
   numProcesses: number
-  threadsAlive: number
   threadsSleeping: number
-  uptime: number
-  timestamp: Date
+  aggregatedPercentage: number
 }
 
-export interface MemoryLog {
-  deviceId: string
-  usagePercentage: number
+export interface MemoryDynamic {
   inUse: number
   available: number
   cached: number
-  pagedPool: number
-  nonPagedPool: number
-  timestamp: Date
+  aggregatedPercentage: number
 }
 
-export interface DiskLog {
-  deviceId: string
+export interface DiskDynamic {
   activeTimePercent: number
   responseTime: number
   readSpeed: number
   writeSpeed: number
-  timestamp: Date
 }
 
-export interface WifiLog {
-  deviceId: string
+export interface WifiDynamic {
   sendSpeed: number
   receiveSpeed: number
   signalStrength: string
-  timestamp: Date
+}
+
+export interface CpuProcess {
+  usagePercentage: number
+}
+
+export interface MemoryProcess {
+  usagePercentage: number
 }

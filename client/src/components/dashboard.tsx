@@ -1,8 +1,8 @@
 // 3rd Party
-import React from 'react';
+import React from 'react'
 
 // Custom
-import Navbar from './Navbar';
+import Navbar from './Navbar'
 
 const Dashboard = () => {
   return (
@@ -12,7 +12,7 @@ const Dashboard = () => {
         dashboard
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default Dashboard;
+export default Dashboard

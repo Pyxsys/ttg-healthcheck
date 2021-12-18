@@ -1,7 +1,7 @@
 /* eslint-disable new-cap */
 const express = require('express')
 const router = express.Router()
-const {Devices, DeviceSchema} = require('../models/device.js')
+const { Devices, DeviceSchema } = require('../models/device.js')
 const auth = require('../middleware/auth.js')
 const { parseQuery } = require('./common/filter')
 

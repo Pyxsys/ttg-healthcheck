@@ -6,81 +6,7 @@ const connectDB = require('../../db/db_connection')
 const { Devices } = require('../../models/device.js')
 const { DeviceLogs } = require('../../models/device_logs')
 const daemonFunctions = require('../../api/daemon')
-
-const mockStartupPayload = {
-  deviceId: 'TEST3C2D-C033-7B87-4B31-244BFX931D14',
-  name: 'test device',
-  description: 'Device used for testing purposes. It is not real',
-  connectionType: 'medium',
-  status: 'active',
-  provider: 'test_provider',
-  memory_: {
-    maxSize: 1024,
-    formFactor: ['DIMM', 'DIMM'],
-  },
-  disk_: {
-    capacity: 1000000000,    
-    physical_disk: [
-        {
-            media: "SSD",
-            model: "TST  DISK10T2B0B-00TS70",
-            size: 1000000000
-        }
-    ]
-  }
-}
-
-const mockLogPayload = {
-  deviceId: 'TEST3C2D-C033-7B87-4B31-244BFX931D14',
-  timestamp: '2021-10-24 09:47:55.966088',
-  processes: [
-    {
-      name: 'python',
-      pid: 12345,
-      status: 'running',
-      cpu_percent: 1.768,
-      memory_percent: 2.65,
-      rss: 25313280,
-      vms: 10844561,
-    },
-    {
-      name: 'celebid',
-      pid: 12344,
-      status: 'idle',
-      cpu_percent: 0.462,
-      memory_percent: 7.32,
-      rss: 25319245,
-      vms: 17502208,
-    },
-  ],
-  memory: {
-    available: 25166790656,
-    free: 25166790656,
-    used: 9103147008,
-    percent: 26.6,
-  },
-  network: [38.4, 21.6],
-  disk: {
-    partitions: {
-        "C:\\": {
-            free: 317964967936,
-            percent: 70.0,
-            total: 1000000000,
-            used: 681584918528
-        }
-    },
-    physical_disk_io: {
-        PhysicalDrive0: {
-            read_bytes: 8347789,
-            read_count: 4109294,
-            read_time: 238205985280,
-            write_bytes: 3069,
-            write_count: 267098048512,
-            write_time: 4240
-        }
-    }
-  }
-}
+const { mockStartupPayload, mockLogPayload1 } = require('./common.test')
 
 beforeAll(async () => {
   await connectDB() // connect to local_db
@@ -103,15 +29,18 @@ describe('Test helper functions', () => {
   })
 
   it('Sum correct amount of running processes', () => {
-    const result = daemonFunctions.computeLiveSleepingProcesses(mockLogPayload.processes)
+    const result = daemonFunctions.computeLiveSleepingProcesses(
+      mockLogPayload1.processes
+    )
     expect(result[0]).toBe(1)
   })
 
   it('Sum correct amount of non-running processes', () => {
-    const result = daemonFunctions.computeLiveSleepingProcesses(mockLogPayload.processes)
+    const result = daemonFunctions.computeLiveSleepingProcesses(
+      mockLogPayload1.processes
+    )
     expect(result[1]).toBe(1)
   })
-
 })
 
 describe('Test Device formatters', () => {
@@ -128,7 +57,7 @@ describe('Test Device formatters', () => {
 })
 
 describe('Test CPU log formatter', () => {
-  const doc = daemonFunctions.processCpuLogInfo(mockLogPayload)
+  const doc = daemonFunctions.processCpuLogInfo(mockLogPayload1)
   //computed values
   it('Sum of processes', () => {
     expect(doc.numProcesses).toBe(2)
@@ -147,17 +76,17 @@ describe('Test CPU log formatter', () => {
   })
 
   it.skip('Process data is consistent - no longer applicable with #156', () => {
-    expect(doc.processes[0].name).toBe(mockLogPayload.processes[0].name)
-    expect(doc.processes[0].pid).toBe(mockLogPayload.processes[0].pid)
-    expect(doc.processes[0].status).toBe(mockLogPayload.processes[0].status)
+    expect(doc.processes[0].name).toBe(mockLogPayload1.processes[0].name)
+    expect(doc.processes[0].pid).toBe(mockLogPayload1.processes[0].pid)
+    expect(doc.processes[0].status).toBe(mockLogPayload1.processes[0].status)
     expect(doc.processes[0].cpu_percent).toBe(
-      mockLogPayload.processes[0].cpu_percent
+      mockLogPayload1.processes[0].cpu_percent
     )
   })
 })
 
 describe('Test Memory log formatter', () => {
-  const doc = daemonFunctions.processMemoryLogInfo(mockLogPayload)
+  const doc = daemonFunctions.processMemoryLogInfo(mockLogPayload1)
 
   it('Sum of Cache memory', () => {
     expect(doc.cached).toBe(28346769)
@@ -169,14 +98,14 @@ describe('Test Memory log formatter', () => {
 })
 
 describe('Test Disk log formatter', () => {
-  const doc = daemonFunctions.processDiskLogInfo(mockLogPayload)
-  
+  const doc = daemonFunctions.processDiskLogInfo(mockLogPayload1)
+
   it('Should return average disk percentage at time', () => {
     expect(doc.activeTimePercent).toBe(0) //tmp should be 70
   })
 
   it('Should compute average response time accross disks', () => {
-    expect(doc.responseTime).toBe(0)  //tmp
+    expect(doc.responseTime).toBe(0) //tmp
   })
 
   it('Should compute average read speed accross disks', () => {
@@ -184,9 +113,8 @@ describe('Test Disk log formatter', () => {
   })
 
   it('Should compute average write speed accross disks', () => {
-    expect(doc.writeSpeed).toBe(0)  //tmp
+    expect(doc.writeSpeed).toBe(0) //tmp
   })
-
 })
 
 describe('Save daemon device to DB', () => {
@@ -225,14 +153,14 @@ describe('Save daemon device to DB', () => {
 
 describe('Save daemon log payload to DB', () => {
   const logPath = '/api/daemon'
-  const invalidIDLog = { ...mockLogPayload, deviceId: 'invalid' }
+  const invalidIDLog = { ...mockLogPayload1, deviceId: 'invalid' }
 
   afterEach(async () => {
     await DeviceLogs.deleteMany()
   })
 
   it.skip('Should save the CPU log to the DB - no longer applicable with #156', async () => {
-    const response_good = await request(app).post(logPath).send(mockLogPayload)
+    const response_good = await request(app).post(logPath).send(mockLogPayload1)
     expect(response_good.statusCode).toBe(200)
 
     const cpus = await CpuLogs.find()
@@ -248,7 +176,7 @@ describe('Save daemon log payload to DB', () => {
   })
 
   it.skip('Should save the Memory log to the DB - no longer applicable with #156', async () => {
-    const response_good = await request(app).post(logPath).send(mockLogPayload)
+    const response_good = await request(app).post(logPath).send(mockLogPayload1)
     expect(response_good.statusCode).toBe(200)
 
     const mems = await MemoryLogs.find()

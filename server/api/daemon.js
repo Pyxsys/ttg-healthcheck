@@ -163,7 +163,7 @@ const processDiskLogInfo = (payload) => {
 
   //compute values
   const activeTimePercent = averageDiskUsagePercentage(disk)
-  const responseTime = averageDiskIOResponseTime(disk);
+  const responseTime = averageDiskIOResponseTime(disk)
   const readSpeed = averageDiskReadSpeed(disk)
   const writeSpeed = averageDiskWriteSpeed(disk)
 
@@ -251,7 +251,6 @@ const sumMemoryPercentUsage = (processes) => {
 }
 
 const averageDiskUsagePercentage = (disk) => {
-  
   const { partitions } = disk
   let sumPercentageUsage = 0
   let amount = 0
@@ -271,9 +270,9 @@ const averageDiskUsagePercentage = (disk) => {
 }
 
 const averageDiskIOResponseTime = (disk) => {
-  const {physical_disk_io} = disk
-  let sumIOCount = 0  //in IO activities
-  let sumIOTime = 0   //in ms
+  const { physical_disk_io } = disk
+  let sumIOCount = 0 //in IO activities
+  let sumIOTime = 0 //in ms
 
   /*
   //implementation fails
@@ -288,12 +287,10 @@ const averageDiskIOResponseTime = (disk) => {
 }
 
 const averageDiskReadSpeed = (disk) => {
-
   return 0
 }
 
 const averageDiskWriteSpeed = (disk) => {
-
   return 0
 }
 

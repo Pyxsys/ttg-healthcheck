@@ -1,89 +1,79 @@
 // 3rd Party
-import React, {useEffect, useState} from 'react';
-import axios from 'axios';
-import {Link} from 'react-router-dom';
-import {Col, Row} from 'react-bootstrap';
-import BootstrapTable from 'react-bootstrap-table-next';
-import filterFactory, {textFilter} from 'react-bootstrap-table2-filter';
+import React, { useEffect, useState } from 'react'
+import axios from 'axios'
+import { Link } from 'react-router-dom'
+import { Col, Row } from 'react-bootstrap'
+import BootstrapTable from 'react-bootstrap-table-next'
+import filterFactory, { textFilter } from 'react-bootstrap-table2-filter'
+import { BsChevronLeft, BsChevronRight } from 'react-icons/bs'
 
 // Custom
-import Navbar from './Navbar';
-import {IResponse} from '../types/common';
-import {CpuLog, MemoryLog} from '../types/queries';
-import {DevicesColumns} from '../types/tables';
+import Navbar from './Navbar'
+import { IResponse } from '../types/common'
+import { DeviceLog } from '../types/queries'
 
 const DevicePage = () => {
-  const [deviceData, setDeviceData] = useState([] as DevicesColumns[]);
+  // Readonly Values
+  const initialPage: number = 1
+  const pageSize: number = 10
+
+  const [deviceData, setDeviceData] = useState([] as DeviceLog[])
+  const [page, setPage] = useState(initialPage)
 
   const queryTable = async () => {
-    // Query log information from year 2020 to today
-    // We should change this so we do not query 1000's of records
-    const timestampParams = {
-      startTimeStamp: new Date('2020'),
-      endTimeStamp: new Date(),
-    };
+    const skip: number = (page - 1) * pageSize
+    const deviceIdQuery = {
+      params: {
+        limit: pageSize,
+        skip: skip,
+      },
+    }
+    const deviceResponse = await axios.get<IResponse<string>>(
+      'api/device/ids',
+      deviceIdQuery
+    )
+    const deviceIds = deviceResponse.data.Results
 
-    const deviceResponse = await axios.get<IResponse<string>>('api/device/ids');
-    const deviceIds = deviceResponse.data.Results;
+    const latestDevicesResponse = await axios.get<IResponse<DeviceLog>>(
+      'api/device-logs/latest',
+      { params: { Ids: deviceIds.join(',') } }
+    )
+    const latestDevices = latestDevicesResponse.data.Results
 
-    const cpuResponse = await axios.get<IResponse<CpuLog>>(
-        'api/cpu-logs/timestamp',
-        {params: timestampParams},
-    );
-    const cpuUsages = cpuResponse.data.Results;
-
-    const memoryResponse = await axios.get<IResponse<MemoryLog>>(
-        'api/memory-logs/timestamp',
-        {params: timestampParams},
-    );
-    const memoryUsages = memoryResponse.data.Results;
-
-    const device: DevicesColumns[] = deviceIds.map((id) => {
-      const cpu = cpuUsages?.find((cpuUsage) => cpuUsage?.deviceId == id);
-      const mem = memoryUsages?.find(
-          (memoryUsage) => memoryUsage?.deviceId == id,
-      );
-      return {
-        id: id,
-        cpuUsage: cpu?.usagePercentage as number,
-        memoryUsage: mem?.usagePercentage as number,
-        uptime: cpu?.uptime as number,
-      };
-    });
-    setDeviceData(device);
-  };
+    setDeviceData(latestDevices)
+  }
 
   useEffect(() => {
-    queryTable();
-  }, []);
+    queryTable()
+  }, [page])
 
   const idFormatter = (cell: {} | null | undefined) => {
     return (
       <>
-        <Link to={{pathname: '/device', state: {id: cell}}}>{cell}</Link>
+        <Link to={{ pathname: '/device', state: { id: cell } }}>{cell}</Link>
       </>
-    );
-  };
+    )
+  }
 
   const uuidHeaderFormatter = (
-      column: any,
-      colIndex: any,
-      {sortElement, filterElement}: any,
+    column: any,
+    colIndex: any,
+    { sortElement, filterElement }: any
   ) => {
     return (
-      <div style={{display: 'flex', flexDirection: 'column'}}>
+      <div style={{ display: 'flex', flexDirection: 'column' }}>
         {column.text}
-        <div style={{display: 'flex', flexDirection: 'row'}}>
+        <div style={{ display: 'flex', flexDirection: 'row' }}>
           {filterElement}
           {sortElement}
         </div>
       </div>
-    );
-  };
+    )
+  }
 
   const columns = [
     {
-      dataField: 'id',
+      dataField: 'deviceId',
       text: 'UUID',
       filter: textFilter({
         placeholder: 'Filter by UUID...',
@@ -94,22 +84,22 @@ const DevicePage = () => {
     },
 
     {
-      dataField: 'cpuUsage',
+      dataField: 'cpu.aggregatedPercentage',
       text: 'CPU',
       sort: true,
     },
     {
-      dataField: 'memoryUsage',
+      dataField: 'memory.aggregatedPercentage',
       text: 'Memory',
       sort: true,
     },
 
     {
-      dataField: 'uptime',
+      dataField: 'timestamp',
       text: 'Uptime',
       sort: true,
     },
-  ];
+  ]
 
   return (
     <div id="outer-container">
@@ -126,12 +116,30 @@ const DevicePage = () => {
                 filter={filterFactory()}
                 wrapperClasses="table-responsive"
               />
+              <h4>Change Page</h4>
+              <div className="d-flex align-items-center">
+                <i
+                  className="pe-2"
+                  role="button"
+                  onClick={() => setPage(page > 1 ? page - 1 : 1)}
+                >
+                  <BsChevronLeft />
+                </i>
+                <span>Page {page}</span>
+                <i
+                  className="ps-2"
+                  role="button"
+                  onClick={() => setPage(page + 1)}
+                >
+                  <BsChevronRight />
+                </i>
+              </div>
             </div>
           </Col>
         </Row>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default DevicePage;
+export default DevicePage
