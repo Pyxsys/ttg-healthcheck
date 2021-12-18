@@ -76,7 +76,6 @@ const processDeviceLogInfo = (payload) => {
 
   const newCpuLog = processCpuLogInfo(payload)
   const newMemoryLog = processMemoryLogInfo(payload)
-  //const newDiskLog = processDiskLogInfo(payload)
   const newWifiLog = processWifiLogInfo(payload)
   const newProcessLogArray = processProcessLogInfo(payload)
 
@@ -85,7 +84,6 @@ const processDeviceLogInfo = (payload) => {
     timestamp,
     cpu: newCpuLog,
     memory: newMemoryLog,
-    //disk: newDiskLog,
     wifi: newWifiLog,
     processes: newProcessLogArray,
   })
