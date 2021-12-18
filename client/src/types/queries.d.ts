@@ -1,3 +1,13 @@
+import {CpuDynamic, CpuProcess, CpuStatic} from './cpu';
+import {DiskDynamic, DiskStatic} from './disk';
+import {MemoryDynamic, MemoryProcess, MemoryStatic} from './memory';
+import {WifiDynamic, WifiStatic} from './wifi';
+
+export interface IResponse<T> {
+  Results: T[]
+  Total: number
+}
+
 export interface Device {
   deviceId: string
   name: string
@@ -32,67 +42,4 @@ export interface Process {
 
 export interface HardwareStatic {
   harwareName: string
-}
-
-export interface CpuStatic {
-  baseSpeed: number
-  sockets: number
-  cores: number
-  processors: number
-  cacheSizeL1: number
-  cacheSizeL2: number
-  cacheSizeL3: number
-}
-
-export interface MemoryStatic {
-  maxSize: number
-  formFactor: string
-}
-
-export interface DiskStatic {
-  capacity: number
-  type: string
-}
-
-export interface WifiStatic {
-  adapterName: string
-  SSID: string
-  connectionType: string
-  ipv4Address: string
-  ipv6Address: string
-}
-
-export interface CpuDynamic {
-  usageSpeed: number
-  numProcesses: number
-  threadsSleeping: number
-  aggregatedPercentage: number
-}
-
-export interface MemoryDynamic {
-  inUse: number
-  available: number
-  cached: number
-  aggregatedPercentage: number
-}
-
-export interface DiskDynamic {
-  activeTimePercent: number
-  responseTime: number
-  readSpeed: number
-  writeSpeed: number
-}
-
-export interface WifiDynamic {
-  sendSpeed: number
-  receiveSpeed: number
-  signalStrength: string
-}
-
-export interface CpuProcess {
-  usagePercentage: number
-}
-
-export interface MemoryProcess {
-  usagePercentage: number
 }
