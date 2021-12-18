@@ -185,7 +185,7 @@ const setupLogTests = async () => {
   })
 
   // login user and store cookie
-  const cookieSession = await request(app)
+  return await request(app)
     .post('/api/user/login')
     .send({
       email: testUser.email,
@@ -197,8 +197,6 @@ const setupLogTests = async () => {
         .map((item) => item.split(';')[0])
         .join(';')
     )
-
-  return cookieSession
 }
 
 const teardownLogTests = async () => {

@@ -8,16 +8,13 @@ const validOperators = ['gt', 'gte', 'lt', 'lte']
  * @returns an array of the schema attribute names
  */
 const getAttributes = (schema) => {
-  const attributeNames = Object.values(schema.paths)
-    .map(path =>
-      (path.instance === 'Array' || path.instance === 'Embedded') && path.schema
-        ? getAttributes(path.schema).map(attrPath => `${path.path}.${attrPath}`)
-        : path.path
-    )
-    .filter(name => name !== '__v' && name !== '_id')
-    .reduce((acc, name) => acc.concat(name), [])
-
-  return attributeNames
+  return Object.values(schema.paths).map(path =>
+    (path.instance === 'Array' || path.instance === 'Embedded') && path.schema
+      ? getAttributes(path.schema).map(attrPath => `${path.path}.${attrPath}`)
+      : path.path
+  )
+  .filter(name => name !== '__v' && name !== '_id')
+  .reduce((acc, name) => acc.concat(name), [])
 }
 
 /**
