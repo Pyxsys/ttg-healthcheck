@@ -27,7 +27,7 @@ const mockStartupPayload = {
             size: 1000000000
         }
     ]
-}
+  }
 }
 
 const mockLogPayload = {
@@ -171,20 +171,20 @@ describe('Test Memory log formatter', () => {
 describe('Test Disk log formatter', () => {
   const doc = daemonFunctions.processDiskLogInfo(mockLogPayload)
   
-  it('Should return disk percentage at time', () => {
-    
+  it('Should return average disk percentage at time', () => {
+    expect(doc.activeTimePercent).toBe(0) //tmp should be 70
   })
 
   it('Should compute average response time accross disks', () => {
-
+    expect(doc.responseTime).toBe(0)  //tmp
   })
 
   it('Should compute average read speed accross disks', () => {
-    
+    expect(doc.readSpeed).toBe(0) //tmp
   })
 
   it('Should compute average write speed accross disks', () => {
-    
+    expect(doc.writeSpeed).toBe(0)  //tmp
   })
 
 })

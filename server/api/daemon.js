@@ -76,7 +76,7 @@ const processDeviceLogInfo = (payload) => {
 
   const newCpuLog = processCpuLogInfo(payload)
   const newMemoryLog = processMemoryLogInfo(payload)
-  //const newDiskLog = processDiskLogInfo(payload)
+  const newDiskLog = processDiskLogInfo(payload)
   const newWifiLog = processWifiLogInfo(payload)
   const newProcessLogArray = processProcessLogInfo(payload)
 
@@ -85,7 +85,7 @@ const processDeviceLogInfo = (payload) => {
     timestamp,
     cpu: newCpuLog,
     memory: newMemoryLog,
-    //disk: newDiskLog,
+    disk: newDiskLog,
     wifi: newWifiLog,
     processes: newProcessLogArray,
   })
@@ -155,6 +155,24 @@ const processProcessLogInfo = (payload) => {
   })
 
   return processArray
+}
+
+const processDiskLogInfo = (payload) => {
+  //load values
+  const { disk } = payload
+
+  //compute values
+  const activeTimePercent = averageDiskUsagePercentage(disk)
+  const responseTime = averageDiskIOResponseTime(disk);
+  const readSpeed = averageDiskReadSpeed(disk)
+  const writeSpeed = averageDiskWriteSpeed(disk)
+
+  return {
+    activeTimePercent,
+    responseTime,
+    readSpeed,
+    writeSpeed,
+  }
 }
 
 const processSingleProcess = (process) => {
@@ -232,6 +250,53 @@ const sumMemoryPercentUsage = (processes) => {
   return aggregatedPercentage
 }
 
+const averageDiskUsagePercentage = (disk) => {
+  
+  const { partitions } = disk
+  let sumPercentageUsage = 0
+  let amount = 0
+  /*
+  //implementation fails
+  console.log(partitions)
+
+  for(var p of partitions.entries()){
+    console.log(p[1] + " ??? " + p[0])
+    sumPercentageUsage += p[1].percent
+    amount++
+  }
+  if (amount === 0) { amount++ }
+  return sumPercentageUsage / amount
+  */
+  return 0
+}
+
+const averageDiskIOResponseTime = (disk) => {
+  const {physical_disk_io} = disk
+  let sumIOCount = 0  //in IO activities
+  let sumIOTime = 0   //in ms
+
+  /*
+  //implementation fails
+  physical_disk_io.forEach((d) => {
+    sumIOCount += (d.read_count + d.write_count)
+    sumIOTime += (d.read_time + d.write_time)
+  })
+  
+  return (sumIOTime/sumIOTime)
+  */
+  return 0
+}
+
+const averageDiskReadSpeed = (disk) => {
+
+  return 0
+}
+
+const averageDiskWriteSpeed = (disk) => {
+
+  return 0
+}
+
 module.exports = {
   router,
   verifyDeviceIdFormat,
@@ -241,6 +306,7 @@ module.exports = {
   processMemoryLogInfo,
   processWifiLogInfo,
   processProcessLogInfo,
+  processDiskLogInfo,
   processSingleProcess,
   computeLiveSleepingProcesses,
 }
