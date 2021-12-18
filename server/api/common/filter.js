@@ -31,8 +31,6 @@ const getAttributes = (schema) => {
  * @returns the separated valid query and options array
  */
 const parseQuery = (query, schema) => {
-  const options = {}
-
   const validAttributes = [...getAttributes(schema), 'limit', 'skip', 'orderBy']
 
   const paramKeyValue = Object.entries(query)
@@ -47,7 +45,14 @@ const parseQuery = (query, schema) => {
     }
     return acc
   }, {})
-  
+
+  return splitQuery(validParams)
+}
+
+const splitQuery = (query) => {
+  const validParams = query
+  const options = {}
+
   if (validParams.limit) {
     options.limit = Number(validParams.limit)
     delete validParams.limit
