@@ -5,8 +5,7 @@ import {Card, Col, Row, Table} from 'react-bootstrap';
 
 // Custom
 import Navbar from './Navbar';
-import {IResponse} from '../types/common';
-import {Device, DeviceLog} from '../types/queries';
+import {Device, DeviceLog, IResponse} from '../types/queries';
 
 const DeviceDetailPage = (props: any) => {
   const deviceId = props.location.state.id;
@@ -114,7 +113,7 @@ const DeviceDetailPage = (props: any) => {
                       <Card.Body>
                         <div className="row h-100">
                           <div className="col-12 my-auto">
-                            {deviceLogsData?.disk.activeTimePercent}%
+                            {deviceLogsData?.disk.partitions.reduce((sum, p)=>sum+p.percent, 0) / deviceLogsData?.disk.partitions.length}%
                           </div>
                         </div>
                       </Card.Body>
@@ -203,22 +202,22 @@ const DeviceDetailPage = (props: any) => {
                     <Table className="text-center" responsive="sm" hover>
                       <tbody>
                         <tr>
-                          <td className="w-50">Active Time</td>
+                          <td className="w-50">Partition Percent</td>
                           <td className="w-50">
-                            {deviceLogsData?.disk.activeTimePercent}%
+                            {deviceLogsData?.disk.partitions[0]?.percent}%
                           </td>
                         </tr>
                         <tr>
                           <td className="w-50">Response Time</td>
-                          <td className="w-50">{deviceLogsData?.disk.responseTime}</td>
+                          <td className="w-50">{deviceLogsData?.disk.disks[0]?.responseTime}</td>
                         </tr>
                         <tr>
                           <td className="w-50">Read Speed</td>
-                          <td className="w-50">{deviceLogsData?.disk.readSpeed}</td>
+                          <td className="w-50">{deviceLogsData?.disk.disks[0]?.readSpeed}</td>
                         </tr>
                         <tr>
                           <td className="w-50">Write Speed</td>
-                          <td className="w-50">{deviceLogsData?.disk.writeSpeed}</td>
+                          <td className="w-50">{deviceLogsData?.disk.disks[0]?.writeSpeed}</td>
                         </tr>
                         <tr>
                           <td className="w-50">Timestamp</td>
@@ -354,7 +353,7 @@ const DeviceDetailPage = (props: any) => {
                           </tr>
                           <tr>
                             <td className="w-50">Type</td>
-                            <td className="w-50">{deviceData?.disk?.type}</td>
+                            <td className="w-50">{deviceData?.disk?.disks[0]?.type}</td>
                           </tr>
                         </tbody>
                       </Table>

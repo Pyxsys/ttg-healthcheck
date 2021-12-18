@@ -9,8 +9,7 @@ import {BsChevronLeft, BsChevronRight} from 'react-icons/bs';
 
 // Custom
 import Navbar from './Navbar';
-import {IResponse} from '../types/common';
-import {DeviceLog} from '../types/queries';
+import {DeviceLog, IResponse} from '../types/queries';
 
 const DevicePage = () => {
   // Readonly Values
