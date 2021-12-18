@@ -185,7 +185,7 @@ const setupLogTests = async () => {
   })
 
   // login user and store cookie
-  return await request(app)
+  return request(app)
     .post('/api/user/login')
     .send({
       email: testUser.email,
