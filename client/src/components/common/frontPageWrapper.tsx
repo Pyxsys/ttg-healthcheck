@@ -1,10 +1,10 @@
 // 3rd Party
-import React from 'react'
+import React from 'react';
 
 // Custom
-import '../../App.scss'
+import '../../App.scss';
 
-const FrontPageWrapper = ({ children }: { children: JSX.Element }) => {
+const FrontPageWrapper = ({children}: { children: JSX.Element }) => {
   return (
     <div className="h-100 d-flex flex-column">
       <div className="d-flex flex-column align-items-center home-header">
@@ -24,7 +24,7 @@ const FrontPageWrapper = ({ children }: { children: JSX.Element }) => {
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default FrontPageWrapper
+export default FrontPageWrapper;

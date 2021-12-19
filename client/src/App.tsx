@@ -1,15 +1,15 @@
 /* eslint-disable require-jsdoc */
-import React from 'react'
-import './App.scss'
-import { Route } from 'react-router-dom'
-import PrivateRoute from './routes/privateRoute'
-import Login from './components/login'
-import Dashboard from './components/dashboard'
-import AdminPanel from './components/adminPanel'
-import Signup from './components/signup'
-import DevicePage from './components/devicePage'
-import deviceDetailPage from './components/deviceDetailPage'
-import { AuthProvider } from './context/authContext'
+import React from 'react';
+import './App.scss';
+import {Route} from 'react-router-dom';
+import PrivateRoute from './routes/privateRoute';
+import Login from './components/login';
+import Dashboard from './components/dashboard';
+import AdminPanel from './components/adminPanel';
+import Signup from './components/signup';
+import DevicePage from './components/devicePage';
+import deviceDetailPage from './components/deviceDetailPage';
+import {AuthProvider} from './context/authContext';
 
 function App() {
   return (
@@ -41,7 +41,7 @@ function App() {
         component={AdminPanel}
       ></PrivateRoute>
     </AuthProvider>
-  )
+  );
 }
 
-export default App
+export default App;

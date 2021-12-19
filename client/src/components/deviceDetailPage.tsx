@@ -1,42 +1,42 @@
 // 3rd Party
-import React, { useState, useEffect } from 'react'
-import axios from 'axios'
-import { Card, Col, Row, Table } from 'react-bootstrap'
+import React, {useState, useEffect} from 'react';
+import axios from 'axios';
+import {Card, Col, Row, Table} from 'react-bootstrap';
 
 // Custom
-import Navbar from './Navbar'
-import { Device, DeviceLog, IResponse } from '../types/queries'
+import Navbar from './Navbar';
+import {Device, DeviceLog, IResponse} from '../types/queries';
 
 const DeviceDetailPage = (props: any) => {
-  const deviceId = props.location.state.id
-  const [deviceData, setDeviceData] = useState({} as Device)
-  const [deviceLogsData, setDeviceLogsData] = useState({} as DeviceLog)
+  const deviceId = props.location.state.id;
+  const [deviceData, setDeviceData] = useState({} as Device);
+  const [deviceLogsData, setDeviceLogsData] = useState({} as DeviceLog);
 
   const queryLogs = async () => {
     const queryParams = {
       deviceId: deviceId,
       limit: 1,
-    }
+    };
 
     const deviceResponse = await axios.get<IResponse<Device>>('api/device', {
       params: queryParams,
-    })
-    const devices = deviceResponse.data.Results
-    setDeviceData(devices[0] || null)
+    });
+    const devices = deviceResponse.data.Results;
+    setDeviceData(devices[0] || null);
 
     const deviceLogResponse = await axios.get<IResponse<DeviceLog>>(
-      'api/device-logs',
-      {
-        params: queryParams,
-      }
-    )
-    const deviceLogs = deviceLogResponse.data.Results
-    setDeviceLogsData(deviceLogs[0] || null)
-  }
+        'api/device-logs',
+        {
+          params: queryParams,
+        },
+    );
+    const deviceLogs = deviceLogResponse.data.Results;
+    setDeviceLogsData(deviceLogs[0] || null);
+  };
 
   useEffect(() => {
-    queryLogs()
-  }, [])
+    queryLogs();
+  }, []);
 
   return (
     <div id="outer-container">
@@ -117,8 +117,8 @@ const DeviceDetailPage = (props: any) => {
                         <div className="row h-100">
                           <div className="col-12 my-auto">
                             {deviceLogsData?.disk.partitions.reduce(
-                              (sum, p) => sum + p.percent,
-                              0
+                                (sum, p) => sum + p.percent,
+                                0,
                             ) / deviceLogsData?.disk.partitions.length}
                             %
                           </div>
@@ -454,7 +454,7 @@ const DeviceDetailPage = (props: any) => {
         </Row>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default DeviceDetailPage
+export default DeviceDetailPage;

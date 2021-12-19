@@ -1,60 +1,60 @@
 // 3rd Party
-import React from 'react'
-import axios from 'axios'
-import { Nav } from 'react-bootstrap'
-import { IconContext } from 'react-icons'
-import { MdOutlineSpaceDashboard, MdAnalytics, MdLogout } from 'react-icons/md'
-import { DiRasberryPi } from 'react-icons/di'
-import { CgProfile } from 'react-icons/cg'
-import { slide as Menu } from 'react-burger-menu'
+import React from 'react';
+import axios from 'axios';
+import {Nav} from 'react-bootstrap';
+import {IconContext} from 'react-icons';
+import {MdOutlineSpaceDashboard, MdAnalytics, MdLogout} from 'react-icons/md';
+import {DiRasberryPi} from 'react-icons/di';
+import {CgProfile} from 'react-icons/cg';
+import {slide as Menu} from 'react-burger-menu';
 
 // Custom
-import { useAuth } from '../context/authContext'
+import {useAuth} from '../context/authContext';
 
 const Navbar = () => {
-  const { setUser, setIsAuthenticated } = useAuth()
+  const {setUser, setIsAuthenticated} = useAuth();
 
   const logout = async (e: React.ChangeEvent<any>) => {
-    e.preventDefault()
+    e.preventDefault();
     await axios
-      .get('api/user/logout')
-      .then((response) => {
-        if (response.data) {
-          setUser({ name: '', role: '' })
-          setIsAuthenticated(false)
-        }
-      })
-      .catch((error) => {
-        console.error(error)
-      })
-  }
+        .get('api/user/logout')
+        .then((response) => {
+          if (response.data) {
+            setUser({name: '', role: ''});
+            setIsAuthenticated(false);
+          }
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+  };
 
   return (
     <>
       <Menu pageWrapId={'page-wrap'} outerContainerId={'outer-container'}>
         <Nav.Link className="text-secondary mt-5" href="/dashboard">
-          <IconContext.Provider value={{ size: '2em' }}>
+          <IconContext.Provider value={{size: '2em'}}>
             <div>
               <MdOutlineSpaceDashboard />
             </div>
           </IconContext.Provider>
         </Nav.Link>
         <Nav.Link className="text-secondary mt-5" href="/devices">
-          <IconContext.Provider value={{ size: '2em' }}>
+          <IconContext.Provider value={{size: '2em'}}>
             <div>
               <DiRasberryPi />
             </div>
           </IconContext.Provider>
         </Nav.Link>
         <Nav.Link className="text-secondary mt-5" href="/dashboard">
-          <IconContext.Provider value={{ size: '2em' }}>
+          <IconContext.Provider value={{size: '2em'}}>
             <div>
               <MdAnalytics />
             </div>
           </IconContext.Provider>
         </Nav.Link>
         <Nav.Link className="text-secondary mt-5" href="/dashboard">
-          <IconContext.Provider value={{ size: '2em' }}>
+          <IconContext.Provider value={{size: '2em'}}>
             <div>
               <CgProfile />
             </div>
@@ -65,7 +65,7 @@ const Navbar = () => {
           href="/logout"
           onClick={(e) => logout(e)}
         >
-          <IconContext.Provider value={{ size: '2em' }}>
+          <IconContext.Provider value={{size: '2em'}}>
             <div>
               <MdLogout />
             </div>
@@ -73,6 +73,6 @@ const Navbar = () => {
         </Nav.Link>
       </Menu>
     </>
-  )
-}
-export default Navbar
+  );
+};
+export default Navbar;

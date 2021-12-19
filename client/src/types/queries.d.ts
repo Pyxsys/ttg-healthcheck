@@ -1,7 +1,7 @@
-import { CpuDynamic, CpuProcess, CpuStatic } from './cpu'
-import { DiskDynamic, DiskStatic } from './disk'
-import { MemoryDynamic, MemoryProcess, MemoryStatic } from './memory'
-import { WifiDynamic, WifiStatic } from './wifi'
+import {CpuDynamic, CpuProcess, CpuStatic} from './cpu';
+import {DiskDynamic, DiskStatic} from './disk';
+import {MemoryDynamic, MemoryProcess, MemoryStatic} from './memory';
+import {WifiDynamic, WifiStatic} from './wifi';
 
 export interface IResponse<T> {
   Results: T[]

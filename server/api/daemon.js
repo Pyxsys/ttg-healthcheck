@@ -287,24 +287,24 @@ const processDiskLogIOInfo = (disk) => {
   let arr = new Array()
 
   for (var key of Object.keys(physical_disk_io)) {
-
     let responseTime =
       (physical_disk_io[key].read_time + physical_disk_io[key].write_time) /
       (physical_disk_io[key].read_count + physical_disk_io[key].write_count) /
       conversion_value
-    
+
     let readSpeed =
       (physical_disk_io[key].read_bytes / physical_disk_io[key].read_time) *
       conversion_value
-    
-     let writeSpeed =
+
+    let writeSpeed =
       (physical_disk_io[key].write_bytes / physical_disk_io[key].write_time) *
       conversion_value
 
     //If there were 0-valued I/O, mark as 0
-    responseTime = (isNaN(responseTime) || !isFinite(responseTime)) ? 0 : responseTime
-    readSpeed = (isNaN(readSpeed) || !isFinite(readSpeed)) ? 0 : readSpeed
-    writeSpeed = (isNaN(writeSpeed) || !isFinite(writeSpeed)) ? 0 : writeSpeed
+    responseTime =
+      isNaN(responseTime) || !isFinite(responseTime) ? 0 : responseTime
+    readSpeed = isNaN(readSpeed) || !isFinite(readSpeed) ? 0 : readSpeed
+    writeSpeed = isNaN(writeSpeed) || !isFinite(writeSpeed) ? 0 : writeSpeed
 
     arr.push({
       name: key,
