@@ -1,36 +1,27 @@
 const mongoose = require('mongoose')
-const { HardwareSchema } = require('./hardware')
-const { CpuSchema } = require('./cpu')
-const { DiskSchema } = require('./disk')
-const { MemorySchema } = require('./memory')
-const { WifiSchema } = require('./wifi')
+const { CpuStaticSchema } = require('./cpu')
+const { DiskStaticSchema } = require('./disk')
+const { HardwareStaticSchema } = require('./hardware')
+const { MemoryStaticSchema } = require('./memory')
+const { WifiStaticSchema } = require('./wifi')
 
 const DeviceSchema = new mongoose.Schema({
   deviceId: {
     type: String,
     required: true,
   },
-  name: {
-    type: String,
-  },
-  description: {
-    type: String,
-  },
-  connectionType: {
-    type: String,
-  },
-  status: {
-    type: String,
-  },
-  provider: {
-    type: String,
-  },
-  hardware: HardwareSchema,
-  cpu: CpuSchema,
-  memory: MemorySchema,
-  disk: DiskSchema,
-  wifi: WifiSchema,
+  name: String,
+  description: String,
+  connectionType: String,
+  status: String,
+  provider: String,
+  hardware: HardwareStaticSchema,
+  cpu: CpuStaticSchema,
+  memory: MemoryStaticSchema,
+  disk: DiskStaticSchema,
+  wifi: WifiStaticSchema,
 })
 
 const Devices = mongoose.model('devices', DeviceSchema)
-module.exports = Devices
+
+module.exports = { Devices, DeviceSchema }

@@ -1,9 +1,7 @@
 const mongoose = require('mongoose')
 
-const HardwareSchema = new mongoose.Schema({
-  hardwareName: {
-    type: String,
-  },
+const HardwareStaticSchema = new mongoose.Schema({
+  hardwareName: String,
 })
 
-module.exports = { HardwareSchema: HardwareSchema }
+module.exports = { HardwareStaticSchema }

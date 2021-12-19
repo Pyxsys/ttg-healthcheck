@@ -1,10 +1,10 @@
+const request = require('supertest')
 const mongoose = require('mongoose')
 const WebSocket = require('ws')
-const request = require('supertest')
 
+const app = require('../app')
 const connectDB = require('../db/db_connection')
 const User = require('../models/user.js')
-const app = require('../app')
 const { createWebSocketServer, listeningForClients } = require('../ws_server')
 const {
   monitorPredefinedCollections,

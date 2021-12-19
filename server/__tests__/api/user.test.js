@@ -1,7 +1,8 @@
 const request = require('supertest')
-const User = require('../models/user.js')
-const app = require('../app')
-const { setupLogTests, teardownLogTests } = require('./api_common.test')
+
+const app = require('../../app')
+const User = require('../../models/user.js')
+const { setupLogTests, teardownLogTests } = require('./common.test')
 
 let cookieSession = ''
 
