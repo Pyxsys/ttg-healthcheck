@@ -155,7 +155,7 @@ class SysReport:
 
     def add_disk_usage_info(self):
         disk_usage=dict()
-        disk_usage['physical_disk_io'] = SysReport.fetch_physical_disk_IO()
+        disk_usage['physical_disk_io'] = SysReport.fetch_physical_disk_io()
         disk_usage['partitions'] = SysReport.fetch_disk_partition_status()
         self.set_section("disk", disk_usage)
 
@@ -269,7 +269,7 @@ class SysReport:
                 command="lsblk -d -o name,rota | grep %s" % (m[0])
 
                 extract=os.popen(command)
-                ps_buffer=re.findall(r'(0|1)$', extract.read(), flags)
+                ps_buffer=re.findall(r'([01])$', extract.read(), flags)
                 extract.close()
 
                 temp_dict["media"]=rota_map[ps_buffer[0]]
@@ -283,7 +283,7 @@ class SysReport:
         return psutil.disk_usage('/').total
 
     @classmethod
-    def fetch_physical_disk_IO(cls):
+    def fetch_physical_disk_io(cls):
         disk_dict = dict()
 
         disk_io_buffer = psutil.disk_io_counters(perdisk=True)

@@ -121,7 +121,7 @@ class TestSystemReportClass(unittest.TestCase):
         expected_attributes={'read_bytes', 'read_count', 'read_time', 'write_bytes', 'write_count', 'write_time'}
         missing_attributes=[]
 
-        disk_io = SysReport.fetch_physical_disk_IO()
+        disk_io = SysReport.fetch_physical_disk_io()
         for item in disk_io:
             attribute_list = disk_io[item].keys()
             
