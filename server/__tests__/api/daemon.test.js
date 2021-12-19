@@ -105,9 +105,11 @@ describe('Test Disk log formatter', () => {
     expect(doc.partitions[0].path).toBe('C:\\')
   })
 
-  //TODO
-  it.skip('Should return correct physical disk IO info', () => {
-    expect(doc.disks[0]).toBe(0) //tmp
+  it('Should return correct physical disk IO info', () => {
+    expect(doc.disks[0].name).toBe('PhysicalDrive0')
+    expect(doc.disks[0].responseTime).toBe(0.125)
+    expect(doc.disks[0].readSpeed).toBe(1024)
+    expect(doc.disks[0].writeSpeed).toBe(1024)
   })
 })
 

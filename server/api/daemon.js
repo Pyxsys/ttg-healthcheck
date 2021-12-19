@@ -283,7 +283,28 @@ const processDiskLogPartitionInfo = (disk) => {
 
 const processDiskLogIOInfo = (disk) => {
   const { physical_disk_io } = disk
+  const conversion_value = 1000 //ms to s
   let arr = new Array()
+
+  for (var key of Object.keys(physical_disk_io)) {
+    let responseTime =
+      (physical_disk_io[key].read_time + physical_disk_io[key].write_time) /
+      (physical_disk_io[key].read_count + physical_disk_io[key].write_count) /
+      conversion_value
+    let readSpeed =
+      (physical_disk_io[key].read_bytes / physical_disk_io[key].read_time) *
+      conversion_value
+    let writeSpeed =
+      (physical_disk_io[key].write_bytes / physical_disk_io[key].write_time) *
+      conversion_value
+
+    arr.push({
+      name: key,
+      responseTime,
+      readSpeed,
+      writeSpeed,
+    })
+  }
 
   return arr
 }
