@@ -179,31 +179,31 @@ const mockLogPayload2 = {
   timestamp: '2021-11-24 09:47:55.966088',
   processes: [
     {
-      name: 'python',
-      pid: 12345,
+      name: 'process1',
+      pid: 54321,
       status: 'running',
-      cpu_percent: 1.768,
-      memory_percent: 2.65,
-      rss: 25313280,
-      vms: 10844561,
+      cpu_percent: 5.592,
+      memory_percent: 6.37,
+      rss: 89547398,
+      vms: 462374623,
     },
     {
-      name: 'celebid',
-      pid: 12344,
+      name: 'process2',
+      pid: 54320,
       status: 'idle',
-      cpu_percent: 0.462,
-      memory_percent: 7.32,
-      rss: 25319245,
-      vms: 17502208,
+      cpu_percent: 4.593,
+      memory_percent: 9.46,
+      rss: 1249025520,
+      vms: 21985325,
     },
   ],
   memory: {
-    available: 25166790656,
-    free: 25166790656,
-    used: 9103147008,
-    percent: 26.6,
+    available: 78647893432,
+    free: 1234234224,
+    used: 4747489422195,
+    percent: 58.4,
   },
-  network: [38.4, 21.6],
+  network: [36.4, 97.5],
   disk: {
     partitions: {
       'C:\\': {
@@ -246,7 +246,7 @@ const setupLogTests = async () => {
   })
 
   // login user and store cookie
-  const cookieSession = await request(app)
+  return request(app)
     .post('/api/user/login')
     .send({
       email: testUser.email,
@@ -258,8 +258,6 @@ const setupLogTests = async () => {
         .map((item) => item.split(';')[0])
         .join(';')
     )
-
-  return cookieSession
 }
 
 const teardownLogTests = async () => {

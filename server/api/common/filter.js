@@ -8,7 +8,7 @@ const validOperators = ['gt', 'gte', 'lt', 'lte']
  * @returns an array of the schema attribute names
  */
 const getAttributes = (schema) => {
-  const attributeNames = Object.values(schema.paths)
+  return Object.values(schema.paths)
     .map((path) =>
       (path.instance === 'Array' || path.instance === 'Embedded') && path.schema
         ? getAttributes(path.schema).map(
@@ -18,8 +18,6 @@ const getAttributes = (schema) => {
     )
     .filter((name) => name !== '__v' && name !== '_id')
     .reduce((acc, name) => acc.concat(name), [])
-
-  return attributeNames
 }
 
 /**
@@ -36,8 +34,6 @@ const getAttributes = (schema) => {
  * @returns the separated valid query and options array
  */
 const parseQuery = (query, schema) => {
-  const options = {}
-
   const validAttributes = [...getAttributes(schema), 'limit', 'skip', 'orderBy']
 
   const paramKeyValue = Object.entries(query)
@@ -54,6 +50,13 @@ const parseQuery = (query, schema) => {
     }
     return acc
   }, {})
+
+  return splitQuery(validParams)
+}
+
+const splitQuery = (query) => {
+  const validParams = query
+  const options = {}
 
   if (validParams.limit) {
     options.limit = Number(validParams.limit)

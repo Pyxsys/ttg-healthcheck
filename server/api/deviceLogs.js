@@ -23,12 +23,12 @@ router.get('/latest', auth, async (req, res) => {
   const idsArray = String(query.Ids).split(',')
   const results = await Promise.all(
     idsArray.map(async (id) => {
-      const res = await DeviceLogs.find(
+      const devices = await DeviceLogs.find(
         { deviceId: id },
         {},
         { limit: 1, sort: { timestamp: [-1] } }
       )
-      return res.length > 0 ? res[0] : null
+      return devices.length > 0 ? devices[0] : null
     })
   )
   const nonEmptyResults = results.filter((deviceLog) => deviceLog)
