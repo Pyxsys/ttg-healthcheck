@@ -29,15 +29,18 @@ describe('Test helper functions', () => {
   })
 
   it('Sum correct amount of running processes', () => {
-    const result = daemonFunctions.computeLiveSleepingProcesses(mockLogPayload1.processes)
+    const result = daemonFunctions.computeLiveSleepingProcesses(
+      mockLogPayload1.processes
+    )
     expect(result[0]).toBe(1)
   })
 
   it('Sum correct amount of non-running processes', () => {
-    const result = daemonFunctions.computeLiveSleepingProcesses(mockLogPayload1.processes)
+    const result = daemonFunctions.computeLiveSleepingProcesses(
+      mockLogPayload1.processes
+    )
     expect(result[1]).toBe(1)
   })
-
 })
 
 describe('Test Device formatters', () => {
@@ -91,6 +94,22 @@ describe('Test Memory log formatter', () => {
 
   it('Sum of percentage memory', () => {
     expect(doc.aggregatedPercentage).toBe(9.97)
+  })
+})
+
+describe('Test Disk log formatter', () => {
+  const doc = daemonFunctions.processDiskLogInfo(mockLogPayload1)
+
+  it('Should return correct disk partitionInfo', () => {
+    expect(doc.partitions[0].percent).toBe(70)
+    expect(doc.partitions[0].path).toBe('C:\\')
+  })
+
+  it('Should return correct physical disk IO info', () => {
+    expect(doc.disks[0].name).toBe('PhysicalDrive0')
+    expect(doc.disks[0].responseTime).toBe(0.125)
+    expect(doc.disks[0].readSpeed).toBe(1024)
+    expect(doc.disks[0].writeSpeed).toBe(1024)
   })
 })
 

@@ -2,7 +2,12 @@ const request = require('supertest')
 
 const app = require('../../app')
 const { DeviceLogs } = require('../../models/device_logs')
-const { setupLogTests, teardownLogTests, mockLogPayload1, mockLogPayload2 } = require('./common.test')
+const {
+  setupLogTests,
+  teardownLogTests,
+  mockLogPayload1,
+  mockLogPayload2,
+} = require('./common.test')
 
 let cookieSession = ''
 
@@ -31,7 +36,7 @@ describe('Get Device Logs using timestamps', () => {
     expect(response.statusCode).toBe(200)
     expect(results.length).toBe(2)
   })
-  
+
   it('should retrieve 2 Devices less than the second date', async () => {
     const date2 = new Date(mockLogPayload2.timestamp)
     const query = {
@@ -47,7 +52,7 @@ describe('Get Device Logs using timestamps', () => {
     expect(response.statusCode).toBe(200)
     expect(results.length).toBe(2)
   })
-  
+
   it('should retrieve 1 Device between the first date and the next day', async () => {
     const date1 = new Date(mockLogPayload1.timestamp)
     const nextDay = new Date(mockLogPayload1.timestamp)
@@ -89,7 +94,6 @@ describe('Get Device Logs from attributes', () => {
   })
 })
 
-
 describe('Get the latest logs from the devices', () => {
   it('should retrieve 1 Device with the timestamp from the second date', async () => {
     const payloadDeviceId = mockLogPayload1.deviceId
@@ -107,9 +111,11 @@ describe('Get the latest logs from the devices', () => {
     expect(response.statusCode).toBe(200)
     expect(results.length).toBe(1)
     expect(results[0].timestamp).toBeTruthy()
-    expect(new Date(results[0].timestamp).toString()).toBe(new Date(secondDate).toString())
+    expect(new Date(results[0].timestamp).toString()).toBe(
+      new Date(secondDate).toString()
+    )
   })
-  
+
   it('should retrieve an empty array if no Ids are found', async () => {
     const query = {
       Ids: ['InvalidID-Found'],
@@ -120,11 +126,11 @@ describe('Get the latest logs from the devices', () => {
       .query(query)
       .set('Cookie', cookieSession)
 
-      const results = response.body.Results
-      expect(response.statusCode).toBe(200)
-      expect(results.length).toBe(0)
+    const results = response.body.Results
+    expect(response.statusCode).toBe(200)
+    expect(results.length).toBe(0)
   })
-  
+
   it('should throw an error if no "Ids" attribute is passed in the query', async () => {
     const query = {
       invalid: true,

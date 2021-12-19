@@ -1,4 +1,3 @@
-
 export interface WifiStatic {
   adapterName: string
   SSID: string

@@ -1,4 +1,3 @@
-
 export interface MemoryStatic {
   maxSize: number
   formFactor: string

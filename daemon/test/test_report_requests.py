@@ -27,10 +27,21 @@ class TestRunner(unittest.TestCase):
         self.assertIsInstance(self.test_runner, Runner, msg=None)
 
     def testRunnerGeneratingReport(self):
-        expected_sections={'deviceId', 'processes', 'memory', 'timestamp'}
+        expected_sections={'deviceId', 'processes', 'memory', 'disk', 'timestamp'}
         missing_sections=[]
 
         self.test_runner.gen_report()
+        section_list=list(self.test_runner.get_report().keys())
+        for section in expected_sections:
+            if section not in section_list:
+                missing_sections.append(section)
+        self.assertEqual(len(missing_sections), 0, msg=missing_sections)
+
+    def testRunnerGeneratingStartupReport(self):
+        expected_sections={'deviceId', 'memory_', 'disk_', 'timestamp'}
+        missing_sections=[]
+
+        self.test_runner.gen_startup_report()
         section_list=list(self.test_runner.get_report().keys())
         for section in expected_sections:
             if section not in section_list:

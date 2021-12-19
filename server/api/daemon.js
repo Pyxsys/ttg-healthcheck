@@ -52,9 +52,11 @@ const processDeviceInfo = (payload) => {
     hardware,
     cpu,
     memory_,
-    disk,
+    disk_,
     wifi,
   } = payload
+
+  let disk = processDiskStaticInfo(disk_)
 
   return {
     deviceId,
@@ -76,6 +78,7 @@ const processDeviceLogInfo = (payload) => {
 
   const newCpuLog = processCpuLogInfo(payload)
   const newMemoryLog = processMemoryLogInfo(payload)
+  const newDiskLog = processDiskLogInfo(payload)
   const newWifiLog = processWifiLogInfo(payload)
   const newProcessLogArray = processProcessLogInfo(payload)
 
@@ -84,6 +87,7 @@ const processDeviceLogInfo = (payload) => {
     timestamp,
     cpu: newCpuLog,
     memory: newMemoryLog,
+    disk: newDiskLog,
     wifi: newWifiLog,
     processes: newProcessLogArray,
   })
@@ -153,6 +157,39 @@ const processProcessLogInfo = (payload) => {
   })
 
   return processArray
+}
+
+const processDiskStaticInfo = (disks) => {
+  const { capacity, physical_disk } = disks
+  let arr = new Array()
+
+  physical_disk.forEach((disk) => {
+    let tempDisk = {
+      type: disk.media,
+      model: disk.model,
+      size: disk.size,
+    }
+    arr.push(tempDisk)
+  })
+
+  return {
+    capacity,
+    disks: arr,
+  }
+}
+
+const processDiskLogInfo = (payload) => {
+  //load values
+  const { disk } = payload
+
+  //compute values
+  const partitions = processDiskLogPartitionInfo(disk)
+  const disks = processDiskLogIOInfo(disk)
+
+  return {
+    partitions,
+    disks,
+  }
 }
 
 const processSingleProcess = (process) => {
@@ -230,6 +267,56 @@ const sumMemoryPercentUsage = (processes) => {
   return aggregatedPercentage
 }
 
+const processDiskLogPartitionInfo = (disk) => {
+  const { partitions } = disk
+  let arr = new Array()
+
+  for (var key of Object.keys(partitions)) {
+    arr.push({
+      path: key,
+      percent: partitions[key].percent,
+    })
+  }
+
+  return arr
+}
+
+const processDiskLogIOInfo = (disk) => {
+  const { physical_disk_io } = disk
+  const conversion_value = 1000 //ms to s
+  let arr = new Array()
+
+  for (var key of Object.keys(physical_disk_io)) {
+    let responseTime =
+      (physical_disk_io[key].read_time + physical_disk_io[key].write_time) /
+      (physical_disk_io[key].read_count + physical_disk_io[key].write_count) /
+      conversion_value
+
+    let readSpeed =
+      (physical_disk_io[key].read_bytes / physical_disk_io[key].read_time) *
+      conversion_value
+
+    let writeSpeed =
+      (physical_disk_io[key].write_bytes / physical_disk_io[key].write_time) *
+      conversion_value
+
+    //If there were 0-valued I/O, mark as 0
+    responseTime =
+      isNaN(responseTime) || !isFinite(responseTime) ? 0 : responseTime
+    readSpeed = isNaN(readSpeed) || !isFinite(readSpeed) ? 0 : readSpeed
+    writeSpeed = isNaN(writeSpeed) || !isFinite(writeSpeed) ? 0 : writeSpeed
+
+    arr.push({
+      name: key,
+      responseTime,
+      readSpeed,
+      writeSpeed,
+    })
+  }
+
+  return arr
+}
+
 module.exports = {
   router,
   verifyDeviceIdFormat,
@@ -239,6 +326,7 @@ module.exports = {
   processMemoryLogInfo,
   processWifiLogInfo,
   processProcessLogInfo,
+  processDiskLogInfo,
   processSingleProcess,
   computeLiveSleepingProcesses,
 }

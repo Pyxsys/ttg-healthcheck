@@ -27,10 +27,16 @@ const DevicePage = () => {
         skip: skip,
       },
     };
-    const deviceResponse = await axios.get<IResponse<string>>('api/device/ids', deviceIdQuery);
+    const deviceResponse = await axios.get<IResponse<string>>(
+        'api/device/ids',
+        deviceIdQuery,
+    );
     const deviceIds = deviceResponse.data.Results;
 
-    const latestDevicesResponse = await axios.get<IResponse<DeviceLog>>('api/device-logs/latest', {params: {Ids: deviceIds.join(',')}});
+    const latestDevicesResponse = await axios.get<IResponse<DeviceLog>>(
+        'api/device-logs/latest',
+        {params: {Ids: deviceIds.join(',')}},
+    );
     const latestDevices = latestDevicesResponse.data.Results;
 
     setDeviceData(latestDevices);
@@ -111,11 +117,19 @@ const DevicePage = () => {
               />
               <h4>Change Page</h4>
               <div className="d-flex align-items-center">
-                <i className='pe-2' role="button" onClick={()=>setPage(page > 1 ? page-1 : 1)}>
+                <i
+                  className="pe-2"
+                  role="button"
+                  onClick={() => setPage(page > 1 ? page - 1 : 1)}
+                >
                   <BsChevronLeft />
                 </i>
                 <span>Page {page}</span>
-                <i className='ps-2' role="button" onClick={()=>setPage(page+1)}>
+                <i
+                  className="ps-2"
+                  role="button"
+                  onClick={() => setPage(page + 1)}
+                >
                   <BsChevronRight />
                 </i>
               </div>

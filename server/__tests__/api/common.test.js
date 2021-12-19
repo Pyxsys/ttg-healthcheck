@@ -5,7 +5,6 @@ const app = require('../../app')
 const connectDB = require('../../db/db_connection')
 const { parseQuery, getAttributes } = require('../../api/common/filter')
 
-
 const SimpleMongoSchema = new mongoose.Schema({
   stringAttribute: String,
   numberAttribute: Number,
@@ -25,7 +24,11 @@ describe('Get the attributes of a Mongo Schema', () => {
 
   it('should return all first layer attributes and embedded attributes', () => {
     const embeddedAttributes = getAttributes(EmbeddedMongoSchema)
-    const correctResult = ['stringAttribute', 'embeddedAttribute.stringAttribute', 'embeddedAttribute.numberAttribute']
+    const correctResult = [
+      'stringAttribute',
+      'embeddedAttribute.stringAttribute',
+      'embeddedAttribute.numberAttribute',
+    ]
     expect(embeddedAttributes).toMatchObject(correctResult)
   })
 })
@@ -40,13 +43,17 @@ describe('Filter out attributes from Query', () => {
     }
     const [query, options] = parseQuery(req, SimpleMongoSchema)
     expect(query).toEqual({ stringAttribute: 'string' })
-    expect(options).toEqual({ limit: 1, skip: 1, sort: { numberAttribute: -1 } })
+    expect(options).toEqual({
+      limit: 1,
+      skip: 1,
+      sort: { numberAttribute: -1 },
+    })
   })
-  
+
   it('should filter out the keywords limit and orderBy ascending', () => {
     const req = {
       stringAttribute: 'string',
-      orderBy: 'numberAttribute'
+      orderBy: 'numberAttribute',
     }
     const [query, options] = parseQuery(req, SimpleMongoSchema)
     expect(query).toEqual({ stringAttribute: 'string' })
@@ -61,25 +68,29 @@ describe('Filter out attributes from Query', () => {
     expect(query).toEqual({ stringAttribute: 'string' })
     expect(options).toEqual({ sort: { timestamp: -1 } })
   })
-  
+
   it('should not include any attributes not included in the Schema', () => {
     const req = {
       stringAttribute: 'string',
       numberAttribute: 2,
       invalidAttribute: true,
     }
-    const [query, ] = parseQuery(req, SimpleMongoSchema)
+    const [query] = parseQuery(req, SimpleMongoSchema)
     expect(query).toEqual({ stringAttribute: 'string', numberAttribute: '2' })
   })
-  
+
   it('should return embedded attributes with a period separating the paths', () => {
     const req = {
       stringAttribute: 'string',
       'embeddedAttribute.stringAttribute': 'stringTwo',
       'embeddedAttribute.numberAttribute': 2,
     }
-    const [query, ] = parseQuery(req, EmbeddedMongoSchema)
-    expect(query).toEqual({ stringAttribute: 'string', 'embeddedAttribute.stringAttribute': 'stringTwo', 'embeddedAttribute.numberAttribute': '2' })
+    const [query] = parseQuery(req, EmbeddedMongoSchema)
+    expect(query).toEqual({
+      stringAttribute: 'string',
+      'embeddedAttribute.stringAttribute': 'stringTwo',
+      'embeddedAttribute.numberAttribute': '2',
+    })
   })
 })
 
@@ -98,6 +109,16 @@ const mockStartupPayload = {
   memory_: {
     maxSize: 1024,
     formFactor: ['DIMM', 'DIMM'],
+  },
+  disk_: {
+    capacity: 1000000000,
+    physical_disk: [
+      {
+        media: 'SSD',
+        model: 'TST  DISK10T2B0B-00TS70',
+        size: 1000000000,
+      },
+    ],
   },
 }
 
@@ -131,6 +152,26 @@ const mockLogPayload1 = {
     percent: 26.6,
   },
   network: [38.4, 21.6],
+  disk: {
+    partitions: {
+      'C:\\': {
+        free: 317964967936,
+        percent: 70.0,
+        total: 1000000000,
+        used: 681584918528,
+      },
+    },
+    physical_disk_io: {
+      PhysicalDrive0: {
+        read_bytes: 1024,
+        read_count: 8,
+        read_time: 1000,
+        write_bytes: 1024,
+        write_count: 8,
+        write_time: 1000,
+      },
+    },
+  },
 }
 
 const mockLogPayload2 = {
@@ -163,6 +204,26 @@ const mockLogPayload2 = {
     percent: 58.4,
   },
   network: [36.4, 97.5],
+  disk: {
+    partitions: {
+      'C:\\': {
+        free: 317964967936,
+        percent: 70.0,
+        total: 1000000000,
+        used: 681584918528,
+      },
+    },
+    physical_disk_io: {
+      PhysicalDrive0: {
+        read_bytes: 1024,
+        read_count: 8,
+        read_time: 1000,
+        write_bytes: 1024,
+        write_count: 8,
+        write_time: 1000,
+      },
+    },
+  },
 }
 
 const testUser = {
@@ -191,7 +252,7 @@ const setupLogTests = async () => {
       email: testUser.email,
       password: testUser.password,
     })
-    .then((res) => 
+    .then((res) =>
       res.headers['set-cookie'][0]
         .split(',')
         .map((item) => item.split(';')[0])

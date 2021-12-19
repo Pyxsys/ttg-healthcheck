@@ -17,6 +17,7 @@ const DiskDynamicPartitionSubSchema = mongoose.Schema({
 })
 
 const DiskDynamicPhysicalSubSchema = mongoose.Schema({
+  name: String,
   responseTime: Number,
   readSpeed: Number,
   writeSpeed: Number,

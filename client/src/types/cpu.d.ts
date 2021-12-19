@@ -1,4 +1,3 @@
-
 export interface CpuStatic {
   baseSpeed: number
   sockets: number
