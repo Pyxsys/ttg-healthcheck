@@ -5,16 +5,12 @@ import {Card, Col, Row, Table} from 'react-bootstrap';
 
 // Custom
 import Navbar from './Navbar';
-import {IResponse} from '../types/common';
-import {Device, MemoryLog, WifiLog, CpuLog, DiskLog} from '../types/queries';
+import {Device, DeviceLog, IResponse} from '../types/queries';
 
 const DeviceDetailPage = (props: any) => {
   const deviceId = props.location.state.id;
   const [deviceData, setDeviceData] = useState({} as Device);
-  const [memoryData, setMemoryData] = useState({} as MemoryLog);
-  const [wifiData, setWifiData] = useState({} as WifiLog);
-  const [cpuData, setCpuData] = useState({} as CpuLog);
-  const [diskData, setDiskData] = useState({} as DiskLog);
+  const [deviceLogsData, setDeviceLogsData] = useState({} as DeviceLog);
 
   const queryLogs = async () => {
     const queryParams = {
@@ -28,30 +24,14 @@ const DeviceDetailPage = (props: any) => {
     const devices = deviceResponse.data.Results;
     setDeviceData(devices[0] || null);
 
-    const cpuResponse = await axios.get<IResponse<CpuLog>>('api/cpu-logs', {
-      params: queryParams,
-    });
-    const cpuLogs = cpuResponse.data.Results;
-    setCpuData(cpuLogs[0] || null);
-
-    const memoryResponse = await axios.get<IResponse<MemoryLog>>(
-        'api/memory-logs',
-        {params: queryParams},
+    const deviceLogResponse = await axios.get<IResponse<DeviceLog>>(
+        'api/device-logs',
+        {
+          params: queryParams,
+        },
     );
-    const memoryLogs = memoryResponse.data.Results;
-    setMemoryData(memoryLogs[0] || null);
-
-    const diskResponse = await axios.get<IResponse<DiskLog>>('api/disk-logs', {
-      params: queryParams,
-    });
-    const diskLogs = diskResponse.data.Results;
-    setDiskData(diskLogs[0] || null);
-
-    const wifiResponse = await axios.get<IResponse<WifiLog>>('api/wifi-logs', {
-      params: queryParams,
-    });
-    const wifiLogs = wifiResponse.data.Results;
-    setWifiData(wifiLogs[0] || null);
+    const deviceLogs = deviceLogResponse.data.Results;
+    setDeviceLogsData(deviceLogs[0] || null);
   };
 
   useEffect(() => {
@@ -112,7 +92,7 @@ const DeviceDetailPage = (props: any) => {
                       <Card.Body>
                         <div className="row h-100">
                           <div className="col-12 my-auto">
-                            {cpuData?.usagePercentage}%
+                            {deviceLogsData?.cpu.aggregatedPercentage}%
                           </div>
                         </div>
                       </Card.Body>
@@ -124,7 +104,7 @@ const DeviceDetailPage = (props: any) => {
                       <Card.Body>
                         <div className="row h-100">
                           <div className="col-12 my-auto">
-                            {memoryData?.usagePercentage}%
+                            {deviceLogsData?.memory.aggregatedPercentage}%
                           </div>
                         </div>
                       </Card.Body>
@@ -136,7 +116,11 @@ const DeviceDetailPage = (props: any) => {
                       <Card.Body>
                         <div className="row h-100">
                           <div className="col-12 my-auto">
-                            {diskData?.activeTimePercent}%
+                            {deviceLogsData?.disk.partitions.reduce(
+                                (sum, p) => sum + p.percent,
+                                0,
+                            ) / deviceLogsData?.disk.partitions.length}
+                            %
                           </div>
                         </div>
                       </Card.Body>
@@ -158,7 +142,9 @@ const DeviceDetailPage = (props: any) => {
                       <tbody>
                         <tr>
                           <td className="w-50">Usage</td>
-                          <td className="w-50">{cpuData?.usagePercentage}%</td>
+                          <td className="w-50">
+                            {deviceLogsData?.cpu.aggregatedPercentage}%
+                          </td>
                         </tr>
                         <tr>
                           <td className="w-50">In Use</td>
@@ -166,23 +152,19 @@ const DeviceDetailPage = (props: any) => {
                         </tr>
                         <tr>
                           <td className="w-50">Number of Processes</td>
-                          <td className="w-50">{cpuData?.numProcesses}</td>
-                        </tr>
-                        <tr>
-                          <td className="w-50">Threads Alive</td>
-                          <td className="w-50">{cpuData?.threadsAlive}</td>
+                          <td className="w-50">
+                            {deviceLogsData?.cpu.numProcesses}
+                          </td>
                         </tr>
                         <tr>
                           <td className="w-50">Threads Sleeping</td>
-                          <td className="w-50">{cpuData?.threadsSleeping}</td>
-                        </tr>
-                        <tr>
-                          <td className="w-50">Uptime</td>
-                          <td className="w-50">{cpuData?.uptime}</td>
+                          <td className="w-50">
+                            {deviceLogsData?.cpu.threadsSleeping}
+                          </td>
                         </tr>
                         <tr>
                           <td className="w-50">Timestamp</td>
-                          <td className="w-50">{cpuData?.timestamp}</td>
+                          <td className="w-50">{deviceLogsData?.timestamp}</td>
                         </tr>
                       </tbody>
                     </Table>
@@ -200,32 +182,30 @@ const DeviceDetailPage = (props: any) => {
                         <tr>
                           <td className="w-50">Usage</td>
                           <td className="w-50">
-                            {memoryData?.usagePercentage}%
+                            {deviceLogsData?.memory.aggregatedPercentage}%
                           </td>
                         </tr>
                         <tr>
                           <td className="w-50">In Use</td>
-                          <td className="w-50">{memoryData?.inUse}</td>
+                          <td className="w-50">
+                            {deviceLogsData?.memory.inUse}
+                          </td>
                         </tr>
                         <tr>
                           <td className="w-50">Available</td>
-                          <td className="w-50">{memoryData?.available}</td>
+                          <td className="w-50">
+                            {deviceLogsData?.memory.available}
+                          </td>
                         </tr>
                         <tr>
                           <td className="w-50">Cached</td>
-                          <td className="w-50">{memoryData?.cached}</td>
-                        </tr>
-                        <tr>
-                          <td className="w-50">Paged Pool</td>
-                          <td className="w-50">{memoryData?.pagedPool}</td>
-                        </tr>
-                        <tr>
-                          <td className="w-50">non Paged Pool</td>
-                          <td className="w-50">{memoryData?.nonPagedPool}</td>
+                          <td className="w-50">
+                            {deviceLogsData?.memory.cached}
+                          </td>
                         </tr>
                         <tr>
                           <td className="w-50">Timestamp</td>
-                          <td className="w-50">{memoryData?.timestamp}</td>
+                          <td className="w-50">{deviceLogsData?.timestamp}</td>
                         </tr>
                       </tbody>
                     </Table>
@@ -241,26 +221,32 @@ const DeviceDetailPage = (props: any) => {
                     <Table className="text-center" responsive="sm" hover>
                       <tbody>
                         <tr>
-                          <td className="w-50">Active Time</td>
+                          <td className="w-50">Partition Percent</td>
                           <td className="w-50">
-                            {diskData?.activeTimePercent}%
+                            {deviceLogsData?.disk.partitions[0]?.percent}%
                           </td>
                         </tr>
                         <tr>
                           <td className="w-50">Response Time</td>
-                          <td className="w-50">{diskData?.responseTime}</td>
+                          <td className="w-50">
+                            {deviceLogsData?.disk.disks[0]?.responseTime}
+                          </td>
                         </tr>
                         <tr>
                           <td className="w-50">Read Speed</td>
-                          <td className="w-50">{diskData?.readSpeed}</td>
+                          <td className="w-50">
+                            {deviceLogsData?.disk.disks[0]?.readSpeed}
+                          </td>
                         </tr>
                         <tr>
                           <td className="w-50">Write Speed</td>
-                          <td className="w-50">{diskData?.writeSpeed}</td>
+                          <td className="w-50">
+                            {deviceLogsData?.disk.disks[0]?.writeSpeed}
+                          </td>
                         </tr>
                         <tr>
                           <td className="w-50">Timestamp</td>
-                          <td className="w-50">{diskData?.timestamp}</td>
+                          <td className="w-50">{deviceLogsData?.timestamp}</td>
                         </tr>
                       </tbody>
                     </Table>
@@ -277,19 +263,25 @@ const DeviceDetailPage = (props: any) => {
                       <tbody>
                         <tr>
                           <td className="w-50">Send Speed</td>
-                          <td className="w-50">{wifiData?.sendSpeed}</td>
+                          <td className="w-50">
+                            {deviceLogsData?.wifi.sendSpeed}
+                          </td>
                         </tr>
                         <tr>
                           <td className="w-50">Receive Speed</td>
-                          <td className="w-50">{wifiData?.receiveSpeed}</td>
+                          <td className="w-50">
+                            {deviceLogsData?.wifi.receiveSpeed}
+                          </td>
                         </tr>
                         <tr>
                           <td className="w-50">Signal Strength</td>
-                          <td className="w-50">{wifiData?.signalStrength}</td>
+                          <td className="w-50">
+                            {deviceLogsData?.wifi.signalStrength}
+                          </td>
                         </tr>
                         <tr>
                           <td className="w-50">Timestamp</td>
-                          <td className="w-50">{wifiData?.timestamp}</td>
+                          <td className="w-50">{deviceLogsData?.timestamp}</td>
                         </tr>
                       </tbody>
                     </Table>
@@ -392,7 +384,9 @@ const DeviceDetailPage = (props: any) => {
                           </tr>
                           <tr>
                             <td className="w-50">Type</td>
-                            <td className="w-50">{deviceData?.disk?.type}</td>
+                            <td className="w-50">
+                              {deviceData?.disk?.disks[0]?.type}
+                            </td>
                           </tr>
                         </tbody>
                       </Table>

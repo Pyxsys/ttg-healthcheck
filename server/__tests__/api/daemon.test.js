@@ -1,62 +1,17 @@
 const request = require('supertest')
-const connectDB = require('../db/db_connection')
-const app = require('../app')
 const mongoose = require('mongoose')
-const Device = require('../models/device.js')
-const { CpuLogs } = require('../models/cpu.js')
-const { MemoryLogs } = require('../models/memory')
-const daemonFunctions = require('../api/daemon')
 
-const mockStartupPayload = {
-  deviceId: 'TEST3C2D-C033-7B87-4B31-244BFX931D14',
-  name: 'test device',
-  description: 'Device used for testing purposes. It is not real',
-  connectionType: 'medium',
-  status: 'active',
-  provider: 'test_provider',
-  memory_: {
-    maxSize: 1024,
-    formFactor: ['DIMM', 'DIMM'],
-  },
-}
-
-const mockLogPayload = {
-  deviceId: 'TEST3C2D-C033-7B87-4B31-244BFX931D14',
-  timestamp: '2021-10-24 09:47:55.966088',
-  processes: [
-    {
-      name: 'python',
-      pid: 12345,
-      status: 'running',
-      cpu_percent: 1.768,
-      memory_percent: 2.65,
-      rss: 25313280,
-      vms: 10844561,
-    },
-    {
-      name: 'celebid',
-      pid: 12344,
-      status: 'idle',
-      cpu_percent: 0.462,
-      memory_percent: 7.32,
-      rss: 25319245,
-      vms: 17502208,
-    },
-  ],
-  memory: {
-    available: 25166790656,
-    free: 25166790656,
-    used: 9103147008,
-    percent: 26.6,
-  },
-  network: [38.4, 21.6],
-}
+const app = require('../../app')
+const connectDB = require('../../db/db_connection')
+const { Devices } = require('../../models/device.js')
+const { DeviceLogs } = require('../../models/device_logs')
+const daemonFunctions = require('../../api/daemon')
+const { mockStartupPayload, mockLogPayload1 } = require('./common.test')
 
 beforeAll(async () => {
   await connectDB() // connect to local_db
-  await Device.deleteMany() //clear devices
-  await CpuLogs.deleteMany() //clear logs
-  await MemoryLogs.deleteMany()
+  await Devices.deleteMany() //clear devices
+  await DeviceLogs.deleteMany() //clear logs
 })
 
 describe('Test helper functions', () => {
@@ -71,6 +26,20 @@ describe('Test helper functions', () => {
     expect(() => daemonFunctions.verifyDeviceIdFormat(null)).toThrow(
       'deviceId [' + null + '] is invalid'
     )
+  })
+
+  it('Sum correct amount of running processes', () => {
+    const result = daemonFunctions.computeLiveSleepingProcesses(
+      mockLogPayload1.processes
+    )
+    expect(result[0]).toBe(1)
+  })
+
+  it('Sum correct amount of non-running processes', () => {
+    const result = daemonFunctions.computeLiveSleepingProcesses(
+      mockLogPayload1.processes
+    )
+    expect(result[1]).toBe(1)
   })
 })
 
@@ -88,17 +57,17 @@ describe('Test Device formatters', () => {
 })
 
 describe('Test CPU log formatter', () => {
-  const doc = daemonFunctions.processCpuLogInfo(mockLogPayload)
+  const doc = daemonFunctions.processCpuLogInfo(mockLogPayload1)
   //computed values
   it('Sum of processes', () => {
     expect(doc.numProcesses).toBe(2)
   })
 
   it('Sum of CPU usage', () => {
-    expect(doc.usagePercentage).toBe(2.23)
+    expect(doc.aggregatedPercentage).toBe(2.23)
   })
 
-  it('Running processes', () => {
+  it.skip('Running processes - no longer applicable with #156', () => {
     expect(doc.threadsAlive).toBe(1)
   })
 
@@ -106,22 +75,41 @@ describe('Test CPU log formatter', () => {
     expect(doc.threadsSleeping).toBe(1)
   })
 
-  //process values
-  it('Process data is consistent', () => {
-    expect(doc.processes[0].name).toBe(mockLogPayload.processes[0].name)
-    expect(doc.processes[0].pid).toBe(mockLogPayload.processes[0].pid)
-    expect(doc.processes[0].status).toBe(mockLogPayload.processes[0].status)
+  it.skip('Process data is consistent - no longer applicable with #156', () => {
+    expect(doc.processes[0].name).toBe(mockLogPayload1.processes[0].name)
+    expect(doc.processes[0].pid).toBe(mockLogPayload1.processes[0].pid)
+    expect(doc.processes[0].status).toBe(mockLogPayload1.processes[0].status)
     expect(doc.processes[0].cpu_percent).toBe(
-      mockLogPayload.processes[0].cpu_percent
+      mockLogPayload1.processes[0].cpu_percent
     )
   })
 })
 
 describe('Test Memory log formatter', () => {
-  const doc = daemonFunctions.processMemoryLogInfo(mockLogPayload)
+  const doc = daemonFunctions.processMemoryLogInfo(mockLogPayload1)
 
   it('Sum of Cache memory', () => {
     expect(doc.cached).toBe(28346769)
+  })
+
+  it('Sum of percentage memory', () => {
+    expect(doc.aggregatedPercentage).toBe(9.97)
+  })
+})
+
+describe('Test Disk log formatter', () => {
+  const doc = daemonFunctions.processDiskLogInfo(mockLogPayload1)
+
+  it('Should return correct disk partitionInfo', () => {
+    expect(doc.partitions[0].percent).toBe(70)
+    expect(doc.partitions[0].path).toBe('C:\\')
+  })
+
+  it('Should return correct physical disk IO info', () => {
+    expect(doc.disks[0].name).toBe('PhysicalDrive0')
+    expect(doc.disks[0].responseTime).toBe(0.125)
+    expect(doc.disks[0].readSpeed).toBe(1024)
+    expect(doc.disks[0].writeSpeed).toBe(1024)
   })
 })
 
@@ -134,7 +122,7 @@ describe('Save daemon device to DB', () => {
       .send(mockStartupPayload)
     expect(response.statusCode).toBe(200)
 
-    const devices = await Device.find()
+    const devices = await Devices.find()
     expect(devices.length).toBe(1)
     expect(devices[0].name).toBe('test device')
   })
@@ -144,7 +132,7 @@ describe('Save daemon device to DB', () => {
     const response = await request(app).post(devicePath).send(updatedDevice)
     expect(response.statusCode).toBe(200)
 
-    const devices = await Device.find()
+    const devices = await Devices.find()
     expect(devices.length).toBe(1)
     expect(devices[0].name).toBe('another name')
   })
@@ -154,22 +142,21 @@ describe('Save daemon device to DB', () => {
     const response = await request(app).post(devicePath).send(invalidDevice)
     expect(response.statusCode).toBe(501)
 
-    const devices = await Device.find()
+    const devices = await Devices.find()
     expect(devices.length).toBe(1)
   })
 })
 
-describe('Save daemon payload to DB', () => {
+describe('Save daemon log payload to DB', () => {
   const logPath = '/api/daemon'
-  const invalidIDLog = { ...mockLogPayload, deviceId: 'invalid' }
+  const invalidIDLog = { ...mockLogPayload1, deviceId: 'invalid' }
 
   afterEach(async () => {
-    await CpuLogs.deleteMany()
-    await MemoryLogs.deleteMany()
+    await DeviceLogs.deleteMany()
   })
 
-  it('Should save the CPU log to the DB', async () => {
-    const response_good = await request(app).post(logPath).send(mockLogPayload)
+  it.skip('Should save the CPU log to the DB - no longer applicable with #156', async () => {
+    const response_good = await request(app).post(logPath).send(mockLogPayload1)
     expect(response_good.statusCode).toBe(200)
 
     const cpus = await CpuLogs.find()
@@ -180,12 +167,12 @@ describe('Save daemon payload to DB', () => {
     const response_bad = await request(app).post(logPath).send(invalidIDLog)
     expect(response_bad.statusCode).toBe(501)
 
-    const cpus = await CpuLogs.find()
-    expect(cpus.length).toBe(0)
+    const device_logs = await DeviceLogs.find()
+    expect(device_logs.length).toBe(0)
   })
 
-  it('Should save the Memory log to the DB', async () => {
-    const response_good = await request(app).post(logPath).send(mockLogPayload)
+  it.skip('Should save the Memory log to the DB - no longer applicable with #156', async () => {
+    const response_good = await request(app).post(logPath).send(mockLogPayload1)
     expect(response_good.statusCode).toBe(200)
 
     const mems = await MemoryLogs.find()

@@ -1,3 +1,13 @@
+import {CpuDynamic, CpuProcess, CpuStatic} from './cpu';
+import {DiskDynamic, DiskStatic} from './disk';
+import {MemoryDynamic, MemoryProcess, MemoryStatic} from './memory';
+import {WifiDynamic, WifiStatic} from './wifi';
+
+export interface IResponse<T> {
+  Results: T[]
+  Total: number
+}
+
 export interface Device {
   deviceId: string
   name: string
@@ -12,73 +22,24 @@ export interface Device {
   wifi: WifiStatic
 }
 
+export interface DeviceLog {
+  deviceId: string
+  timestamp: Date
+  cpu: CpuDynamic
+  memory: MemoryDynamic
+  disk: DiskDynamic
+  wifi: WifiDynamic
+  processes: Process[]
+}
+
+export interface Process {
+  name: string
+  pid: number
+  status: string
+  cpu: CpuProcess
+  memory: MemoryProcess
+}
+
 export interface HardwareStatic {
   harwareName: string
-}
-
-export interface CpuStatic {
-  baseSpeed: number
-  sockets: number
-  cores: number
-  processors: number
-  cacheSizeL1: number
-  cacheSizeL2: number
-  cacheSizeL3: number
-}
-
-export interface MemoryStatic {
-  maxSize: number
-  formFactor: string
-}
-
-export interface DiskStatic {
-  capacity: number
-  type: string
-}
-
-export interface WifiStatic {
-  adapterName: string
-  SSID: string
-  connectionType: string
-  ipv4Address: string
-  ipv6Address: string
-}
-
-export interface CpuLog {
-  deviceId: string
-  usagePercentage: number
-  usageSpeed: number
-  numProcesses: number
-  threadsAlive: number
-  threadsSleeping: number
-  uptime: number
-  timestamp: Date
-}
-
-export interface MemoryLog {
-  deviceId: string
-  usagePercentage: number
-  inUse: number
-  available: number
-  cached: number
-  pagedPool: number
-  nonPagedPool: number
-  timestamp: Date
-}
-
-export interface DiskLog {
-  deviceId: string
-  activeTimePercent: number
-  responseTime: number
-  readSpeed: number
-  writeSpeed: number
-  timestamp: Date
-}
-
-export interface WifiLog {
-  deviceId: string
-  sendSpeed: number
-  receiveSpeed: number
-  signalStrength: string
-  timestamp: Date
 }
