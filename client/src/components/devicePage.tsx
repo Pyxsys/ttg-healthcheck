@@ -8,8 +8,8 @@ import filterFactory, {textFilter} from 'react-bootstrap-table2-filter';
 import {BsChevronLeft, BsChevronRight} from 'react-icons/bs';
 
 // Custom
-import Navbar from './Navbar';
 import {DeviceLog, IResponse} from '../types/queries';
+import DevicesPageWrapper from './common/devicesPageWrapper';
 
 const DevicePage = () => {
   // Readonly Values
@@ -61,8 +61,8 @@ const DevicePage = () => {
   ) => {
     return (
       <div style={{display: 'flex', flexDirection: 'column'}}>
-        {column.text}
         <div style={{display: 'flex', flexDirection: 'row'}}>
+          {column.text}
           {filterElement}
           {sortElement}
         </div>
@@ -92,22 +92,29 @@ const DevicePage = () => {
       text: 'Memory',
       sort: true,
     },
-
     {
-      dataField: 'timestamp',
-      text: 'Uptime',
+      dataField: 'memory.aggregatedPercentage',
+      text: 'Disk',
+      sort: true,
+    },
+    {
+      dataField: 'memory.aggregatedPercentage',
+      text: 'Disk',
+      sort: true,
+    },
+    {
+      dataField: 'network',
+      text: 'Network',
       sort: true,
     },
   ];
 
   return (
-    <div id="outer-container">
-      <Navbar />
+    <DevicesPageWrapper>
       <div id="page-wrap" className="h-100 overflow-auto container">
         <Row className="flex-nowrap h-100">
           <Col>
-            <div className="">
-              <h1 className="text-primary mb-5 mt-5">Devices</h1>
+            <div className="devices-table ">
               <BootstrapTable
                 keyField="id"
                 data={deviceData}
@@ -115,18 +122,17 @@ const DevicePage = () => {
                 filter={filterFactory()}
                 wrapperClasses="table-responsive"
               />
-              <h4>Change Page</h4>
-              <div className="d-flex align-items-center">
+              <div className="d-flex justify-content-end">
                 <i
-                  className="pe-2"
+                  className="pe-2 device-icon"
                   role="button"
                   onClick={() => setPage(page > 1 ? page - 1 : 1)}
                 >
                   <BsChevronLeft />
                 </i>
-                <span>Page {page}</span>
+                <span className="device-span" >Page {page}</span>
                 <i
-                  className="ps-2"
+                  className="ps-2 device-icon"
                   role="button"
                   onClick={() => setPage(page + 1)}
                 >
@@ -137,7 +143,7 @@ const DevicePage = () => {
           </Col>
         </Row>
       </div>
-    </div>
+    </DevicesPageWrapper>
   );
 };
 

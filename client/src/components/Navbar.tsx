@@ -31,7 +31,7 @@ const Navbar = () => {
 
   return (
     <>
-      <Menu pageWrapId={'page-wrap'} outerContainerId={'outer-container'}>
+      <Menu outerContainerId={'outer-container'}>
         <Nav.Link className="text-secondary mt-5" href="/dashboard">
           <IconContext.Provider value={{size: '2em'}}>
             <div>
