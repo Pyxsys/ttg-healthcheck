@@ -1,54 +1,29 @@
-const app = require('../app')
 const WebSocket = require('ws')
-const { createWebSocketServer, listeningForClients } = require('../ws_server')
+
+const app = require('../app')
 const {
-  clientCollections,
-  getCollectionsNames,
-  notifyClients,
-} = require('../db/collection_subject')
+  createWebSocketServer,
+  listenForClients,
+  onClientConnection,
+} = require('../ws_server')
+const {
+  clientConnectionFns,
+  clearClientConnectionFns,
+  notifyClientConnectionFns,
+} = require('../ws_server').test
 
 const PORT = 8081
 const PORT_TEMP = 8091
 
-const collection1 = 'test_collection_1'
-const collection2 = 'test_collection_2'
-
-const testValues = {
-  httpServerGlobal: null,
-  wsServerGlobal: null,
-  httpServerTemp: null,
-  wsServerTemp: null,
-
-  wsClientTemp1: null,
-  wsClientTemp2: null,
-}
+httpServerGlobal = null
 
 beforeAll((done) => {
-  testValues.httpServerGlobal = app.listen(PORT, () => done())
-})
-
-afterEach(() => {
-  if (testValues.httpServerTemp) {
-    testValues.httpServerTemp.close()
-    testValues.httpServerTemp = null
-  }
-  if (testValues.wsServerTemp) {
-    testValues.wsServerTemp.close()
-    testValues.wsServerTemp = null
-  }
-  if (testValues.wsClientTemp1) {
-    testValues.wsClientTemp1.close()
-    testValues.wsClientTemp1 = null
-  }
-  if (testValues.wsClientTemp2) {
-    testValues.wsClientTemp2.close()
-    testValues.wsClientTemp2 = null
-  }
+  httpServerGlobal = app.listen(PORT, () => done())
 })
 
 describe('Create Web Socket server', () => {
   it('should successfully create a Web Socket server', async () => {
-    const wsServer = createWebSocketServer(testValues.httpServerGlobal)
+    const wsServer = createWebSocketServer(httpServerGlobal)
     expect(wsServer).toBeDefined()
     wsServer.close()
   })
@@ -56,183 +31,99 @@ describe('Create Web Socket server', () => {
 
 describe('Disconnect HTTP server', () => {
   it('should disconnect Web Socket server as well', async () => {
-    testValues.httpServerTemp = await new Promise((resolve) => {
+    const httpServerTemp = await new Promise((resolve) => {
       const s = app.listen(PORT_TEMP, () => resolve(s))
     })
-    testValues.wsServerTemp = createWebSocketServer(testValues.httpServerTemp)
+    const wsServerTemp = createWebSocketServer(httpServerTemp)
 
-    expect(testValues.httpServerTemp).not.toBeNull()
-    expect(testValues.wsServerTemp).not.toBeNull()
+    expect(httpServerTemp).not.toBeNull()
+    expect(wsServerTemp).not.toBeNull()
 
     await expect(
       new Promise((resolve) => {
-        testValues.wsServerTemp.on('close', () => {
+        wsServerTemp.on('close', () => {
           resolve('closed')
         })
-        testValues.httpServerTemp.close()
-        testValues.httpServerTemp = null
+        httpServerTemp.close()
       })
     ).resolves.toBe('closed')
   })
 })
 
-describe('Attach/Detatch/Notify client Web Sockets To Collections', () => {
-  beforeAll(() => {
-    testValues.wsServerGlobal = createWebSocketServer(
-      testValues.httpServerGlobal
-    )
-    listeningForClients(testValues.wsServerGlobal)
+describe('Update the collection of client connections', () => {
+  beforeEach(() => {
+    clearClientConnectionFns()
   })
 
-  afterEach(() => {
-    clientCollections[collection1] = []
-    clientCollections[collection2] = []
+  it('should add a function to the list of client connections', async () => {
+    onClientConnection(() => 'added')
+    const addedClientConnections = clientConnectionFns.length
+    expect(addedClientConnections).toBe(1)
   })
 
-  it('should attach client to collection that exists', async () => {
-    const collectionName = getCollectionsNames()[0]
-    const numOfCollections = getCollectionsNames().length
-    const numOfClients = clientCollections[collectionName]
-      ? clientCollections[collectionName].length
-      : 0
+  it('should clear all functions in the list of client connections', async () => {
+    onClientConnection(() => 'added 1')
+    onClientConnection(() => 'added 2')
+    const numClientConnectionsBefore = clientConnectionFns.length
+    expect(numClientConnectionsBefore).toBe(2)
 
-    testValues.wsClientTemp1 = new WebSocket(
-      `ws://localhost:${PORT}/?collection=${collectionName}`
-    )
-    await new Promise((res) => testValues.wsClientTemp1.on('open', () => res()))
-
-    expect(getCollectionsNames().length).toBe(numOfCollections)
-    expect(clientCollections[collectionName].length).toBe(numOfClients + 1)
-
-    clientCollections[collectionName] = []
+    clearClientConnectionFns()
+    const removedClientConnections = clientConnectionFns.length
+    expect(removedClientConnections).toBe(0)
   })
 
-  it('should attach client to collection that does not exist', async () => {
-    const collectionName = 'new_collection'
-    const numOfCollections = getCollectionsNames().length
-    const numOfClients = clientCollections[collectionName]
-      ? clientCollections[collectionName].length
-      : 0
-
-    testValues.wsClientTemp1 = new WebSocket(
-      `ws://localhost:${PORT}/?collection=${collectionName}`
-    )
-
-    await new Promise((res) => testValues.wsClientTemp1.on('open', () => res()))
-
-    expect(getCollectionsNames().length).toBe(numOfCollections + 1)
-    expect(clientCollections[collectionName].length).toBe(numOfClients + 1)
-
-    clientCollections[collectionName] = []
-  })
-
-  it('should not attach clients to with collections', async () => {
-    testValues.wsClientTemp1 = new WebSocket(`ws://localhost:${PORT}`)
-    await new Promise((res) => testValues.wsClientTemp1.on('open', () => res()))
-
-    expect(clientCollections[collection1].length).toBe(0)
-    expect(clientCollections[collection2].length).toBe(0)
-  })
-
-  it('should notify all clients that a collection was updated within 3 seconds', async () => {
-    testValues.wsClientTemp1 = new WebSocket(
-      `ws://localhost:${PORT}/?collection=${collection1}`
-    )
-    testValues.wsClientTemp2 = new WebSocket(
-      `ws://localhost:${PORT}/?collection=${collection1}`
-    )
-    await new Promise((res) => testValues.wsClientTemp1.on('open', () => res()))
-    await new Promise((res) => testValues.wsClientTemp2.on('open', () => res()))
-
-    notifyClients(collection1, 'message received')
-
-    let oneResolved = false
-    const messages = { client1: null, client2: null }
-    await expect(
-      new Promise(async (resolve) => {
-        const checkResolvePromise = () => {
-          if (oneResolved) {
-            resolve(messages)
-          } else {
-            oneResolved = true
-          }
-        }
-        testValues.wsClientTemp1.onmessage = (event) => {
-          messages.client1 = event.data
-          checkResolvePromise()
-        }
-        testValues.wsClientTemp2.onmessage = (event) => {
-          messages.client2 = event.data
-          checkResolvePromise()
-        }
-        await new Promise((r) => setTimeout(r, 3000))
-        resolve('no message received')
-      })
-    ).resolves.toEqual({
-      client1: 'message received',
-      client2: 'message received',
+  it('should call a function after notifying', async () => {
+    const clientSocket = 'Client'
+    const additionalInfo = 'Additional Information'
+    onClientConnection((client, info) => {
+      expect(client).toBe(clientSocket)
+      expect(info).toBe(additionalInfo)
     })
+
+    notifyClientConnectionFns(clientSocket, additionalInfo)
+  })
+})
+
+describe('Listen to client Web Sockets that connect to the Web Socket server', () => {
+  let wsServer = null
+  let wsClient = null
+
+  beforeAll(() => {
+    wsServer = createWebSocketServer(httpServerGlobal)
+    clearClientConnectionFns()
   })
 
-  it('should not notify incorrect collections', async () => {
-    testValues.wsClientTemp1 = new WebSocket(
-      `ws://localhost:${PORT}/?collection=${collection1}`
-    )
-    await new Promise((res) => testValues.wsClientTemp1.on('open', () => res()))
+  it('should call a function after the client connects to the websocket server', async () => {
+    const url = `/?additional-information`
+    listenForClients(wsServer)
+    onClientConnection((client, info) => {
+      expect(client).toBeInstanceOf(WebSocket)
+      expect(info.url).toBe(url)
+    })
 
-    notifyClients('error_collection', 'message received')
-
-    await expect(
-      new Promise(async (resolve) => {
-        testValues.wsClientTemp1.onmessage = (event) => {
-          resolve(event.data)
-        }
-        await new Promise((r) => setTimeout(r, 50))
-        resolve('no message received')
-      })
-    ).resolves.toBe('no message received')
+    wsClient = new WebSocket(`ws://localhost:${PORT}${url}`)
+    await new Promise((res) => wsClient.on('open', () => res()))
+    expect.assertions(2)
   })
 
-  it('should not notify closed clients', async () => {
-    testValues.wsClientTemp1 = new WebSocket(
-      `ws://localhost:${PORT}/?collection=${collection1}`
-    )
-    await new Promise((res) => testValues.wsClientTemp1.on('open', () => res()))
-
-    testValues.wsClientTemp1.close()
-    await new Promise((res) =>
-      testValues.wsClientTemp1.on('close', () => res())
-    )
-
-    expect(testValues.wsClientTemp1.readyState).toBe(WebSocket.CLOSED)
-    notifyClients(collection1, 'message received')
-
-    await expect(
-      new Promise(async (res) => {
-        testValues.wsClientTemp1.onmessage = (event) => {
-          res(event.data)
-        }
-        await new Promise((r) => setTimeout(r, 50))
-        res('no message received')
-      })
-    ).resolves.toBe('no message received')
-  })
   afterAll(async () => {
-    if (testValues.wsServerGlobal) {
-      testValues.wsServerGlobal.close()
-      testValues.wsServerGlobal = null
+    if (wsClient) {
+      wsClient.close()
+      await new Promise((res) => wsClient.on('close', () => res()))
+      wsClient = null
+    }
+    if (wsServer) {
+      wsServer.close()
+      await new Promise((res) => wsServer.on('close', () => res()))
+      wsServer = null
     }
   })
 })
 
 afterAll(async () => {
   // Close servers if open
-  if (testValues.httpServerGlobal) {
-    testValues.httpServerGlobal.close()
-    testValues.httpServerGlobal = null
-  }
-  if (testValues.wsServerGlobal) {
-    testValues.wsServerGlobal.close()
-    testValues.wsServerGlobal = null
+  if (httpServerGlobal) {
+    httpServerGlobal.close()
+    httpServerGlobal = null
   }
 })
