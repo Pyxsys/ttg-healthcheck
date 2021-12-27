@@ -1,7 +1,7 @@
+# Dependencies
 node_modules
-coverage
-.nyc_output
 .vscode
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
@@ -54,6 +54,8 @@ coverage.xml
 *.py,cover
 .hypothesis/
 .pytest_cache/
+coverage
+.nyc_output
 
 # Translations
 *.mo
