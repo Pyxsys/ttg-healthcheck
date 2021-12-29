@@ -6,11 +6,21 @@ import {Card, Col, Row, Table} from 'react-bootstrap';
 // Custom
 import Navbar from './Navbar';
 import {Device, DeviceLog, IResponse} from '../types/queries';
+import {useRealTimeService} from '../context/realTimeContext';
 
 const DeviceDetailPage = (props: any) => {
-  const deviceId = props.location.state.id;
+  const deviceId: string = props.location.state.id;
   const [deviceData, setDeviceData] = useState({} as Device);
   const [deviceLogsData, setDeviceLogsData] = useState({} as DeviceLog);
+
+  const realTimeDataService = useRealTimeService();
+
+  const initialRealTimeData = () => {
+    realTimeDataService.setDeviceIds([deviceId]);
+    realTimeDataService.getRealTimeData((device) => {
+      setDeviceLogsData(device);
+    });
+  };
 
   const queryLogs = async () => {
     const queryParams = {
@@ -34,21 +44,9 @@ const DeviceDetailPage = (props: any) => {
     setDeviceLogsData(deviceLogs[0] || null);
   };
 
-  const initialRealTimeData = () => {
-    const PORT = 5000;
-    const wsClient = new WebSocket(`ws://localhost:${PORT}/?reason=realTime&deviceIds=${deviceId}`);
-    wsClient.onmessage = (msg) => {
-      const data = msg.data;
-      if (!(data as string).startsWith('message')) {
-        const device = JSON.parse(data);
-        setDeviceLogsData(device);
-      }
-    };
-  };
-
   useEffect(() => {
-    queryLogs();
     initialRealTimeData();
+    queryLogs();
   }, []);
 
   return (

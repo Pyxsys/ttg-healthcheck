@@ -10,6 +10,7 @@ import {BsChevronLeft, BsChevronRight} from 'react-icons/bs';
 // Custom
 import Navbar from './Navbar';
 import {DeviceLog, IResponse} from '../types/queries';
+import {useRealTimeService} from '../context/realTimeContext';
 
 const DevicePage = () => {
   // Readonly Values
@@ -18,12 +19,17 @@ const DevicePage = () => {
 
   const [deviceData, setDeviceData] = useState([] as DeviceLog[]);
   const [page, setPage] = useState(initialPage);
-  const [wsClient, setWsClient] = useState({} as WebSocket);
 
-  const addRealTimeDevices = (deviceIds: string[]): void => {
-    if (wsClient.send && deviceIds.length > 0) {
-      wsClient.send(`clear-devices?deviceIds=${deviceIds.join(',')}`);
-    }
+  const realTimeDataService = useRealTimeService();
+
+  const initialRealTimeData = () => {
+    realTimeDataService.getRealTimeData((newDevice) => {
+      setDeviceData((prevState) =>
+        prevState.map((device) =>
+          device.deviceId === newDevice.deviceId ? newDevice : device,
+        ),
+      );
+    });
   };
 
   const queryTable = async () => {
@@ -47,32 +53,16 @@ const DevicePage = () => {
     const latestDevices = latestDevicesResponse.data.Results;
 
     setDeviceData(latestDevices);
-    addRealTimeDevices(deviceIds);
-  };
-
-  useEffect(() => {
-    queryTable();
-  }, [page]);
-
-  const initialRealTimeData = () => {
-    const PORT = 5000;
-    const wsClient = new WebSocket(`ws://localhost:${PORT}/?reason=realTime`);
-    wsClient.onmessage = (msg) => {
-      const data = msg.data;
-      if (!(data as string).startsWith('message')) {
-        const newDevice: DeviceLog = JSON.parse(data);
-        setDeviceData((prevState) =>
-          prevState.map((device) =>
-            device.deviceId === newDevice.deviceId ? newDevice : device,
-          ));
-      }
-    };
-    setWsClient(wsClient);
+    realTimeDataService.setDeviceIds(deviceIds);
   };
 
   useEffect(() => {
     initialRealTimeData();
   }, []);
+
+  useEffect(() => {
+    queryTable();
+  }, [page]);
 
   const idFormatter = (cell: {} | null | undefined) => {
     return (
