@@ -5,11 +5,14 @@ import App from './App';
 import {BrowserRouter as Router} from 'react-router-dom';
 import reportWebVitals from './reportWebVitals';
 import {ToastContainer} from 'react-toastify';
+import AppServices from './context/appContexts';
 
 ReactDOM.render(
     <div className="app">
       <Router>
-        <App />
+        <AppServices>
+          <App />
+        </AppServices>
       </Router>
       <ToastContainer />
     </div>,
