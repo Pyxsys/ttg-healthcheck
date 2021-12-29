@@ -41,8 +41,6 @@ const RealTimeService = ({children}: any) => {
         wsClient.onmessage = (msg) => {
           const data = msg.data;
           if (!(data as string).startsWith('message')) {
-            console.log('sending updates');
-
             const device: DeviceLog = JSON.parse(data);
             callbackFn(device);
           }
