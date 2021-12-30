@@ -3,6 +3,8 @@ $primary: #393f49;
 $secondary: #f8f9fa;
 $third: #b1b1b1;
 $fourth: #30353d;
+$fifth: #3F4651;
+$sixth: #4C535F;
 
 $gray-100: #c2c2c2;
 $gray-200: #9b9b9b;
@@ -343,9 +345,68 @@ Note: Beware of modifying this element as it can break the animations - you shou
   background: rgba(0, 0, 0, 0.3);
 }
 
+
+/*-----------------------Devices Page--------------------------*/
+
+.devices-content {
+  background-color: $fourth;
+  @media (min-width: $screen-w-sm) {
+    min-height: 500px;
+  }
+  @media (min-width: $screen-w-md) {
+    min-height: 500px;
+  }
+  @media (min-width: $screen-w-lg) {
+    min-height: 500px;
+  }
+  @media (min-width: $screen-w-xlg) {
+    min-height: 550px;
+  }
+  @media (min-width: $screen-w-xxlg) {
+    min-height: 550px;
+  }
+  @media (min-width: $screen-w-xxxlg) {
+    min-height: 550px;
+  }
+}
+
+// devices table
+
+.devices-table {
+  margin-top: 8rem;
+  margin-left: 2rem;
+}
+
 // responsive table
 .react-bootstrap-table table {
+  --bs-table-striped-color: white;
   table-layout: auto;
+  border: $fourth !important;
+}
+
+.react-bootstrap-table table thead tr {
+  color: white;
+  background-color: $fifth;
+}
+
+.order {
+  display: flex;
+  flex-direction: row;
+}
+
+.devices-header-formatter{
+  display: flex;
+  flex-direction: row;
+}
+
+.react-bootstrap-table table tbody tr:nth-child(odd) {
+  color: white;
+  background-color: $sixth;
+}
+
+.react-bootstrap-table table tbody tr:nth-child(even) {
+  color: white;
+  background-color: $fifth;
 }
 
 // hide uneeded sr-only label in device table
@@ -383,38 +444,6 @@ Note: Beware of modifying this element as it can break the animations - you shou
   border-bottom: 4px dashed;
   border-bottom: 4px solid \9;
   content: "";
-}
-
-
-/*-----------------------Devices Page--------------------------*/
-
-.devices-content {
-  background-color: $fourth;
-  @media (min-width: $screen-w-sm) {
-    min-height: 500px;
-  }
-  @media (min-width: $screen-w-md) {
-    min-height: 500px;
-  }
-  @media (min-width: $screen-w-lg) {
-    min-height: 500px;
-  }
-  @media (min-width: $screen-w-xlg) {
-    min-height: 550px;
-  }
-  @media (min-width: $screen-w-xxlg) {
-    min-height: 550px;
-  }
-  @media (min-width: $screen-w-xxxlg) {
-    min-height: 550px;
-  }
-}
-
-// devices table
-
-.devices-table {
-  margin-top: 8rem;
-  margin-left: 2rem;
 }
 
 .device-icon{

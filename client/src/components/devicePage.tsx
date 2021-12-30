@@ -60,12 +60,10 @@ const DevicePage = () => {
       {sortElement, filterElement}: any,
   ) => {
     return (
-      <div style={{display: 'flex', flexDirection: 'column'}}>
-        <div style={{display: 'flex', flexDirection: 'row'}}>
-          {column.text}
-          {filterElement}
-          {sortElement}
-        </div>
+      <div className='devices-header-formatter'>
+        {column.text}
+        {filterElement}
+        {sortElement}
       </div>
     );
   };
@@ -81,31 +79,29 @@ const DevicePage = () => {
       formatter: idFormatter,
       headerFormatter: uuidHeaderFormatter,
     },
-
     {
       dataField: 'cpu.aggregatedPercentage',
       text: 'CPU',
       sort: true,
+      headerFormatter: uuidHeaderFormatter,
     },
     {
       dataField: 'memory.aggregatedPercentage',
       text: 'Memory',
       sort: true,
+      headerFormatter: uuidHeaderFormatter,
     },
     {
-      dataField: 'memory.aggregatedPercentage',
+      dataField: 'disk.aggregatedPercentage',
       text: 'Disk',
       sort: true,
-    },
-    {
-      dataField: 'memory.aggregatedPercentage',
-      text: 'Disk',
-      sort: true,
+      headerFormatter: uuidHeaderFormatter,
     },
     {
       dataField: 'network',
       text: 'Network',
       sort: true,
+      headerFormatter: uuidHeaderFormatter,
     },
   ];
 
@@ -116,11 +112,11 @@ const DevicePage = () => {
           <Col>
             <div className="devices-table ">
               <BootstrapTable
+                striped={true}
                 keyField="id"
                 data={deviceData}
                 columns={columns}
                 filter={filterFactory()}
-                wrapperClasses="table-responsive"
               />
               <div className="d-flex justify-content-end">
                 <i
