@@ -34,7 +34,7 @@ const pipeline = {
  */
 const createChangeStream = (collectionName) => {
   const existingChangeStream = monitoredChangeStreams.find(
-    (changeStream) => changeStream.parent.collectionName === collectionName
+    (stream) => stream.parent.collectionName === collectionName
   )
   if (existingChangeStream) {
     return existingChangeStream
