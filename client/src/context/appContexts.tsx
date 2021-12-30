@@ -7,7 +7,7 @@ import RealTimeService from './realTimeContext';
  * @param {any} param0 contains the child elements
  * @return {JSX.Element}
  */
-const AppServices = ({children}: any) => {
+const AppContexts = ({children}: any) => {
   return (
     <>
       <RealTimeService>
@@ -19,4 +19,4 @@ const AppServices = ({children}: any) => {
   );
 };
 
-export default AppServices;
+export default AppContexts;
