@@ -29,7 +29,7 @@ const {
   parseMessage,
 } = require('../realTimeData/realTimeData').test
 
-const PORT = 8081
+const PORT = 8091
 
 const client1Id = 'CLIENT-1'
 const client2Id = 'CLIENT-2'
