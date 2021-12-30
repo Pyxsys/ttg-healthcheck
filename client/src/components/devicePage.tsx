@@ -64,6 +64,20 @@ const DevicePage = () => {
     queryTable();
   }, [page]);
 
+  /**
+   * If the browser window unloads
+   * or if the React component unloads
+   * clear devices for real time data
+   */
+  useEffect(() => {
+    const clearDevices = () => realTimeDataService.setDeviceIds([]);
+    window.addEventListener('beforeunload', clearDevices);
+    return () => {
+      window.removeEventListener('beforeunload', clearDevices);
+      clearDevices();
+    };
+  }, []);
+
   const idFormatter = (cell: {} | null | undefined) => {
     return (
       <>

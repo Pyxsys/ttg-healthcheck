@@ -49,6 +49,20 @@ const DeviceDetailPage = (props: any) => {
     queryLogs();
   }, []);
 
+  /**
+   * If the browser window unloads
+   * or if the React component unloads
+   * clear devices for real time data
+   */
+  useEffect(() => {
+    const clearDevices = () => realTimeDataService.setDeviceIds([]);
+    window.addEventListener('beforeunload', clearDevices);
+    return () => {
+      window.removeEventListener('beforeunload', clearDevices);
+      clearDevices();
+    };
+  }, []);
+
   return (
     <div id="outer-container">
       <Navbar />

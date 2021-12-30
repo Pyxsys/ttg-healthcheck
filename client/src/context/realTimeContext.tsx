@@ -9,6 +9,7 @@ import Contextualizer, {AppServices} from '../services/context.service';
 type RealTimeCallback = (device: DeviceLog) => void;
 
 export interface IRealTimeService {
+  // clearDeviceIds(): void;
   setDeviceIds(deviceIds: string[]): void;
   getRealTimeData(callbackFn: RealTimeCallback): void;
   enableRealTimeData(): void;
@@ -24,14 +25,17 @@ const RealTimeService = ({children}: any) => {
 
   const realTimeService: IRealTimeService = {
     setDeviceIds: (deviceIds) => {
-      if (wsClient && deviceIds.length > 0) {
-        if (wsClient.readyState === WebSocket.CONNECTING) {
-          wsClient.onopen = () => {
+      if (wsClient) {
+        switch (wsClient.readyState) {
+          case WebSocket.CONNECTING:
+            wsClient.onopen = () => {
+              wsClient.send(`clear-devices?deviceIds=${deviceIds.join(',')}`);
+              wsClient.onopen = null;
+            };
+            break;
+          case WebSocket.OPEN:
             wsClient.send(`clear-devices?deviceIds=${deviceIds.join(',')}`);
-            wsClient.onopen = null;
-          };
-        } else {
-          wsClient.send(`clear-devices?deviceIds=${deviceIds.join(',')}`);
+            break;
         }
       }
     },
