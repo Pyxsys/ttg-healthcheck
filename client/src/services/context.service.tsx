@@ -4,7 +4,7 @@ import React, {createContext, useContext} from 'react';
 export enum AppServices {
   RealTimeService,
   Authentication,
-};
+}
 
 const contexts = new Map<AppServices, React.Context<any | null>>();
 
