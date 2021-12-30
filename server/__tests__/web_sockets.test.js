@@ -15,7 +15,7 @@ const {
 const PORT = 8081
 const PORT_TEMP = 8091
 
-httpServerGlobal = null
+let httpServerGlobal = null
 
 beforeAll((done) => {
   httpServerGlobal = app.listen(PORT, () => done())
