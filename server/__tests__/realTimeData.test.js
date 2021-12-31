@@ -306,6 +306,7 @@ describe('Sending real time data to a connected client', () => {
 
       expect(deviceLog.deviceId).toBeTruthy()
       expect(deviceLog.deviceId).toBe(mockLogPayload1.deviceId)
+      done()
     }
 
     request(app)
@@ -313,27 +314,27 @@ describe('Sending real time data to a connected client', () => {
       .send(mockLogPayload1)
       .then((deviceLogResponse) => {
         expect(deviceLogResponse.statusCode).toBe(200)
-        done()
       })
   })
 
   it('should not send DeviceLog data to closed clients', async () => {
     wsClient.close()
-    
     await new Promise((res) => wsClient.on('close', () => res()))
 
-    wsClient.onmessage = (msg) => {
-      const noMessage = msg.data
-      expect(noMessage).toBeFalsy()
-    }
+    expect(wsClient.readyState).toBe(WebSocket.CLOSED)
 
-    await request(app)
+    const deviceLogResponse = await request(app)
       .post('/api/daemon')
       .send(mockLogPayload1)
-      .then((deviceLogResponse) => {
-        expect(deviceLogResponse.statusCode).toBe(200)
+    expect(deviceLogResponse.statusCode).toBe(200)
+
+    await expect(
+      new Promise(async (res) => {
+        wsClient.onmessage = (event) => res(event.data)
+        await new Promise((r) => setTimeout(r, 50))
+        res('no message received')
       })
-    expect.assertions(1)
+    ).resolves.toBe('no message received')
     wsClient = null
   })
 
