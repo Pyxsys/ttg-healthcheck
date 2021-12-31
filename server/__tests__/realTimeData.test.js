@@ -306,7 +306,6 @@ describe('Sending real time data to a connected client', () => {
 
       expect(deviceLog.deviceId).toBeTruthy()
       expect(deviceLog.deviceId).toBe(mockLogPayload1.deviceId)
-      done()
     }
 
     request(app)
@@ -314,6 +313,7 @@ describe('Sending real time data to a connected client', () => {
       .send(mockLogPayload1)
       .then((deviceLogResponse) => {
         expect(deviceLogResponse.statusCode).toBe(200)
+        done()
       })
   })
 
