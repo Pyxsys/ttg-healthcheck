@@ -315,7 +315,6 @@ describe('Sending real time data to a connected client', () => {
         expect(deviceLogResponse.statusCode).toBe(200)
         done()
       })
-    expect.assertions(3)
   })
 
   it('should not send DeviceLog data to closed clients', (done) => {
