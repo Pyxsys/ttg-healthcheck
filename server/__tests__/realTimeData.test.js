@@ -299,17 +299,22 @@ describe('Sending real time data to a connected client', () => {
     await new Promise((res) => wsClient.on('open', () => res()))
   })
 
-  it('should receive DeviceLog data from web socket', (done) => {
+  it('should receive DeviceLog data from web socket', async () => {
     wsClient.onmessage = (msg) => {
       const deviceLogString = msg.data
       const deviceLog = JSON.parse(deviceLogString)
 
       expect(deviceLog.deviceId).toBeTruthy()
       expect(deviceLog.deviceId).toBe(mockLogPayload1.deviceId)
-      done()
     }
+    
+    const deviceLogResponse = await request(app)
+      .post('/api/daemon')
+      .send(mockLogPayload1)
+    expect(deviceLogResponse.statusCode).toBe(200)
 
-    request(app).post('/api/daemon').send(mockLogPayload1).then()
+    await new Promise((res) => setTimeout(() => res(), 3000))
+    expect.assertions(3)
   })
 
   it('should not send DeviceLog data to closed clients', async () => {
