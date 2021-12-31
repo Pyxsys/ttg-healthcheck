@@ -9,11 +9,10 @@ import AdminPanel from './components/adminPanel';
 import Signup from './components/signup';
 import DevicePage from './components/devicePage';
 import deviceDetailPage from './components/deviceDetailPage';
-import {AuthProvider} from './context/authContext';
 
 function App() {
   return (
-    <AuthProvider>
+    <>
       <Route exact path="/" component={Login}></Route>
       <Route exact path="/signup" component={Signup}></Route>
       <PrivateRoute
@@ -40,7 +39,7 @@ function App() {
         roles={['admin']}
         component={AdminPanel}
       ></PrivateRoute>
-    </AuthProvider>
+    </>
   );
 }
 
