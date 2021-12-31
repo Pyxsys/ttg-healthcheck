@@ -103,7 +103,7 @@ jobs:
 
     - name: Install Dependencies
       run: |
-        npm ci --prefix client
+        npm install --prefix client
         npm install --prefix server
 
     - name: Run Server
@@ -136,7 +136,7 @@ jobs:
 
     - name: Install Dependencies
       run: |
-        npm ci --prefix client
+        npm install --prefix client
             
     - name: Cypress Run
       uses: cypress-io/github-action@v2
