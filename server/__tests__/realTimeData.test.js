@@ -307,31 +307,33 @@ describe('Sending real time data to a connected client', () => {
       expect(deviceLog.deviceId).toBeTruthy()
       expect(deviceLog.deviceId).toBe(mockLogPayload1.deviceId)
     }
-    
+
     request(app)
       .post('/api/daemon')
       .send(mockLogPayload1)
-      .then(() => done())
+      .then((deviceLogResponse) => {
+        expect(deviceLogResponse.statusCode).toBe(200)
+        done()
+      })
+    expect.assertions(3)
   })
 
-  it('should not send DeviceLog data to closed clients', async () => {
+  it('should not send DeviceLog data to closed clients', (done) => {
     wsClient.close()
-    await new Promise((res) => wsClient.on('close', () => res()))
 
-    expect(wsClient.readyState).toBe(WebSocket.CLOSED)
+    wsClient.onmessage = (msg) => {
+      const noMessage = msg.data
+      expect(noMessage).toBeFalsy()
+    }
 
-    const deviceLogResponse = await request(app)
+    request(app)
       .post('/api/daemon')
       .send(mockLogPayload1)
-    expect(deviceLogResponse.statusCode).toBe(200)
-
-    await expect(
-      new Promise(async (res) => {
-        wsClient.onmessage = (event) => res(event.data)
-        await new Promise((r) => setTimeout(r, 50))
-        res('no message received')
+      .then((deviceLogResponse) => {
+        expect(deviceLogResponse.statusCode).toBe(200)
+        done()
       })
-    ).resolves.toBe('no message received')
+    expect.assertions(1)
     wsClient = null
   })
 
