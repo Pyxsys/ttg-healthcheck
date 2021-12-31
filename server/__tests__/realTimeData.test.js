@@ -29,7 +29,7 @@ const {
   parseMessage,
 } = require('../realTimeData/realTimeData').test
 
-const PORT = 8091
+const PORT = 8081
 
 const client1Id = 'CLIENT-1'
 const client2Id = 'CLIENT-2'
@@ -299,17 +299,19 @@ describe('Sending real time data to a connected client', () => {
     await new Promise((res) => wsClient.on('open', () => res()))
   })
 
-  it.skip('should receive DeviceLog data from web socket', (done) => {
+  it('should receive DeviceLog data from web socket', (done) => {
     wsClient.onmessage = (msg) => {
       const deviceLogString = msg.data
       const deviceLog = JSON.parse(deviceLogString)
 
       expect(deviceLog.deviceId).toBeTruthy()
       expect(deviceLog.deviceId).toBe(mockLogPayload1.deviceId)
-      done()
     }
-
-    request(app).post('/api/daemon').send(mockLogPayload1).then()
+    
+    request(app)
+      .post('/api/daemon')
+      .send(mockLogPayload1)
+      .then(() => done())
   })
 
   it('should not send DeviceLog data to closed clients', async () => {
