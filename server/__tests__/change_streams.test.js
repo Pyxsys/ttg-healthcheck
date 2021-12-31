@@ -1,131 +1,105 @@
 const request = require('supertest')
 const mongoose = require('mongoose')
-const WebSocket = require('ws')
 
 const app = require('../app')
 const connectDB = require('../db/db_connection')
-const User = require('../models/user.js')
-const { createWebSocketServer, listeningForClients } = require('../ws_server')
+const User = require('../models/user')
 const {
-  monitorPredefinedCollections,
   closeMonitoredCollection,
   monitorCollection,
-  numOfMonitoredChangeStream,
-} = require('../db/change_streams')
+} = require('../db/changeStreams')
+const { createChangeStream, numOfMonitoredChangeStream } =
+  require('../db/changeStreams').test
 
-const PORT = 8081
-const collectionName = 'users'
+const collection1 = 'new_collection_1'
+const collection2 = 'new_collection_2'
 
-const testValues = {
-  httpServer: null,
-  wsServer: null,
-  wsClient: null,
-}
-
-const testUser = {
-  name: 'test',
+const changeSteamUser = {
+  name: 'change-stream',
   password: process.env.PASSWORD,
-  email: 'test2@gmail.com',
+  email: 'change-stream@gmail.com',
   role: 'user',
 }
 
 beforeAll(async () => {
-  // create http server
-  await new Promise(
-    (res) => (testValues.httpServer = app.listen(PORT, () => res()))
-  )
-  // create web socket server
-  testValues.wsServer = createWebSocketServer(testValues.httpServer)
-  listeningForClients(testValues.wsServer)
-
   // connect to local_db
   await connectDB()
-
   await User.deleteMany()
+})
+
+describe('Monitoring change streams', () => {
+  beforeEach(async () => {
+    closeMonitoredCollection()
+  })
+
+  it('should create a change stream', () => {
+    const newChangeStream = createChangeStream(collection1)
+    expect(newChangeStream).toBeDefined()
+    expect(newChangeStream.parent.collectionName).toBe(collection1)
+    expect(numOfMonitoredChangeStream()).toBe(1)
+  })
+
+  it('should return the same change stream', () => {
+    const firstChangeStream = createChangeStream(collection1)
+    const secondChangeStream = createChangeStream(collection1)
+    expect(firstChangeStream).toEqual(secondChangeStream)
+    expect(numOfMonitoredChangeStream()).toBe(1)
+  })
+
+  it('should close one collection change stream', async () => {
+    createChangeStream(collection1)
+    createChangeStream(collection2)
+    const initChangeStreams = numOfMonitoredChangeStream()
+    closeMonitoredCollection(collection1)
+    const removeAChangeStreams = numOfMonitoredChangeStream()
+    expect(removeAChangeStreams).toBe(initChangeStreams - 1)
+  })
+
+  it('should close all the collection change streams', async () => {
+    createChangeStream(collection1)
+    const initChangeStreams = numOfMonitoredChangeStream()
+    expect(initChangeStreams).not.toBe(0)
+    closeMonitoredCollection()
+    const removeMultipleChangeStreams = numOfMonitoredChangeStream()
+    expect(removeMultipleChangeStreams).toBe(0)
+  })
 })
 
 describe('Insert a new user to the database and get data from the change stream', () => {
   beforeAll(async () => {
-    monitorCollection(collectionName)
-    await new Promise((resolve) => {
-      while (numOfMonitoredChangeStream() === 0);
-      resolve()
-    })
+    closeMonitoredCollection()
   })
 
   it('should receive the inserted data from the websocket', async () => {
-    testValues.wsClient = new WebSocket(
-      `ws://localhost:${PORT}/?collection=${collectionName}`
-    )
-    await new Promise((res) => testValues.wsClient.on('open', () => res()))
+    expect.assertions(4)
 
-    await request(app)
-      .post('/api/user/register')
-      .send({
-        name: testUser.name,
-        password: testUser.password,
-        email: testUser.email,
-        role: testUser.role,
-      })
-      .then((response) => {
-        expect(response.statusCode).toBe(200)
-      })
-
-    const dataStr = await new Promise((resolve) => {
-      testValues.wsClient.onmessage = (event) => resolve(event.data)
+    monitorCollection(User.collection.collectionName, (change) => {
+      const document = change.fullDocument
+      expect(document).toBeDefined()
+      expect(document && document.constructor === Object).toBeTruthy()
+      expect(document.email).toBe(changeSteamUser.email)
     })
 
-    try {
-      const dataObj = JSON.parse(dataStr)
-      expect(dataObj && dataObj.constructor === Object).toBeTruthy()
-      expect(dataObj.fullDocument).toBeDefined()
-      expect(dataObj.operationType).toBe('insert')
-    } catch (err) {
-      expect(err).toBeFalsy()
-    }
-  }, 15000)
+    const response = await request(app).post('/api/user/register').send({
+      name: changeSteamUser.name,
+      password: changeSteamUser.password,
+      email: changeSteamUser.email,
+      role: changeSteamUser.role,
+    })
+    expect(response.statusCode).toBe(200)
+
+    await new Promise((res) => {
+      setTimeout(() => res(), 500)
+    })
+  })
+
   afterAll(() => {
-    if (testValues.wsClient) {
-      testValues.wsClient.close()
-      testValues.wsClient = null
-    }
-
     closeMonitoredCollection()
-  })
-})
-
-describe('Closes the collection change streams', () => {
-  afterEach(async () => {
-    closeMonitoredCollection()
-  })
-
-  it('should close one collection change stream', async () => {
-    monitorCollection('new_collection_1')
-    monitorCollection('new_collection_2')
-    const numOfChangeStreams = numOfMonitoredChangeStream()
-    closeMonitoredCollection('new_collection_1')
-    expect(numOfMonitoredChangeStream()).toBe(numOfChangeStreams - 1)
-  })
-
-  it('should close all the collection change streams', async () => {
-    monitorPredefinedCollections()
-    expect(numOfMonitoredChangeStream()).not.toBe(0)
-    closeMonitoredCollection()
-    expect(numOfMonitoredChangeStream()).toBe(0)
   })
 })
 
 afterAll(async () => {
-  // Close servers
-  if (testValues.wsServer) {
-    testValues.wsServer.close()
-    testValues.wsServer = null
-  }
-  if (testValues.httpServer) {
-    testValues.httpServer.close()
-    testValues.httpServer = null
-  }
-
   // Closing the DB connection allows Jest to exit successfully.
+  closeMonitoredCollection()
   await mongoose.connection.close()
 })

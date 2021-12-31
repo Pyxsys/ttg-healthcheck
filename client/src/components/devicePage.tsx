@@ -10,6 +10,7 @@ import {BsChevronLeft, BsChevronRight} from 'react-icons/bs';
 // Custom
 import Navbar from './Navbar';
 import {DeviceLog, IResponse} from '../types/queries';
+import {useRealTimeService} from '../context/realTimeContext';
 
 const DevicePage = () => {
   // Readonly Values
@@ -18,6 +19,18 @@ const DevicePage = () => {
 
   const [deviceData, setDeviceData] = useState([] as DeviceLog[]);
   const [page, setPage] = useState(initialPage);
+
+  const realTimeDataService = useRealTimeService();
+
+  const initialRealTimeData = () => {
+    realTimeDataService.getRealTimeData((newDevice) => {
+      setDeviceData((prevState) =>
+        prevState.map((device) =>
+          device.deviceId === newDevice.deviceId ? newDevice : device,
+        ),
+      );
+    });
+  };
 
   const queryTable = async () => {
     const skip: number = (page - 1) * pageSize;
@@ -40,11 +53,30 @@ const DevicePage = () => {
     const latestDevices = latestDevicesResponse.data.Results;
 
     setDeviceData(latestDevices);
+    realTimeDataService.setDeviceIds(deviceIds);
   };
+
+  useEffect(() => {
+    initialRealTimeData();
+  }, []);
 
   useEffect(() => {
     queryTable();
   }, [page]);
+
+  /**
+   * If the browser window unloads
+   * or if the React component unloads
+   * clear devices for real time data
+   */
+  useEffect(() => {
+    const clearDevices = () => realTimeDataService.setDeviceIds([]);
+    window.addEventListener('beforeunload', clearDevices);
+    return () => {
+      window.removeEventListener('beforeunload', clearDevices);
+      clearDevices();
+    };
+  }, []);
 
   const idFormatter = (cell: {} | null | undefined) => {
     return (

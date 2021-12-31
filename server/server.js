@@ -1,23 +1,29 @@
 const app = require('./app')
-const { monitorPredefinedCollections } = require('./db/change_streams')
 const connectDB = require('./db/db_connection')
 const { subscribeOnExit } = require('./destroyProcess')
-const { listeningForClients, createWebSocketServer } = require('./ws_server')
+const { createWebSocketServer, listenForClients } = require('./ws_server')
+const { closeMonitoredCollection } = require('./db/changeStreams')
+const {
+  connectClientsToRealTimeData,
+  monitorRealTimeDataCollections,
+} = require('./realTimeData/realTimeData')
 
 // start server
 const PORT = process.env.PORT || 5000
 const server = app.listen(PORT, () => console.log(`Listening on port ${PORT}`))
 const wsServer = createWebSocketServer(server)
-listeningForClients(wsServer)
+connectClientsToRealTimeData()
+listenForClients(wsServer)
 
 // connect database
 connectDB().then(() => {
-  monitorPredefinedCollections()
+  monitorRealTimeDataCollections()
 })
 
 // if process wants to exit
 subscribeOnExit((err, code) => {
-  console.error(err)
+  closeMonitoredCollection()
   server.close()
+  console.error(err)
   process.exit(code)
 })
