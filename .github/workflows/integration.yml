@@ -114,7 +114,10 @@ jobs:
       with:
         start: npm start --prefix client
         wait-on: http://localhost:3000
-
+        
+    - name: Code Coverage
+      run: npx nyc report
+      
   Client_Test:
     # The type of runner that the job will run on
     name: Client_Test
@@ -144,5 +147,7 @@ jobs:
         project: ./client
         start: npm start --prefix client
         wait-on: http://localhost:3000
-
+        
+    - name: Code Coverage
+      run: npx nyc report --prefix client
   
