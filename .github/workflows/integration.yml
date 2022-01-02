@@ -103,7 +103,7 @@ jobs:
 
     - name: Install Dependencies
       run: |
-        npm install --prefix client
+        npm ci --prefix client
         npm install --prefix server
 
     - name: Run Server
@@ -114,6 +114,9 @@ jobs:
       with:
         start: npm start --prefix client
         wait-on: http://localhost:3000
+    
+    - name: Code Coverage
+      run: npx nyc report
 
   Client_Test:
     # The type of runner that the job will run on
@@ -136,13 +139,17 @@ jobs:
 
     - name: Install Dependencies
       run: |
-        npm install --prefix client
+        npm ci --prefix client
             
     - name: Cypress Run
       uses: cypress-io/github-action@v2
       with:
-        project: ./client
+        project: ./client/src
         start: npm start --prefix client
         wait-on: http://localhost:3000
+        
+    - name: Code Coverage
+      run: npx nyc report --prefix client
+
 
   
