@@ -149,5 +149,7 @@ jobs:
         wait-on: http://localhost:3000
         
     - name: Code Coverage
-      run: npx nyc report --prefix client
+      run: |
+        cd client
+        npx nyc report 
   
