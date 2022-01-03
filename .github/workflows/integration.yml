@@ -114,7 +114,10 @@ jobs:
       with:
         start: npm start --prefix client
         wait-on: http://localhost:3000
-
+        
+    - name: Code Coverage
+      run: npx nyc report
+      
   Client_Test:
     # The type of runner that the job will run on
     name: Client_Test
@@ -141,8 +144,12 @@ jobs:
     - name: Cypress Run
       uses: cypress-io/github-action@v2
       with:
-        project: ./client/src
+        project: ./client
         start: npm start --prefix client
         wait-on: http://localhost:3000
-
+        
+    - name: Code Coverage
+      run: |
+        cd client
+        npx nyc report 
   

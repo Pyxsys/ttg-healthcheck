@@ -6,11 +6,21 @@ import {Card, Col, Row, Table} from 'react-bootstrap';
 // Custom
 import Navbar from './Navbar';
 import {Device, DeviceLog, IResponse} from '../types/queries';
+import {useRealTimeService} from '../context/realTimeContext';
 
 const DeviceDetailPage = (props: any) => {
-  const deviceId = props.location.state.id;
+  const deviceId: string = props.location.state.id;
   const [deviceData, setDeviceData] = useState({} as Device);
   const [deviceLogsData, setDeviceLogsData] = useState({} as DeviceLog);
+
+  const realTimeDataService = useRealTimeService();
+
+  const initialRealTimeData = () => {
+    realTimeDataService.setDeviceIds([deviceId]);
+    realTimeDataService.getRealTimeData((device) => {
+      setDeviceLogsData(device);
+    });
+  };
 
   const queryLogs = async () => {
     const queryParams = {
@@ -35,7 +45,22 @@ const DeviceDetailPage = (props: any) => {
   };
 
   useEffect(() => {
+    initialRealTimeData();
     queryLogs();
+  }, []);
+
+  /**
+   * If the browser window unloads
+   * or if the React component unloads
+   * clear devices for real time data
+   */
+  useEffect(() => {
+    const clearDevices = () => realTimeDataService.setDeviceIds([]);
+    window.addEventListener('beforeunload', clearDevices);
+    return () => {
+      window.removeEventListener('beforeunload', clearDevices);
+      clearDevices();
+    };
   }, []);
 
   return (

@@ -1,5 +1,7 @@
+# Dependencies
 node_modules
 .vscode
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
@@ -52,6 +54,8 @@ coverage.xml
 *.py,cover
 .hypothesis/
 .pytest_cache/
+coverage
+.nyc_output
 
 # Translations
 *.mo

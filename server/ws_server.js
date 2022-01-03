@@ -1,5 +1,17 @@
-const { Server } = require('ws')
-const { attatchClient, detatchClient } = require('./db/collection_subject')
+const { Server, WebSocket } = require('ws')
+
+/**
+ * Callback for client connections.
+ * @callback ClientConnectionCallback
+ * @param {WebSocket} client the client that connected
+ * @param {IncomingMessage} additionalInfo additional information that passed with the client
+ */
+
+/**
+ * Collection of callback functions for client connection.
+ * @type {ClientConnectionCallback[]}
+ */
+const clientConnectionFns = []
 
 /**
  * Create a web socket server over an http server
@@ -8,9 +20,9 @@ const { attatchClient, detatchClient } = require('./db/collection_subject')
  */
 const createWebSocketServer = (server) => {
   // Create Web Socket Server on top of the HTTP server (using the same port)
+  // Do not need Client Tracking, since it is done manually
   const wsServer = new Server({
     server: server,
-    // Do not need Client Tracking, since it is done manually
     clientTracking: false,
   })
 
@@ -25,33 +37,51 @@ const createWebSocketServer = (server) => {
 /**
  * Listens on a web socket server for a client to connect.
  *
- * When a client connects to the web socket server, subscribe
- * them to the collection for updates.
+ * When a client connects to the web socket server, connects the
+ * client to the appropriate functionality.
  * @param {Server} wsServer web socket server
  */
-const listeningForClients = (wsServer) => {
-  wsServer.on('connection', (client, a) => {
-    // Get the collections the client wishes to subscribe to
-    const path = getQueryStringParams('collection', a.url)
-    if (path) {
-      // Attach the client to the collection subjects
-      const collections = path.split(',')
-      collections.forEach((collection) => {
-        attatchClient(client, collection)
-      })
-    }
-
-    // Remove client from clientList after ws closes
-    client.on('close', () => {
-      detatchClient(client)
-    })
+const listenForClients = (wsServer) => {
+  wsServer.on('connection', (client, additionalInfo) => {
+    notifyClientConnectionFns(client, additionalInfo)
   })
 }
 
-const getQueryStringParams = (params, url) => {
-  const regEx = new RegExp('[?&]' + params + '=([^&#]*)')
-  const value = regEx.exec(decodeURIComponent(url))
-  return value ? value[1] : null
+/**
+ * Calls the provided function when the client connects to the
+ * websocket server.
+ * @param {ClientConnectionCallback} callbackFn A function that accepts two arguments: **client**, **additionalInfo**
+ */
+const onClientConnection = (callbackFn) => {
+  clientConnectionFns.push(callbackFn)
 }
 
-module.exports = { createWebSocketServer, listeningForClients }
+/**
+ * Clears the callback functions that are called on a client connection.
+ */
+const clearClientConnectionFns = () => {
+  clientConnectionFns.splice(0)
+}
+
+/**
+ *
+ * @param {WebSocket} client
+ * @param {IncomingMessage} additionalInfo
+ */
+const notifyClientConnectionFns = (client, additionalInfo) => {
+  clientConnectionFns.forEach((callbackFn) =>
+    callbackFn(client, additionalInfo)
+  )
+}
+
+module.exports = {
+  createWebSocketServer,
+  listenForClients,
+  onClientConnection,
+
+  test: {
+    clientConnectionFns,
+    clearClientConnectionFns,
+    notifyClientConnectionFns,
+  },
+}
