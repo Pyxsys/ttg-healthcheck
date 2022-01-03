@@ -1,8 +1,9 @@
 // Set new color palette.
-$primary: #393f49;
-$secondary: #f8f9fa;
-$third: #b1b1b1;
-$fourth: #30353d;
+$primary-gray: #393f49;
+$secondary-gray: #f8f9fa;
+$tertiary-gray: #30353d;
+$fifth: #3F4651;
+$sixth: #4C535F;
 
 $gray-100: #c2c2c2;
 $gray-200: #9b9b9b;
@@ -29,10 +30,7 @@ body {
   width: 100%;
 }
 
-/*
-**  LOGIN/SIGNUP PAGE
-**
-*/
+/*-----------------------Login/Signup--------------------------*/
 
 // Custom scrollbar only for computers
 @media only screen and (min-width: $screen-w-md) {
@@ -66,7 +64,7 @@ body {
 }
 
 .home-header {
-  background-color: $primary;
+  background-color: $primary-gray;
   // smooth transition when header div changes size
   -webkit-transition: all 0.5s ease;
   -moz-transition: all 0.5s ease;
@@ -94,7 +92,7 @@ body {
 }
 
 .home-content {
-  background-color: $fourth;
+  background-color: $tertiary-gray;
   @media (min-width: $screen-w-sm) {
     min-height: 500px;
   }
@@ -116,7 +114,7 @@ body {
 }
 
 .home-footer {
-  background-color: $fourth;
+  background-color: $tertiary-gray;
 }
 
 .home-logo {
@@ -144,13 +142,13 @@ body {
 .bottom-triangle {
   border-right: solid 15px transparent;
   border-left: solid 15px transparent;
-  border-top: solid 15px $primary;
+  border-top: solid 15px $primary-gray;
   transform: translateY(15px);
 }
 
 // login/signup footer
 .home-copyright {
-  color: $secondary;
+  color: $secondary-gray;
   opacity: 80%;
   font-size: 11px;
   font-weight: 600;
@@ -159,7 +157,7 @@ body {
 .home-header-subtitle {
   padding-bottom: 0px;
   text-align: center;
-  color: $secondary;
+  color: $secondary-gray;
   opacity: 80%;
   font-weight: 500;
   @media (min-width: $screen-w-sm) {
@@ -210,24 +208,24 @@ body {
 
 .home-input {
   @media (min-width: $screen-w-sm) {
-    padding: 12px !important;
+    padding: 12px;
   }
   @media (min-width: $screen-w-md) {
-    padding: 13px !important;
+    padding: 13px;
   }
   @media (min-width: $screen-w-lg) {
-    padding: 13px !important;
+    padding: 13px;
   }
   @media (min-width: $screen-w-xlg) {
-    padding: 13px !important;
+    padding: 13px;
   }
   @media (min-width: $screen-w-xxlg) {
-    padding: 15px !important;
-    font-size: 15px !important;
+    padding: 15px;
+    font-size: 15px;
   }
   @media (min-width: $screen-w-xxxlg) {
-    padding: 17px !important;
-    font-size: 17px !important;
+    padding: 17px;
+    font-size: 17px;
   }
   border: none !important;
   border-radius: 0 0.25rem 0.25rem 0 !important;
@@ -241,40 +239,37 @@ body {
 
 .home-button {
   @media (min-width: $screen-w-sm) {
-    padding: 12px !important;
+    padding: 12px;
   }
   @media (min-width: $screen-w-md) {
-    padding: 13px !important;
+    padding: 13px;
   }
   @media (min-width: $screen-w-lg) {
-    padding: 13px !important;
+    padding: 13px;
   }
   @media (min-width: $screen-w-xlg) {
-    padding: 13px !important;
+    padding: 13px;
   }
   @media (min-width: $screen-w-xxlg) {
-    padding: 15px !important;
-    font-size: 15px !important;
+    padding: 15px;
+    font-size: 15px;
   }
   @media (min-width: $screen-w-xxxlg) {
-    padding: 17px !important;
-    font-size: 17px !important;
+    padding: 17px;
+    font-size: 17px;
   }
   opacity: 80%;
-  color: $secondary !important;
-  font-weight: 500 !important;
+  color: $secondary-gray;
+  font-weight: 500;
   border: 1px solid #b1b1b1ab !important;
-  background-color: $fourth !important;
+  background-color: $tertiary-gray;
 }
 
 .home-button:hover {
-  background-color: $primary !important;
+  background-color: $primary-gray !important;
 }
 
-/*
-**  NAV
-**
-*/
+/*-----------------------Navigation--------------------------*/
 
 /* Position and sizing of burger button */
 .bm-burger-button {
@@ -384,4 +379,26 @@ Note: Beware of modifying this element as it can break the animations - you shou
   content: "";
 }
 
+/*-----------------------Device Details--------------------------*/
 
+#device-details-container{
+  padding-top: 150px;
+  background-color: $tertiary-gray;
+}
+
+.device-details-table > tbody > tr > td{
+  color: white;
+  border-bottom: 0;
+  border-top: 0;
+}
+
+.accordion-header{
+  font-size: 20px !important;
+  color: red !important;
+  background-color: $fifth !important;
+  box-shadow: none;
+}
+
+.panel-body{
+  background-color: $sixth;
+}
