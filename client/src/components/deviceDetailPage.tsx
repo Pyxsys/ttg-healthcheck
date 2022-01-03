@@ -70,7 +70,7 @@ const DeviceDetailPage = (props: any) => {
       <div id="page-wrap" className="h-100 container pe-0 ps-0">
         <Row>
           <Col>
-            <Row className="d-flex pb-0">
+            <Row className="d-flex gx-5">
               <Col xs={12} sm={12} md={4}>
                 <Accordion defaultActiveKey="0" flush>
                   <Accordion.Item eventKey="0">
@@ -110,7 +110,7 @@ const DeviceDetailPage = (props: any) => {
                   </Accordion.Item>
                 </Accordion>
               </Col>
-              <Col xs={12} sm={12} md={8}>
+              <Col xs={12} sm={12} md={8} className="detail-page-piechart">
                 <Accordion defaultActiveKey="0" flush>
                   <Accordion.Item eventKey="0">
                     <div className="panel-header">
@@ -123,12 +123,12 @@ const DeviceDetailPage = (props: any) => {
                         </div>
                       </Accordion.Header>
                     </div>
-                    <Accordion.Body className="panel-body">
-                      <div className="d-flex justify-content-center">
+                    <Accordion.Body className="panel-body" >
+                      <div className="d-flex justify-content-center pt-5 pb-5">
                         <div><Pie percentage={deviceLogsData?.cpu?.aggregatedPercentage}/></div>
                         <div><Pie percentage={deviceLogsData?.memory?.aggregatedPercentage}/></div>
-                        <div><Pie percentage={deviceLogsData?.cpu?.aggregatedPercentage}/></div>
-                        <div><Pie percentage={deviceLogsData?.cpu?.aggregatedPercentage}/></div>
+                        <div><Pie percentage={60}/></div>
+                        <div><Pie percentage={90}/></div>
                       </div>
                     </Accordion.Body>
                   </Accordion.Item>
