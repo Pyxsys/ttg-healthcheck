@@ -8,7 +8,11 @@ const { DeviceLogs, DeviceLogsSchema } = require('../models/device_logs.js')
 router.get('/', auth, async (req, res) => {
   const [query, options] = parseQuery(Object(req.query), DeviceLogsSchema)
   const results = await DeviceLogs.find({ $and: [query] }, {}, options)
-  return res.status(200).json({ Results: results })
+  const deviceLogsResponse = { Results: results }
+  if (req.query.Total) {
+    deviceLogsResponse.Total = await DeviceLogs.countDocuments(query)
+  }
+  return res.status(200).json(deviceLogsResponse)
 })
 
 // get latest device logs from a list of device Ids
