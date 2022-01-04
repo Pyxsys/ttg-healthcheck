@@ -75,7 +75,7 @@ const DeviceDetailPage = (props: any) => {
                 <Accordion defaultActiveKey="0" flush className="device-details-accordion">
                   <Accordion.Item eventKey="0">
                     <Accordion.Header>
-                      <div className="d-flex w-100 justify-content-around">Device</div>
+                      <div className="d-flex w-100">Device</div>
                     </Accordion.Header>
                     <Accordion.Body>
                       <Table className="device-details-table">
