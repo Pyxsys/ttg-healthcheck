@@ -1,5 +1,6 @@
 import React from 'react';
 
+// center text for piewheel
 const Text = ({percentage}: any) => {
   if (!percentage) {
     percentage = 0;
@@ -20,6 +21,7 @@ const Text = ({percentage}: any) => {
   );
 };
 
+// piewheel
 const Circle = ({colour, percentage}: any) => {
   const radius = 55;
   const circle = 2 * Math.PI * radius;
@@ -38,10 +40,15 @@ const Circle = ({colour, percentage}: any) => {
   );
 };
 
+// this will be used to render our piewheel with a percentage value
 const Pie = ({percentage}: any) => {
   let backgroundColour = '';
   let colour = '';
+  console.log(typeof(percentage));
   switch (true) {
+    case (percentage == 0 || isNaN(parseFloat(percentage))):
+      backgroundColour = '#3F4651';
+      break;
     case (percentage > 0 && percentage <= 40):
       backgroundColour = 'rgb(166, 187, 155)';
       colour = 'rgb(51, 153, 0)';
@@ -56,7 +63,7 @@ const Pie = ({percentage}: any) => {
       break;
   }
   return (
-    <svg width="100%" height="auto" viewBox="0 0 200 200" preserveAspectRatio="none" version="1.1" xmlns="http://www.w3.org/2000/svg">
+    <svg width="100%" height="auto" viewBox="0 0 200 200">
       <g transform={`rotate(-90 ${'100 100'})`} width="180" height="180">
         <Circle colour={backgroundColour} />
         <Circle colour={colour} percentage={percentage} />

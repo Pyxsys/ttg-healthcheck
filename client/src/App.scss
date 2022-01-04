@@ -2,8 +2,8 @@
 $primary-gray: #393f49;
 $secondary-gray: #f8f9fa;
 $tertiary-gray: #30353d;
-$fifth: #3F4651;
-$sixth: #4C535F;
+$quarternary-gray: #3F4651;
+$quinary-gray: #4C535F;
 
 $gray-100: #c2c2c2;
 $gray-200: #9b9b9b;
@@ -282,12 +282,12 @@ body {
 
 /* Color/shape of burger icon bars */
 .bm-burger-bars {
-  background: #373a47;
+  background: #dfdfdf;
 }
 
 /* Color/shape of burger icon bars on hover*/
 .bm-burger-bars-hover {
-  background: #a90000;
+  background: #e7e7e7;
 }
 
 /* Position and sizing of clickable cross button */
@@ -381,53 +381,52 @@ Note: Beware of modifying this element as it can break the animations - you shou
 
 /*-----------------------Device Details--------------------------*/
 
-#device-details-container{
+#device-details-wrapper{
   padding-top: 150px;
   background-color: $tertiary-gray;
 }
 
+#device-details-container{
+  background-color: $tertiary-gray;
+}
+
+// Accordion
+.device-details-accordion .accordion-button {
+  height: 2.4em;
+  color: white;
+  background-color: $quarternary-gray;
+  box-shadow: none;
+  font-size: 0.6em;
+}
+
+.device-details-accordion h2 {
+  background-color: $quarternary-gray;
+}
+
+// dropdown arrow colour not collapsed
+.device-details-accordion .accordion-button:not(.collapsed)::after {
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23b5b5b5'%3e%3cpath fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/%3e%3c/svg%3e");
+}
+
+// dropdown arrow colour collapsed
+.device-details-accordion .accordion-button:after {
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23b5b5b5'%3e%3cpath fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/%3e%3c/svg%3e");
+}
+
+.device-details-accordion .accordion-body {
+  border-bottom-left-radius: 9px;
+  border-bottom-right-radius: 9px;
+  background-color: $quinary-gray;
+  min-height: 360px;
+}
+
+.device-details-accordion .accordion-item {
+  border-radius: 12px;
+}
+
+// first device table
 .device-details-table > tbody > tr > td{
   color: white;
   border-bottom: 0;
   border-top: 0;
-}
-
-.accordion{
-  border-radius: 30px !important;
-  box-shadow: none;
-}
-
-.accordion-header{
-  box-shadow: none;
-}
-
-.accordion-item{
-  border-radius: 12px !important;
-}
-
-.accordion-body{
-  border-bottom-left-radius: 10px;
-  border-bottom-right-radius: 10px;
-  min-height: 360px;
-  background-color: $sixth;
-}
-
-.accordion-button {
-  font-size: 0.7em;
-  text-align: center;
-  width: 100%;
-  height: 2.2em;
-  color: white !important;
-  background-color: $fifth !important;
-  box-shadow: none !important;
-}
-
-h2{
-  color: red;
-  background-color: $fifth  !important;
-  font-size: 30px;
-}
-
-.aa{
-  justify-content: space-around;
 }
