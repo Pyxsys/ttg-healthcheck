@@ -149,6 +149,20 @@ describe('Get the latest logs from the devices', () => {
     expect(results.length).toBe(0)
   })
 
+  it('should retrieve an empty array if no Ids are passed', async () => {
+    const query = {
+      Ids: [''],
+    }
+
+    const response = await request(app)
+      .get('/api/device-logs/latest')
+      .query(query)
+      .set('Cookie', cookieSession)
+
+    expect(response.statusCode).toBe(200)
+    expect(response.body.Results.length).toBe(0)
+  })
+
   it('should throw an error if no "Ids" attribute is passed in the query', async () => {
     const query = {
       invalid: true,
