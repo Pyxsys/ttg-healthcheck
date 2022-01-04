@@ -67,17 +67,17 @@ const DeviceDetailPage = (props: any) => {
   return (
     <div id="device-details-container">
       <Navbar />
-      <div id="page-wrap" className="h-100 container pe-0 ps-0">
+      <div id="page-wrap" className="h-100 container pe-0 ps-0 overflow-hidden">
         <Row>
           <Col>
             <Row className="d-flex gx-5">
-              <Col xs={12} sm={12} md={4}>
+              <Col xs={12} sm={12} md={12} lg={4}>
                 <Accordion defaultActiveKey="0" flush>
                   <Accordion.Item eventKey="0">
                     <div className="panel-header">
                       <Accordion.Header>Device</Accordion.Header>
                     </div>
-                    <Accordion.Body className="panel-body">
+                    <Accordion.Body>
                       <Table className="device-details-table">
                         <tbody>
                           <tr>
@@ -110,23 +110,23 @@ const DeviceDetailPage = (props: any) => {
                   </Accordion.Item>
                 </Accordion>
               </Col>
-              <Col xs={12} sm={12} md={8} className="detail-page-piechart">
+              <Col xs={12} sm={12} md={12} lg={8}>
                 <Accordion defaultActiveKey="0" flush>
                   <Accordion.Item eventKey="0">
                     <div className="panel-header">
-                      <Accordion.Header>
-                        <div className="d-flex justify-content-center">
-                          <div>CPU</div>
-                          <div>MEMORY</div>
+                      <Accordion.Header id="accordion-header">
+                        <div className="d-flex aa w-100">
+                          <div className="pr-1">CPU</div>
+                          <div className="mr-2">Memory</div>
                           <div>Disk</div>
                           <div>Wifi</div>
                         </div>
                       </Accordion.Header>
                     </div>
-                    <Accordion.Body className="panel-body" >
-                      <div className="d-flex justify-content-center pt-5 pb-5">
+                    <Accordion.Body>
+                      <div className="d-flex justify-content-center pt-5 pb-1 w-100">
                         <div><Pie percentage={deviceLogsData?.cpu?.aggregatedPercentage}/></div>
-                        <div><Pie percentage={deviceLogsData?.memory?.aggregatedPercentage}/></div>
+                        <div><Pie percentage={33}/></div>
                         <div><Pie percentage={60}/></div>
                         <div><Pie percentage={90}/></div>
                       </div>
