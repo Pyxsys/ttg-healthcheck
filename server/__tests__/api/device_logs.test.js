@@ -92,6 +92,24 @@ describe('Get Device Logs from attributes', () => {
     expect(results[0].deviceId).toBe(payloadDeviceId)
     expect(results[1].deviceId).toBe(payloadDeviceId)
   })
+
+  it('should retreive the total number of DeviceLogs in the database with a limit', async () => {
+    const payloadDeviceId = mockLogPayload1.deviceId
+    const query = {
+      deviceId: payloadDeviceId,
+      Total: true,
+      lmit: 1,
+    }
+
+    const response = await request(app)
+      .get('/api/device-logs')
+      .query(query)
+      .set('Cookie', cookieSession)
+
+    const total = response.body.Total
+    expect(response.statusCode).toBe(200)
+    expect(total).toBe(2)
+  })
 })
 
 describe('Get the latest logs from the devices', () => {
