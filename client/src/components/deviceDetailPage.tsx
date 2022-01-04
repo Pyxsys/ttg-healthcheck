@@ -67,16 +67,16 @@ const DeviceDetailPage = (props: any) => {
   return (
     <div id="device-details-container">
       <Navbar />
-      <div id="page-wrap" className="h-100 container pe-0 ps-0 overflow-hidden">
+      <div id="device-details-wrapper" className="h-100 container pe-0 ps-0 overflow-hidden">
         <Row>
           <Col>
             <Row className="d-flex gx-5">
-              <Col xs={12} sm={12} md={12} lg={4}>
-                <Accordion defaultActiveKey="0" flush>
+              <Col xs={12} sm={12} md={12} lg={12} xl={4}>
+                <Accordion defaultActiveKey="0" flush className="device-details-accordion">
                   <Accordion.Item eventKey="0">
-                    <div className="panel-header">
-                      <Accordion.Header>Device</Accordion.Header>
-                    </div>
+                    <Accordion.Header>
+                      <div className="d-flex w-100 justify-content-around">Device</div>
+                    </Accordion.Header>
                     <Accordion.Body>
                       <Table className="device-details-table">
                         <tbody>
@@ -110,25 +110,26 @@ const DeviceDetailPage = (props: any) => {
                   </Accordion.Item>
                 </Accordion>
               </Col>
-              <Col xs={12} sm={12} md={12} lg={8}>
-                <Accordion defaultActiveKey="0" flush>
+              <Col xs={12} sm={12} md={12} lg={12} xl={8}>
+                <Accordion defaultActiveKey="0" flush className="device-details-accordion">
                   <Accordion.Item eventKey="0">
-                    <div className="panel-header">
-                      <Accordion.Header id="accordion-header">
-                        <div className="d-flex aa w-100">
-                          <div className="pr-1">CPU</div>
-                          <div className="mr-2">Memory</div>
-                          <div>Disk</div>
-                          <div>Wifi</div>
-                        </div>
-                      </Accordion.Header>
-                    </div>
+                    <Accordion.Header>
+                      <div className="d-flex w-100 justify-content-around">
+                        <div>CPU</div>
+                        <div>Memory</div>
+                        <div>Disk</div>
+                        <div>Wifi</div>
+                      </div>
+                    </Accordion.Header>
                     <Accordion.Body>
-                      <div className="d-flex justify-content-center pt-5 pb-1 w-100">
+                      <div className="d-flex justify-content-center pt-5 w-100">
                         <div><Pie percentage={deviceLogsData?.cpu?.aggregatedPercentage}/></div>
-                        <div><Pie percentage={33}/></div>
-                        <div><Pie percentage={60}/></div>
-                        <div><Pie percentage={90}/></div>
+                        <div><Pie percentage={deviceLogsData?.memory?.aggregatedPercentage}/></div>
+                        <div><Pie percentage={deviceLogsData?.disk?.partitions?.reduce(
+                            (sum, p) => sum + p.percent,
+                            0,
+                        ) / deviceLogsData?.disk?.partitions?.length}/></div>
+                        <div><Pie percentage={88}/></div>
                       </div>
                     </Accordion.Body>
                   </Accordion.Item>
@@ -136,41 +137,13 @@ const DeviceDetailPage = (props: any) => {
               </Col>
             </Row>
             <Row className="d-flex pt-5">
-              <Col xs={12} sm={12} md={12}>
-                <Accordion defaultActiveKey="0" flush>
+              <Col>
+                <Accordion defaultActiveKey="0" flush className="device-details-accordion">
                   <Accordion.Item eventKey="0">
-                    <div className="panel-header">
+                    <div>
                       <Accordion.Header>Device</Accordion.Header>
                     </div>
-                    <Accordion.Body className="panel-body">
-                      <Table className="device-details-table">
-                        <tbody>
-                          <tr>
-                            <td className="w-50">ID</td>
-                            <td className="w-50"><div> percentage={deviceLogsData?.cpu?.aggregatedPercentage}</div></td>
-                          </tr>
-                          <tr>
-                            <td>Name</td>
-                            <td>{deviceData?.name}</td>
-                          </tr>
-                          <tr>
-                            <td>Description</td>
-                            <td>{deviceData?.description}</td>
-                          </tr>
-                          <tr>
-                            <td>Connection Type</td>
-                            <td>{deviceData?.connectionType}</td>
-                          </tr>
-                          <tr>
-                            <td>Status</td>
-                            <td>{deviceData?.status}</td>
-                          </tr>
-                          <tr>
-                            <td>Provider</td>
-                            <td>{deviceData?.provider}</td>
-                          </tr>
-                        </tbody>
-                      </Table>
+                    <Accordion.Body>
                     </Accordion.Body>
                   </Accordion.Item>
                 </Accordion>
