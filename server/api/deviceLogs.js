@@ -21,7 +21,11 @@ router.get('/latest', auth, async (req, res) => {
 
   // If query does not have Ids attribute
   if (!query.Ids) {
-    return res.status(501).send('Server Error: must include Ids parameter')
+    if (query.Ids === undefined) {
+      return res.status(501).send('Server Error: must include Ids parameter')
+    } else {
+      return res.status(200).json({ Results: [] })
+    }
   }
 
   const idsArray = String(query.Ids).split(',')
