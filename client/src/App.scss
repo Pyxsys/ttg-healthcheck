@@ -396,7 +396,7 @@ Note: Beware of modifying this element as it can break the animations - you shou
   color: white;
   background-color: $quarternary-gray;
   box-shadow: none;
-  font-size: 0.6em;
+  font-size: 0.65em;
 }
 
 .device-details-accordion h2 {
@@ -417,7 +417,7 @@ Note: Beware of modifying this element as it can break the animations - you shou
   border-bottom-left-radius: 9px;
   border-bottom-right-radius: 9px;
   background-color: $quinary-gray;
-  min-height: 360px;
+  min-height: 340px;
 }
 
 .device-details-accordion .accordion-item {
@@ -429,4 +429,5 @@ Note: Beware of modifying this element as it can break the animations - you shou
   color: white;
   border-bottom: 0;
   border-top: 0;
+  font-size: 0.9em;
 }
