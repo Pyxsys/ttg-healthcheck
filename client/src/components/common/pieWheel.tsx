@@ -31,7 +31,7 @@ const Circle = ({colour, percentage}: any) => {
       cy={100}
       fill="transparent"
       stroke={strokePct !== circle ? colour : ''}
-      strokeWidth={'2.2rem'}
+      strokeWidth={'2.4rem'}
       strokeDasharray={circle}
       strokeDashoffset={percentage ? strokePct : 0}
     ></circle>
@@ -39,9 +39,8 @@ const Circle = ({colour, percentage}: any) => {
 };
 
 const Pie = ({percentage}: any) => {
-  let backgroundColour = 'rgb(166, 187, 155)';
-  let colour = 'rgb(51, 153, 0)';
-  console.log(typeof(percentage));
+  let backgroundColour = '';
+  let colour = '';
   switch (true) {
     case (percentage > 0 && percentage <= 40):
       backgroundColour = 'rgb(166, 187, 155)';
@@ -54,6 +53,7 @@ const Pie = ({percentage}: any) => {
     case (percentage > 75):
       backgroundColour = 'rgb(198, 166, 155)';
       colour = 'rgb(204, 51, 0)';
+      break;
   }
   return (
     <svg width="100%" height="auto" viewBox="0 0 200 200" preserveAspectRatio="none" version="1.1" xmlns="http://www.w3.org/2000/svg">
