@@ -23,7 +23,7 @@ const Text = ({percentage}: any) => {
 
 // piewheel
 const Circle = ({colour, percentage}: any) => {
-  const radius = 55;
+  const radius = 52;
   const circle = 2 * Math.PI * radius;
   const strokePct = ((100 - percentage) * circle) / 100;
   return (

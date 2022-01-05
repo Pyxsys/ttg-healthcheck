@@ -82,7 +82,7 @@ const DeviceDetailPage = (props: any) => {
                         <tbody>
                           <tr>
                             <td className="w-50">ID</td>
-                            <td className="w-50">{deviceId}</td>
+                            <td>{deviceId}</td>
                           </tr>
                           <tr>
                             <td>Name</td>
