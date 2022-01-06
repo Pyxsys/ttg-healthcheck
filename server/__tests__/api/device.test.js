@@ -72,7 +72,7 @@ describe('Retrieve a specific device given name or id', () => {
   it('should retreive the total number of devices in the database with a limit', async () => {
     const response = await request(app)
       .get('/api/device')
-      .query({ Total: true, lmit: 1 })
+      .query({ Total: true, limit: 1 })
       .set('Cookie', cookieSession)
 
     const total = response.body.Total

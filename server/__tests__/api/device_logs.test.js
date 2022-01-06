@@ -98,7 +98,7 @@ describe('Get Device Logs from attributes', () => {
     const query = {
       deviceId: payloadDeviceId,
       Total: true,
-      lmit: 1,
+      limit: 1,
     }
 
     const response = await request(app)
