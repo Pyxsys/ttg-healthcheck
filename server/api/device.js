@@ -9,14 +9,22 @@ const { parseQuery } = require('./common/filter')
 router.get('/ids', auth, async (req, res) => {
   const [query, options] = parseQuery(Object(req.query), DeviceSchema)
   const devices = await Devices.find(query, { deviceId: 1 }, options)
-  return res.status(200).json({ Results: devices.map((d) => d.deviceId) })
+  const deviceIdsResponse = { Results: devices.map((d) => d.deviceId) }
+  if (req.query.Total) {
+    deviceIdsResponse.Total = await Devices.countDocuments(query)
+  }
+  return res.status(200).json(deviceIdsResponse)
 })
 
 // get multiple devices with param options (limit, multiple attributes, orderBy, orderValue)
 router.get('/', auth, async (req, res) => {
   const [query, options] = parseQuery(Object(req.query), DeviceSchema)
   const results = await Devices.find({ $and: [query] }, {}, options)
-  return res.status(200).json({ Results: results })
+  const deviceResponse = { Results: results }
+  if (req.query.Total) {
+    deviceResponse.Total = await Devices.countDocuments(query)
+  }
+  return res.status(200).json(deviceResponse)
 })
 
 module.exports = router
