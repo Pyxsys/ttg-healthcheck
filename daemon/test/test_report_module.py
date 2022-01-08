@@ -147,7 +147,7 @@ class TestSystemReportClass(unittest.TestCase):
     def testAddingStaticCPUInfo(self):
         expected_result = ( 'baseSpeed', 'sockets', 'processors', 'cores', 'cacheSizeL1', 'cacheSizeL2', 'cacheSizeL3' )
 
-        self.test_report.add_disk_usage_info()
+        self.test_report.add_startup_cpu_info()
         section = self.test_report.get_section("_cpu")
         actual_result = tuple(section)
 
@@ -165,6 +165,11 @@ class TestSystemReportClass(unittest.TestCase):
     def testFetchingL3Cache(self):    
         actual_result = SysReport.fetch_cpu_l3_cache()
         self.assertGreaterEqual(int(actual_result), 0)
+
+    def testFetchingCPUSockets(self):
+        actual_result=SysReport.fetch_cpu_sockets()
+        self.assertGreaterEqual(actual_result,1)
+
 
 if __name__ == '__main__':
     unittest.main()

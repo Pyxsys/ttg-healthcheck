@@ -161,9 +161,9 @@ class SysReport:
 
     def add_startup_cpu_info(self):
         cpu_info=dict()
-        cpu_info['baseSpeed'] = SysReport.fetch_cpu_speed()
+        cpu_info['baseSpeed'] = psutil.cpu_freq().max
         cpu_info['sockets'] = SysReport.fetch_cpu_sockets()
-        cpu_info['processors'] = SysReport.fetch_cpu_processors()
+        cpu_info['processors'] = psutil.cpu_count(logical=True)
         cpu_info['cores'] = psutil.cpu_count(logical=False)
         cpu_info['cacheSizeL1'] = SysReport.fetch_cpu_l1_cache(cores=psutil.cpu_count(logical=False))
         cpu_info['cacheSizeL2'] = SysReport.fetch_cpu_l2_cache()
@@ -398,6 +398,24 @@ class SysReport:
 
         return int(buffer[0])
 
+    @classmethod
+    def fetch_cpu_sockets(cls):
+        if psutil.WINDOWS:
+            command='powershell.exe -Command "@(Get-CimInstance -ClassName Win32_Processor).Count"'
+            pattern='(\d+)'
+
+        elif psutil.LINUX:
+            command='lscpu | egrep Socket'
+            pattern='(?:Socket\(s\):\s+(\d+))'
+
+        else:
+            return 0
+
+        extract=os.popen(command)
+        buffer=re.findall(pattern, extract.read(), re.MULTILINE)
+        extract.close()
+
+        return int(buffer[0])
 
 def main(config, mode):
     runner=Runner(config)
