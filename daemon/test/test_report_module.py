@@ -148,7 +148,7 @@ class TestSystemReportClass(unittest.TestCase):
         expected_result = ( 'baseSpeed', 'sockets', 'processors', 'cores', 'cacheSizeL1', 'cacheSizeL2', 'cacheSizeL3' )
 
         self.test_report.add_startup_cpu_info()
-        section = self.test_report.get_section("_cpu")
+        section = self.test_report.get_section("cpu_")
         actual_result = tuple(section)
 
         self.assertTupleEqual(actual_result, expected_result)

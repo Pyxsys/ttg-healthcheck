@@ -170,7 +170,7 @@ class SysReport:
         cpu_info['cacheSizeL2'] = SysReport.fetch_cpu_l2_cache()
         cpu_info['cacheSizeL3'] = SysReport.fetch_cpu_l3_cache()
 
-        self.set_section("_cpu", cpu_info)
+        self.set_section("cpu_", cpu_info)
         
     @classmethod
     def fetch_total_memory(cls):
