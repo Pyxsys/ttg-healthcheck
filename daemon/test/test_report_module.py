@@ -9,6 +9,16 @@ from psutil._common import scpufreq
 sys.path.append('../')
 from daemon.src.system_report import SysReport
 
+
+#Change return value for psutil.cpu_freq() incase of linux VM
+#See https://github.com/giampaolo/psutil/pull/1493
+cpufreqExistsAndHasNoContents =  len(os.listdir('/sys/devices/system/cpu/cpufreq/')) == 0 if os.path.isdir('/sys/devices/system/cpu/cpufreq/') else False
+cpu0ExistsAndHasCpuFreq = os.path.exists('/sys/devices/system/cpu/cpu0/cpufreq') if os.path.isdir('/sys/devices/system/cpu0') else False
+
+if psutil.LINUX & cpufreqExistsAndHasNoContents & (not cpu0ExistsAndHasCpuFreq):
+    psutil.cpu_freq = MagicMock(return_value=scpufreq(current=1, min=1, max=1))
+#endof Linux VM check
+
 class TestSystemReportClass(unittest.TestCase):
     mock_dictionary={
         "names": {
@@ -18,19 +28,9 @@ class TestSystemReportClass(unittest.TestCase):
         }
     }
 
-    @classmethod
-    def setUpClass(cls):
-        #Change return value for psutil.cpu_freq() incase of linux VM
-        #See https://github.com/giampaolo/psutil/pull/1493
-        cpufreqExistsAndHasContents =  len(os.listdir('/sys/devices/system/cpu/cpufreq/')) == 0 if os.path.isdir('/sys/devices/system/cpu/cpufreq/') else False
-        cpu0ExistsAndHasCpuFreq = os.path.exists('/sys/devices/system/cpu/cpu0/cpufreq') if os.path.isdir('/sys/devices/system/cpu0') else False
-
-        if psutil.LINUX & (not cpufreqExistsAndHasContents) & (not cpu0ExistsAndHasCpuFreq):
-            psutil.cpu_freq = MagicMock(return_value=scpufreq(current=1, min=1, max=1)) 
-
     def setUp(self):
         self.test_report=SysReport()
-        
+
 
 
 
@@ -61,7 +61,7 @@ class TestSystemReportClass(unittest.TestCase):
     def testAddingProcessesToReport(self):
         expected_result='python.exe'
         self.test_report.add_system_process_info()
-        
+
         process_list=self.test_report.get_section("processes")
         self.assertTrue(x.name == 'python.exe' for x in process_list)
 
@@ -77,7 +77,7 @@ class TestSystemReportClass(unittest.TestCase):
 
     def testAddingStaticMemoryInfoToReport(self):
         expected_result = ('maxSize', 'formFactor')
-        
+
         self.test_report.add_startup_memory_info()
         section=self.test_report.get_section("memory_")
         actual_result = tuple(section)
@@ -86,7 +86,7 @@ class TestSystemReportClass(unittest.TestCase):
 
     def testAddingMemoryInfoToReport(self):
         expected_result = ('used', 'free', 'percent', 'available')
-        
+
         self.test_report.add_memory_usage_info()
         section=self.test_report.get_section("memory")
         actual_result = tuple(section)
@@ -110,11 +110,11 @@ class TestSystemReportClass(unittest.TestCase):
         actual_result = tuple(section)
 
         self.assertTupleEqual(actual_result, expected_result)
-        
+
     def testFetchingPhysicalDiskList(self):
         disk_sub_categories = ('model', 'size', 'media')
         actual_list = SysReport.fetch_physical_disks()
-        
+
         for x in actual_list:
             actual_result=tuple(x)
             self.assertTupleEqual(actual_result, disk_sub_categories)
@@ -139,7 +139,7 @@ class TestSystemReportClass(unittest.TestCase):
         disk_io = SysReport.fetch_physical_disk_io()
         for item in disk_io:
             attribute_list = disk_io[item].keys()
-            
+
             for attribute in expected_attributes:
                 if attribute not in attribute_list:
                     missing_attributes.append(attribute)
@@ -152,12 +152,12 @@ class TestSystemReportClass(unittest.TestCase):
         partitions = SysReport.fetch_disk_partition_status()
         for item in partitions:
             attribute_list = partitions[item].keys()
-            
+
             for attribute in expected_attributes:
                 if attribute not in attribute_list:
                     missing_attributes.append(attribute)
             self.assertEqual(len(missing_attributes), 0, msg=missing_attributes)
-        
+
     def testAddingStaticCPUInfo(self):
         expected_result = ( 'baseSpeed', 'sockets', 'processors', 'cores', 'cacheSizeL1', 'cacheSizeL2', 'cacheSizeL3' )
 
@@ -174,8 +174,8 @@ class TestSystemReportClass(unittest.TestCase):
     def testFetchingL2Cache(self):
         actual_result = SysReport.fetch_cpu_l2_cache()
         self.assertGreaterEqual(int(actual_result), 0)
-        
-    def testFetchingL3Cache(self):    
+
+    def testFetchingL3Cache(self):
         actual_result = SysReport.fetch_cpu_l3_cache()
         self.assertGreaterEqual(int(actual_result), 0)
 
