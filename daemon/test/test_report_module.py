@@ -156,7 +156,6 @@ class TestSystemReportClass(unittest.TestCase):
     def testFetchingL1Cache(self):
         actual_result = SysReport.fetch_cpu_l1_cache(cores=psutil.cpu_count(logical=False))
         self.assertGreaterEqual(int(actual_result), 0)
-        print(actual_result)
 
     def testFetchingL2Cache(self):
         actual_result = SysReport.fetch_cpu_l2_cache()
