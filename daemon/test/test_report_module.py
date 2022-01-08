@@ -1,8 +1,9 @@
 from datetime import datetime
-import sys
+import sys, os
 import psutil
 import unittest
-from unittest.case import expectedFailure
+from unittest.mock import MagicMock
+from psutil._common import scpufreq
 
 # Include src directory for imports
 sys.path.append('../')
@@ -17,8 +18,21 @@ class TestSystemReportClass(unittest.TestCase):
         }
     }
 
+    @classmethod
+    def setUpClass(cls):
+        #Change return value for psutil.cpu_freq() incase of linux VM
+        #See https://github.com/giampaolo/psutil/pull/1493
+        cpufreqExistsAndHasContents =  len(os.listdir('/sys/devices/system/cpu/cpufreq/')) == 0 if os.path.isdir('/sys/devices/system/cpu/cpufreq/') else False
+        cpu0ExistsAndHasCpuFreq = os.path.exists('/sys/devices/system/cpu/cpu0/cpufreq') if os.path.isdir('/sys/devices/system/cpu0') else False
+
+        if psutil.LINUX & (not cpufreqExistsAndHasContents) & (not cpu0ExistsAndHasCpuFreq):
+            psutil.cpu_freq = MagicMock(return_value=scpufreq(current=1, min=1, max=1)) 
+
     def setUp(self):
         self.test_report=SysReport()
+        
+
+
 
     def tearDown(self):
         del self.test_report
