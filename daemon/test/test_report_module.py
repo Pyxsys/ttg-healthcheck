@@ -1,5 +1,6 @@
 from datetime import datetime
 import sys
+import psutil
 import unittest
 from unittest.case import expectedFailure
 
@@ -143,6 +144,27 @@ class TestSystemReportClass(unittest.TestCase):
                     missing_attributes.append(attribute)
             self.assertEqual(len(missing_attributes), 0, msg=missing_attributes)
         
+    def testAddingStaticCPUInfo(self):
+        expected_result = ( 'baseSpeed', 'sockets', 'processors', 'cores', 'cacheSizeL1', 'cacheSizeL2', 'cacheSizeL3' )
+
+        self.test_report.add_disk_usage_info()
+        section = self.test_report.get_section("_cpu")
+        actual_result = tuple(section)
+
+        self.assertTupleEqual(actual_result, expected_result)
+
+    def testFetchingL1Cache(self):
+        actual_result = SysReport.fetch_cpu_l1_cache(cores=psutil.cpu_count(logical=False))
+        self.assertGreaterEqual(int(actual_result), 0)
+        print(actual_result)
+
+    def testFetchingL2Cache(self):
+        actual_result = SysReport.fetch_cpu_l2_cache()
+        self.assertGreaterEqual(int(actual_result), 0)
+        
+    def testFetchingL3Cache(self):    
+        actual_result = SysReport.fetch_cpu_l3_cache()
+        self.assertGreaterEqual(int(actual_result), 0)
 
 if __name__ == '__main__':
     unittest.main()
