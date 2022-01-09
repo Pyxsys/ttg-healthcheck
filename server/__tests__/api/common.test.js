@@ -120,6 +120,15 @@ const mockStartupPayload = {
       },
     ],
   },
+  cpu_: {
+    baseSpeed: 3893.0,
+    cacheSizeL1: 512,
+    cacheSizeL2: 4096,
+    cacheSizeL3: 32768,
+    cores: 8,
+    processors: 16,
+    sockets: 1,
+  },
 }
 
 const mockLogPayload1 = {
