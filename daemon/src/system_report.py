@@ -68,6 +68,9 @@ class Runner:
         self.sleep()
 
 class SysReport:
+    # Constants
+    _R_DIGIT_PATTERN = '(\d+)'
+
     # Initializes instance attributes.
     def __init__(self):
         self.report_message = {}
@@ -338,7 +341,7 @@ class SysReport:
 
         if psutil.WINDOWS:
             command='wmic os get osarchitecture | findstr /r "[0-9][0-9]"'
-            pattern='(\d+)'
+            pattern=cls._R_DIGIT_PATTERN
 
             if cores == None:
                 cores = 1   #minimum 1 core must be given for windows OS
@@ -365,7 +368,7 @@ class SysReport:
     def fetch_cpu_l2_cache(cls):
         if psutil.WINDOWS:
             command='wmic cpu get L2CacheSize | findstr /r "[0-9][0-9]"'
-            pattern='(\d+)'
+            pattern=cls._R_DIGIT_PATTERN
 
         elif psutil.LINUX:
             command='getconf -a | grep CACHE_SIZE'
@@ -384,7 +387,7 @@ class SysReport:
     def fetch_cpu_l3_cache(cls):
         if psutil.WINDOWS:
             command='wmic cpu get L3CacheSize | findstr /r "[0-9][0-9]"'
-            pattern='(\d+)'
+            pattern=cls._R_DIGIT_PATTERN
 
         elif psutil.LINUX:
             command='getconf -a | grep CACHE_SIZE'
@@ -403,7 +406,7 @@ class SysReport:
     def fetch_cpu_sockets(cls):
         if psutil.WINDOWS:
             command='powershell.exe -Command "@(Get-CimInstance -ClassName Win32_Processor).Count"'
-            pattern='(\d+)'
+            pattern=cls._R_DIGIT_PATTERN
 
         elif psutil.LINUX:
             command='lscpu | egrep Socket'
