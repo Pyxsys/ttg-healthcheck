@@ -92,6 +92,24 @@ describe('Get Device Logs from attributes', () => {
     expect(results[0].deviceId).toBe(payloadDeviceId)
     expect(results[1].deviceId).toBe(payloadDeviceId)
   })
+
+  it('should retreive the total number of DeviceLogs in the database with a limit', async () => {
+    const payloadDeviceId = mockLogPayload1.deviceId
+    const query = {
+      deviceId: payloadDeviceId,
+      Total: true,
+      limit: 1,
+    }
+
+    const response = await request(app)
+      .get('/api/device-logs')
+      .query(query)
+      .set('Cookie', cookieSession)
+
+    const total = response.body.Total
+    expect(response.statusCode).toBe(200)
+    expect(total).toBe(2)
+  })
 })
 
 describe('Get the latest logs from the devices', () => {
@@ -129,6 +147,20 @@ describe('Get the latest logs from the devices', () => {
     const results = response.body.Results
     expect(response.statusCode).toBe(200)
     expect(results.length).toBe(0)
+  })
+
+  it('should retrieve an empty array if no Ids are passed', async () => {
+    const query = {
+      Ids: [''],
+    }
+
+    const response = await request(app)
+      .get('/api/device-logs/latest')
+      .query(query)
+      .set('Cookie', cookieSession)
+
+    expect(response.statusCode).toBe(200)
+    expect(response.body.Results.length).toBe(0)
   })
 
   it('should throw an error if no "Ids" attribute is passed in the query', async () => {
