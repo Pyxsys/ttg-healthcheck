@@ -8,7 +8,11 @@ const { DeviceLogs, DeviceLogsSchema } = require('../models/device_logs.js')
 router.get('/', auth, async (req, res) => {
   const [query, options] = parseQuery(Object(req.query), DeviceLogsSchema)
   const results = await DeviceLogs.find({ $and: [query] }, {}, options)
-  return res.status(200).json({ Results: results })
+  const deviceLogsResponse = { Results: results }
+  if (req.query.Total) {
+    deviceLogsResponse.Total = await DeviceLogs.countDocuments(query)
+  }
+  return res.status(200).json(deviceLogsResponse)
 })
 
 // get latest device logs from a list of device Ids
@@ -17,7 +21,11 @@ router.get('/latest', auth, async (req, res) => {
 
   // If query does not have Ids attribute
   if (!query.Ids) {
-    return res.status(501).send('Server Error: must include Ids parameter')
+    if (query.Ids === undefined) {
+      return res.status(501).send('Server Error: must include Ids parameter')
+    } else {
+      return res.status(200).json({ Results: [] })
+    }
   }
 
   const idsArray = String(query.Ids).split(',')
