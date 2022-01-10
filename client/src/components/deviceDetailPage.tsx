@@ -1,7 +1,7 @@
 // 3rd Party
 import React, {useState, useEffect} from 'react';
 import axios from 'axios';
-import {Col, Row, Table, Accordion} from 'react-bootstrap';
+import {Col, Row, Table, Accordion, Tabs, Tab} from 'react-bootstrap';
 
 // Custom
 import Navbar from './Navbar';
@@ -67,12 +67,12 @@ const DeviceDetailPage = (props: any) => {
   return (
     <div id="device-details-container">
       <Navbar />
-      <div id="device-details-wrapper" className="h-100 container pe-0 ps-0 overflow-hidden">
+      <div id="device-details-wrapper" className="h-100 container pe-0 ps-0">
         <Row>
           <Col>
-            <Row className="d-flex gx-5">
-              <Col xs={12} sm={12} md={12} lg={12} xl={4}>
-                <Accordion defaultActiveKey="0" flush className="device-details-accordion">
+            <Row className="gx-5">
+              <Col xs={12} sm={12} md={12} lg={12} xl={4} className="device-details-accordion">
+                <Accordion defaultActiveKey="0" flush>
                   <Accordion.Item eventKey="0">
                     <Accordion.Header>
                       <div className="d-flex w-100">Device</div>
@@ -110,8 +110,8 @@ const DeviceDetailPage = (props: any) => {
                   </Accordion.Item>
                 </Accordion>
               </Col>
-              <Col xs={12} sm={12} md={12} lg={12} xl={8}>
-                <Accordion defaultActiveKey="0" flush className="device-details-accordion">
+              <Col xs={12} sm={12} md={12} lg={12} xl={8} className="device-details-accordion">
+                <Accordion defaultActiveKey="0" flush>
                   <Accordion.Item eventKey="0">
                     <Accordion.Header>
                       <div className="d-flex w-100 justify-content-around">
@@ -136,17 +136,25 @@ const DeviceDetailPage = (props: any) => {
                 </Accordion>
               </Col>
             </Row>
-            <Row className="d-flex pt-5">
-              <Col>
-                <Accordion defaultActiveKey="0" flush className="device-details-accordion">
-                  <Accordion.Item eventKey="0">
-                    <div>
-                      <Accordion.Header>Device</Accordion.Header>
-                    </div>
-                    <Accordion.Body>
-                    </Accordion.Body>
-                  </Accordion.Item>
-                </Accordion>
+            <Row className="pt-5 pb-5">
+              <Col className="device-details-tabs">
+                <Tabs defaultActiveKey="cpu">
+                  <Tab eventKey="cpu" title="CPU">
+                    <div className="test"></div>
+                  </Tab>
+                  <Tab eventKey="memory" title="Memory">
+                    <div className="test"></div>
+                  </Tab>
+                  <Tab eventKey="disk" title="Disk">
+                    <div className="test"></div>
+                  </Tab>
+                  <Tab eventKey="wifi" title="Wifi">
+                  </Tab>
+                  <Tab eventKey="hardware" title="Hardware">
+                  </Tab>
+                  <Tab eventKey="processes" title="Processes">
+                  </Tab>
+                </Tabs>
               </Col>
             </Row>
           </Col>

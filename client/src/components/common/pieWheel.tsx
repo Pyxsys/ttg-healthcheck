@@ -66,7 +66,7 @@ const wheelColor = (percentage: number) => {
     colour = 'rgb(204, 51, 0)';
   }
   return [backgroundColour, colour];
-}
+};
 
 // import to create our piewheel with a percentage value
 const Pie = ({percentage}: PieWheel) => {
