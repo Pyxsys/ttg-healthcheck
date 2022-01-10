@@ -233,7 +233,6 @@ body {
   -webkit-box-shadow: none !important;
 }
 
-// 
 .home-content .input-group-text {
   border: none !important;
 }
@@ -383,15 +382,17 @@ Note: Beware of modifying this element as it can break the animations - you shou
 /*-----------------------Device Details--------------------------*/
 
 #device-details-wrapper{
-  padding-top: 150px;
+  padding: 120px;
   background-color: $tertiary-gray;
 }
 
 #device-details-container{
   background-color: $tertiary-gray;
+  height: 100%;
+  overflow-x: hidden;
 }
 
-// Accordion
+// accordion top bar
 .device-details-accordion .accordion-button {
   height: 2.4em;
   color: white;
@@ -400,6 +401,7 @@ Note: Beware of modifying this element as it can break the animations - you shou
   font-size: 0.65em;
 }
 
+// h2 inside top bar
 .device-details-accordion h2 {
   background-color: $quarternary-gray;
 }
@@ -414,6 +416,7 @@ Note: Beware of modifying this element as it can break the animations - you shou
   background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23b5b5b5'%3e%3cpath fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/%3e%3c/svg%3e");
 }
 
+// accordion body
 .device-details-accordion .accordion-body {
   border-bottom-left-radius: 9px;
   border-bottom-right-radius: 9px;
@@ -422,6 +425,7 @@ Note: Beware of modifying this element as it can break the animations - you shou
   padding: 15px;
 }
 
+// accordion item
 .device-details-accordion .accordion-item {
   border-radius: 12px;
 }
@@ -432,4 +436,44 @@ Note: Beware of modifying this element as it can break the animations - you shou
   border-bottom: 0;
   border-top: 0;
   font-size: 0.85em;
+}
+
+// tab bar
+.device-details-tabs .nav-tabs {
+  background-color: $quarternary-gray;
+  border-bottom: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  margin: 0px;
+}
+
+// tab nav link items
+.device-details-tabs .nav-tabs .nav-item .nav-link {
+  padding-right: 25px;
+  padding-left: 25px;
+  font-size: 1.1em;
+  background-color: none;
+  color: rgb(158, 158, 158);
+  &:hover{
+    border-color: $quarternary-gray
+  }
+}
+
+// alter css when nav-link tabs are active
+.device-details-tabs .nav-tabs .nav-item .nav-link.active {
+  color: #ffffff;
+  background-color: $quarternary-gray;
+  border-color: $quarternary-gray
+}
+
+// test content div for a tab 
+.test {
+  border-bottom-left-radius: 9px;
+  border-bottom-right-radius: 9px;
+  min-height: 500px;
+  background-color: $quinary-gray;
 }
