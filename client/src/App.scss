@@ -391,7 +391,7 @@ Note: Beware of modifying this element as it can break the animations - you shou
 /*-----------------------Device Details--------------------------*/
 
 #device-details-wrapper{
-  padding: 120px;
+  padding-top: 100px;
   background-color: $tertiary-gray;
 }
 
@@ -399,6 +399,38 @@ Note: Beware of modifying this element as it can break the animations - you shou
   background-color: $tertiary-gray;
   height: 100%;
   overflow-x: hidden;
+}
+
+// first device table
+.device-details-table > tbody > tr > td{
+  color: white;
+  border-bottom: 0;
+  border-top: 0;
+  font-size: 0.85em;
+}
+
+// dark device table
+.device-details-table-dark {
+  width: 80%;
+}
+
+// used to float td in table to the right
+.float-right {
+  float: right;
+}
+
+//----------------- ACCORDIONS
+
+// border-radius button (in front of header)
+.device-details-accordion .accordion-item .accordion-button{
+   border-top-left-radius: 7px;
+  border-top-right-radius: 7px;
+}
+
+// border-radius header
+.device-details-accordion .accordion-header {
+   border-top-left-radius: 7px;
+  border-top-right-radius: 7px;
 }
 
 // accordion top bar
@@ -427,25 +459,36 @@ Note: Beware of modifying this element as it can break the animations - you shou
 
 // accordion body
 .device-details-accordion .accordion-body {
-  border-bottom-left-radius: 9px;
-  border-bottom-right-radius: 9px;
+  border-bottom-left-radius: 7px;
+  border-bottom-right-radius: 7px;
   background-color: $quinary-gray;
-  min-height: 330px;
-  padding: 15px;
+  font-size: 0.95em;
+  min-height: 320px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 // accordion item
 .device-details-accordion .accordion-item {
   border-radius: 12px;
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
 }
 
-// first device table
-.device-details-table > tbody > tr > td{
-  color: white;
-  border-bottom: 0;
-  border-top: 0;
-  font-size: 0.85em;
+// accordion body darker version
+.dark-accordion .accordion-body {
+  background-color: #393F49;
+  min-height: 250px;
 }
+
+// accordion button darker version
+.dark-accordion .accordion-button {
+  font-size: 0.50em;
+  height: 3.4em;
+}
+
+//----------------- TABS
 
 // tab bar
 .device-details-tabs .nav-tabs {
@@ -455,16 +498,18 @@ Note: Beware of modifying this element as it can break the animations - you shou
   justify-content: center;
   align-items: center;
   flex-wrap: wrap;
-  padding-top: 4px;
-  padding-bottom: 4px;
+  padding-top: 7px;
+  padding-bottom: 7px;
   margin: 0px;
+  border-top-left-radius: 7px;
+  border-top-right-radius: 7px;
 }
 
 // tab nav link items
 .device-details-tabs .nav-tabs .nav-item .nav-link {
   padding-right: 25px;
   padding-left: 25px;
-  font-size: 1.1em;
+  font-size: 1em;
   background-color: none;
   color: rgb(158, 158, 158);
   &:hover{
@@ -479,10 +524,9 @@ Note: Beware of modifying this element as it can break the animations - you shou
   border-color: $quarternary-gray
 }
 
-// test content div for a tab 
-.test {
-  border-bottom-left-radius: 9px;
-  border-bottom-right-radius: 9px;
-  min-height: 500px;
+// background div for a tab 
+.tab-body {
+  border-bottom-left-radius: 7px;
+  border-bottom-right-radius: 7px;
   background-color: $quinary-gray;
 }
