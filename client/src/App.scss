@@ -30,6 +30,15 @@ body {
   width: 100%;
 }
 
+@for $i from 1 through 10 {
+  .h-#{$i*10} {
+    height: $i*10%;
+  }
+  .w-#{$i*10} {
+    width: $i*10%;
+  }
+}
+
 /*-----------------------Login/Signup--------------------------*/
 
 // Custom scrollbar only for computers
