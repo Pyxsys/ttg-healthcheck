@@ -8,6 +8,8 @@ import Navbar from './Navbar';
 import {Device, DeviceLog, IResponse} from '../types/queries';
 import {useRealTimeService} from '../context/realTimeContext';
 import Pie from './common/pieWheel';
+import CpuUsageWidget from './device-detail-widgets/cpuUsage';
+import CpuAdditionalWidget from './device-detail-widgets/cpuAdditional';
 
 const DeviceDetailPage = (props: any) => {
   const deviceId: string = props.location.state.id;
@@ -140,7 +142,14 @@ const DeviceDetailPage = (props: any) => {
               <Col className="device-details-tabs">
                 <Tabs defaultActiveKey="cpu">
                   <Tab eventKey="cpu" title="CPU">
-                    <div className="test"></div>
+                    <div className="test d-flex justify-content-around py-4">
+                      <div className="px-2 w-40">
+                        <CpuUsageWidget deviceDynamic={deviceLogsData}></CpuUsageWidget>
+                      </div>
+                      <div className="px-2 w-40">
+                        <CpuAdditionalWidget deviceStatic={deviceData}></CpuAdditionalWidget>
+                      </div>
+                    </div>
                   </Tab>
                   <Tab eventKey="memory" title="Memory">
                     <div className="test"></div>
