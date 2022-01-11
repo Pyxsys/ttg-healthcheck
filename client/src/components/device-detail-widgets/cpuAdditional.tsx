@@ -9,30 +9,30 @@ const CpuAdditionalWidget = (props: any) => {
   const deviceStatic: Device = props.deviceStatic;
 
   return (
-    <Col className="device-details-accordion">
+    <Col className="device-details-accordion dark-accordion pt-3 pb-3">
       <Accordion defaultActiveKey="0" flush>
         <Accordion.Item eventKey="0">
           <Accordion.Header>
-            <div className="d-flex w-100">Additional CPU Information</div>
+            <div className="d-flex w-100 justify-content-around">Additional CPU Information</div>
           </Accordion.Header>
           <Accordion.Body>
-            <Table className="device-details-table">
+            <Table className="device-details-table device-details-table-dark">
               <tbody>
                 <tr className="border-bottom">
                   <td>Base Speed</td>
-                  <td>{deviceStatic?.cpu?.baseSpeed || 'N/A'}</td>
+                  <td className="float-right">{deviceStatic?.cpu?.baseSpeed || 'N/A'}</td>
                 </tr>
                 <tr className="border-bottom">
                   <td className="w-50">Number Of Cores</td>
-                  <td>{deviceStatic?.cpu?.cores || 'N/A'}</td>
+                  <td className="float-right">{deviceStatic?.cpu?.cores || 'N/A'}</td>
                 </tr>
                 <tr className="border-bottom">
                   <td>Number Of Processors</td>
-                  <td>{deviceStatic?.cpu?.processors || 'N/A'}</td>
+                  <td className="float-right">{deviceStatic?.cpu?.processors || 'N/A'}</td>
                 </tr>
                 <tr className="border-bottom">
                   <td>Number Of Scokets</td>
-                  <td>{deviceStatic?.cpu?.sockets || 'N/A'}</td>
+                  <td className="float-right">{deviceStatic?.cpu?.sockets || 'N/A'}</td>
                 </tr>
                 {
                   deviceStatic?.cpu?.cacheSizeL1 ?

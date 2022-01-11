@@ -77,7 +77,7 @@ const DeviceDetailPage = (props: any) => {
                 <Accordion defaultActiveKey="0" flush>
                   <Accordion.Item eventKey="0">
                     <Accordion.Header>
-                      <div className="d-flex w-100">Device</div>
+                      <div className="d-flex w-100 justify-content-around">Device</div>
                     </Accordion.Header>
                     <Accordion.Body>
                       <Table className="device-details-table">
@@ -124,7 +124,7 @@ const DeviceDetailPage = (props: any) => {
                       </div>
                     </Accordion.Header>
                     <Accordion.Body>
-                      <div className="d-flex justify-content-center pt-5 w-100">
+                      <div className="d-flex justify-content-center">
                         <div><Pie percentage={deviceLogsData?.cpu?.aggregatedPercentage}/></div>
                         <div><Pie percentage={deviceLogsData?.memory?.aggregatedPercentage}/></div>
                         <div><Pie percentage={deviceLogsData?.disk?.partitions?.reduce(
@@ -142,20 +142,20 @@ const DeviceDetailPage = (props: any) => {
               <Col className="device-details-tabs">
                 <Tabs defaultActiveKey="cpu">
                   <Tab eventKey="cpu" title="CPU">
-                    <div className="test d-flex justify-content-around py-4">
-                      <div className="px-2 w-40">
+                    <div className="tab-body d-flex justify-content-around py-4">
+                      <div className="px-1 w-40">
                         <CpuUsageWidget deviceDynamic={deviceLogsData}></CpuUsageWidget>
                       </div>
-                      <div className="px-2 w-40">
+                      <div className="px-1 w-40">
                         <CpuAdditionalWidget deviceStatic={deviceData}></CpuAdditionalWidget>
                       </div>
                     </div>
                   </Tab>
                   <Tab eventKey="memory" title="Memory">
-                    <div className="test"></div>
+                    <div className="tab-body"></div>
                   </Tab>
                   <Tab eventKey="disk" title="Disk">
-                    <div className="test"></div>
+                    <div className="tab-body"></div>
                   </Tab>
                   <Tab eventKey="wifi" title="Wifi">
                   </Tab>
