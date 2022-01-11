@@ -53,6 +53,13 @@ describe('Test Device formatters', () => {
     expect(doc.memory.formFactor[0]).toBe(
       mockStartupPayload.memory_.formFactor[0]
     )
+    expect(doc.cpu.baseSpeed).toBe(mockStartupPayload.cpu_.baseSpeed)
+    expect(doc.cpu.cacheSizeL1).toBe(mockStartupPayload.cpu_.cacheSizeL1)
+    expect(doc.cpu.cacheSizeL2).toBe(mockStartupPayload.cpu_.cacheSizeL2)
+    expect(doc.cpu.cacheSizeL3).toBe(mockStartupPayload.cpu_.cacheSizeL3)
+    expect(doc.cpu.cores).toBe(mockStartupPayload.cpu_.cores)
+    expect(doc.cpu.processors).toBe(mockStartupPayload.cpu_.processors)
+    expect(doc.cpu.sockets).toBe(mockStartupPayload.cpu_.sockets)
   })
 })
 
