@@ -143,10 +143,10 @@ const DeviceDetailPage = (props: any) => {
                 <Tabs defaultActiveKey="cpu">
                   <Tab eventKey="cpu" title="CPU">
                     <div className="tab-body d-flex justify-content-around py-4">
-                      <div className="px-1 w-40">
+                      <div className="px-5 w-100">
                         <CpuUsageWidget deviceDynamic={deviceLogsData}></CpuUsageWidget>
                       </div>
-                      <div className="px-1 w-40">
+                      <div className="px-5 w-100">
                         <CpuAdditionalWidget deviceStatic={deviceData}></CpuAdditionalWidget>
                       </div>
                     </div>
