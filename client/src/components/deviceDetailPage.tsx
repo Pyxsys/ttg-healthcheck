@@ -10,6 +10,7 @@ import {useRealTimeService} from '../context/realTimeContext';
 import Pie from './common/pieWheel';
 import CpuUsageWidget from './device-detail-widgets/cpuUsage';
 import CpuAdditionalWidget from './device-detail-widgets/cpuAdditional';
+import SignalStrength from './common/signalStrength';
 
 const DeviceDetailPage = (props: any) => {
   const deviceId: string = props.location.state.id;
@@ -166,7 +167,7 @@ const DeviceDetailPage = (props: any) => {
                           />
                         </div>
                         <div>
-                          <Pie percentage={88} />
+                          <SignalStrength level={Number(deviceLogsData?.wifi?.signalStrength)} showText={true} />
                         </div>
                       </div>
                     </Accordion.Body>
