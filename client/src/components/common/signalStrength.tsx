@@ -1,14 +1,28 @@
 import React from 'react';
+import styled, {keyframes} from 'styled-components';
 
 interface IBarInput {
   colour: string
   size: number
+  delay: number
 }
 
 interface ISignalStrengthInput {
   level: number
   showText?: boolean
 }
+
+/**
+ * Returns the keyframes to fill in colour based on a given delay.
+ * @param {string} colour the hex or RGB value to fill
+ * @param {number} delay the delay in percentage
+ * @return {Keyframe} the keyframes to fill in colour
+ */
+const fillColorDelay = (colour: string, delay: number) => keyframes`
+  0% { fill: #C4C4C4; }
+  ${delay}% { fill: #C4C4C4; }
+  100% { fill: ${colour}; }
+`;
 
 /**
  * Returns the bar colour depending on the level and index of the bar.
@@ -78,20 +92,15 @@ const Text = ({text}: {text: string}) => {
 
 /**
  * Creates a vertical rectangle with the given size and colour.
- * @param {string} colour
- * @param {number} size
+ * @param {IBarInput} bar the input attributes associated with the Bar Component
  * @return {JSX.Element} a JSX Element of a vertical bar
  */
-const Bar = ({colour, size}: IBarInput) => {
-  const width = 20;
-  const height = size;
-  return (
-    <rect
-      width={width}
-      height={height}
-      fill={colour} />
-  );
-};
+const Bar = styled.rect.attrs((bar: IBarInput) => bar)`
+  width: 20px;
+  height: ${(bar) => bar.size}px;
+  fill: ${(bar) => bar.colour};
+  animation: ${(bar) => fillColorDelay(bar.colour, bar.delay)} 0.5s linear;
+`;
 
 /**
  * Creates a slanted horizontal rectangle.
@@ -119,16 +128,13 @@ const SignalStrength = ({level, showText}: ISignalStrengthInput) => {
 
   return (
     <svg width="100%" height="auto" viewBox="-40 0 175 125">
-      <g>
+      {[0, 1, 2, 3].map((index) =>
+        <g key={index} transform={`translate(${index * 25}, ${60 - (index * 20)})`}>
+          <Bar colour={barColour(level, index)} size={40 + (index * 20)} delay={index * 25} />
+        </g>,
+      )}
 
-        {[0, 1, 2, 3].map((index) =>
-          <g key={index} transform={`translate(${index * 25}, ${60 - (index * 20)})`}>
-            <Bar colour={barColour(level, index)} size={40 + (index * 20)} />
-          </g>,
-        )}
-
-        {text ? <Text text={showText ? text : ''}/> : <CrossBar />}
-      </g>
+      {text ? <Text text={showText ? text : ''}/> : <CrossBar />}
     </svg>
   );
 };
