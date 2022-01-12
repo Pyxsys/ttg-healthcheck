@@ -4,7 +4,8 @@ import styled, {keyframes} from 'styled-components';
 interface PieWheel {
   percentage: number,
   colour?: string,
-  backgroundColour?: string
+  backgroundColour?: string,
+  text?: boolean
 }
 
 // center text for piewheel
@@ -29,7 +30,7 @@ const Text = ({percentage}: PieWheel) => {
 };
 
 // keyframe animation for fill
-const rotate360 = (strokePct: number) => keyframes`
+const fillColour = (strokePct: number) => keyframes`
   from { stroke-dashoffset: 310; }
   to { stroke-dashoffset: ${strokePct}; }
 `;
@@ -48,7 +49,7 @@ const Circle = styled.circle.attrs((props: {colour: string, percentage: number, 
   stroke: ${(props) => strokePct(props.percentage) !== (2 * Math.PI * 52) ? (props) => props.colour : ''};
   stroke-width: 2.4rem;
   stroke-dasharray: ${(2 * Math.PI * 52)};
-  animation: ${(props) => props.animate ? (props) => rotate360(strokePct(props.percentage)) : ''} 0.4s linear;
+  animation: ${(props) => props.animate ? (props) => fillColour(strokePct(props.percentage)) : ''} 0.4s linear;
 `;
 
 // wheel colour depending on percentage
@@ -74,7 +75,7 @@ const wheelColor = (percentage: number) => {
 };
 
 // import to create our piewheel with a percentage value
-const Pie = ({percentage}: PieWheel) => {
+const Pie = ({percentage, text}: PieWheel) => {
   const [backgroundColour, colour] = wheelColor(percentage);
   return (
     <svg width="100%" height="auto" viewBox="0 0 200 200">
@@ -82,7 +83,7 @@ const Pie = ({percentage}: PieWheel) => {
         <Circle colour={backgroundColour} percentage={100} animate={false}/>
         <Circle colour={colour} percentage={percentage} animate={true}></Circle>
       </g>
-      <Text percentage={percentage}/>
+      {text ? <Text percentage={percentage}/> : '' }
     </svg>
   );
 };

@@ -147,6 +147,7 @@ const DeviceDetailPage = (props: any) => {
                             percentage={
                               deviceLogsData?.cpu?.aggregatedPercentage
                             }
+                            text={true}
                           />
                         </div>
                         <div>
@@ -154,6 +155,7 @@ const DeviceDetailPage = (props: any) => {
                             percentage={
                               deviceLogsData?.memory?.aggregatedPercentage
                             }
+                            text={true}
                           />
                         </div>
                         <div>
@@ -164,6 +166,7 @@ const DeviceDetailPage = (props: any) => {
                                   0,
                               ) / deviceLogsData?.disk?.partitions?.length
                             }
+                            text={true}
                           />
                         </div>
                         <div>
