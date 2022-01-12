@@ -23,7 +23,9 @@ const Contextualizer = {
 
     const serviceContext = useContext(context);
     if (!serviceContext) {
-      throw new Error(`Must use ${AppServices[service]} from within its service`);
+      throw new Error(
+          `Must use ${AppServices[service]} from within its service`,
+      );
     }
 
     return serviceContext;
