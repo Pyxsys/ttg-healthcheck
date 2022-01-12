@@ -73,11 +73,20 @@ const DeviceDetailPage = (props: any) => {
         <Row>
           <Col>
             <Row className="gx-5">
-              <Col xs={12} sm={12} md={12} lg={12} xl={4} className="device-details-accordion">
+              <Col
+                xs={12}
+                sm={12}
+                md={12}
+                lg={12}
+                xl={4}
+                className="device-details-accordion"
+              >
                 <Accordion defaultActiveKey="0" flush>
                   <Accordion.Item eventKey="0">
                     <Accordion.Header>
-                      <div className="d-flex w-100 justify-content-around">Device</div>
+                      <div className="d-flex w-100 justify-content-around">
+                        Device
+                      </div>
                     </Accordion.Header>
                     <Accordion.Body>
                       <Table className="device-details-table">
@@ -112,7 +121,14 @@ const DeviceDetailPage = (props: any) => {
                   </Accordion.Item>
                 </Accordion>
               </Col>
-              <Col xs={12} sm={12} md={12} lg={12} xl={8} className="device-details-accordion">
+              <Col
+                xs={12}
+                sm={12}
+                md={12}
+                lg={12}
+                xl={8}
+                className="device-details-accordion"
+              >
                 <Accordion defaultActiveKey="0" flush>
                   <Accordion.Item eventKey="0">
                     <Accordion.Header>
@@ -125,13 +141,33 @@ const DeviceDetailPage = (props: any) => {
                     </Accordion.Header>
                     <Accordion.Body>
                       <div className="d-flex justify-content-center">
-                        <div><Pie percentage={deviceLogsData?.cpu?.aggregatedPercentage}/></div>
-                        <div><Pie percentage={deviceLogsData?.memory?.aggregatedPercentage}/></div>
-                        <div><Pie percentage={deviceLogsData?.disk?.partitions?.reduce(
-                            (sum, p) => sum + p.percent,
-                            0,
-                        ) / deviceLogsData?.disk?.partitions?.length}/></div>
-                        <div><Pie percentage={88}/></div>
+                        <div>
+                          <Pie
+                            percentage={
+                              deviceLogsData?.cpu?.aggregatedPercentage
+                            }
+                          />
+                        </div>
+                        <div>
+                          <Pie
+                            percentage={
+                              deviceLogsData?.memory?.aggregatedPercentage
+                            }
+                          />
+                        </div>
+                        <div>
+                          <Pie
+                            percentage={
+                              deviceLogsData?.disk?.partitions?.reduce(
+                                  (sum, p) => sum + p.percent,
+                                  0,
+                              ) / deviceLogsData?.disk?.partitions?.length
+                            }
+                          />
+                        </div>
+                        <div>
+                          <Pie percentage={88} />
+                        </div>
                       </div>
                     </Accordion.Body>
                   </Accordion.Item>
@@ -144,10 +180,14 @@ const DeviceDetailPage = (props: any) => {
                   <Tab eventKey="cpu" title="CPU">
                     <div className="tab-body d-flex justify-content-around py-4">
                       <div className="px-5 w-100">
-                        <CpuUsageWidget deviceDynamic={deviceLogsData}></CpuUsageWidget>
+                        <CpuUsageWidget
+                          deviceDynamic={deviceLogsData}
+                        ></CpuUsageWidget>
                       </div>
                       <div className="px-5 w-100">
-                        <CpuAdditionalWidget deviceStatic={deviceData}></CpuAdditionalWidget>
+                        <CpuAdditionalWidget
+                          deviceStatic={deviceData}
+                        ></CpuAdditionalWidget>
                       </div>
                     </div>
                   </Tab>
@@ -157,12 +197,9 @@ const DeviceDetailPage = (props: any) => {
                   <Tab eventKey="disk" title="Disk">
                     <div className="tab-body"></div>
                   </Tab>
-                  <Tab eventKey="wifi" title="Wifi">
-                  </Tab>
-                  <Tab eventKey="hardware" title="Hardware">
-                  </Tab>
-                  <Tab eventKey="processes" title="Processes">
-                  </Tab>
+                  <Tab eventKey="wifi" title="Wifi"></Tab>
+                  <Tab eventKey="hardware" title="Hardware"></Tab>
+                  <Tab eventKey="processes" title="Processes"></Tab>
                 </Tabs>
               </Col>
             </Row>

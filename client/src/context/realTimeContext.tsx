@@ -6,22 +6,29 @@ import Contextualizer, {AppServices} from '../services/context.service';
  * Calls the function, when a device log is updated from the database.
  * @param device the updated device
  */
-type RealTimeCallback = (device: DeviceLog) => void;
+type RealTimeCallback = (device: DeviceLog) => void
 
 export interface IRealTimeService {
   // clearDeviceIds(): void;
-  setDeviceIds(deviceIds: string[]): void;
-  getRealTimeData(callbackFn: RealTimeCallback): void;
-  enableRealTimeData(): void;
-  disableRealTimeData(): void;
+  setDeviceIds(deviceIds: string[]): void
+  getRealTimeData(callbackFn: RealTimeCallback): void
+  enableRealTimeData(): void
+  disableRealTimeData(): void
 }
 
-const RealTimeContext = Contextualizer.createContext<IRealTimeService>(AppServices.RealTimeService);
-export const useRealTimeService = () => Contextualizer.use<IRealTimeService>(AppServices.RealTimeService);
+const RealTimeContext = Contextualizer.createContext<IRealTimeService>(
+    AppServices.RealTimeService,
+);
+export const useRealTimeService = () =>
+  Contextualizer.use<IRealTimeService>(AppServices.RealTimeService);
 
 const RealTimeService = ({children}: any) => {
   const SERVER_PORT = 5000;
-  const [wsClient, setWsClient] = useState(new WebSocket(`ws://localhost:${SERVER_PORT}/?reason=realTime`) as WebSocket | null);
+  const [wsClient, setWsClient] = useState(
+    new WebSocket(
+        `ws://localhost:${SERVER_PORT}/?reason=realTime`,
+    ) as WebSocket | null,
+  );
 
   const realTimeService: IRealTimeService = {
     setDeviceIds: (deviceIds) => {
@@ -54,7 +61,9 @@ const RealTimeService = ({children}: any) => {
 
     enableRealTimeData: () => {
       if (!wsClient) {
-        setWsClient(new WebSocket(`ws://localhost:${SERVER_PORT}/?reason=realTime`));
+        setWsClient(
+            new WebSocket(`ws://localhost:${SERVER_PORT}/?reason=realTime`),
+        );
       }
     },
 
