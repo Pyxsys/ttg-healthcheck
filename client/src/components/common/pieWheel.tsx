@@ -28,25 +28,6 @@ const Text = ({percentage}: PieWheel) => {
   );
 };
 
-// piewheel
-const Circle = ({colour, percentage}: PieWheel) => {
-  const radius = 52;
-  const circle = 2 * Math.PI * radius;
-  const strokePct = ((100 - percentage) * circle) / 100;
-  return (
-    <circle
-      r={radius}
-      cx={100}
-      cy={100}
-      fill="transparent"
-      strokeDashoffset={percentage ? strokePct : 0}
-      stroke={strokePct !== circle ? colour : ''}
-      strokeWidth={'2.4rem'}
-      strokeDasharray={circle}
-    ></circle>
-  );
-};
-
 // keyframe animation for fill
 const rotate360 = (strokePct: number) => keyframes`
   from { stroke-dashoffset: 310; }
@@ -58,7 +39,7 @@ const strokePct = (percentage: number) => {
 };
 
 // color fill and animation
-const AnimatedCircle = styled.circle.attrs((props: {colour: string, percentage: number}) => props)`
+const Circle = styled.circle.attrs((props: {colour: string, percentage: number, animate: boolean}) => props)`
   r: 52;
   cx: 100;
   cy: 100;
@@ -67,7 +48,7 @@ const AnimatedCircle = styled.circle.attrs((props: {colour: string, percentage: 
   stroke: ${(props) => strokePct(props.percentage) !== (2 * Math.PI * 52) ? (props) => props.colour : ''};
   stroke-width: 2.4rem;
   stroke-dasharray: ${(2 * Math.PI * 52)};
-  animation: ${(props) => rotate360(strokePct(props.percentage))} 0.4s linear;
+  animation: ${(props) => props.animate ? (props) => rotate360(strokePct(props.percentage)) : ''} 0.4s linear;
 `;
 
 // wheel colour depending on percentage
@@ -98,8 +79,8 @@ const Pie = ({percentage}: PieWheel) => {
   return (
     <svg width="100%" height="auto" viewBox="0 0 200 200">
       <g transform={`rotate(-90 ${'100 100'})`} width="180" height="180">
-        <Circle colour={backgroundColour} percentage={100}/>
-        <AnimatedCircle colour={colour} percentage={percentage} ></AnimatedCircle>
+        <Circle colour={backgroundColour} percentage={100} animate={false}/>
+        <Circle colour={colour} percentage={percentage} animate={true}></Circle>
       </g>
       <Text percentage={percentage}/>
     </svg>
