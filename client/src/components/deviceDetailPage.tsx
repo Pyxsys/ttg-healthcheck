@@ -10,6 +10,12 @@ import {useRealTimeService} from '../context/realTimeContext';
 import Pie from './common/pieWheel';
 import CpuUsageWidget from './device-detail-widgets/cpuUsage';
 import CpuAdditionalWidget from './device-detail-widgets/cpuAdditional';
+import DiskUsageWidget from './device-detail-widgets/diskUsage';
+import DiskAdditionalWidget from './device-detail-widgets/diskAdditional';
+import MemoryUsageWidget from './device-detail-widgets/memoryUsage';
+import MemoryAdditionalWidget from './device-detail-widgets/memoryAdditional';
+import WifiUsageWidget from './device-detail-widgets/wifiUsage';
+import WifiAdditionalWidget from './device-detail-widgets/wifiAdditional';
 import SignalStrength from './common/signalStrength';
 
 const DeviceDetailPage = (props: any) => {
@@ -90,7 +96,7 @@ const DeviceDetailPage = (props: any) => {
                       </div>
                     </Accordion.Header>
                     <Accordion.Body>
-                      <Table className="device-details-table">
+                      <Table className="device-details-table" id="device-details-table">
                         <tbody>
                           <tr>
                             <td className="w-50">ID</td>
@@ -115,6 +121,10 @@ const DeviceDetailPage = (props: any) => {
                           <tr>
                             <td>Provider</td>
                             <td>{deviceData?.provider}</td>
+                          </tr>
+                          <tr>
+                            <td>Hardware Name</td>
+                            <td>{deviceData?.hardware?.harwareName}</td>
                           </tr>
                         </tbody>
                       </Table>
@@ -196,13 +206,47 @@ const DeviceDetailPage = (props: any) => {
                     </div>
                   </Tab>
                   <Tab eventKey="memory" title="Memory">
-                    <div className="tab-body"></div>
+                    <div className="tab-body d-flex justify-content-around py-4">
+                      <div className="px-5 w-100">
+                        <MemoryUsageWidget
+                          deviceDynamic={deviceLogsData}
+                        ></MemoryUsageWidget>
+                      </div>
+                      <div className="px-5 w-100">
+                        <MemoryAdditionalWidget
+                          deviceStatic={deviceData}
+                        ></MemoryAdditionalWidget>
+                      </div>
+                    </div>
                   </Tab>
                   <Tab eventKey="disk" title="Disk">
-                    <div className="tab-body"></div>
+                    <div className="tab-body d-flex justify-content-around py-4">
+                      <div className="px-5 w-100">
+                        <DiskUsageWidget
+                          deviceDynamic={deviceLogsData}
+                        ></DiskUsageWidget>
+                      </div>
+                      <div className="px-5 w-100">
+                        <DiskAdditionalWidget
+                          deviceStatic={deviceData}
+                        ></DiskAdditionalWidget>
+                      </div>
+                    </div>
                   </Tab>
-                  <Tab eventKey="wifi" title="Wifi"></Tab>
-                  <Tab eventKey="hardware" title="Hardware"></Tab>
+                  <Tab eventKey="wifi" title="Wifi">
+                    <div className="tab-body d-flex justify-content-around py-4">
+                      <div className="px-5 w-100">
+                        <WifiUsageWidget
+                          deviceDynamic={deviceLogsData}
+                        ></WifiUsageWidget>
+                      </div>
+                      <div className="px-5 w-100">
+                        <WifiAdditionalWidget
+                          deviceStatic={deviceData}
+                        ></WifiAdditionalWidget>
+                      </div>
+                    </div>
+                  </Tab>
                   <Tab eventKey="processes" title="Processes"></Tab>
                 </Tabs>
               </Col>
