@@ -6,7 +6,7 @@ import {format} from 'fecha';
 // Custom
 import {DeviceLog} from '../../types/queries';
 
-const MemoryUsageWidget = (props: any) => {
+const MemoryUsageWidget = (props: {deviceDynamic: DeviceLog}) => {
   const deviceDynamic: DeviceLog = props.deviceDynamic;
 
   return (

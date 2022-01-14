@@ -5,7 +5,7 @@ import {Col, Table, Accordion} from 'react-bootstrap';
 // Custom
 import {Device} from '../../types/queries';
 
-const WifiAdditionalWidget = (props: any) => {
+const WifiAdditionalWidget = (props: {deviceStatic: Device}) => {
   const deviceStatic: Device = props.deviceStatic;
 
   return (
