@@ -287,55 +287,71 @@ body {
 
 // nav-hamburger wrapper
 .nav-hamburger {
-  z-index: 88;
+  position: static;
+  z-index: 99;
   padding: 8px;
   margin-left: 15px;
   height: 40px;
   width: 40px;
 }
 
-// side-nav 
-.sidenav {
-  height: 100vh;
-  width: 0;
+// fixed position hamburger to follow side nav on scroll
+.nav-hamburger.active {
   position: fixed;
-  z-index: 88;
-  top: 0;
-  left: 0;
-  background-color: #20262b;
-  overflow-x: hidden;
-  transition: 0.2s;
-  padding-top: 70px;
 }
 
-// side-nav-item wrapper
-.nav-items-wrapper {
-  flex-wrap: nowrap;
+// side-nav closed
+.side-nav {
+  height: 100vh;
+  width: 250px;
+  position: fixed;
+  z-index: 10;
+  top: 0;
+  background-color: #20262b;
+  left: -100%;
+  transition: 850ms;
+  padding-top: 75px;
+}
+
+// side-nav open
+.side-nav.active {
+  left: 0;
+  transition: 450ms;
+}
+
+// nav items wrappers
+.nav-item-wrapper {
+  margin-left: 10px;
   display: flex;
-  margin-top: 23px;
+  height: 75px;
+}
+
+// nav items link tag
+.nav-item-wrapper a {
+  text-decoration: none;
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  padding: 0 16px;
+  border-radius: 4px;
 }
 
 // side-nav-item text
-.nav-items-text {
+.nav-item-text {
   margin-left: 25px;
-  line-height: 55px;
-  width: 100%;
-  justify-content: center;
-  font-size: 0.9em;
+  font-size: 0.90em;
   color: white;
   cursor: pointer;
-  text-decoration: none;
 }
 
-// side-nav-item on hover
-.nav-items-text:hover {
+// side-nav-item text on hover
+.nav-item-text:hover {
   font-weight: 600;
   color: white;
 }
 
 // side-nav-item icons
-.nav-items-logo > svg {
-  margin-left: 25px;
+.nav-item-logo > svg {
   width: 2.8em;
   height: 2.8em;
   color: white;
