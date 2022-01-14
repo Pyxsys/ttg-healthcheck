@@ -1,19 +1,18 @@
-// 3rd Party
 import React from 'react';
+import {useRef} from 'react';
+// 3rd Party
 import axios from 'axios';
-import {Nav} from 'react-bootstrap';
-import {IconContext} from 'react-icons';
-import {MdOutlineSpaceDashboard, MdAnalytics, MdLogout} from 'react-icons/md';
+import {Squash as Hamburger} from 'hamburger-react';
 import {DiRasberryPi} from 'react-icons/di';
+import {MdOutlineSpaceDashboard, MdAnalytics, MdLogout} from 'react-icons/md';
 import {CgProfile} from 'react-icons/cg';
-import {slide as Menu} from 'react-burger-menu';
-
 // Custom
 import {useAuth} from '../context/authContext';
 
 const Navbar = () => {
+  const sideMenu = useRef<any>();
+  const navBar = useRef<any>();
   const {setUser, setIsAuthenticated} = useAuth();
-
   const logout = async (e: React.ChangeEvent<any>) => {
     e.preventDefault();
     await axios
@@ -29,49 +28,55 @@ const Navbar = () => {
         });
   };
 
+  const openNav = () => {
+    sideMenu.current.style.width = '250px';
+    navBar.current.style.position = 'fixed';
+    navBar.current.style.top = '0';
+  };
+
+  const closeNav = () => {
+    sideMenu.current.style.width = '0';
+    navBar.current.style.position = 'static';
+  };
+
   return (
     <>
-      <Menu pageWrapId={'page-wrap'} outerContainerId={'outer-container'}>
-        <Nav.Link className="text-secondary mt-5" href="/dashboard">
-          <IconContext.Provider value={{size: '2em'}}>
-            <div>
-              <MdOutlineSpaceDashboard />
-            </div>
-          </IconContext.Provider>
-        </Nav.Link>
-        <Nav.Link className="text-secondary mt-5" href="/devices">
-          <IconContext.Provider value={{size: '2em'}}>
-            <div>
-              <DiRasberryPi />
-            </div>
-          </IconContext.Provider>
-        </Nav.Link>
-        <Nav.Link className="text-secondary mt-5" href="/dashboard">
-          <IconContext.Provider value={{size: '2em'}}>
-            <div>
-              <MdAnalytics />
-            </div>
-          </IconContext.Provider>
-        </Nav.Link>
-        <Nav.Link className="text-secondary mt-5" href="/dashboard">
-          <IconContext.Provider value={{size: '2em'}}>
-            <div>
-              <CgProfile />
-            </div>
-          </IconContext.Provider>
-        </Nav.Link>
-        <Nav.Link
-          className="text-secondary mt-5"
-          href="/logout"
-          onClick={(e) => logout(e)}
-        >
-          <IconContext.Provider value={{size: '2em'}}>
-            <div>
-              <MdLogout />
-            </div>
-          </IconContext.Provider>
-        </Nav.Link>
-      </Menu>
+      <div className='sidenav' ref={sideMenu}>
+        <div className='d-flex nav-items-wrapper'>
+          <a className="nav-items-logo" href="/dashboard"><MdOutlineSpaceDashboard /></a>
+          <a className="nav-items-text" href="/dashboard">Dashboard</a>
+        </div>
+        <div className='d-flex nav-items-wrapper'>
+          <a className="nav-items-logo" href="/devices"><DiRasberryPi /></a>
+          <a className="nav-items-text" href="/devices">Devices</a>
+        </div>
+        <div className='d-flex nav-items-wrapper'>
+          <a className="nav-items-logo"><MdAnalytics /></a>
+          <a className="nav-items-text">Analytics</a>
+        </div>
+        <div className='d-flex nav-items-wrapper'>
+          <a className="nav-items-logo"><CgProfile /></a>
+          <a className="nav-items-text">Profile</a>
+        </div>
+        <div className='d-flex nav-items-wrapper'>
+          <a className="nav-items-logo"><MdLogout /></a>
+          <a className="nav-items-text" onClick={(e) => logout(e)}>Exit</a>
+        </div>
+        <DiRasberryPi />
+      </div>
+      <div
+        className='d-flex nav-wrapper'
+      >
+        <div className='nav-hamburger' ref={navBar}>
+          <Hamburger rounded color={'white'} size={33} onToggle={(toggled) => {
+            if (toggled) {
+              openNav();
+            } else {
+              closeNav();
+            }
+          }} />
+        </div>
+      </div>
     </>
   );
 };

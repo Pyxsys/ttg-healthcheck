@@ -280,77 +280,69 @@ body {
 
 /*-----------------------Navigation--------------------------*/
 
-/* Position and sizing of burger button */
-.bm-burger-button {
+.nav-wrapper{
+  background-color:rgb(32, 39, 44);
+  height: 65px;
+}
+
+// nav-hamburger wrapper
+.nav-hamburger {
+  z-index: 88;
+  padding: 8px;
+  margin-left: 15px;
+  height: 40px;
+  width: 40px;
+}
+
+// side-nav 
+.sidenav {
+  height: 100vh;
+  width: 0;
   position: fixed;
-  width: 36px;
-  height: 30px;
-  left: 36px;
-  top: 36px;
+  z-index: 88;
+  top: 0;
+  left: 0;
+  background-color: #20262b;
+  overflow-x: hidden;
+  transition: 0.2s;
+  padding-top: 70px;
 }
 
-/* Color/shape of burger icon bars */
-.bm-burger-bars {
-  background: #dfdfdf;
+// side-nav-item wrapper
+.nav-items-wrapper {
+  flex-wrap: nowrap;
+  display: flex;
+  margin-top: 23px;
 }
 
-/* Color/shape of burger icon bars on hover*/
-.bm-burger-bars-hover {
-  background: #e7e7e7;
+// side-nav-item text
+.nav-items-text {
+  margin-left: 25px;
+  line-height: 55px;
+  width: 100%;
+  justify-content: center;
+  font-size: 0.9em;
+  color: white;
+  cursor: pointer;
+  text-decoration: none;
 }
 
-/* Position and sizing of clickable cross button */
-.bm-cross-button {
-  height: 24px;
-  width: 24px;
+// side-nav-item on hover
+.nav-items-text:hover {
+  font-weight: 600;
+  color: white;
 }
 
-/* Color/shape of close button cross */
-.bm-cross {
-  background: #bdc3c7;
+// side-nav-item icons
+.nav-items-logo > svg {
+  margin-left: 25px;
+  width: 2.8em;
+  height: 2.8em;
+  color: white;
+  cursor: pointer;
 }
 
-/*
-Sidebar wrapper styles
-Note: Beware of modifying this element as it can break the animations - you should not need to touch it in most cases
-*/
-.bm-menu-wrap {
-  position: fixed;
-  height: 100%;
-}
-
-/* General sidebar styles */
-.bm-menu {
-  background: #373a47;
-  padding: 2.5em 1.5em 0;
-  font-size: 1.15em;
-}
-
-/* Morph shape necessary with bubble or elastic */
-.bm-morph-shape {
-  fill: #373a47;
-}
-
-/* Wrapper for item list */
-.bm-item-list {
-  color: #b8b7ad;
-  padding: 0.8em;
-}
-
-/* Individual item */
-.bm-item {
-  display: inline-block;
-}
-
-/* Styling of overlay */
-.bm-overlay {
-  background: rgba(0, 0, 0, 0.3);
-}
-
-// responsive table
-.react-bootstrap-table table {
-  table-layout: auto;
-}
+/*-----------------------Devices--------------------------*/
 
 // hide uneeded sr-only label in device table
 .sr-only {
@@ -391,7 +383,7 @@ Note: Beware of modifying this element as it can break the animations - you shou
 /*-----------------------Device Details--------------------------*/
 
 #device-details-wrapper{
-  padding-top: 100px;
+  padding-top: 50px;
   background-color: $tertiary-gray;
 }
 
@@ -438,7 +430,7 @@ Note: Beware of modifying this element as it can break the animations - you shou
   color: white;
   background-color: $quarternary-gray;
   box-shadow: none;
-  font-size: 0.65em;
+  font-size: 0.64em;
 }
 
 // h2 inside top bar
@@ -462,7 +454,7 @@ Note: Beware of modifying this element as it can break the animations - you shou
   border-bottom-right-radius: 7px;
   background-color: $quinary-gray;
   font-size: 0.95em;
-  min-height: 320px;
+  min-height: 355px;
   display: flex;
   justify-content: center;
   align-items: center;
