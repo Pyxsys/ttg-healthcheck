@@ -3,7 +3,8 @@ import sys, os
 import psutil
 import unittest
 from unittest.mock import MagicMock
-from psutil._common import scpufreq
+from psutil._common import scpufreq, snicaddr
+from socket import AddressFamily
 
 # Include src directory for imports
 sys.path.append('../')
@@ -180,20 +181,45 @@ class TestSystemReportClass(unittest.TestCase):
         actual_result=SysReport.fetch_cpu_sockets()
         self.assertGreaterEqual(actual_result,1)
 
+    def testFetchingAdapterName(self):
+        mockdict = dict()
+        expected_result = 'target_adapter'
+
+        mockdict['wlan0'] = [
+                snicaddr(family=psutil.AF_LINK, address='FE-ED-FE-ED-11-11', netmask=None, broadcast=None, ptp=None), 
+                snicaddr(family=AddressFamily.AF_INET, address='9.99.0.999', netmask='255.255.0.0', broadcast=None, ptp=None), 
+                snicaddr(family=AddressFamily.AF_INET6, address='feed::fade:1111:face:1111', netmask=None, broadcast=None, ptp=None)
+                ]
+        mockdict['Wi-Fi'] = [
+                snicaddr(family=psutil.AF_LINK, address='FE-ED-FE-ED-11-11', netmask=None, broadcast=None, ptp=None), 
+                snicaddr(family=AddressFamily.AF_INET, address='9.99.0.999', netmask='255.255.0.0', broadcast=None, ptp=None), 
+                snicaddr(family=AddressFamily.AF_INET6, address='feed::fade:1111:face:1111', netmask=None, broadcast=None, ptp=None)
+                ]
+        mockdict[expected_result] = [
+                snicaddr(family=psutil.AF_LINK, address='FE-ED-FE-ED-11-11', netmask=None, broadcast=None, ptp=None), 
+                snicaddr(family=AddressFamily.AF_INET, address='9.99.0.999', netmask='255.255.0.0', broadcast=None, ptp=None), 
+                snicaddr(family=AddressFamily.AF_INET6, address='feed::fade:1111:face:1111', netmask=None, broadcast=None, ptp=None)
+                ]
+
+        psutil.net_if_addrs = MagicMock(return_value = mockdict)
+        actual_result = SysReport.fetch_net_adapter_addrs(expected_result).get('adapterName')
+
+        self.assertEquals(actual_result, expected_result)
+
     def testFetchingIpv4Address(self):
-        actual_result=SysReport.fetch_device_ip_addr().get('ipv4')
+        actual_result=SysReport.fetch_net_adapter_addrs(None).get('ipv4')
         ipv4_pattern = '(?:\d{1,3}\.){3}\d{1,3}'
 
         self.assertRegex(actual_result, ipv4_pattern)
 
     def testFetchingIpv6Address(self):
-        actual_result=SysReport.fetch_device_ip_addr().get('ipv6')
+        actual_result=SysReport.fetch_net_adapter_addrs(None).get('ipv6')
         ipv6_pattern = '(?:(?:\d|[a-f]){0,4}:){5}(?:\d|[a-f]){0,4}'
 
         self.assertRegex(actual_result.lower(), ipv6_pattern)
 
     def testFetchingMacAddress(self):
-        actual_result=SysReport.fetch_device_ip_addr().get('mac')
+        actual_result=SysReport.fetch_net_adapter_addrs(None).get('mac')
         mac_pattern = '[0-9a-f]{2}([-:]?)[0-9a-f]{2}(\\1[0-9a-f]{2}){4}$'
 
         self.assertRegex(actual_result.lower(), mac_pattern)

@@ -176,17 +176,17 @@ class SysReport:
 
         self.set_section("cpu_", cpu_info)
 
-    def add_startup_network_info(self):
+    def add_startup_network_info(self, adapter_name = None):
         net_info=dict()
 
-        ip=SysReport.fetch_device_ip_addr()
+        ip=SysReport.fetch_net_adapter_addrs(adapter_name)
 
-        #net_info['adapterName'] = 
+        net_info['adapterName'] = ip.get('adapterName')
         #net_info['SSID'] =
         #net_info['connectionType'] = 
-        net_info['ipv4Address'] = ip.ipv4
-        net_info['ipv6Address'] = ip.ipv6
-        net_info['macAdress'] = ip.mac
+        net_info['ipv4Address'] = ip.get('ipv4')
+        net_info['ipv6Address'] = ip.get('ipv6')
+        net_info['macAdress'] = ip.get('mac')
 
     @classmethod
     def fetch_total_memory(cls):
@@ -443,22 +443,30 @@ class SysReport:
         #???
     
     @classmethod
-    def fetch_device_ip_addr(cls):
+    def fetch_net_adapter_addrs(cls, adapter_name = None):
         addresses = psutil.net_if_addrs()
         ips=dict()
 
+        #default OS name for adapters
         if psutil.WINDOWS:
             os_net_pattern={'wifi': 'Wi-Fi', 'ethernet': 'Ethernet'}
         elif psutil.LINUX:
             os_net_pattern={'wifi': 'wlan0', 'ethernet': 'eth0'}
+            
 
-        #prioritize Wi-fi over Ethernet
-        if os_net_pattern['wifi'] in addresses:
+        if adapter_name in addresses:
+            found_adapter = adapter_name
+            buffer = addresses.get(adapter_name)
+
+        elif os_net_pattern['wifi'] in addresses:           #prioritize Wi-fi over Ethernet
+            found_adapter = os_net_pattern['wifi']
             buffer = addresses.get(os_net_pattern['wifi'])
-        
+                 
         elif os_net_pattern['ethernet'] in addresses:
+            found_adapter = os_net_pattern['ethernet']
             buffer = addresses.get(os_net_pattern['ethernet'])
 
+        ips['adapterName'] = found_adapter
         ips['ipv6'] = buffer.pop().address
         ips['ipv4'] = buffer.pop().address
         ips['mac'] = buffer.pop().address
