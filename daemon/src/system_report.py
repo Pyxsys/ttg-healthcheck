@@ -1,3 +1,4 @@
+from types import ClassMethodDescriptorType
 import requests, psutil
 import sys, os, json, re
 import time
@@ -174,7 +175,18 @@ class SysReport:
         cpu_info['cacheSizeL3'] = SysReport.fetch_cpu_l3_cache()
 
         self.set_section("cpu_", cpu_info)
-        
+
+    def add_startup_network_info(self):
+        net_info=dict()
+
+        ip=SysReport.fetch_device_ip_addr()
+
+        #net_info['adapterName'] = 
+        #net_info['SSID'] =
+        #net_info['connectionType'] = 
+        net_info['ipv4Address'] = ip.ipv4
+        net_info['ipv6Address'] = ip.ipv6
+
     @classmethod
     def fetch_total_memory(cls):
         return psutil.virtual_memory().total
@@ -420,6 +432,42 @@ class SysReport:
         extract.close()
 
         return int(buffer[0])
+
+    @classmethod
+    def fetch_connected_network_ssid(cls):
+        #WIN
+        #netsh wlan show interfaces | select-string SSID
+        print('x')
+        #UX
+        #???
+    
+    @classmethod
+    def fetch_device_ip_addr(cls):
+        addresses = psutil.net_if_addrs()
+        ips=dict()
+
+        AF_INET_position=1
+        AF_INET6_position=2
+
+        if psutil.WINDOWS:
+            os_net_pattern={'wifi': 'Wi-Fi', 'ethernet': 'Ethernet'}
+        elif psutil.LINUX:
+            os_net_pattern={'wifi': 'wlan0', 'ethernet': 'eth0'}
+
+        #prioritize Wi-fi over Ethernet
+        if os_net_pattern['wifi'] in addresses:
+            buffer = addresses.get(os_net_pattern['wifi'])
+        
+        elif os_net_pattern['ethernet'] in addresses:
+            buffer = addresses.get(os_net_pattern['ethernet'])
+
+        ips['ipv4'] = buffer[AF_INET_position].address
+        ips['ipv6'] = buffer[AF_INET6_position].address
+        
+        return ips
+
+        
+        
 
 def main(config, mode):
     runner=Runner(config)

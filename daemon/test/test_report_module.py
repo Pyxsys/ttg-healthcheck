@@ -31,9 +31,6 @@ class TestSystemReportClass(unittest.TestCase):
     def setUp(self):
         self.test_report=SysReport()
 
-
-
-
     def tearDown(self):
         del self.test_report
 
@@ -183,6 +180,17 @@ class TestSystemReportClass(unittest.TestCase):
         actual_result=SysReport.fetch_cpu_sockets()
         self.assertGreaterEqual(actual_result,1)
 
+    def testFetchingIpv4Address(self):
+        actual_result=SysReport.fetch_device_ip_addr()
+        ipv4_pattern = '(?:\d{1,3}\.){3}\d{1,3}'
+
+        self.assertRegex(actual_result.get('ipv4'), ipv4_pattern)
+
+    def testFetchingIpv6Address(self):
+        actual_result=SysReport.fetch_device_ip_addr().get('ipv6')
+        ipv6_pattern = '(?:(?:\d|[a-fA-F]){0,4}:){5}(?:\d|[a-fA-F]){0,4}'
+
+        self.assertRegex(actual_result, ipv6_pattern)
 
 if __name__ == '__main__':
     unittest.main()
