@@ -186,6 +186,7 @@ class SysReport:
         #net_info['connectionType'] = 
         net_info['ipv4Address'] = ip.ipv4
         net_info['ipv6Address'] = ip.ipv6
+        net_info['macAdress'] = ip.mac
 
     @classmethod
     def fetch_total_memory(cls):
@@ -446,9 +447,6 @@ class SysReport:
         addresses = psutil.net_if_addrs()
         ips=dict()
 
-        AF_INET_position=1
-        AF_INET6_position=2
-
         if psutil.WINDOWS:
             os_net_pattern={'wifi': 'Wi-Fi', 'ethernet': 'Ethernet'}
         elif psutil.LINUX:
@@ -461,8 +459,9 @@ class SysReport:
         elif os_net_pattern['ethernet'] in addresses:
             buffer = addresses.get(os_net_pattern['ethernet'])
 
-        ips['ipv4'] = buffer[AF_INET_position].address
-        ips['ipv6'] = buffer[AF_INET6_position].address
+        ips['ipv6'] = buffer.pop().address
+        ips['ipv4'] = buffer.pop().address
+        ips['mac'] = buffer.pop().address
         
         return ips
 

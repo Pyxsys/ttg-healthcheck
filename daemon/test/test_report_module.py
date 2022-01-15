@@ -181,16 +181,22 @@ class TestSystemReportClass(unittest.TestCase):
         self.assertGreaterEqual(actual_result,1)
 
     def testFetchingIpv4Address(self):
-        actual_result=SysReport.fetch_device_ip_addr()
+        actual_result=SysReport.fetch_device_ip_addr().get('ipv4')
         ipv4_pattern = '(?:\d{1,3}\.){3}\d{1,3}'
 
-        self.assertRegex(actual_result.get('ipv4'), ipv4_pattern)
+        self.assertRegex(actual_result, ipv4_pattern)
 
     def testFetchingIpv6Address(self):
         actual_result=SysReport.fetch_device_ip_addr().get('ipv6')
-        ipv6_pattern = '(?:(?:\d|[a-fA-F]){0,4}:){5}(?:\d|[a-fA-F]){0,4}'
+        ipv6_pattern = '(?:(?:\d|[a-f]){0,4}:){5}(?:\d|[a-f]){0,4}'
 
-        self.assertRegex(actual_result, ipv6_pattern)
+        self.assertRegex(actual_result.lower(), ipv6_pattern)
+
+    def testFetchingMacAddress(self):
+        actual_result=SysReport.fetch_device_ip_addr().get('mac')
+        mac_pattern = '[0-9a-f]{2}([-:]?)[0-9a-f]{2}(\\1[0-9a-f]{2}){4}$'
+
+        self.assertRegex(actual_result.lower(), mac_pattern)
 
 if __name__ == '__main__':
     unittest.main()
