@@ -357,7 +357,7 @@ body {
   margin-left: 0px;
   display: flex;
   @media (min-width: $screen-w-md) {
-    height: 67px;
+    height: 70px;
   }
   @media (min-width: $screen-w-lg) {
     height: 70px;
@@ -406,8 +406,8 @@ body {
 // side-nav-item icons
 .nav-item-logo > svg {
   @media (min-width: $screen-w-md) {
-    width: 2.4em;
-    height: 2.4em;
+    width: 2.5em;
+    height: 2.5em;
   }
   @media (min-width: $screen-w-lg) {
     width: 2.7em;
