@@ -4,7 +4,7 @@ import {useState, useEffect, useRef} from 'react';
  * event listener to close outside side-nav
  * @return {Event}
  */
-export default function useComponentVisible() {
+const useComponentVisible = () => {
   const [isComponentVisible, setIsComponentVisible] = useState(false);
   const ref = useRef<any>(null);
 
@@ -27,4 +27,6 @@ export default function useComponentVisible() {
   });
 
   return {ref, isComponentVisible, setIsComponentVisible};
-}
+};
+
+export default useComponentVisible;
