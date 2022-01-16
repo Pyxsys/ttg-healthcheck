@@ -1,5 +1,4 @@
 import React from 'react';
-import {useState} from 'react';
 // 3rd Party
 import {Link} from 'react-router-dom';
 import axios from 'axios';
@@ -9,6 +8,7 @@ import {MdOutlineSpaceDashboard, MdAnalytics, MdLogout} from 'react-icons/md';
 import {CgProfile} from 'react-icons/cg';
 // Custom
 import {useAuth} from '../context/authContext';
+import useComponentVisible from './common/useComponentVisible';
 
 // side nav items
 const SideNavData = [
@@ -45,8 +45,9 @@ const SideNavData = [
 ];
 
 const Navbar = () => {
-  const [sideNav, setSideNav] = useState(false);
-  const showSideNav = () => setSideNav(!sideNav);
+  // event listener to close outside side-nav
+  const {ref, isComponentVisible, setIsComponentVisible} =
+  useComponentVisible();
   const {setUser, setIsAuthenticated} = useAuth();
   const logout = async (e: React.ChangeEvent<any>) => {
     e.preventDefault();
@@ -68,29 +69,25 @@ const Navbar = () => {
       <nav
         className='d-flex nav-wrapper'
       >
-        <div className={sideNav ? 'nav-hamburger active' : 'nav-hamburger'}>
-          <Hamburger rounded size={33} onToggle={() => {
-            showSideNav();
-          }} />
+        <div ref={ref} className={isComponentVisible ? 'nav-hamburger active' : 'nav-hamburger'}>
+          <Hamburger toggled={isComponentVisible} toggle={setIsComponentVisible} />
         </div>
-        <div className={sideNav ? 'side-nav active' : 'side-nav'}>
+        {isComponentVisible ?
+        <div ref={ref} className='side-nav active'>
           {SideNavData.map((item, index) => {
             return (
               <div key={index} className={item.cName}>
-                <Link to={item.path}>
-                  {item.title == 'Logout' ?
-                    <span className="nav-item-logo" onClick={(e) => logout(e)}>{item.icon}</span> :
-                    <span className="nav-item-logo">{item.icon}</span>
-                  }
-                  {item.title == 'Logout' ?
-                    <span className="nav-item-text" onClick={(e) => logout(e)}>{item.title} </span> :
-                    <span className="nav-item-text">{item.title}</span>
-                  }
+                <Link to={item.path} onClick={item.title == 'Logout' ? ((e) => logout(e)) : (e) => {}}>
+                  <span className="nav-item-logo">{item.icon} </span>
+                  <span className="nav-item-text">{item.title}</span>
                 </Link>
               </div>
             );
           })}
+        </div> :
+        <div className='side-nav'>
         </div>
+        }
       </nav>
     </>
   );

@@ -285,7 +285,7 @@ body {
   height: 65px;
 }
 
-// change hamburger size
+// change hamburger width/height of lines
 .hamburger-react div > div{
   @media (min-width: $screen-w-md) {
     width: 30px !important;
@@ -329,13 +329,13 @@ body {
 .side-nav {
   height: 100vh;
   @media (min-width: $screen-w-md) {
-    width: 220px;
+    width: 240px;
   }
   @media (min-width: $screen-w-lg) {
-    width: 230px;
+    width: 250px;
   }
   @media (min-width: $screen-w-xlg) {
-    width: 250px;
+    width: 260px;
   }
   position: fixed;
   z-index: 10;
@@ -349,30 +349,43 @@ body {
 // side-nav open
 .side-nav.active {
   left: 0;
-  transition: 450ms;
+  transition: 350ms;
 }
 
 // nav items wrappers
 .nav-item-wrapper {
-  margin-left: 10px;
+  margin-left: 0px;
   display: flex;
-  height: 75px;
-}
-
-// nav items link tag
-.nav-item-wrapper a {
-  text-decoration: none;
-  color: #ffffff;
-  display: flex;
-  align-items: center;
   @media (min-width: $screen-w-md) {
-    padding: 0 2px;
+    height: 67px;
   }
   @media (min-width: $screen-w-lg) {
-    padding: 0 6px;
+    height: 70px;
   }
   @media (min-width: $screen-w-xlg) {
-    padding: 0 10px;
+    height: 75px;
+  }
+}
+
+.nav-item-wrapper:hover {
+  background-color: #30393f86;
+}
+// nav items link tag
+.nav-item-wrapper a {
+  font-weight: 600;
+  width: 100%;
+  text-decoration: none;
+  display: flex;
+  color: rgb(255, 255, 255);
+  align-items: center;
+  @media (min-width: $screen-w-md) {
+    padding: 0 12px;
+  }
+  @media (min-width: $screen-w-lg) {
+    padding: 0 16px;
+  }
+  @media (min-width: $screen-w-xlg) {
+    padding: 0 20px;
   }
 }
 
@@ -388,21 +401,13 @@ body {
   @media (min-width: $screen-w-xlg) {
     font-size: 0.90em;
   }
-  color: white;
-  cursor: pointer;
-}
-
-// side-nav-item text on hover
-.nav-item-text:hover {
-  font-weight: 600;
-  color: white;
 }
 
 // side-nav-item icons
 .nav-item-logo > svg {
   @media (min-width: $screen-w-md) {
-    width: 2.5em;
-    height: 2.5em;
+    width: 2.4em;
+    height: 2.4em;
   }
   @media (min-width: $screen-w-lg) {
     width: 2.7em;
@@ -413,7 +418,6 @@ body {
     height: 2.8em;
   }
   color: white;
-  cursor: pointer;
 }
 
 /*-----------------------Devices--------------------------*/
