@@ -10,6 +10,7 @@ import {CgProfile} from 'react-icons/cg';
 // Custom
 import {useAuth} from '../context/authContext';
 
+// side nav items
 const SideNavData = [
   {
     title: 'Dashboard',
@@ -68,7 +69,7 @@ const Navbar = () => {
         className='d-flex nav-wrapper'
       >
         <div className={sideNav ? 'nav-hamburger active' : 'nav-hamburger'}>
-          <Hamburger rounded color={'white'} size={33} onToggle={() => {
+          <Hamburger rounded size={33} onToggle={() => {
             showSideNav();
           }} />
         </div>

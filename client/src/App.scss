@@ -18,7 +18,7 @@ $gray-900: #101010;
 // Media query sizes
 $screen-w-sm: 280px;
 $screen-w-md: 376px;
-$screen-w-lg: 768px;
+$screen-w-lg: 991px;
 $screen-w-xlg: 1366px;
 $screen-w-xxlg: 1940px;
 $screen-w-xxxlg: 2350px;
@@ -285,14 +285,39 @@ body {
   height: 65px;
 }
 
+// change hamburger size
+.hamburger-react div > div{
+  @media (min-width: $screen-w-md) {
+    width: 30px !important;
+    height: 2.5px !important;
+  }
+  @media (min-width: $screen-w-lg) {
+    width: 32px !important;
+    height: 3px !important;
+  }
+  @media (min-width: $screen-w-xlg) {
+    width: 33px !important;
+    height: 3px !important;
+  }
+}
+
 // nav-hamburger wrapper
 .nav-hamburger {
   position: static;
   z-index: 99;
   padding: 8px;
-  margin-left: 15px;
   height: 40px;
   width: 40px;
+  color: white;
+  @media (min-width: $screen-w-md) {
+    margin-left: 0px;
+  }
+  @media (min-width: $screen-w-lg) {
+    margin-left: 5px;
+  }
+  @media (min-width: $screen-w-xlg) {
+    margin-left: 10px;
+  }
 }
 
 // fixed position hamburger to follow side nav on scroll
@@ -303,14 +328,22 @@ body {
 // side-nav closed
 .side-nav {
   height: 100vh;
-  width: 250px;
+  @media (min-width: $screen-w-md) {
+    width: 220px;
+  }
+  @media (min-width: $screen-w-lg) {
+    width: 230px;
+  }
+  @media (min-width: $screen-w-xlg) {
+    width: 250px;
+  }
   position: fixed;
   z-index: 10;
   top: 0;
   background-color: #1d2327;
   left: -100%;
   transition: 850ms;
-  padding-top: 80px;
+  padding-top: 85px;
 }
 
 // side-nav open
@@ -332,14 +365,29 @@ body {
   color: #ffffff;
   display: flex;
   align-items: center;
-  padding: 0 16px;
-  border-radius: 4px;
+  @media (min-width: $screen-w-md) {
+    padding: 0 2px;
+  }
+  @media (min-width: $screen-w-lg) {
+    padding: 0 6px;
+  }
+  @media (min-width: $screen-w-xlg) {
+    padding: 0 10px;
+  }
 }
 
 // side-nav-item text
 .nav-item-text {
   margin-left: 25px;
-  font-size: 0.90em;
+  @media (min-width: $screen-w-md) {
+    font-size: 0.84em;
+  }
+  @media (min-width: $screen-w-lg) {
+    font-size: 0.87em;
+  }
+  @media (min-width: $screen-w-xlg) {
+    font-size: 0.90em;
+  }
   color: white;
   cursor: pointer;
 }
@@ -352,8 +400,18 @@ body {
 
 // side-nav-item icons
 .nav-item-logo > svg {
-  width: 2.8em;
-  height: 2.8em;
+  @media (min-width: $screen-w-md) {
+    width: 2.5em;
+    height: 2.5em;
+  }
+  @media (min-width: $screen-w-lg) {
+    width: 2.7em;
+    height: 2.7em;
+  }
+  @media (min-width: $screen-w-xlg) {
+    width: 2.8em;
+    height: 2.8em;
+  }
   color: white;
   cursor: pointer;
 }
