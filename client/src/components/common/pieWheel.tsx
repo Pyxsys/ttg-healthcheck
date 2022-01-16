@@ -78,7 +78,7 @@ const wheelColor = (percentage: number) => {
 const Pie = ({percentage, text}: PieWheel) => {
   const [backgroundColour, colour] = wheelColor(percentage);
   return (
-    <svg width="100%" height="auto" viewBox="0 0 200 200">
+    <svg width="100%" height="100%" viewBox="0 0 200 200">
       <g transform={`rotate(-90 ${'100 100'})`} width="180" height="180">
         <Circle colour={backgroundColour} percentage={100} animate={false}/>
         <Circle colour={colour} percentage={percentage} animate={true}></Circle>

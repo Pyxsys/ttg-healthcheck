@@ -127,7 +127,7 @@ const SignalStrength = ({level, showText}: ISignalStrengthInput) => {
   const text = signalText(level);
 
   return (
-    <svg width="100%" height="auto" viewBox="-40 0 175 125">
+    <svg width="100%" height="100%" viewBox="-40 0 175 125">
       {[0, 1, 2, 3].map((index) =>
         <g key={index} transform={`translate(${index * 25}, ${60 - (index * 20)})`}>
           <Bar colour={barColour(level, index)} size={40 + (index * 20)} delay={index * 25} />
