@@ -3,8 +3,22 @@ Cypress.env();
 const testUser = {
   name: "test2",
   password: Cypress.env("test_password"),
-  email: "selenium@gmail.com"
+  email: "cypress@gmail.com"
 };
+
+// describe("lighthouse test", () => {
+//   it("basic test", () => {
+//     // cy.lighthouse('/').as('results')
+//     cy.visit('/')
+//     cy.lighthouse({
+//       performance: 60,
+//       accessibility: 90,
+//       'best-practices': 85,
+//       seo: 85, // Search Engine Optimization  (used to web technical configuration, content relevance and link popularity)
+//       pwa: 50 // Progressive Web Application (app-like experience to users)
+//     })
+//   })
+// })
 
 // Check to ensure that the various pages related to login load in a reasonable amount of time.
 describe("Test 1: Check to ensure that the various pages related to login load in a reasonable amount of time.", () => {
@@ -18,11 +32,10 @@ describe("Test 1: Check to ensure that the various pages related to login load i
       .its("performance")
       .then(performance => {
         //Ensure all appropriate fields have loaded
-        cy.contains("Email Address").should("be.visible");
-        cy.contains("Password").should("be.visible");
-        cy.contains("Login").should("be.visible");
-        cy.contains("Signup")
-          .should("be.visible")
+        cy.get('input[name=email1]').should("be.visible");
+        cy.get('input[name=password1]').should("be.visible");
+        cy.get('button').contains("Login").should("be.visible");
+        cy.get('button').contains("Register").should("be.visible")
 
           .then(() => performance.mark("end-loading"))
           .then(() => {
@@ -34,7 +47,7 @@ describe("Test 1: Check to ensure that the various pages related to login load i
       });
   });
 
-  it("Test 1.2: Checks to ensure that the devices loads in in under 2000 milliseconds.", () => {
+  it("Test 1.2: Checks to ensure that the devices page loads in under 2000 milliseconds.", () => {
     // Go to login page
     cy.visit("/", {
       onBeforeLoad: win => {
@@ -46,7 +59,7 @@ describe("Test 1: Check to ensure that the various pages related to login load i
         cy.get("input[name=email1]").type(testUser.email);
         cy.get("input[name=password1]").type(testUser.password);
         cy.get("button[type=submit]").click();
-        cy.get("button[id=react-burger-menu-btn]").click();
+        cy.get('div[class=hamburger-react]').click();
       });
 
     cy.visit("/devices", {
@@ -82,7 +95,7 @@ describe("Test 1: Check to ensure that the various pages related to login load i
         cy.get("input[name=email1]").type(testUser.email);
         cy.get("input[name=password1]").type(testUser.password);
         cy.get("button[type=submit]").click();
-        cy.get("button[id=react-burger-menu-btn]").click();
+        cy.get('div[class=hamburger-react]').click();
       });
 
     cy.visit("/dashboard", {
