@@ -17,6 +17,7 @@ import MemoryAdditionalWidget from './device-detail-widgets/memoryAdditional';
 import WifiUsageWidget from './device-detail-widgets/wifiUsage';
 import WifiAdditionalWidget from './device-detail-widgets/wifiAdditional';
 import SignalStrength from './common/signalStrength';
+import ProcessTable from './device-detail-widgets/processes';
 
 const DeviceDetailPage = (props: any) => {
   const deviceId: string = props.location.state.id;
@@ -247,7 +248,13 @@ const DeviceDetailPage = (props: any) => {
                       </div>
                     </div>
                   </Tab>
-                  <Tab eventKey="processes" title="Processes"></Tab>
+                  <Tab eventKey="processes" title="Processes">
+                    <div className="tab-body">
+                      <ProcessTable
+                        deviceDynamic={deviceLogsData}
+                      ></ProcessTable>
+                    </div>
+                  </Tab>
                 </Tabs>
               </Col>
             </Row>
