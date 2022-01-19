@@ -1,6 +1,7 @@
-import React, {createContext, useState, useEffect, useContext} from 'react';
-import AuthService from '../services/authService';
+import React, {useState, useEffect} from 'react';
 import {useLocation} from 'react-router-dom';
+import AuthService from '../services/authService';
+import Contextualizer, {AppServices} from '../services/context.service';
 
 interface AuthObject {
   isAuthenticated: boolean
@@ -14,22 +15,19 @@ interface UserObject {
   role: string
 }
 
-const AuthContext = createContext({} as AuthObject);
+const AuthContext = Contextualizer.createContext<AuthObject>(AppServices.Authentication);
 
 /**
- *
- * @return {void} user information and authentication status
+ * @return {AuthObject} user information and authentication status
  */
-export function useAuth() {
-  return useContext(AuthContext);
-}
+export const useAuth = (): AuthObject => Contextualizer.use<AuthObject>(AppServices.Authentication);
 
 /**
  *
  * @param {object} param0 render from index.js
  * @return {void} auth context values
  */
-export function AuthProvider({children}: any) {
+function AuthProvider({children}: any) {
   const location = useLocation();
   const [user, setUser] = useState({name: '', role: ''});
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -56,3 +54,5 @@ export function AuthProvider({children}: any) {
     </AuthContext.Provider>
   );
 }
+
+export default AuthProvider;

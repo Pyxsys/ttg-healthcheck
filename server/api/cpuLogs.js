@@ -20,7 +20,11 @@ router.get('/', auth, async (req, res) => {
     CpuProjection,
     options
   )
-  return res.status(200).json({ Results: results })
+  const cpuResponse = { Results: results }
+  if (req.query.Total) {
+    cpuResponse.Total = await DeviceLogs.countDocuments(query)
+  }
+  return res.status(200).json(cpuResponse)
 })
 
 module.exports = router

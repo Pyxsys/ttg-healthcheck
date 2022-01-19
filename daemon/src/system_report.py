@@ -40,6 +40,7 @@ class Runner:
         self.init_report()
         self.report.add_startup_memory_info()
         self.report.add_startup_disk_info()
+        self.report.add_startup_cpu_info()
 
     def sleep(self):
         time.sleep(self.get_config()['report_delay'])
@@ -67,6 +68,9 @@ class Runner:
         self.sleep()
 
 class SysReport:
+    # Constants
+    _R_DIGIT_PATTERN = '(\d+)'
+
     # Initializes instance attributes.
     def __init__(self):
         self.report_message = {}
@@ -159,6 +163,18 @@ class SysReport:
         disk_usage['partitions'] = SysReport.fetch_disk_partition_status()
         self.set_section("disk", disk_usage)
 
+    def add_startup_cpu_info(self):
+        cpu_info=dict()
+        cpu_info['baseSpeed'] = psutil.cpu_freq().max
+        cpu_info['sockets'] = SysReport.fetch_cpu_sockets()
+        cpu_info['processors'] = psutil.cpu_count(logical=True)
+        cpu_info['cores'] = psutil.cpu_count(logical=False)
+        cpu_info['cacheSizeL1'] = SysReport.fetch_cpu_l1_cache(cores=psutil.cpu_count(logical=False))
+        cpu_info['cacheSizeL2'] = SysReport.fetch_cpu_l2_cache()
+        cpu_info['cacheSizeL3'] = SysReport.fetch_cpu_l3_cache()
+
+        self.set_section("cpu_", cpu_info)
+        
     @classmethod
     def fetch_total_memory(cls):
         return psutil.virtual_memory().total
@@ -319,6 +335,91 @@ class SysReport:
 
         return disk_dict
 
+    @classmethod
+    def fetch_cpu_l1_cache(cls, cores = None):
+        l1_size = 0
+
+        if psutil.WINDOWS:
+            command='wmic os get osarchitecture | findstr /r "[0-9][0-9]"'
+            pattern=cls._R_DIGIT_PATTERN
+
+            if cores == None:
+                cores = 1   #minimum 1 core must be given for windows OS
+
+        elif psutil.LINUX:
+            command='getconf -a | grep LEVEL1_ICACHE_SIZE'
+            pattern='(?:LEVEL1_ICACHE_SIZE\s+(\d+))'
+        
+        else:
+            return 0
+
+        extract=os.popen(command)
+        buffer=re.findall(pattern, extract.read(),  re.MULTILINE)
+        extract.close()
+
+        if psutil.WINDOWS:
+            l1_size = cores * int(buffer[0])
+        else:
+            l1_size = int(buffer[0])
+
+        return l1_size
+
+    @classmethod
+    def fetch_cpu_l2_cache(cls):
+        if psutil.WINDOWS:
+            command='wmic cpu get L2CacheSize | findstr /r "[0-9][0-9]"'
+            pattern=cls._R_DIGIT_PATTERN
+
+        elif psutil.LINUX:
+            command='getconf -a | grep CACHE_SIZE'
+            pattern='(?:LEVEL2_\S?CACHE_SIZE\s+(\d+))'
+
+        else:
+            return 0
+
+        extract=os.popen(command)
+        buffer=re.findall(pattern, extract.read(),  re.MULTILINE)
+        extract.close()
+        
+        return int(buffer[0])
+
+    @classmethod
+    def fetch_cpu_l3_cache(cls):
+        if psutil.WINDOWS:
+            command='wmic cpu get L3CacheSize | findstr /r "[0-9][0-9]"'
+            pattern=cls._R_DIGIT_PATTERN
+
+        elif psutil.LINUX:
+            command='getconf -a | grep CACHE_SIZE'
+            pattern='(?:LEVEL3_\S?CACHE_SIZE\s+(\d+))'
+
+        else:
+            return 0
+
+        extract=os.popen(command)
+        buffer=re.findall(pattern, extract.read(),  re.MULTILINE)
+        extract.close()
+
+        return int(buffer[0])
+
+    @classmethod
+    def fetch_cpu_sockets(cls):
+        if psutil.WINDOWS:
+            command='powershell.exe -Command "@(Get-CimInstance -ClassName Win32_Processor).Count"'
+            pattern=cls._R_DIGIT_PATTERN
+
+        elif psutil.LINUX:
+            command='lscpu | egrep Socket'
+            pattern='(?:Socket\(s\):\s+(\d+))'
+
+        else:
+            return 0
+
+        extract=os.popen(command)
+        buffer=re.findall(pattern, extract.read(), re.MULTILINE)
+        extract.close()
+
+        return int(buffer[0])
 
 def main(config, mode):
     runner=Runner(config)
