@@ -98,7 +98,7 @@ const DeviceDetailPage = (props: any) => {
                         </div>
                       </Accordion.Header>
                       <Accordion.Body>
-                        <Table className="device-details-table" id="device-details-table">
+                        <Table className="device-details-table">
                           <tbody>
                             <tr>
                               <td className="w-50" style={{fontWeight: '600'}}>ID</td>

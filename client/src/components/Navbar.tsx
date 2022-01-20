@@ -73,7 +73,6 @@ const Navbar = () => {
         <div ref={ref} className="nav-hamburger">
           <Hamburger toggled={isComponentVisible} toggle={setIsComponentVisible} />
         </div>
-        <div></div>
         <div className="nav-right-menu d-flex">
           <div className="nav-right-icon">
             <img src="https://avatarfiles.alphacoders.com/247/247895.jpg"></img>
