@@ -88,7 +88,7 @@ const Navbar = () => {
             return (
               <>
                 <div key={index} className={item.cName}>
-                  <Link to={item.path} onClick={item.title == 'Logout' ? ((e) => logout(e)) : (e) => {}}>
+                  <Link to={item.path} onClick={item.title == 'Logout' ? ((e) => logout(e)) : (e) => null}>
                     <span className="side-nav-item-icon">{item.icon} </span>
                     <span className="side-nav-item-text">{item.title}</span>
                   </Link>

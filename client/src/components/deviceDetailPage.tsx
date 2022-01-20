@@ -86,7 +86,7 @@ const DeviceDetailPage = (props: any) => {
                   xs={12}
                   sm={12}
                   md={12}
-                  lg={12}
+                  lg={4}
                   xl={4}
                   className="device-details-accordion"
                 >
@@ -138,7 +138,7 @@ const DeviceDetailPage = (props: any) => {
                   xs={12}
                   sm={12}
                   md={12}
-                  lg={12}
+                  lg={8}
                   xl={8}
                   className="device-details-accordion device-details-second-accordion"
                 >

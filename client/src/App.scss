@@ -559,7 +559,7 @@ body {
     font-size: 0.9em;
   }
   @media (min-width: $screen-w-lg) {
-    font-size: 0.95em;
+    font-size: 0.85em;
   }
   @media (min-width: $screen-w-xlg) {
     font-size: 0.9em;
@@ -595,7 +595,7 @@ body {
     padding-top: 20px;
   }
   @media (min-width: $screen-w-lg) {
-    padding-top: 25px;
+    padding-top: 0px;
   }
   @media (min-width: $screen-w-xlg) {
     padding-top: 0px;
@@ -645,7 +645,7 @@ body {
     min-height: 0px;
   }
   @media (min-width: $screen-w-lg) {
-    min-height: 0px;
+    min-height: 373px;
   }
   @media (min-width: $screen-w-xlg) {
     min-height: 365px;
