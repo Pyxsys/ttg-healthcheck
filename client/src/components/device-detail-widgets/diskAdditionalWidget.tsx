@@ -21,7 +21,7 @@ const diskAdditionalWidget = (props: {deviceStatic: Device}) => {
             <Table className="device-details-table device-details-table-dark">
               <tbody>
                 <tr className="border-bottom">
-                  <td>Capacity:</td>
+                  <td>Capacity</td>
                   <td className="float-right">
                     {deviceStatic?.disk?.capacity || 'N/A'}
                   </td>

@@ -30,9 +30,9 @@ const Text = ({percentage}: PieWheel) => {
 };
 
 // keyframe animation for fill
-const fillColour = (strokePct: number) => keyframes`
+const fillColour = (percentage: number) => keyframes`
   from { stroke-dashoffset: 310; }
-  to { stroke-dashoffset: ${strokePct}; }
+  to { stroke-dashoffset: ${percentage}; }
 `;
 
 const strokePct = (percentage: number) => {
@@ -46,10 +46,10 @@ const Circle = styled.circle.attrs((props: {colour: string, percentage: number, 
   cy: 100;
   fill: transparent;
   stroke-dashoffset: ${(props) => props.percentage ? strokePct(props.percentage) : 0};
-  stroke: ${(props) => strokePct(props.percentage) !== (2 * Math.PI * 52) ? (props) => props.colour : ''};
+  stroke: ${(props) => strokePct(props.percentage) !== (2 * Math.PI * 52) ? () => props.colour : ''};
   stroke-width: 2.4rem;
   stroke-dasharray: ${(2 * Math.PI * 52)};
-  animation: ${(props) => props.animate ? (props) => fillColour(strokePct(props.percentage)) : ''} 0.4s linear;
+  animation: ${(props) => props.animate ? () => fillColour(strokePct(props.percentage)) : ''} 0.4s linear;
 `;
 
 // wheel colour depending on percentage

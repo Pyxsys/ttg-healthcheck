@@ -21,7 +21,7 @@ $screen-w-xsm: 360px;
 $screen-w-sm: 573px;
 $screen-w-md: 768px;
 $screen-w-lg: 991px;
-$screen-w-xlg: 1400px;
+$screen-w-xlg: 1200px;
 $screen-w-xxlg: 1940px;
 $screen-w-xxxlg: 2350px;
 
@@ -553,21 +553,21 @@ body {
   border-bottom: 0;
   border-top: 0;
   @media (min-width: $screen-w-xsm) {
-    font-size: 0.80em;
+    font-size: 0.87em;
   }
   @media (min-width: $screen-w-md) {
-    font-size: 0.85em;
+    font-size: 0.9em;
   }
   @media (min-width: $screen-w-lg) {
-    font-size: 0.80em;
+    font-size: 0.95em;
   }
   @media (min-width: $screen-w-xlg) {
-    font-size: 0.85em;
+    font-size: 0.9em;
   }
 }
 
 .device-details-table-dark{
-  width: 75%;
+  width: 85%;
 }
 
 // used to float td in table to the right
@@ -595,7 +595,7 @@ body {
     padding-top: 20px;
   }
   @media (min-width: $screen-w-lg) {
-    padding-top: 0px;
+    padding-top: 25px;
   }
   @media (min-width: $screen-w-xlg) {
     padding-top: 0px;
@@ -645,10 +645,10 @@ body {
     min-height: 0px;
   }
   @media (min-width: $screen-w-lg) {
-    min-height: 361px;
+    min-height: 0px;
   }
   @media (min-width: $screen-w-xlg) {
-    min-height: 355px;
+    min-height: 365px;
   }
   display: flex;
   justify-content: center;
@@ -665,7 +665,15 @@ body {
 // accordion body darker version
 .dark-accordion .accordion-body {
   background-color: #393F49;
-  min-height: 220px;
+  @media (min-width: $screen-w-xsm) {
+    min-height: 150px;
+  }
+  @media (min-width: $screen-w-md) {
+    min-height: 250px;
+  }
+  @media (min-width: $screen-w-xlg) {
+    min-height: 250px;
+  }
 }
 
 // accordion button darker version
@@ -762,7 +770,7 @@ body {
     padding: 0px 0px;
   }
   @media (min-width: $screen-w-lg) {
-    padding: 0px 5px;
+    padding: 0px 40px;
   }
   @media (min-width: $screen-w-xlg) {
     padding: 0px 20px;

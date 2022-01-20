@@ -86,7 +86,7 @@ const DeviceDetailPage = (props: any) => {
                   xs={12}
                   sm={12}
                   md={12}
-                  lg={4}
+                  lg={12}
                   xl={4}
                   className="device-details-accordion"
                 >
@@ -101,32 +101,32 @@ const DeviceDetailPage = (props: any) => {
                         <Table className="device-details-table" id="device-details-table">
                           <tbody>
                             <tr>
-                              <td className="w-50">ID</td>
-                              <td>{deviceId}</td>
+                              <td className="w-50" style={{fontWeight: '600'}}>ID</td>
+                              <td style={{fontStyle: 'italic'}}>{deviceId}</td>
                             </tr>
                             <tr>
-                              <td>Name</td>
-                              <td>{deviceData?.name}</td>
+                              <td style={{fontWeight: '600'}}>Name</td>
+                              <td style={{fontStyle: 'italic'}}>{deviceData?.name}</td>
                             </tr>
                             <tr>
-                              <td>Description</td>
-                              <td>{deviceData?.description}</td>
+                              <td style={{fontWeight: '600'}}>Description</td>
+                              <td style={{fontStyle: 'italic'}}>{deviceData?.description}</td>
                             </tr>
                             <tr>
-                              <td>Connection Type</td>
-                              <td>{deviceData?.connectionType}</td>
+                              <td style={{fontWeight: '600'}}>Connection Type</td>
+                              <td style={{fontStyle: 'italic'}}>{deviceData?.connectionType}</td>
                             </tr>
                             <tr>
-                              <td>Status</td>
-                              <td>{deviceData?.status}</td>
+                              <td style={{fontWeight: '600'}}>Status</td>
+                              <td style={{fontStyle: 'italic'}}>{deviceData?.status}</td>
                             </tr>
                             <tr>
-                              <td>Provider</td>
-                              <td>{deviceData?.provider}</td>
+                              <td style={{fontWeight: '600'}}>Provider</td>
+                              <td style={{fontStyle: 'italic'}}>{deviceData?.provider}</td>
                             </tr>
                             <tr>
-                              <td>Hardware Name</td>
-                              <td>{deviceData?.hardware?.harwareName}</td>
+                              <td style={{fontWeight: '600'}}>Hardware Name</td>
+                              <td style={{fontStyle: 'italic'}}>{deviceData?.hardware?.harwareName}</td>
                             </tr>
                           </tbody>
                         </Table>
@@ -138,7 +138,7 @@ const DeviceDetailPage = (props: any) => {
                   xs={12}
                   sm={12}
                   md={12}
-                  lg={8}
+                  lg={12}
                   xl={8}
                   className="device-details-accordion device-details-second-accordion"
                 >
@@ -200,7 +200,7 @@ const DeviceDetailPage = (props: any) => {
                             xs={12}
                             sm={12}
                             md={12}
-                            lg={6}
+                            lg={12}
                             xl={6}
                           >
                             <div className="tab-widget-padding w-100">
@@ -213,7 +213,7 @@ const DeviceDetailPage = (props: any) => {
                             xs={12}
                             sm={12}
                             md={12}
-                            lg={6}
+                            lg={12}
                             xl={6}
                           >
                             <div className="tab-widget-padding w-100">
@@ -232,7 +232,7 @@ const DeviceDetailPage = (props: any) => {
                             xs={12}
                             sm={12}
                             md={12}
-                            lg={6}
+                            lg={12}
                             xl={6}
                           >
                             <div className="tab-widget-padding w-100">
@@ -245,7 +245,7 @@ const DeviceDetailPage = (props: any) => {
                             xs={12}
                             sm={12}
                             md={12}
-                            lg={6}
+                            lg={12}
                             xl={6}
                           >
                             <div className="tab-widget-padding w-100">
@@ -264,7 +264,7 @@ const DeviceDetailPage = (props: any) => {
                             xs={12}
                             sm={12}
                             md={12}
-                            lg={6}
+                            lg={12}
                             xl={6}
                           >
                             <div className="tab-widget-padding w-100">
@@ -277,7 +277,7 @@ const DeviceDetailPage = (props: any) => {
                             xs={12}
                             sm={12}
                             md={12}
-                            lg={6}
+                            lg={12}
                             xl={6}
                           >
                             <div className="tab-widget-padding w-100">
@@ -296,7 +296,7 @@ const DeviceDetailPage = (props: any) => {
                             xs={12}
                             sm={12}
                             md={12}
-                            lg={6}
+                            lg={12}
                             xl={6}
                           >
                             <div className="tab-widget-padding w-100">
@@ -309,7 +309,7 @@ const DeviceDetailPage = (props: any) => {
                             xs={12}
                             sm={12}
                             md={12}
-                            lg={6}
+                            lg={12}
                             xl={6}
                           >
                             <div className="tab-widget-padding w-100">
