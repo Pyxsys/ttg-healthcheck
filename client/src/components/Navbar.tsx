@@ -20,7 +20,7 @@ const Navbar = () => {
         .get('api/user/logout')
         .then((response) => {
           if (response.data) {
-            setUser({name: '', role: ''});
+            setUser({_id: '', name: '', role: ''});
             setIsAuthenticated(false);
           }
         })

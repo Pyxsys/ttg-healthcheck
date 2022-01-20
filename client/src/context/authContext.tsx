@@ -2,17 +2,13 @@ import React, {useState, useEffect} from 'react';
 import {useLocation} from 'react-router-dom';
 import AuthService from '../services/authService';
 import Contextualizer, {AppServices} from '../services/context.service';
+import {UserObject} from '../types/users';
 
 interface AuthObject {
   isAuthenticated: boolean
   setIsAuthenticated: (active: boolean) => void
   user: UserObject
   setUser: (active: UserObject) => void
-}
-
-interface UserObject {
-  name: string
-  role: string
 }
 
 const AuthContext = Contextualizer.createContext<AuthObject>(AppServices.Authentication);
@@ -29,7 +25,7 @@ export const useAuth = (): AuthObject => Contextualizer.use<AuthObject>(AppServi
  */
 function AuthProvider({children}: any) {
   const location = useLocation();
-  const [user, setUser] = useState({name: '', role: ''});
+  const [user, setUser] = useState({_id: '', name: '', role: ''});
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [loading, setLoading] = useState(true);
   // check authentication of user on router dom changes(for links and redirects) and initial page loads

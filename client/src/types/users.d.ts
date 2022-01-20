@@ -5,3 +5,9 @@ export interface UserResponse {
     role: string
   }
 }
+
+export interface UserObject {
+  _id: string
+  name: string
+  role: string
+}
