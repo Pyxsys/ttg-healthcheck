@@ -38,7 +38,7 @@ class TestRunner(unittest.TestCase):
         self.assertEqual(len(missing_sections), 0, msg=missing_sections)
 
     def testRunnerGeneratingStartupReport(self):
-        expected_sections={'deviceId', 'memory_', 'disk_', 'timestamp'}
+        expected_sections={'deviceId', 'memory_', 'disk_', 'cpu_', 'timestamp'}
         missing_sections=[]
 
         self.test_runner.gen_startup_report()
