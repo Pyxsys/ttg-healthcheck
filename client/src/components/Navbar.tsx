@@ -39,7 +39,7 @@ const SideNavData = [
   },
   {
     title: 'Logout',
-    path: '/',
+    path: '/logout',
     icon: <MdLogout />,
     cName: 'side-nav-item',
   },
