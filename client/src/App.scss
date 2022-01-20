@@ -530,10 +530,10 @@ body {
     padding-top: 12px;
   }
   @media (min-width: $screen-w-sm) {
-    padding-top: 15px;
+    padding-top: 12px;
   }
   @media (min-width: $screen-w-md) {
-    padding-top: 20px;
+    padding-top: 15px;
   }
   @media (min-width: $screen-w-lg) {
     padding-top: 25px;
@@ -556,10 +556,10 @@ body {
     font-size: 0.87em;
   }
   @media (min-width: $screen-w-md) {
-    font-size: 0.9em;
+    font-size: 0.87em;
   }
   @media (min-width: $screen-w-lg) {
-    font-size: 0.85em;
+    font-size: 0.84em;
   }
   @media (min-width: $screen-w-xlg) {
     font-size: 0.9em;
@@ -589,10 +589,10 @@ body {
     padding-top: 12px;
   }
   @media (min-width: $screen-w-sm) {
-    padding-top: 15px;
+    padding-top: 12px;
   }
   @media (min-width: $screen-w-md) {
-    padding-top: 20px;
+    padding-top: 15px;
   }
   @media (min-width: $screen-w-lg) {
     padding-top: 0px;
@@ -645,7 +645,7 @@ body {
     min-height: 0px;
   }
   @media (min-width: $screen-w-lg) {
-    min-height: 373px;
+    min-height: 370px;
   }
   @media (min-width: $screen-w-xlg) {
     min-height: 365px;
@@ -691,11 +691,11 @@ body {
     padding-bottom: 20px;
   }
   @media (min-width: $screen-w-sm) {
-    padding-top: 15px;
+    padding-top: 12px;
     padding-bottom: 25px;
   }
   @media (min-width: $screen-w-md) {
-    padding-top: 20px;
+    padding-top: 15px;
     padding-bottom: 30px;
   }
   @media (min-width: $screen-w-lg) {
@@ -757,10 +757,10 @@ body {
     padding: 25px 25px;
   }
   @media (min-width: $screen-w-lg) {
-    padding: 30px 30px;
+    padding: 30px 17px;
   }
   @media (min-width: $screen-w-xlg) {
-    padding: 30px 30px;
+    padding: 30px 25px;
   }
 }
 
@@ -770,9 +770,9 @@ body {
     padding: 0px 0px;
   }
   @media (min-width: $screen-w-lg) {
-    padding: 0px 40px;
+    padding: 0px 8px;
   }
   @media (min-width: $screen-w-xlg) {
-    padding: 0px 20px;
+    padding: 0px 18px;
   }
 }

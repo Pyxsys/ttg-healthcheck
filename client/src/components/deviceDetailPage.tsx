@@ -200,7 +200,7 @@ const DeviceDetailPage = (props: any) => {
                             xs={12}
                             sm={12}
                             md={12}
-                            lg={12}
+                            lg={6}
                             xl={6}
                           >
                             <div className="tab-widget-padding w-100">
@@ -213,7 +213,7 @@ const DeviceDetailPage = (props: any) => {
                             xs={12}
                             sm={12}
                             md={12}
-                            lg={12}
+                            lg={6}
                             xl={6}
                           >
                             <div className="tab-widget-padding w-100">
@@ -232,7 +232,7 @@ const DeviceDetailPage = (props: any) => {
                             xs={12}
                             sm={12}
                             md={12}
-                            lg={12}
+                            lg={6}
                             xl={6}
                           >
                             <div className="tab-widget-padding w-100">
@@ -245,7 +245,7 @@ const DeviceDetailPage = (props: any) => {
                             xs={12}
                             sm={12}
                             md={12}
-                            lg={12}
+                            lg={6}
                             xl={6}
                           >
                             <div className="tab-widget-padding w-100">
@@ -264,7 +264,7 @@ const DeviceDetailPage = (props: any) => {
                             xs={12}
                             sm={12}
                             md={12}
-                            lg={12}
+                            lg={6}
                             xl={6}
                           >
                             <div className="tab-widget-padding w-100">
@@ -277,7 +277,7 @@ const DeviceDetailPage = (props: any) => {
                             xs={12}
                             sm={12}
                             md={12}
-                            lg={12}
+                            lg={6}
                             xl={6}
                           >
                             <div className="tab-widget-padding w-100">
@@ -296,7 +296,7 @@ const DeviceDetailPage = (props: any) => {
                             xs={12}
                             sm={12}
                             md={12}
-                            lg={12}
+                            lg={6}
                             xl={6}
                           >
                             <div className="tab-widget-padding w-100">
@@ -309,7 +309,7 @@ const DeviceDetailPage = (props: any) => {
                             xs={12}
                             sm={12}
                             md={12}
-                            lg={12}
+                            lg={6}
                             xl={6}
                           >
                             <div className="tab-widget-padding w-100">

@@ -125,7 +125,7 @@ const CrossBar = () => {
  */
 const SignalStrength = ({level, showText}: ISignalStrengthInput) => {
   const text = signalText(level);
-
+  const showSignalStrengthText:any = showText ? text : '';
   return (
     <svg width="100%" height="100%" viewBox="-40 0 175 125">
       {[0, 1, 2, 3].map((index) =>
@@ -133,8 +133,7 @@ const SignalStrength = ({level, showText}: ISignalStrengthInput) => {
           <Bar colour={barColour(level, index)} size={40 + (index * 20)} delay={index * 25} />
         </g>,
       )}
-
-      {text ? <Text text={showText ? text : ''}/> : <CrossBar />}
+      {text ? <Text text={showSignalStrengthText}/> : <CrossBar />}
     </svg>
   );
 };
