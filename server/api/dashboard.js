@@ -8,12 +8,29 @@ const { parseQuery } = require('./common/filter')
 // get multiple devices with param options (limit, multiple attributes, orderBy, orderValue)
 router.post('/', auth, async (req, res) => {
   const { userId, widgets } = req.body
-  const dashboard = Dashboards.findOne({ userId: userId })
-  
-  if (!dashboard) {
-    return res.status(400).json({ message: 'User does not exist' })
+
+  if (!(typeof userId === 'string')) {
+    return res.status(400).send('Invalid: UserId must be a String')
   }
-  dashboard.update({}, {dashboardWidgets: widgets})
+  if (!(widgets instanceof Array)) {
+    return res.status(400).send('Invalid: Widgets must be an Array')
+  }
+
+  const invalidWidgets = widgets.filter(
+    (widget) => !('widgetType' in widget && 'options' in widget)
+  )
+  if (invalidWidgets.length > 0) {
+    return res
+      .status(400)
+      .send('Invalid: Widgets must have parameters: widgetType and options')
+  }
+
+  const query = { userId: userId }
+  const update = { userId, widgets }
+  const options = { upsert: true, new: true, setDefaultsOnInsert: true }
+
+  await Dashboards.findOneAndUpdate(query, update, options)
+  return res.status(200).send('Save Successful')
 })
 
 // get multiple devices with param options (limit, multiple attributes, orderBy, orderValue)
@@ -24,8 +41,8 @@ router.get('/', auth, async (req, res) => {
     return res.status(501).send('Server Error: must include userId parameter')
   }
 
-  const results = await Dashboards.find({ $and: [query] }, {}, options)
-  return res.status(200).json({ Results: results })
+  const results = await Dashboards.findOne({ $and: [query] }, {}, options)
+  return res.status(200).json({ Results: [results] })
 })
 
 module.exports = router

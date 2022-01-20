@@ -7,7 +7,7 @@ const DashboardWidgetSchema = new mongoose.Schema({
 
 const DashboardSchema = new mongoose.Schema({
   userId: mongoose.SchemaTypes.ObjectId,
-  dashboardWidgets: [DashboardWidgetSchema],
+  widgets: [DashboardWidgetSchema],
 })
 
 const Dashboards = mongoose.model('dashboards', DashboardSchema)
