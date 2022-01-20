@@ -346,7 +346,10 @@ Note: Beware of modifying this element as it can break the animations - you shou
 }
 
 
-/*-----------------------Devices Page--------------------------*/
+/*
+**  Devices Page
+**
+*/
 
 .devices-content {
   background-color: $fourth;
@@ -371,7 +374,6 @@ Note: Beware of modifying this element as it can break the animations - you shou
 }
 
 // devices table
-
 .devices-table {
   margin-top: 8rem;
   margin-left: 2rem;
@@ -394,7 +396,7 @@ Note: Beware of modifying this element as it can break the animations - you shou
   flex-direction: row;
 }
 
-.devices-header-formatter{
+.devices-table-header-formatter{
   display: flex;
   flex-direction: row;
 }

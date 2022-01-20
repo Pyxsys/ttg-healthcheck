@@ -11,9 +11,7 @@ const AppContexts = ({children}: any) => {
   return (
     <>
       <RealTimeService>
-        <AuthProvider>
-          {children}
-        </AuthProvider>
+        <AuthProvider>{children}</AuthProvider>
       </RealTimeService>
     </>
   );

@@ -86,13 +86,27 @@ const DevicePage = () => {
     );
   };
 
+  const uuidFirstHeaderFormatter = (
+      column: any,
+      colIndex: any,
+      {sortElement, filterElement}: any,
+  ) => {
+    return (
+      <div className="devices-first-header-formatter">
+        {column.text}
+        {filterElement}
+        {sortElement}
+      </div>
+    );
+  };
+
   const uuidHeaderFormatter = (
       column: any,
       colIndex: any,
       {sortElement, filterElement}: any,
   ) => {
     return (
-      <div className='devices-header-formatter'>
+      <div className="devices-table-header-formatter">
         {column.text}
         {filterElement}
         {sortElement}
@@ -109,7 +123,7 @@ const DevicePage = () => {
       }),
       sort: true,
       formatter: idFormatter,
-      headerFormatter: uuidHeaderFormatter,
+      headerFormatter: uuidFirstHeaderFormatter,
     },
     {
       dataField: 'cpu.aggregatedPercentage',
@@ -158,7 +172,7 @@ const DevicePage = () => {
                 >
                   <BsChevronLeft />
                 </i>
-                <span className="device-span" >Page {page}</span>
+                <span className="device-span">Page {page}</span>
                 <i
                   className="ps-2 device-icon"
                   role="button"

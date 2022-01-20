@@ -9,7 +9,7 @@ const DevicesPageWrapper = ({children}: { children: JSX.Element }) => {
   return (
     <div className="h-100 d-flex flex-column">
       <div id="outer-container">
-        <Navbar/>
+        <Navbar />
       </div>
 
       <div className="flex-grow-1 d-flex flex-column align-items-center devices-content">
