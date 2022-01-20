@@ -5,7 +5,7 @@ import {Col, Table, Accordion} from 'react-bootstrap';
 // Custom
 import {Device} from '../../types/queries';
 
-const DiskAdditionalWidget = (props: {deviceStatic: Device}) => {
+const diskAdditionalWidget = (props: {deviceStatic: Device}) => {
   const deviceStatic: Device = props.deviceStatic;
 
   return (
@@ -53,4 +53,4 @@ const DiskAdditionalWidget = (props: {deviceStatic: Device}) => {
   );
 };
 
-export default DiskAdditionalWidget;
+export default diskAdditionalWidget;

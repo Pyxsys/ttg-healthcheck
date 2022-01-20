@@ -5,7 +5,7 @@ import {Col, Table, Accordion} from 'react-bootstrap';
 // Custom
 import {Device} from '../../types/queries';
 
-const MemoryAdditionalWidget = (props: {deviceStatic: Device}) => {
+const memoryAdditionalWidget = (props: {deviceStatic: Device}) => {
   const deviceStatic: Device = props.deviceStatic;
 
   return (
@@ -41,4 +41,4 @@ const MemoryAdditionalWidget = (props: {deviceStatic: Device}) => {
   );
 };
 
-export default MemoryAdditionalWidget;
+export default memoryAdditionalWidget;

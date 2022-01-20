@@ -6,7 +6,7 @@ import {format} from 'fecha';
 // Custom
 import {DeviceLog} from '../../types/queries';
 
-const DiskUsageWidget = (props: {deviceDynamic: DeviceLog}) => {
+const cpuUsageWidget = (props: {deviceDynamic: DeviceLog}) => {
   const deviceDynamic: DeviceLog = props.deviceDynamic;
 
   return (
@@ -15,40 +15,28 @@ const DiskUsageWidget = (props: {deviceDynamic: DeviceLog}) => {
         <Accordion.Item eventKey="0">
           <Accordion.Header>
             <div className="d-flex w-100 justify-content-around">
-              Disk Usage Information
+              CPU Usage Information
             </div>
           </Accordion.Header>
           <Accordion.Body>
             <Table className="device-details-table device-details-table-dark">
               <tbody>
                 <tr className="border-bottom">
-                  <td className="w-50">Partition Path</td>
+                  <td className="w-50">Usage</td>
                   <td className="float-right">
-                    {deviceDynamic?.disk?.partitions.map((partition) => partition.path).join(', ') || 'N/A'}
+                    {deviceDynamic?.cpu?.usageSpeed || 'N/A'}%
                   </td>
                 </tr>
                 <tr className="border-bottom">
-                  <td>Partition Percentage</td>
+                  <td>Number of Processes</td>
                   <td className="float-right">
-                    {deviceDynamic?.disk?.partitions.map((partition) => partition.percent).join(', ') || 'N/A'}%
+                    {deviceDynamic?.cpu?.numProcesses || 'N/A'}
                   </td>
                 </tr>
                 <tr className="border-bottom">
-                  <td>Reponse Time</td>
+                  <td>Threads Sleeping</td>
                   <td className="float-right">
-                    {deviceDynamic?.disk?.disks.map((disk) => disk.responseTime).join(', ') || 'N/A'}
-                  </td>
-                </tr>
-                <tr className="border-bottom">
-                  <td>Read Time</td>
-                  <td className="float-right">
-                    {deviceDynamic?.disk?.disks.map((disk) => disk.readSpeed).join(', ') || 'N/A'}
-                  </td>
-                </tr>
-                <tr className="border-bottom">
-                  <td>Write Time</td>
-                  <td className="float-right">
-                    {deviceDynamic?.disk?.disks.map((disk) => disk.writeSpeed).join(', ') || 'N/A'}
+                    {deviceDynamic?.cpu?.threadsSleeping || 'N/A'}
                   </td>
                 </tr>
                 <tr className="border-bottom">
@@ -71,4 +59,4 @@ const DiskUsageWidget = (props: {deviceDynamic: DeviceLog}) => {
   );
 };
 
-export default DiskUsageWidget;
+export default cpuUsageWidget;

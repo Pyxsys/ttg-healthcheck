@@ -7,17 +7,17 @@ import {Col, Row, Table, Accordion, Tabs, Tab} from 'react-bootstrap';
 import Navbar from './Navbar';
 import {Device, DeviceLog, IResponse} from '../types/queries';
 import {useRealTimeService} from '../context/realTimeContext';
-import Pie from './common/pieWheel';
-import CpuUsageWidget from './device-detail-widgets/cpuUsage';
-import CpuAdditionalWidget from './device-detail-widgets/cpuAdditional';
-import DiskUsageWidget from './device-detail-widgets/diskUsage';
-import DiskAdditionalWidget from './device-detail-widgets/diskAdditional';
-import MemoryUsageWidget from './device-detail-widgets/memoryUsage';
-import MemoryAdditionalWidget from './device-detail-widgets/memoryAdditional';
-import WifiUsageWidget from './device-detail-widgets/wifiUsage';
-import WifiAdditionalWidget from './device-detail-widgets/wifiAdditional';
+import PieWheel from './common/pieWheel';
+import CpuUsageWidget from './device-detail-widgets/cpuUsageWidget';
+import CpuAdditionalWidget from './device-detail-widgets/cpuAdditionalWidget';
+import DiskUsageWidget from './device-detail-widgets/diskUsageWidget';
+import DiskAdditionalWidget from './device-detail-widgets/diskAdditionalWidget';
+import MemoryUsageWidget from './device-detail-widgets/memoryUsageWidget';
+import MemoryAdditionalWidget from './device-detail-widgets/memoryAdditionalWidget';
+import WifiUsageWidget from './device-detail-widgets/wifiUsageWidget';
+import WifiAdditionalWidget from './device-detail-widgets/wifiAdditionalWidget';
 import SignalStrength from './common/signalStrength';
-import ProcessTable from './device-detail-widgets/processes';
+import ProcessTable from './device-detail-widgets/processeTable';
 
 const DeviceDetailPage = (props: any) => {
   const deviceId: string = props.location.state.id;
@@ -155,7 +155,7 @@ const DeviceDetailPage = (props: any) => {
                       <Accordion.Body>
                         <div className="d-flex justify-content-center">
                           <div>
-                            <Pie
+                            <PieWheel
                               percentage={
                                 deviceLogsData?.cpu?.aggregatedPercentage
                               }
@@ -163,7 +163,7 @@ const DeviceDetailPage = (props: any) => {
                             />
                           </div>
                           <div>
-                            <Pie
+                            <PieWheel
                               percentage={
                                 deviceLogsData?.memory?.aggregatedPercentage
                               }
@@ -171,7 +171,7 @@ const DeviceDetailPage = (props: any) => {
                             />
                           </div>
                           <div>
-                            <Pie
+                            <PieWheel
                               percentage={
                                 deviceLogsData?.disk?.partitions?.reduce(
                                     (sum, p) => sum + p.percent,

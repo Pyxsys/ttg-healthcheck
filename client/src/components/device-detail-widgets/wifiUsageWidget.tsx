@@ -1,12 +1,13 @@
 // 3rd Party
 import React from 'react';
 import {Col, Table, Accordion} from 'react-bootstrap';
+import {format} from 'fecha';
 
 // Custom
-import {Device} from '../../types/queries';
+import {DeviceLog} from '../../types/queries';
 
-const WifiAdditionalWidget = (props: {deviceStatic: Device}) => {
-  const deviceStatic: Device = props.deviceStatic;
+const wifiUsageWidget = (props: {deviceDynamic: DeviceLog}) => {
+  const deviceDynamic: DeviceLog = props.deviceDynamic;
 
   return (
     <Col className="device-details-accordion dark-accordion pt-3 pb-3">
@@ -14,40 +15,39 @@ const WifiAdditionalWidget = (props: {deviceStatic: Device}) => {
         <Accordion.Item eventKey="0">
           <Accordion.Header>
             <div className="d-flex w-100 justify-content-around">
-              Additional Wifi Information
+              Wifi Usage Information
             </div>
           </Accordion.Header>
           <Accordion.Body>
             <Table className="device-details-table device-details-table-dark">
               <tbody>
                 <tr className="border-bottom">
-                  <td>Adapter Name</td>
+                  <td className="w-50">Send Speed</td>
                   <td className="float-right">
-                    {deviceStatic?.wifi?.adapterName || 'N/A'}
+                    {deviceDynamic?.wifi?.sendSpeed || 'N/A'}
                   </td>
                 </tr>
                 <tr className="border-bottom">
-                  <td className="w-50">SSID</td>
+                  <td>Receive Speed</td>
                   <td className="float-right">
-                    {deviceStatic?.wifi?.SSID || 'N/A'}
+                    {deviceDynamic?.wifi?.receiveSpeed || 'N/A'}
                   </td>
                 </tr>
                 <tr className="border-bottom">
-                  <td className="w-50">Connection Type</td>
+                  <td>Signal Strength</td>
                   <td className="float-right">
-                    {deviceStatic?.wifi?.connectionType || 'N/A'}
+                    {deviceDynamic?.wifi?.signalStrength || 'N/A'}
                   </td>
                 </tr>
                 <tr className="border-bottom">
-                  <td className="w-50">IPV4 Address</td>
+                  <td>Timestamp</td>
                   <td className="float-right">
-                    {deviceStatic?.wifi?.ipv4Address || 'N/A'}
-                  </td>
-                </tr>
-                <tr className="border-bottom">
-                  <td className="w-50">IPV6 Address</td>
-                  <td className="float-right">
-                    {deviceStatic?.wifi?.ipv6Address || 'N/A'}
+                    {deviceDynamic?.timestamp ?
+                      format(
+                          new Date(deviceDynamic?.timestamp),
+                          'MMM DD, YYYY, h:mm:ss A',
+                      ) :
+                      'N/A'}
                   </td>
                 </tr>
               </tbody>
@@ -59,4 +59,4 @@ const WifiAdditionalWidget = (props: {deviceStatic: Device}) => {
   );
 };
 
-export default WifiAdditionalWidget;
+export default wifiUsageWidget;

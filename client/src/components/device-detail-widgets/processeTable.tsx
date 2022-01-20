@@ -5,7 +5,7 @@ import BootstrapTable, {ColumnDescription} from 'react-bootstrap-table-next';
 // Custom
 import {DeviceLog, Process} from '../../types/queries';
 
-const ProcessTable = (props: {deviceDynamic: DeviceLog}) => {
+const processTable = (props: {deviceDynamic: DeviceLog}) => {
   const processes: Process[] = props.deviceDynamic?.processes || [];
   const columns: ColumnDescription[] = [
     {
@@ -51,4 +51,4 @@ const ProcessTable = (props: {deviceDynamic: DeviceLog}) => {
   );
 };
 
-export default ProcessTable;
+export default processTable;

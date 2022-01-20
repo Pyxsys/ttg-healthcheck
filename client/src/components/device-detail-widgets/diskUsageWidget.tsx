@@ -6,7 +6,7 @@ import {format} from 'fecha';
 // Custom
 import {DeviceLog} from '../../types/queries';
 
-const WifiUsageWidget = (props: {deviceDynamic: DeviceLog}) => {
+const diskUsageWidget = (props: {deviceDynamic: DeviceLog}) => {
   const deviceDynamic: DeviceLog = props.deviceDynamic;
 
   return (
@@ -15,28 +15,40 @@ const WifiUsageWidget = (props: {deviceDynamic: DeviceLog}) => {
         <Accordion.Item eventKey="0">
           <Accordion.Header>
             <div className="d-flex w-100 justify-content-around">
-              Wifi Usage Information
+              Disk Usage Information
             </div>
           </Accordion.Header>
           <Accordion.Body>
             <Table className="device-details-table device-details-table-dark">
               <tbody>
                 <tr className="border-bottom">
-                  <td className="w-50">Send Speed</td>
+                  <td className="w-50">Partition Path</td>
                   <td className="float-right">
-                    {deviceDynamic?.wifi?.sendSpeed || 'N/A'}
+                    {deviceDynamic?.disk?.partitions.map((partition) => partition.path).join(', ') || 'N/A'}
                   </td>
                 </tr>
                 <tr className="border-bottom">
-                  <td>Receive Speed</td>
+                  <td>Partition Percentage</td>
                   <td className="float-right">
-                    {deviceDynamic?.wifi?.receiveSpeed || 'N/A'}
+                    {deviceDynamic?.disk?.partitions.map((partition) => partition.percent).join(', ') || 'N/A'}%
                   </td>
                 </tr>
                 <tr className="border-bottom">
-                  <td>Signal Strength</td>
+                  <td>Reponse Time</td>
                   <td className="float-right">
-                    {deviceDynamic?.wifi?.signalStrength || 'N/A'}
+                    {deviceDynamic?.disk?.disks.map((disk) => disk.responseTime).join(', ') || 'N/A'}
+                  </td>
+                </tr>
+                <tr className="border-bottom">
+                  <td>Read Time</td>
+                  <td className="float-right">
+                    {deviceDynamic?.disk?.disks.map((disk) => disk.readSpeed).join(', ') || 'N/A'}
+                  </td>
+                </tr>
+                <tr className="border-bottom">
+                  <td>Write Time</td>
+                  <td className="float-right">
+                    {deviceDynamic?.disk?.disks.map((disk) => disk.writeSpeed).join(', ') || 'N/A'}
                   </td>
                 </tr>
                 <tr className="border-bottom">
@@ -59,4 +71,4 @@ const WifiUsageWidget = (props: {deviceDynamic: DeviceLog}) => {
   );
 };
 
-export default WifiUsageWidget;
+export default diskUsageWidget;

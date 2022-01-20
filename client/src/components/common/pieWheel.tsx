@@ -75,7 +75,7 @@ const wheelColor = (percentage: number) => {
 };
 
 // import to create our piewheel with a percentage value
-const Pie = ({percentage, text}: PieWheel) => {
+const pieWheel = ({percentage, text}: PieWheel) => {
   const [backgroundColour, colour] = wheelColor(percentage);
   return (
     <svg width="100%" height="100%" viewBox="0 0 200 200">
@@ -88,4 +88,4 @@ const Pie = ({percentage, text}: PieWheel) => {
   );
 };
 
-export default Pie;
+export default pieWheel;

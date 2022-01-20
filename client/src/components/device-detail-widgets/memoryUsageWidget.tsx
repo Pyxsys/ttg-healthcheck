@@ -6,7 +6,7 @@ import {format} from 'fecha';
 // Custom
 import {DeviceLog} from '../../types/queries';
 
-const CpuUsageWidget = (props: {deviceDynamic: DeviceLog}) => {
+const memoryUsageWidget = (props: {deviceDynamic: DeviceLog}) => {
   const deviceDynamic: DeviceLog = props.deviceDynamic;
 
   return (
@@ -15,28 +15,28 @@ const CpuUsageWidget = (props: {deviceDynamic: DeviceLog}) => {
         <Accordion.Item eventKey="0">
           <Accordion.Header>
             <div className="d-flex w-100 justify-content-around">
-              CPU Usage Information
+              Memory Usage Information
             </div>
           </Accordion.Header>
           <Accordion.Body>
             <Table className="device-details-table device-details-table-dark">
               <tbody>
                 <tr className="border-bottom">
-                  <td className="w-50">Usage</td>
+                  <td className="w-50">inUse</td>
                   <td className="float-right">
-                    {deviceDynamic?.cpu?.usageSpeed || 'N/A'}%
+                    {deviceDynamic?.memory?.inUse || 'N/A'}
                   </td>
                 </tr>
                 <tr className="border-bottom">
-                  <td>Number of Processes</td>
+                  <td>Available</td>
                   <td className="float-right">
-                    {deviceDynamic?.cpu?.numProcesses || 'N/A'}
+                    {deviceDynamic?.memory?.available || 'N/A'}
                   </td>
                 </tr>
                 <tr className="border-bottom">
-                  <td>Threads Sleeping</td>
+                  <td>Cached</td>
                   <td className="float-right">
-                    {deviceDynamic?.cpu?.threadsSleeping || 'N/A'}
+                    {deviceDynamic?.memory?.cached || 'N/A'}
                   </td>
                 </tr>
                 <tr className="border-bottom">
@@ -59,4 +59,4 @@ const CpuUsageWidget = (props: {deviceDynamic: DeviceLog}) => {
   );
 };
 
-export default CpuUsageWidget;
+export default memoryUsageWidget;
