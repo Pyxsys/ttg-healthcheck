@@ -16,10 +16,12 @@ $gray-800: #1d1d1d;
 $gray-900: #101010;
 
 // Media query sizes
-$screen-w-sm: 280px;
-$screen-w-md: 376px;
+$screen-w-xxsm: 0px;
+$screen-w-xsm: 360px;
+$screen-w-sm: 573px;
+$screen-w-md: 768px;
 $screen-w-lg: 991px;
-$screen-w-xlg: 1366px;
+$screen-w-xlg: 1400px;
 $screen-w-xxlg: 1940px;
 $screen-w-xxxlg: 2350px;
 
@@ -42,7 +44,7 @@ body {
 /*-----------------------Login/Signup--------------------------*/
 
 // Custom scrollbar only for computers
-@media only screen and (min-width: $screen-w-md) {
+@media only screen and (min-width: $screen-w-xsm) {
   &::-webkit-scrollbar,             // The whole scrollbar (background)
 		&::-webkit-scrollbar-track,       // The track where the handle can go
     &::-webkit-scrollbar-track-piece, // The Track that was selected
@@ -80,7 +82,7 @@ body {
   -o-transition: all 0.5s ease;
   transition: all 0.5s ease;
 
-  @media (min-width: $screen-w-sm) {
+  @media (min-width: $screen-w-xxsm) {
     min-height: 200px;
   }
   @media (min-width: $screen-w-md) {
@@ -102,7 +104,7 @@ body {
 
 .home-content {
   background-color: $tertiary-gray;
-  @media (min-width: $screen-w-sm) {
+  @media (min-width: $screen-w-xxsm) {
     min-height: 500px;
   }
   @media (min-width: $screen-w-md) {
@@ -128,8 +130,14 @@ body {
 
 .home-logo {
   content: url('assets/brainlogo.png');
-  @media (min-width: $screen-w-sm) {
+  @media (min-width: $screen-w-xxsm) {
     width: 100%;
+  }
+  @media (min-width: $screen-w-xsm) {
+    width: 330px;
+  }
+  @media (min-width: $screen-w-sm) {
+    width: 330px;
   }
   @media (min-width: $screen-w-md) {
     width: 330px;
@@ -169,7 +177,7 @@ body {
   color: $secondary-gray;
   opacity: 80%;
   font-weight: 500;
-  @media (min-width: $screen-w-sm) {
+  @media (min-width: $screen-w-xxsm) {
     font-size: 12px;
   }
   @media (min-width: $screen-w-md) {
@@ -191,10 +199,20 @@ body {
 
 .home-form {
   margin-top: 5rem;
-  @media (min-width: $screen-w-sm) {
+  @media (min-width: $screen-w-xxsm) {
     padding-left: 1.5rem;
     padding-right: 1.5rem;
     width: 100%;
+  }
+  @media (min-width: $screen-w-xsm) {
+    padding-left: 0;
+    padding-right: 0;
+    width: 330px;
+  }
+  @media (min-width: $screen-w-sm) {
+    padding-left: 0;
+    padding-right: 0;
+    width: 330px;
   }
   @media (min-width: $screen-w-md) {
     padding-left: 0;
@@ -216,7 +234,7 @@ body {
 }
 
 .home-input {
-  @media (min-width: $screen-w-sm) {
+  @media (min-width: $screen-w-xxsm) {
     padding: 12px;
   }
   @media (min-width: $screen-w-md) {
@@ -247,7 +265,7 @@ body {
 }
 
 .home-button {
-  @media (min-width: $screen-w-sm) {
+  @media (min-width: $screen-w-xxsm) {
     padding: 12px;
   }
   @media (min-width: $screen-w-md) {
@@ -286,25 +304,25 @@ body {
   height: 65px;
   justify-content: space-between;
   align-items: center;
-  @media (min-width: $screen-w-md) {
+  @media (min-width: $screen-w-xsm) {
     padding: 10px;
   }
-  @media (min-width: $screen-w-lg) {
+  @media (min-width: $screen-w-md) {
     padding: 15px;
   }
-  @media (min-width: $screen-w-xlg) {
+  @media (min-width: $screen-w-lg) {
     padding: 20px;
   }
 }
 
-// right navmenu
+// right nav menu
 .nav-right-menu {
   align-items: center;
 }
 
 .nav-right-icon {
-  width: 38px;
-  height: 38px;
+  width: 37px;
+  height: 37px;
   overflow: hidden;
   border-radius: 50%;
   position: relative;
@@ -324,15 +342,15 @@ body {
 
 // change hamburger width/height of lines
 .hamburger-react div > div{
-  @media (min-width: $screen-w-md) {
+  @media (min-width: $screen-w-xsm) {
     width: 30px !important;
     height: 2.5px !important;
   }
-  @media (min-width: $screen-w-lg) {
+  @media (min-width: $screen-w-md) {
     width: 32px !important;
     height: 3px !important;
   }
-  @media (min-width: $screen-w-xlg) {
+  @media (min-width: $screen-w-lg) {
     width: 33px !important;
     height: 3px !important;
   }
@@ -353,13 +371,13 @@ body {
 // side-nav closed
 .side-nav {
   height: 100vh;
-  @media (min-width: $screen-w-md) {
+  @media (min-width: $screen-w-xsm) {
     width: 240px;
   }
-  @media (min-width: $screen-w-lg) {
+  @media (min-width: $screen-w-md) {
     width: 250px;
   }
-  @media (min-width: $screen-w-xlg) {
+  @media (min-width: $screen-w-lg) {
     width: 260px;
   }
   position: fixed;
@@ -381,7 +399,7 @@ body {
 .side-nav-screen-background{
   height: 100vh;
   background-color:black;
-  opacity: 55%;
+  opacity: 45%;
   width: 100%;
   position:fixed;
   top:0;
@@ -393,13 +411,13 @@ body {
 .side-nav-item {
   margin-left: 0px;
   display: flex;
-  @media (min-width: $screen-w-md) {
+  @media (min-width: $screen-w-xsm) {
     height: 67px;
   }
-  @media (min-width: $screen-w-lg) {
+  @media (min-width: $screen-w-md) {
     height: 70px;
   }
-  @media (min-width: $screen-w-xlg) {
+  @media (min-width: $screen-w-lg) {
     height: 75px;
   }
 }
@@ -416,13 +434,13 @@ body {
   display: flex;
   color: rgb(255, 255, 255);
   align-items: center;
-  @media (min-width: $screen-w-md) {
+  @media (min-width: $screen-w-xsm) {
     padding: 0 13px;
   }
-  @media (min-width: $screen-w-lg) {
+  @media (min-width: $screen-w-md) {
     padding: 0 18px;
   }
-  @media (min-width: $screen-w-xlg) {
+  @media (min-width: $screen-w-lg) {
     padding: 0 22px;
   }
 }
@@ -430,28 +448,28 @@ body {
 // side-nav-item text
 .side-nav-item-text {
   margin-left: 25px;
-  @media (min-width: $screen-w-md) {
+  @media (min-width: $screen-w-xsm) {
     font-size: 0.84em;
   }
-  @media (min-width: $screen-w-lg) {
+  @media (min-width: $screen-w-md) {
     font-size: 0.87em;
   }
-  @media (min-width: $screen-w-xlg) {
+  @media (min-width: $screen-w-lg) {
     font-size: 0.90em;
   }
 }
 
 // side-nav-item icons
 .side-nav-item-icon > svg {
-  @media (min-width: $screen-w-md) {
+  @media (min-width: $screen-w-xsm) {
     width: 2.5em;
     height: 2.5em;
   }
-  @media (min-width: $screen-w-lg) {
+  @media (min-width: $screen-w-md) {
     width: 2.7em;
     height: 2.7em;
   }
-  @media (min-width: $screen-w-xlg) {
+  @media (min-width: $screen-w-lg) {
     width: 2.8em;
     height: 2.8em;
   }
@@ -508,7 +526,21 @@ body {
 }
 
 .device-details-wrapper{
-  padding-top: 45px;
+  @media (min-width: $screen-w-xsm) {
+    padding-top: 12px;
+  }
+  @media (min-width: $screen-w-sm) {
+    padding-top: 15px;
+  }
+  @media (min-width: $screen-w-md) {
+    padding-top: 20px;
+  }
+  @media (min-width: $screen-w-lg) {
+    padding-top: 25px;
+  }
+  @media (min-width: $screen-w-xlg) {
+    padding-top: 30px;
+  }
   background-color: $tertiary-gray;
   flex: 1;
   overflow-y: auto;
@@ -520,7 +552,18 @@ body {
   color: white;
   border-bottom: 0;
   border-top: 0;
-  font-size: 0.85em;
+  @media (min-width: $screen-w-xsm) {
+    font-size: 0.80em;
+  }
+  @media (min-width: $screen-w-md) {
+    font-size: 0.85em;
+  }
+  @media (min-width: $screen-w-lg) {
+    font-size: 0.80em;
+  }
+  @media (min-width: $screen-w-xlg) {
+    font-size: 0.85em;
+  }
 }
 
 .device-details-table-dark{
@@ -536,13 +579,32 @@ body {
 
 // border-radius button (in front of header)
 .device-details-accordion .accordion-item .accordion-button{
-   border-top-left-radius: 7px;
+  border-top-left-radius: 7px;
   border-top-right-radius: 7px;
+}
+
+// add padding for mobile for second accordion
+.device-details-second-accordion {
+  @media (min-width: $screen-w-xsm) {
+    padding-top: 12px;
+  }
+  @media (min-width: $screen-w-sm) {
+    padding-top: 15px;
+  }
+  @media (min-width: $screen-w-md) {
+    padding-top: 20px;
+  }
+  @media (min-width: $screen-w-lg) {
+    padding-top: 0px;
+  }
+  @media (min-width: $screen-w-xlg) {
+    padding-top: 0px;
+  }
 }
 
 // border-radius header
 .device-details-accordion .accordion-header {
-   border-top-left-radius: 7px;
+  border-top-left-radius: 7px;
   border-top-right-radius: 7px;
 }
 
@@ -576,7 +638,18 @@ body {
   border-bottom-right-radius: 7px;
   background-color: $quinary-gray;
   font-size: 0.95em;
-  min-height: 355px;
+  @media (min-width: $screen-w-sm) {
+    min-height: 0px;
+  }
+  @media (min-width: $screen-w-md) {
+    min-height: 0px;
+  }
+  @media (min-width: $screen-w-lg) {
+    min-height: 361px;
+  }
+  @media (min-width: $screen-w-xlg) {
+    min-height: 355px;
+  }
   display: flex;
   justify-content: center;
   align-items: center;
@@ -602,6 +675,30 @@ body {
 }
 
 //----------------- TABS
+
+// add padding for different media queries for tab component
+.device-details-tabs {
+  @media (min-width: $screen-w-xsm) {
+    padding-top: 12px;
+    padding-bottom: 20px;
+  }
+  @media (min-width: $screen-w-sm) {
+    padding-top: 15px;
+    padding-bottom: 25px;
+  }
+  @media (min-width: $screen-w-md) {
+    padding-top: 20px;
+    padding-bottom: 30px;
+  }
+  @media (min-width: $screen-w-lg) {
+    padding-top: 25px;
+    padding-bottom: 40px;
+  }
+  @media (min-width: $screen-w-xlg) {
+    padding-top: 25px;
+    padding-bottom: 40px;
+  }
+}
 
 // tab bar
 .device-details-tabs .nav-tabs {
@@ -642,4 +739,32 @@ body {
   border-bottom-left-radius: 7px;
   border-bottom-right-radius: 7px;
   background-color: $quinary-gray;
+  @media (min-width: $screen-w-xsm) {
+    padding: 15px 5px;
+  }
+  @media (min-width: $screen-w-sm) {
+    padding: 20px 20px;
+  }
+  @media (min-width: $screen-w-md) {
+    padding: 25px 25px;
+  }
+  @media (min-width: $screen-w-lg) {
+    padding: 30px 30px;
+  }
+  @media (min-width: $screen-w-xlg) {
+    padding: 30px 30px;
+  }
+}
+
+// tab widgets padding between them
+.tab-widget-padding {
+  @media (min-width: $screen-w-md) {
+    padding: 0px 0px;
+  }
+  @media (min-width: $screen-w-lg) {
+    padding: 0px 5px;
+  }
+  @media (min-width: $screen-w-xlg) {
+    padding: 0px 20px;
+  }
 }

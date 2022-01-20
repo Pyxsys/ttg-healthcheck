@@ -78,15 +78,15 @@ const DeviceDetailPage = (props: any) => {
     <div id="device-details-container">
       <Navbar />
       <div className='device-details-wrapper'>
-        <div className="h-100 container pe-0 ps-0">
+        <div className="h-100 container pe-2 ps-2">
           <Row>
             <Col>
-              <Row className="gx-5">
+              <Row className="gx-4">
                 <Col
                   xs={12}
                   sm={12}
                   md={12}
-                  lg={12}
+                  lg={4}
                   xl={4}
                   className="device-details-accordion"
                 >
@@ -138,9 +138,9 @@ const DeviceDetailPage = (props: any) => {
                   xs={12}
                   sm={12}
                   md={12}
-                  lg={12}
+                  lg={8}
                   xl={8}
-                  className="device-details-accordion"
+                  className="device-details-accordion device-details-second-accordion"
                 >
                   <Accordion defaultActiveKey="0" flush>
                     <Accordion.Item eventKey="0">
@@ -190,63 +190,135 @@ const DeviceDetailPage = (props: any) => {
                   </Accordion>
                 </Col>
               </Row>
-              <Row className="pt-5 pb-5">
+              <Row>
                 <Col className="device-details-tabs">
                   <Tabs defaultActiveKey="cpu">
                     <Tab eventKey="cpu" title="CPU">
-                      <div className="tab-body d-flex justify-content-around py-4">
-                        <div className="px-5 w-100">
-                          <CpuUsageWidget
-                            deviceDynamic={deviceLogsData}
-                          ></CpuUsageWidget>
-                        </div>
-                        <div className="px-5 w-100">
-                          <CpuAdditionalWidget
-                            deviceStatic={deviceData}
-                          ></CpuAdditionalWidget>
-                        </div>
+                      <div className="tab-body d-flex justify-content-center">
+                        <Row className='w-100'>
+                          <Col
+                            xs={12}
+                            sm={12}
+                            md={12}
+                            lg={6}
+                            xl={6}
+                          >
+                            <div className="tab-widget-padding w-100">
+                              <CpuUsageWidget
+                                deviceDynamic={deviceLogsData}
+                              ></CpuUsageWidget>
+                            </div>
+                          </Col>
+                          <Col
+                            xs={12}
+                            sm={12}
+                            md={12}
+                            lg={6}
+                            xl={6}
+                          >
+                            <div className="tab-widget-padding w-100">
+                              <CpuAdditionalWidget
+                                deviceStatic={deviceData}
+                              ></CpuAdditionalWidget>
+                            </div>
+                          </Col>
+                        </Row>
                       </div>
                     </Tab>
                     <Tab eventKey="memory" title="Memory">
-                      <div className="tab-body d-flex justify-content-around py-4">
-                        <div className="px-5 w-100">
-                          <MemoryUsageWidget
-                            deviceDynamic={deviceLogsData}
-                          ></MemoryUsageWidget>
-                        </div>
-                        <div className="px-5 w-100">
-                          <MemoryAdditionalWidget
-                            deviceStatic={deviceData}
-                          ></MemoryAdditionalWidget>
-                        </div>
+                      <div className="tab-body d-flex justify-content-center">
+                        <Row className='w-100'>
+                          <Col
+                            xs={12}
+                            sm={12}
+                            md={12}
+                            lg={6}
+                            xl={6}
+                          >
+                            <div className="tab-widget-padding w-100">
+                              <MemoryUsageWidget
+                                deviceDynamic={deviceLogsData}
+                              ></MemoryUsageWidget>
+                            </div>
+                          </Col>
+                          <Col
+                            xs={12}
+                            sm={12}
+                            md={12}
+                            lg={6}
+                            xl={6}
+                          >
+                            <div className="tab-widget-padding w-100">
+                              <MemoryAdditionalWidget
+                                deviceStatic={deviceData}
+                              ></MemoryAdditionalWidget>
+                            </div>
+                          </Col>
+                        </Row>
                       </div>
                     </Tab>
                     <Tab eventKey="disk" title="Disk">
-                      <div className="tab-body d-flex justify-content-around py-4">
-                        <div className="px-5 w-100">
-                          <DiskUsageWidget
-                            deviceDynamic={deviceLogsData}
-                          ></DiskUsageWidget>
-                        </div>
-                        <div className="px-5 w-100">
-                          <DiskAdditionalWidget
-                            deviceStatic={deviceData}
-                          ></DiskAdditionalWidget>
-                        </div>
+                      <div className="tab-body d-flex justify-content-around">
+                        <Row className='w-100'>
+                          <Col
+                            xs={12}
+                            sm={12}
+                            md={12}
+                            lg={6}
+                            xl={6}
+                          >
+                            <div className="tab-widget-padding w-100">
+                              <DiskUsageWidget
+                                deviceDynamic={deviceLogsData}
+                              ></DiskUsageWidget>
+                            </div>
+                          </Col>
+                          <Col
+                            xs={12}
+                            sm={12}
+                            md={12}
+                            lg={6}
+                            xl={6}
+                          >
+                            <div className="tab-widget-padding w-100">
+                              <DiskAdditionalWidget
+                                deviceStatic={deviceData}
+                              ></DiskAdditionalWidget>
+                            </div>
+                          </Col>
+                        </Row>
                       </div>
                     </Tab>
                     <Tab eventKey="wifi" title="Wifi">
-                      <div className="tab-body d-flex justify-content-around py-4">
-                        <div className="px-5 w-100">
-                          <WifiUsageWidget
-                            deviceDynamic={deviceLogsData}
-                          ></WifiUsageWidget>
-                        </div>
-                        <div className="px-5 w-100">
-                          <WifiAdditionalWidget
-                            deviceStatic={deviceData}
-                          ></WifiAdditionalWidget>
-                        </div>
+                      <div className="tab-body d-flex justify-content-around">
+                        <Row className='w-100'>
+                          <Col
+                            xs={12}
+                            sm={12}
+                            md={12}
+                            lg={6}
+                            xl={6}
+                          >
+                            <div className="tab-widget-padding w-100">
+                              <WifiUsageWidget
+                                deviceDynamic={deviceLogsData}
+                              ></WifiUsageWidget>
+                            </div>
+                          </Col>
+                          <Col
+                            xs={12}
+                            sm={12}
+                            md={12}
+                            lg={6}
+                            xl={6}
+                          >
+                            <div className="tab-widget-padding w-100">
+                              <WifiAdditionalWidget
+                                deviceStatic={deviceData}
+                              ></WifiAdditionalWidget>
+                            </div>
+                          </Col>
+                        </Row>
                       </div>
                     </Tab>
                     <Tab eventKey="processes" title="Processes">
