@@ -17,7 +17,7 @@ import MemoryAdditionalWidget from './device-detail-widgets/memoryAdditionalWidg
 import WifiUsageWidget from './device-detail-widgets/wifiUsageWidget';
 import WifiAdditionalWidget from './device-detail-widgets/wifiAdditionalWidget';
 import SignalStrength from './common/signalStrength';
-import ProcessTable from './device-detail-widgets/processeTable';
+import ProcessTable from './device-detail-widgets/processTable';
 
 const DeviceDetailPage = (props: any) => {
   const deviceId: string = props.location.state.id;
