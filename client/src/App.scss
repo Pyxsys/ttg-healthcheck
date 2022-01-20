@@ -351,6 +351,8 @@ Note: Beware of modifying this element as it can break the animations - you shou
 **
 */
 
+// Devices content
+
 .devices-content {
   background-color: $fourth;
   @media (min-width: $screen-w-sm) {
@@ -373,13 +375,11 @@ Note: Beware of modifying this element as it can break the animations - you shou
   }
 }
 
-// devices table
 .devices-table {
   margin-top: 8rem;
   margin-left: 2rem;
 }
 
-// responsive table
 .react-bootstrap-table table {
   --bs-table-striped-color: white;
   table-layout: auto;
@@ -411,22 +411,15 @@ Note: Beware of modifying this element as it can break the animations - you shou
   background-color: $fifth;
 }
 
-// hide uneeded sr-only label in device table
-.sr-only {
-  border: 0;
-  padding: 0;
-  margin: 0;
-  position: absolute !important;
-  height: 1px; 
-  width: 1px;
-  overflow: hidden;
-  clip: rect(1px 1px 1px 1px); 
-  clip: rect(1px, 1px, 1px, 1px);
-  clip-path: inset(50%); 
-  white-space: nowrap; 
+.device-icon{
+  color: $secondary;
 }
 
-// create carets to be used in the table
+.device-span{
+  color: $secondary;
+}
+
+// caret
 .caret {
   color: $secondary;
   display: inline-block;
@@ -440,7 +433,6 @@ Note: Beware of modifying this element as it can break the animations - you shou
   border-left: 4px solid transparent;
 }
 
-// create carret when clicked
 .dropup .caret, .navbar-fixed-bottom .dropdown .caret {
   border-top: 0;
   border-bottom: 4px dashed;
@@ -448,13 +440,6 @@ Note: Beware of modifying this element as it can break the animations - you shou
   content: "";
 }
 
-.device-icon{
-  color: $secondary;
-}
-
-.device-span{
-  color: $secondary;
-}
 
 // footer
 
@@ -469,6 +454,20 @@ Note: Beware of modifying this element as it can break the animations - you shou
   background-color: $fourth;
 }
 
+// hide uneeded sr-only label in device table
+.sr-only {
+  border: 0;
+  padding: 0;
+  margin: 0;
+  position: absolute !important;
+  height: 1px; 
+  width: 1px;
+  overflow: hidden;
+  clip: rect(1px 1px 1px 1px); 
+  clip: rect(1px, 1px, 1px, 1px);
+  clip-path: inset(50%); 
+  white-space: nowrap; 
+}
 /*-------------------------------------------------------------*/
 
 
