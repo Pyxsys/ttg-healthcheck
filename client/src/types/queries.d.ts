@@ -8,6 +8,13 @@ export interface IResponse<T> {
   Total: number
 }
 
+export interface IQuery {
+  limit?: number
+  skip?: number
+  orderBy?: string
+  Total?: boolean
+}
+
 export interface Device {
   deviceId: string
   name: string
