@@ -12,7 +12,7 @@ import {DeviceLog, IResponse} from '../types/queries';
 import {useRealTimeService} from '../context/realTimeContext';
 import Navbar from './Navbar';
 import PieWheel from './common/pieWheel';
-import SignalStrength from './common/signalStrength';
+import {SignalStrength, signalText} from './common/signalStrength';
 
 const DevicePage = () => {
   // Readonly Values
@@ -21,6 +21,7 @@ const DevicePage = () => {
 
   const [deviceData, setDeviceData] = useState([] as DeviceLog[]);
   const [page, setPage] = useState(initialPage);
+  const [totalPages, setTotalPages] = useState(0);
 
   const realTimeDataService = useRealTimeService();
 
@@ -40,6 +41,7 @@ const DevicePage = () => {
       params: {
         limit: pageSize,
         skip: skip,
+        Total: true,
       },
     };
     const deviceResponse = await axios.get<IResponse<string>>(
@@ -47,6 +49,7 @@ const DevicePage = () => {
         deviceIdQuery,
     );
     const deviceIds = deviceResponse.data.Results;
+    setTotalPages(Math.ceil(deviceResponse.data.Total / pageSize));
 
     const latestDevicesResponse = await axios.get<IResponse<DeviceLog>>(
         'api/device-logs/latest',
@@ -82,18 +85,23 @@ const DevicePage = () => {
 
   const idFormatter = (cell: {} | null | undefined) => {
     return (
-      <>
-        <Link to={{pathname: '/device', state: {id: cell}}}>{cell}</Link>
-      </>
+      <div className="devices-column-h d-flex justify-content-left align-items-center">
+        <div className="devices-uuid-text devices-font">
+          <Link to={{pathname: '/device', state: {id: cell}}}>{cell}</Link>
+        </div>
+      </div>
     );
   };
 
   const pieUsageFormatter = (cell: {} | null | undefined) => {
     return (
-      <div className="d-flex w-50 justify-content-center align-items-center">
-        <div className="w-40">{cell}</div>
-        <div className="ps-2 w-60">
-          <PieWheel percentage={Number(cell)} text={true} />
+      <div className="d-flex justify-content-end align-items-center">
+        <div className="text-truncate devices-font">
+          {Number(cell).toFixed(2)}
+          {cell ? '%' : ''}
+        </div>
+        <div className="ps-2 devices-column">
+          <PieWheel percentage={Number(cell)} text={false} />
         </div>
       </div>
     );
@@ -101,10 +109,14 @@ const DevicePage = () => {
 
   const signalStrengthFormatter = (cell: {} | null | undefined) => {
     return (
-      <div className="d-flex w-50 justify-content-center align-items-center">
-        <div className="w-40">{cell}</div>
-        <div className="ps-2 w-60">
-          <SignalStrength level={Number(cell)} showText={true} />
+      <div className="d-flex flex-column">
+        <div className="d-flex justify-content-end align-items-center">
+          <div className="text-truncate devices-font">
+            {signalText(Number(cell))}
+          </div>
+          <div className="ps-2 devices-column">
+            <SignalStrength level={Number(cell)} showText={false} />
+          </div>
         </div>
       </div>
     );
@@ -118,7 +130,6 @@ const DevicePage = () => {
     return (
       <div className="devices-first-header-formatter">
         {column.text}
-        {filterElement}
         {sortElement}
       </div>
     );
@@ -132,7 +143,6 @@ const DevicePage = () => {
     return (
       <div className="devices-table-header-formatter">
         {column.text}
-        {filterElement}
         {sortElement}
       </div>
     );
@@ -192,7 +202,7 @@ const DevicePage = () => {
               <div className="devices-table ">
                 <BootstrapTable
                   striped={true}
-                  keyField="id"
+                  keyField="deviceId"
                   data={deviceData}
                   columns={columns}
                   filter={filterFactory()}
@@ -209,7 +219,7 @@ const DevicePage = () => {
                   <i
                     className="ps-2 device-icon"
                     role="button"
-                    onClick={() => setPage(page + 1)}
+                    onClick={() => setPage(page < totalPages ? page + 1 : page)}
                   >
                     <BsChevronRight />
                   </i>

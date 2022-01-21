@@ -492,29 +492,136 @@ body {
 }
 
 .devices-column {
+  @media (min-width: $screen-w-xxsm) {
+    height: 50px;
+    width: 50px;
+  }
+  @media (min-width: $screen-w-xsm) {
+    height: 50px;
+    width: 50px;
+  }
   @media (min-width: $screen-w-sm) {
-    min-height: 500px;
+    height: 50px;
+    width: 50px;
   }
   @media (min-width: $screen-w-md) {
-    min-height: 500px;
+    height: 60px;
+    width: 60px;
   }
   @media (min-width: $screen-w-lg) {
-    min-height: 500px;
+    height: 60px;
+    width: 60px;
   }
   @media (min-width: $screen-w-xlg) {
-    min-height: 550px;
+    height: 110px;
+    width: 110px;
   }
   @media (min-width: $screen-w-xxlg) {
-    min-height: 550px;
+    height: 120px;
+    width: 120px;
   }
   @media (min-width: $screen-w-xxxlg) {
-    min-height: 550px;
+    height: 120px;
+    width: 120px;
   }
+}
+
+.devices-column-h {
+  @media (min-width: $screen-w-xxsm) {
+    height: 50px;
+    max-width: 100px;
+  }
+  @media (min-width: $screen-w-xsm) {
+    height: 50px;
+    max-width: 100px;
+  }
+  @media (min-width: $screen-w-sm) {
+    height: 50px;
+    max-width: 100px;
+  }
+  @media (min-width: $screen-w-md) {
+    height: 60px;
+    max-width: 120px;
+  }
+  @media (min-width: $screen-w-lg) {
+    height: 60px;
+    max-width: 120px;
+  }
+  @media (min-width: $screen-w-xlg) {
+    height: 110px;
+    max-width: 220px;
+  }
+  @media (min-width: $screen-w-xxlg) {
+    height: 120px;
+    max-width: 240px;
+  }
+  @media (min-width: $screen-w-xxxlg) {
+    height: 120px;
+    max-width: 240px;
+  }
+}
+
+.devices-uuid-text{
+  @media (min-width: $screen-w-xxsm) {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  @media (min-width: $screen-w-xsm) {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  @media (min-width: $screen-w-sm) {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  @media (min-width: $screen-w-md) {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    
+  }
+  @media (min-width: $screen-w-lg) {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  @media (min-width: $screen-w-xlg) {
+    word-wrap: break-word !important;
+    word-break: break-word !important;
+    overflow: unset;
+    text-overflow: unset;
+    white-space: unset;
+  }
+  @media (min-width: $screen-w-xxlg) {
+    word-wrap: break-word !important;
+    word-break: break-word !important;
+    overflow: unset;
+    text-overflow: unset;
+    white-space: unset;
+  }
+  @media (min-width: $screen-w-xxxlg) {
+    word-wrap: break-word !important;
+    word-break: break-word !important;
+    overflow: unset;
+    text-overflow: unset;
+    white-space: unset;
+  }
+}
+
+.devices-font {
+  font-size: 1.2em;
 }
 
 .devices-table {
   margin-top: 8rem;
   margin-left: 2rem;
+}
+
+.devices-first-header-formatter {
+
 }
 
 .react-bootstrap-table table {
