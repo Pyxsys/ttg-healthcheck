@@ -16,7 +16,8 @@ const AuthContext = Contextualizer.createContext<AuthObject>(AppServices.Authent
 /**
  * @return {AuthObject} user information and authentication status
  */
-export const useAuth = (): AuthObject => Contextualizer.use<AuthObject>(AppServices.Authentication);
+export const useAuth = (): AuthObject =>
+  Contextualizer.use<AuthObject>(AppServices.Authentication);
 
 /**
  *
