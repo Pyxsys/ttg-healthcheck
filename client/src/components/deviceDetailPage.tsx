@@ -77,7 +77,7 @@ const DeviceDetailPage = (props: any) => {
   return (
     <div id="device-details-container">
       <Navbar />
-      <div className='device-details-wrapper'>
+      <div className="device-details-wrapper">
         <div className="h-100 container pe-2 ps-2">
           <Row>
             <Col>
@@ -101,32 +101,55 @@ const DeviceDetailPage = (props: any) => {
                         <Table className="device-details-table">
                           <tbody>
                             <tr>
-                              <td className="w-50" style={{fontWeight: '600'}}>ID</td>
-                              <td style={{fontStyle: 'italic'}}>{deviceId}</td>
+                              <td
+                                className="w-50"
+                                style={{fontWeight: '600'}}
+                              >
+                                ID
+                              </td>
+                              <td style={{fontStyle: 'italic'}}>
+                                {deviceId}
+                              </td>
                             </tr>
                             <tr>
                               <td style={{fontWeight: '600'}}>Name</td>
-                              <td style={{fontStyle: 'italic'}}>{deviceData?.name}</td>
+                              <td style={{fontStyle: 'italic'}}>
+                                {deviceData?.name}
+                              </td>
                             </tr>
                             <tr>
                               <td style={{fontWeight: '600'}}>Description</td>
-                              <td style={{fontStyle: 'italic'}}>{deviceData?.description}</td>
+                              <td style={{fontStyle: 'italic'}}>
+                                {deviceData?.description}
+                              </td>
                             </tr>
                             <tr>
-                              <td style={{fontWeight: '600'}}>Connection Type</td>
-                              <td style={{fontStyle: 'italic'}}>{deviceData?.connectionType}</td>
+                              <td style={{fontWeight: '600'}}>
+                                Connection Type
+                              </td>
+                              <td style={{fontStyle: 'italic'}}>
+                                {deviceData?.connectionType}
+                              </td>
                             </tr>
                             <tr>
                               <td style={{fontWeight: '600'}}>Status</td>
-                              <td style={{fontStyle: 'italic'}}>{deviceData?.status}</td>
+                              <td style={{fontStyle: 'italic'}}>
+                                {deviceData?.status}
+                              </td>
                             </tr>
                             <tr>
                               <td style={{fontWeight: '600'}}>Provider</td>
-                              <td style={{fontStyle: 'italic'}}>{deviceData?.provider}</td>
+                              <td style={{fontStyle: 'italic'}}>
+                                {deviceData?.provider}
+                              </td>
                             </tr>
                             <tr>
-                              <td style={{fontWeight: '600'}}>Hardware Name</td>
-                              <td style={{fontStyle: 'italic'}}>{deviceData?.hardware?.harwareName}</td>
+                              <td style={{fontWeight: '600'}}>
+                                Hardware Name
+                              </td>
+                              <td style={{fontStyle: 'italic'}}>
+                                {deviceData?.hardware?.harwareName}
+                              </td>
                             </tr>
                           </tbody>
                         </Table>
@@ -182,7 +205,12 @@ const DeviceDetailPage = (props: any) => {
                             />
                           </div>
                           <div>
-                            <SignalStrength level={Number(deviceLogsData?.wifi?.signalStrength)} showText={true} />
+                            <SignalStrength
+                              level={Number(
+                                  deviceLogsData?.wifi?.signalStrength,
+                              )}
+                              showText={true}
+                            />
                           </div>
                         </div>
                       </Accordion.Body>
@@ -195,27 +223,15 @@ const DeviceDetailPage = (props: any) => {
                   <Tabs defaultActiveKey="cpu">
                     <Tab eventKey="cpu" title="CPU">
                       <div className="tab-body d-flex justify-content-center">
-                        <Row className='w-100'>
-                          <Col
-                            xs={12}
-                            sm={12}
-                            md={12}
-                            lg={6}
-                            xl={6}
-                          >
+                        <Row className="w-100">
+                          <Col xs={12} sm={12} md={12} lg={6} xl={6}>
                             <div className="tab-widget-padding w-100">
                               <CpuUsageWidget
                                 deviceDynamic={deviceLogsData}
                               ></CpuUsageWidget>
                             </div>
                           </Col>
-                          <Col
-                            xs={12}
-                            sm={12}
-                            md={12}
-                            lg={6}
-                            xl={6}
-                          >
+                          <Col xs={12} sm={12} md={12} lg={6} xl={6}>
                             <div className="tab-widget-padding w-100">
                               <CpuAdditionalWidget
                                 deviceStatic={deviceData}
@@ -227,27 +243,15 @@ const DeviceDetailPage = (props: any) => {
                     </Tab>
                     <Tab eventKey="memory" title="Memory">
                       <div className="tab-body d-flex justify-content-center">
-                        <Row className='w-100'>
-                          <Col
-                            xs={12}
-                            sm={12}
-                            md={12}
-                            lg={6}
-                            xl={6}
-                          >
+                        <Row className="w-100">
+                          <Col xs={12} sm={12} md={12} lg={6} xl={6}>
                             <div className="tab-widget-padding w-100">
                               <MemoryUsageWidget
                                 deviceDynamic={deviceLogsData}
                               ></MemoryUsageWidget>
                             </div>
                           </Col>
-                          <Col
-                            xs={12}
-                            sm={12}
-                            md={12}
-                            lg={6}
-                            xl={6}
-                          >
+                          <Col xs={12} sm={12} md={12} lg={6} xl={6}>
                             <div className="tab-widget-padding w-100">
                               <MemoryAdditionalWidget
                                 deviceStatic={deviceData}
@@ -259,27 +263,15 @@ const DeviceDetailPage = (props: any) => {
                     </Tab>
                     <Tab eventKey="disk" title="Disk">
                       <div className="tab-body d-flex justify-content-around">
-                        <Row className='w-100'>
-                          <Col
-                            xs={12}
-                            sm={12}
-                            md={12}
-                            lg={6}
-                            xl={6}
-                          >
+                        <Row className="w-100">
+                          <Col xs={12} sm={12} md={12} lg={6} xl={6}>
                             <div className="tab-widget-padding w-100">
                               <DiskUsageWidget
                                 deviceDynamic={deviceLogsData}
                               ></DiskUsageWidget>
                             </div>
                           </Col>
-                          <Col
-                            xs={12}
-                            sm={12}
-                            md={12}
-                            lg={6}
-                            xl={6}
-                          >
+                          <Col xs={12} sm={12} md={12} lg={6} xl={6}>
                             <div className="tab-widget-padding w-100">
                               <DiskAdditionalWidget
                                 deviceStatic={deviceData}
@@ -291,27 +283,15 @@ const DeviceDetailPage = (props: any) => {
                     </Tab>
                     <Tab eventKey="wifi" title="Wifi">
                       <div className="tab-body d-flex justify-content-around">
-                        <Row className='w-100'>
-                          <Col
-                            xs={12}
-                            sm={12}
-                            md={12}
-                            lg={6}
-                            xl={6}
-                          >
+                        <Row className="w-100">
+                          <Col xs={12} sm={12} md={12} lg={6} xl={6}>
                             <div className="tab-widget-padding w-100">
                               <WifiUsageWidget
                                 deviceDynamic={deviceLogsData}
                               ></WifiUsageWidget>
                             </div>
                           </Col>
-                          <Col
-                            xs={12}
-                            sm={12}
-                            md={12}
-                            lg={6}
-                            xl={6}
-                          >
+                          <Col xs={12} sm={12} md={12} lg={6} xl={6}>
                             <div className="tab-widget-padding w-100">
                               <WifiAdditionalWidget
                                 deviceStatic={deviceData}

@@ -1,11 +1,4 @@
 // Set new color palette.
-$primary: #393f49;
-$secondary: #f8f9fa;
-$third: #b1b1b1;
-$fourth: #30353d;
-$fifth: #3F4651;
-$sixth: #4C535F;
-
 $primary-gray: #393f49;
 $secondary-gray: #f8f9fa;
 $tertiary-gray: #30353d;
@@ -322,15 +315,6 @@ body {
   }
 }
 
-/* Color/shape of burger icon bars */
-.bm-burger-bars {
-  background: $secondary;
-}
-
-/* Color/shape of burger icon bars on hover*/
-.bm-burger-bars-hover {
-  background: $third;
-}
 // right nav menu
 .nav-right-menu {
   align-items: center;
@@ -354,22 +338,6 @@ body {
   color: white;
   width: 15px;
   height: 15px;
-}
-
-// change hamburger width/height of lines
-.hamburger-react div > div{
-  @media (min-width: $screen-w-xsm) {
-    width: 30px !important;
-    height: 2.5px !important;
-  }
-  @media (min-width: $screen-w-md) {
-    width: 32px !important;
-    height: 3px !important;
-  }
-  @media (min-width: $screen-w-lg) {
-    width: 33px !important;
-    height: 3px !important;
-  }
 }
 
 // nav-hamburger wrapper
@@ -442,6 +410,7 @@ body {
 .side-nav-item:hover {
   background-color: #30393f86;
 }
+
 // nav items link tag
 .side-nav-item a {
   font-weight: 600;
@@ -475,16 +444,54 @@ body {
   }
 }
 
+// side-nav-item icons
+.side-nav-item-icon > svg {
+  @media (min-width: $screen-w-xsm) {
+    width: 2.5em;
+    height: 2.5em;
+  }
+  @media (min-width: $screen-w-md) {
+    width: 2.7em;
+    height: 2.7em;
+  }
+  @media (min-width: $screen-w-lg) {
+    width: 2.8em;
+    height: 2.8em;
+  }
+  color: white;
+}
+
 
 /*
-**  Devices Page
+**  Device table Page
 **
 */
 
-// Devices content
+// Device table content
 
 .devices-content {
-  background-color: $fourth;
+  background-color: $tertiary-gray;
+  @media (min-width: $screen-w-sm) {
+    min-height: 500px;
+  }
+  @media (min-width: $screen-w-md) {
+    min-height: 500px;
+  }
+  @media (min-width: $screen-w-lg) {
+    min-height: 500px;
+  }
+  @media (min-width: $screen-w-xlg) {
+    min-height: 550px;
+  }
+  @media (min-width: $screen-w-xxlg) {
+    min-height: 550px;
+  }
+  @media (min-width: $screen-w-xxxlg) {
+    min-height: 550px;
+  }
+}
+
+.devices-column {
   @media (min-width: $screen-w-sm) {
     min-height: 500px;
   }
@@ -513,51 +520,16 @@ body {
 .react-bootstrap-table table {
   --bs-table-striped-color: white;
   table-layout: auto;
-  border: $fourth !important;
+  border: $tertiary-gray !important;
 }
 
 .react-bootstrap-table table thead tr {
   color: white;
-  background-color: $fifth;
+  background-color: $quarternary-gray;
 }
 
-.order {
-  display: flex;
-  flex-direction: row;
-}
-
-// side-nav-item icons
-.side-nav-item-icon > svg {
-  @media (min-width: $screen-w-xsm) {
-    width: 2.5em;
-    height: 2.5em;
-  }
-  @media (min-width: $screen-w-md) {
-    width: 2.7em;
-    height: 2.7em;
-  }
-  @media (min-width: $screen-w-lg) {
-    width: 2.8em;
-    height: 2.8em;
-  }
-  color: white;
-}
-
-/*-----------------------Devices--------------------------*/
-
-// hide uneeded sr-only label in device table
-.sr-only {
-  border: 0;
-  padding: 0;
-  margin: 0;
-  position: absolute !important;
-  height: 1px; 
-  width: 1px;
-  overflow: hidden;
-  clip: rect(1px 1px 1px 1px); 
-  clip: rect(1px, 1px, 1px, 1px);
-  clip-path: inset(50%); 
-  white-space: nowrap; 
+.react-bootstrap-table table tbody tr td {
+  text-align: -webkit-center !important;
 }
 
 .devices-table-header-formatter{
@@ -567,25 +539,25 @@ body {
 
 .react-bootstrap-table table tbody tr:nth-child(odd) {
   color: white;
-  background-color: $sixth;
+  background-color: $quinary-gray;
 }
 
 .react-bootstrap-table table tbody tr:nth-child(even) {
   color: white;
-  background-color: $fifth;
+  background-color: $quarternary-gray;
 }
 
 .device-icon{
-  color: $secondary;
+  color: $secondary-gray;
 }
 
 .device-span{
-  color: $secondary;
+  color: $secondary-gray;
 }
 
 // caret
 .caret {
-  color: $secondary;
+  color: $secondary-gray;
   display: inline-block;
   width: 0;
   height: 0;
@@ -604,28 +576,17 @@ body {
   content: "";
 }
 
-/*-----------------------Device Details--------------------------*/
-
-#device-details-container{
-  background-color: $tertiary-gray;
-  max-width: 100%;
-  height: 100vh;
-  min-height: 0;  
-  display: flex;
-  flex-direction: column;
-}
-
 // footer
 
 .devices-copyright {
-  color: $secondary;
+  color: $secondary-gray;
   opacity: 80%;
   font-size: 11px;
   font-weight: 600;
 }
 
 .devices-footer {
-  background-color: $fourth;
+  background-color: $tertiary-gray;
 }
 
 // hide uneeded sr-only label in device table
@@ -642,7 +603,17 @@ body {
   clip-path: inset(50%); 
   white-space: nowrap; 
 }
-/*-------------------------------------------------------------*/
+
+/*-----------------------Device Details--------------------------*/
+
+#device-details-container{
+  background-color: $tertiary-gray;
+  max-width: 100%;
+  height: 100vh;
+  min-height: 0;  
+  display: flex;
+  flex-direction: column;
+}
 
 
 .device-details-wrapper{

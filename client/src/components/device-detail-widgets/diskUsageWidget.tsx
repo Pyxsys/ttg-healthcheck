@@ -6,7 +6,7 @@ import {format} from 'fecha';
 // Custom
 import {DeviceLog} from '../../types/queries';
 
-const diskUsageWidget = (props: {deviceDynamic: DeviceLog}) => {
+const diskUsageWidget = (props: { deviceDynamic: DeviceLog }) => {
   const deviceDynamic: DeviceLog = props.deviceDynamic;
 
   return (
@@ -24,31 +24,42 @@ const diskUsageWidget = (props: {deviceDynamic: DeviceLog}) => {
                 <tr className="border-bottom">
                   <td className="w-50">Partition Path</td>
                   <td className="float-right">
-                    {deviceDynamic?.disk?.partitions.map((partition) => partition.path).join(', ') || 'N/A'}
+                    {deviceDynamic?.disk?.partitions
+                        .map((partition) => partition.path)
+                        .join(', ') || 'N/A'}
                   </td>
                 </tr>
                 <tr className="border-bottom">
                   <td>Partition Percentage</td>
                   <td className="float-right">
-                    {deviceDynamic?.disk?.partitions.map((partition) => partition.percent).join(', ') || 'N/A'}%
+                    {deviceDynamic?.disk?.partitions
+                        .map((partition) => partition.percent)
+                        .join(', ') || 'N/A'}
+                    %
                   </td>
                 </tr>
                 <tr className="border-bottom">
                   <td>Reponse Time</td>
                   <td className="float-right">
-                    {deviceDynamic?.disk?.disks.map((disk) => disk.responseTime).join(', ') || 'N/A'}
+                    {deviceDynamic?.disk?.disks
+                        .map((disk) => disk.responseTime)
+                        .join(', ') || 'N/A'}
                   </td>
                 </tr>
                 <tr className="border-bottom">
                   <td>Read Time</td>
                   <td className="float-right">
-                    {deviceDynamic?.disk?.disks.map((disk) => disk.readSpeed).join(', ') || 'N/A'}
+                    {deviceDynamic?.disk?.disks
+                        .map((disk) => disk.readSpeed)
+                        .join(', ') || 'N/A'}
                   </td>
                 </tr>
                 <tr className="border-bottom">
                   <td>Write Time</td>
                   <td className="float-right">
-                    {deviceDynamic?.disk?.disks.map((disk) => disk.writeSpeed).join(', ') || 'N/A'}
+                    {deviceDynamic?.disk?.disks
+                        .map((disk) => disk.writeSpeed)
+                        .join(', ') || 'N/A'}
                   </td>
                 </tr>
                 <tr className="border-bottom">

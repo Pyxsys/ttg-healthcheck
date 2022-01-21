@@ -74,18 +74,16 @@ const signalText = (level: number) => {
  * @param {string} text
  * @return {JSX.Element} a JSX Element of text
  */
-const Text = ({text}: {text: string}) => {
+const Text = ({text}: { text: string }) => {
   return (
     <>
-      {text ?
-        <text
-          x='50'
-          y='120'
-          textAnchor='middle'
-          fontSize={'1em'}
-          fill='white'>{text}</text> :
+      {text ? (
+        <text x="50" y="120" textAnchor="middle" fontSize={'1em'} fill="white">
+          {text}
+        </text>
+      ) : (
         <></>
-      }
+      )}
     </>
   );
 };
@@ -109,10 +107,7 @@ const Bar = styled.rect.attrs((bar: IBarInput) => bar)`
 const CrossBar = () => {
   return (
     <g transform={`translate(-10, 85) rotate(-30)`}>
-      <rect
-        width={125}
-        height={10}
-        fill={barColour(NaN, NaN)} />
+      <rect width={125} height={10} fill={barColour(NaN, NaN)} />
     </g>
   );
 };
@@ -125,15 +120,22 @@ const CrossBar = () => {
  */
 const SignalStrength = ({level, showText}: ISignalStrengthInput) => {
   const text = signalText(level);
-  const showSignalStrengthText:any = showText ? text : '';
+  const showSignalStrengthText: any = showText ? text : '';
   return (
     <svg width="100%" height="100%" viewBox="-40 0 175 125">
-      {[0, 1, 2, 3].map((index) =>
-        <g key={index} transform={`translate(${index * 25}, ${60 - (index * 20)})`}>
-          <Bar colour={barColour(level, index)} size={40 + (index * 20)} delay={index * 25} />
-        </g>,
-      )}
-      {text ? <Text text={showSignalStrengthText}/> : <CrossBar />}
+      {[0, 1, 2, 3].map((index) => (
+        <g
+          key={index}
+          transform={`translate(${index * 25}, ${60 - index * 20})`}
+        >
+          <Bar
+            colour={barColour(level, index)}
+            size={40 + index * 20}
+            delay={index * 25}
+          />
+        </g>
+      ))}
+      {text ? <Text text={showSignalStrengthText} /> : <CrossBar />}
     </svg>
   );
 };

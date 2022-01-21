@@ -9,8 +9,10 @@ import {BsChevronLeft, BsChevronRight} from 'react-icons/bs';
 
 // Custom
 import {DeviceLog, IResponse} from '../types/queries';
-import DevicesPageWrapper from './common/devicesPageWrapper';
 import {useRealTimeService} from '../context/realTimeContext';
+import Navbar from './Navbar';
+import PieWheel from './common/pieWheel';
+import SignalStrength from './common/signalStrength';
 
 const DevicePage = () => {
   // Readonly Values
@@ -86,6 +88,28 @@ const DevicePage = () => {
     );
   };
 
+  const pieUsageFormatter = (cell: {} | null | undefined) => {
+    return (
+      <div className="d-flex w-50 justify-content-center align-items-center">
+        <div className="w-40">{cell}</div>
+        <div className="ps-2 w-60">
+          <PieWheel percentage={Number(cell)} text={true} />
+        </div>
+      </div>
+    );
+  };
+
+  const signalStrengthFormatter = (cell: {} | null | undefined) => {
+    return (
+      <div className="d-flex w-50 justify-content-center align-items-center">
+        <div className="w-40">{cell}</div>
+        <div className="ps-2 w-60">
+          <SignalStrength level={Number(cell)} showText={true} />
+        </div>
+      </div>
+    );
+  };
+
   const uuidFirstHeaderFormatter = (
       column: any,
       colIndex: any,
@@ -129,63 +153,78 @@ const DevicePage = () => {
       dataField: 'cpu.aggregatedPercentage',
       text: 'CPU',
       sort: true,
+      formatter: pieUsageFormatter,
       headerFormatter: uuidHeaderFormatter,
     },
     {
       dataField: 'memory.aggregatedPercentage',
       text: 'Memory',
       sort: true,
+      formatter: pieUsageFormatter,
       headerFormatter: uuidHeaderFormatter,
     },
     {
       dataField: 'disk.aggregatedPercentage',
       text: 'Disk',
       sort: true,
+      formatter: pieUsageFormatter,
       headerFormatter: uuidHeaderFormatter,
     },
     {
-      dataField: 'network',
+      dataField: 'wifi.signalStrength',
       text: 'Network',
       sort: true,
+      formatter: signalStrengthFormatter,
       headerFormatter: uuidHeaderFormatter,
     },
   ];
 
   return (
-    <DevicesPageWrapper>
-      <div id="page-wrap" className="h-100 overflow-auto container">
-        <Row className="flex-nowrap h-100">
-          <Col>
-            <div className="devices-table ">
-              <BootstrapTable
-                striped={true}
-                keyField="id"
-                data={deviceData}
-                columns={columns}
-                filter={filterFactory()}
-              />
-              <div className="d-flex justify-content-end">
-                <i
-                  className="pe-2 device-icon"
-                  role="button"
-                  onClick={() => setPage(page > 1 ? page - 1 : 1)}
-                >
-                  <BsChevronLeft />
-                </i>
-                <span className="device-span">Page {page}</span>
-                <i
-                  className="ps-2 device-icon"
-                  role="button"
-                  onClick={() => setPage(page + 1)}
-                >
-                  <BsChevronRight />
-                </i>
-              </div>
-            </div>
-          </Col>
-        </Row>
+    <div className="h-100 d-flex flex-column">
+      <div id="outer-container">
+        <Navbar />
       </div>
-    </DevicesPageWrapper>
+
+      <div className="flex-grow-1 d-flex flex-column align-items-center devices-content">
+        <div id="page-wrap" className="h-100 overflow-auto container">
+          <Row className="flex-nowrap h-100">
+            <Col>
+              <div className="devices-table ">
+                <BootstrapTable
+                  striped={true}
+                  keyField="id"
+                  data={deviceData}
+                  columns={columns}
+                  filter={filterFactory()}
+                />
+                <div className="d-flex justify-content-end">
+                  <i
+                    className="pe-2 device-icon"
+                    role="button"
+                    onClick={() => setPage(page > 1 ? page - 1 : 1)}
+                  >
+                    <BsChevronLeft />
+                  </i>
+                  <span className="device-span">Page {page}</span>
+                  <i
+                    className="ps-2 device-icon"
+                    role="button"
+                    onClick={() => setPage(page + 1)}
+                  >
+                    <BsChevronRight />
+                  </i>
+                </div>
+              </div>
+            </Col>
+          </Row>
+        </div>
+      </div>
+      <div className="d-flex justify-content-center devices-footer">
+        <div className="pt-1 pb-3 devices-copyright">
+          &#169; SOEN490 TTG-HEALTCHECK
+        </div>
+      </div>
+    </div>
   );
 };
 

@@ -6,7 +6,7 @@ import {format} from 'fecha';
 // Custom
 import {DeviceLog} from '../../types/queries';
 
-const wifiUsageWidget = (props: {deviceDynamic: DeviceLog}) => {
+const wifiUsageWidget = (props: { deviceDynamic: DeviceLog }) => {
   const deviceDynamic: DeviceLog = props.deviceDynamic;
 
   return (

@@ -48,7 +48,7 @@ const SideNavData = [
 const Navbar = () => {
   // event listener to close outside side-nav
   const {ref, isComponentVisible, setIsComponentVisible} =
-  useComponentVisible();
+    useComponentVisible();
   const {setUser, setIsAuthenticated} = useAuth();
   const logout = async (e: React.ChangeEvent<any>) => {
     e.preventDefault();
@@ -67,41 +67,47 @@ const Navbar = () => {
 
   return (
     <>
-      <nav
-        className="d-flex nav-wrapper"
-      >
+      <nav className="d-flex nav-wrapper">
         <div ref={ref} className="nav-hamburger">
-          <Hamburger toggled={isComponentVisible} toggle={setIsComponentVisible} />
+          <Hamburger
+            toggled={isComponentVisible}
+            toggle={setIsComponentVisible}
+          />
         </div>
         <div className="nav-right-menu d-flex">
           <div className="nav-right-icon">
             <img src="https://avatarfiles.alphacoders.com/247/247895.jpg"></img>
           </div>
           <div className="nav-right-darrow">
-            <GoTriangleDown/>
+            <GoTriangleDown />
           </div>
         </div>
-        {isComponentVisible ?
-        <div ref={ref} className="side-nav active">
-          {SideNavData.map((item, index) => {
-            return (
-              <>
-                <div key={index} className={item.cName}>
-                  <Link to={item.path} onClick={item.title == 'Logout' ? ((e) => logout(e)) : (e) => null}>
-                    <span className="side-nav-item-icon">{item.icon} </span>
-                    <span className="side-nav-item-text">{item.title}</span>
-                  </Link>
-                </div>
-              </>
-            );
-          })}
-        </div> :
-        <div className="side-nav">
-        </div>
-        }
-        {isComponentVisible &&
+        {isComponentVisible ? (
+          <div ref={ref} className="side-nav active">
+            {SideNavData.map((item, index) => {
+              return (
+                <>
+                  <div key={index} className={item.cName}>
+                    <Link
+                      to={item.path}
+                      onClick={
+                        item.title == 'Logout' ? (e) => logout(e) : (e) => null
+                      }
+                    >
+                      <span className="side-nav-item-icon">{item.icon} </span>
+                      <span className="side-nav-item-text">{item.title}</span>
+                    </Link>
+                  </div>
+                </>
+              );
+            })}
+          </div>
+        ) : (
+          <div className="side-nav"></div>
+        )}
+        {isComponentVisible && (
           <div className="side-nav-screen-background"></div>
-        }
+        )}
       </nav>
     </>
   );
