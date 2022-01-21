@@ -1,19 +1,55 @@
-// 3rd Party
 import React from 'react';
+// 3rd Party
+import {Link} from 'react-router-dom';
 import axios from 'axios';
-import {Nav} from 'react-bootstrap';
-import {IconContext} from 'react-icons';
-import {MdOutlineSpaceDashboard, MdAnalytics, MdLogout} from 'react-icons/md';
+import {Squash as Hamburger} from 'hamburger-react';
 import {DiRasberryPi} from 'react-icons/di';
+import {GoTriangleDown} from 'react-icons/go';
+import {MdOutlineSpaceDashboard, MdAnalytics, MdLogout} from 'react-icons/md';
 import {CgProfile} from 'react-icons/cg';
-import {slide as Menu} from 'react-burger-menu';
-
 // Custom
 import {useAuth} from '../context/authContext';
+import useComponentVisible from './common/useComponentVisible';
+
+// side nav items
+const SideNavData = [
+  {
+    title: 'Dashboard',
+    path: '/dashboard',
+    icon: <MdOutlineSpaceDashboard />,
+    cName: 'side-nav-item',
+  },
+  {
+    title: 'Devices',
+    path: '/devices',
+    icon: <DiRasberryPi />,
+    cName: 'side-nav-item',
+  },
+  {
+    title: 'Analytics',
+    path: '/analytics',
+    icon: <MdAnalytics />,
+    cName: 'side-nav-item',
+  },
+  {
+    title: 'Profile',
+    path: '/profile',
+    icon: <CgProfile />,
+    cName: 'side-nav-item',
+  },
+  {
+    title: 'Logout',
+    path: '/logout',
+    icon: <MdLogout />,
+    cName: 'side-nav-item',
+  },
+];
 
 const Navbar = () => {
+  // event listener to close outside side-nav
+  const {ref, isComponentVisible, setIsComponentVisible} =
+  useComponentVisible();
   const {setUser, setIsAuthenticated} = useAuth();
-
   const logout = async (e: React.ChangeEvent<any>) => {
     e.preventDefault();
     await axios
@@ -31,47 +67,42 @@ const Navbar = () => {
 
   return (
     <>
-      <Menu outerContainerId={'outer-container'}>
-        <Nav.Link className="text-secondary mt-5" href="/dashboard">
-          <IconContext.Provider value={{size: '2em'}}>
-            <div>
-              <MdOutlineSpaceDashboard />
-            </div>
-          </IconContext.Provider>
-        </Nav.Link>
-        <Nav.Link className="text-secondary mt-5" href="/devices">
-          <IconContext.Provider value={{size: '2em'}}>
-            <div>
-              <DiRasberryPi />
-            </div>
-          </IconContext.Provider>
-        </Nav.Link>
-        <Nav.Link className="text-secondary mt-5" href="/dashboard">
-          <IconContext.Provider value={{size: '2em'}}>
-            <div>
-              <MdAnalytics />
-            </div>
-          </IconContext.Provider>
-        </Nav.Link>
-        <Nav.Link className="text-secondary mt-5" href="/dashboard">
-          <IconContext.Provider value={{size: '2em'}}>
-            <div>
-              <CgProfile />
-            </div>
-          </IconContext.Provider>
-        </Nav.Link>
-        <Nav.Link
-          className="text-secondary mt-5"
-          href="/logout"
-          onClick={(e) => logout(e)}
-        >
-          <IconContext.Provider value={{size: '2em'}}>
-            <div>
-              <MdLogout />
-            </div>
-          </IconContext.Provider>
-        </Nav.Link>
-      </Menu>
+      <nav
+        className="d-flex nav-wrapper"
+      >
+        <div ref={ref} className="nav-hamburger">
+          <Hamburger toggled={isComponentVisible} toggle={setIsComponentVisible} />
+        </div>
+        <div className="nav-right-menu d-flex">
+          <div className="nav-right-icon">
+            <img src="https://avatarfiles.alphacoders.com/247/247895.jpg"></img>
+          </div>
+          <div className="nav-right-darrow">
+            <GoTriangleDown/>
+          </div>
+        </div>
+        {isComponentVisible ?
+        <div ref={ref} className="side-nav active">
+          {SideNavData.map((item, index) => {
+            return (
+              <>
+                <div key={index} className={item.cName}>
+                  <Link to={item.path} onClick={item.title == 'Logout' ? ((e) => logout(e)) : (e) => null}>
+                    <span className="side-nav-item-icon">{item.icon} </span>
+                    <span className="side-nav-item-text">{item.title}</span>
+                  </Link>
+                </div>
+              </>
+            );
+          })}
+        </div> :
+        <div className="side-nav">
+        </div>
+        }
+        {isComponentVisible &&
+          <div className="side-nav-screen-background"></div>
+        }
+      </nav>
     </>
   );
 };
