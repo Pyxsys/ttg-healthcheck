@@ -206,6 +206,7 @@ const DevicePage = () => {
                   data={deviceData}
                   columns={columns}
                   filter={filterFactory()}
+                  sort={{dataField: 'deviceId', order: 'desc'}}
                 />
                 <div className="d-flex justify-content-end">
                   <i
