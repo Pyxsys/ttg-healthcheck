@@ -5,6 +5,8 @@ const testUser = {
   password: Cypress.env("test_password"),
   email: "cypress@gmail.com",
 };
+
+// These can be changed per case directly in the function call
 const lighthouseThreshold = {
   performance: 60,
   accessibility: 90,
