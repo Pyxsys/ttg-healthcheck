@@ -1,5 +1,3 @@
-from ast import pattern
-from types import ClassMethodDescriptorType
 import requests, psutil
 import sys, os, json, re
 import time
