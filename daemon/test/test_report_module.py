@@ -1,8 +1,11 @@
 from datetime import datetime
+from io import FileIO
+from msilib.schema import File
 import sys, os
+from unittest import mock
 import psutil
 import unittest
-from unittest.mock import MagicMock
+from unittest.mock import patch, MagicMock, mock_open
 from psutil._common import scpufreq, snicaddr
 from socket import AddressFamily
 
@@ -223,6 +226,40 @@ class TestSystemReportClass(unittest.TestCase):
         mac_pattern = '[0-9a-f]{2}([-:]?)[0-9a-f]{2}(\\1[0-9a-f]{2}){4}$'
 
         self.assertRegex(actual_result.lower(), mac_pattern)
+
+    def testFetchingAdapterNetworkInfoWIN(self):
+        
+        MOCK_ADAPTER_TERMINAL_OUTPUT='There is 1 interface on the system:\n\n    Name                   : Wi-Fly\n    Description            : foobar 999MHz\n    GUID                   : ace11ace-ace1-ace1-ace1-aceaceaceace\n    Physical address       : aa:aa:aa:aa:aa:aa\n    State                  : connected\n    SSID                   : TARGET_WIFI_SSID\n    BSSID                  : bb:bb:bb:b:bb:bb\n    Network type           : Infrastructure\n    Radio type             : 802.11ac\n    Authentication         : WPA2-Personal\n    Cipher                 : CCMP\n    Connection mode        : Auto Connect\n    Channel                : 000\n    Receive rate (Mbps)    : 999\n    Transmit rate (Mbps)   : 999\n    Signal                 : 81%\n    Profile                : TARGET_WIFI_SSID\n\n    Hosted network status  : Not available'
+
+        psutil.WINDOWS = MagicMock(return_value = True)
+        psutil.LINUX = MagicMock(return_value = False)
+
+        with patch('os.popen', new=mock_open(read_data = MOCK_ADAPTER_TERMINAL_OUTPUT)) as _m:
+            actual_result = SysReport.fetch_adapter_network_info('Wi-Fly')
+
+        expected_result = {
+            "SSID": 'TARGET_WIFI_SSID', 
+            "connectionType": '802.11ac'
+            }
+        
+        self.assertDictEqual(actual_result, expected_result)
+
+    def testFetchingAdapterNetworkInfoLUX(self):
+        #TODO
+        MOCK_ADAPTER_TERMINAL_OUTPUT=''
+
+        psutil.WINDOWS = MagicMock(return_value = False)
+        psutil.LINUX = MagicMock(return_value = True)
+
+        with patch('os.popen', new=mock_open(read_data = MOCK_ADAPTER_TERMINAL_OUTPUT)) as _m:
+            actual_result = SysReport.fetch_adapter_network_info()
+
+        expected_result = {
+            "SSID": 'TARGET_WIFI_SSID', 
+            "connectionType": '802.11ac'
+            }
+        
+        self.assertDictEqual(actual_result, expected_result)
 
 if __name__ == '__main__':
     unittest.main()

@@ -1,3 +1,4 @@
+from ast import pattern
 from types import ClassMethodDescriptorType
 import requests, psutil
 import sys, os, json, re
@@ -435,12 +436,31 @@ class SysReport:
         return int(buffer[0])
 
     @classmethod
-    def fetch_connected_network_ssid(cls):
-        #WIN
-        #netsh wlan show interfaces | select-string SSID
-        print('x')
-        #UX
-        #???
+    def fetch_adapter_network_info(cls, adapter_name = None):
+        output = dict()
+        #assign default values if there is no wifi found
+        output['SSID'] = 'NOT AVAILABLE'
+        output['connectionType'] = 'NOT AVAILABLE' 
+
+        if psutil.WINDOWS:
+            adapter = adapter_name if adapter_name is not None else 'Wi-Fi'
+            command = 'netsh wlan show interfaces'
+            pattern = "(?:Name\s+:\s" + re.escape(adapter) + "(?:\\n.+){5}SSID\s+:\s(.+)(?:\\n.+){3}Radio\stype.+:\s(.+)(?:\\n.+){7}Signal\s+: (\d{,2}))"
+            
+            extract = os.popen(command)
+            k = extract.read()
+            buffer = re.findall(pattern, k, re.MULTILINE)
+            extract.close()
+
+            if len(buffer) > 0:
+                output['SSID'] = buffer[0][0]
+                output['connectionType'] = buffer[0][1]
+        
+        if psutil.LINUX:
+            adapter = adapter_name if adapter_name is not None else 'wlan0'
+
+        return output
+
     
     @classmethod
     def fetch_net_adapter_addrs(cls, adapter_name = None):
