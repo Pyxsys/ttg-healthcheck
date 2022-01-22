@@ -2,7 +2,7 @@ Cypress.env();
 const testUser = {
   name: "test",
   password: Cypress.env("test_password"),
-  email: "selenium@gmail.com",
+  email: "cypress@gmail.com",
   role: "user"
 };
 

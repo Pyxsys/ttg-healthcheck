@@ -1,8 +1,9 @@
 // Set new color palette.
-$primary: #393f49;
-$secondary: #f8f9fa;
-$third: #b1b1b1;
-$fourth: #30353d;
+$primary-gray: #393f49;
+$secondary-gray: #f8f9fa;
+$tertiary-gray: #30353d;
+$quarternary-gray: #3F4651;
+$quinary-gray: #4C535F;
 
 $gray-100: #c2c2c2;
 $gray-200: #9b9b9b;
@@ -15,10 +16,12 @@ $gray-800: #1d1d1d;
 $gray-900: #101010;
 
 // Media query sizes
-$screen-w-sm: 280px;
-$screen-w-md: 376px;
-$screen-w-lg: 768px;
-$screen-w-xlg: 1366px;
+$screen-w-xxsm: 0px;
+$screen-w-xsm: 360px;
+$screen-w-sm: 573px;
+$screen-w-md: 768px;
+$screen-w-lg: 991px;
+$screen-w-xlg: 1200px;
 $screen-w-xxlg: 1940px;
 $screen-w-xxxlg: 2350px;
 
@@ -29,13 +32,19 @@ body {
   width: 100%;
 }
 
-/*
-**  LOGIN/SIGNUP PAGE
-**
-*/
+@for $i from 1 through 10 {
+  .h-#{$i*10} {
+    height: $i*10%;
+  }
+  .w-#{$i*10} {
+    width: $i*10%;
+  }
+}
+
+/*-----------------------Login/Signup--------------------------*/
 
 // Custom scrollbar only for computers
-@media only screen and (min-width: $screen-w-md) {
+@media only screen and (min-width: $screen-w-xsm) {
   &::-webkit-scrollbar,             // The whole scrollbar (background)
 		&::-webkit-scrollbar-track,       // The track where the handle can go
     &::-webkit-scrollbar-track-piece, // The Track that was selected
@@ -66,14 +75,14 @@ body {
 }
 
 .home-header {
-  background-color: $primary;
+  background-color: $primary-gray;
   // smooth transition when header div changes size
   -webkit-transition: all 0.5s ease;
   -moz-transition: all 0.5s ease;
   -o-transition: all 0.5s ease;
   transition: all 0.5s ease;
 
-  @media (min-width: $screen-w-sm) {
+  @media (min-width: $screen-w-xxsm) {
     min-height: 200px;
   }
   @media (min-width: $screen-w-md) {
@@ -94,8 +103,8 @@ body {
 }
 
 .home-content {
-  background-color: $fourth;
-  @media (min-width: $screen-w-sm) {
+  background-color: $tertiary-gray;
+  @media (min-width: $screen-w-xxsm) {
     min-height: 500px;
   }
   @media (min-width: $screen-w-md) {
@@ -116,13 +125,19 @@ body {
 }
 
 .home-footer {
-  background-color: $fourth;
+  background-color: $tertiary-gray;
 }
 
 .home-logo {
   content: url('assets/brainlogo.png');
-  @media (min-width: $screen-w-sm) {
+  @media (min-width: $screen-w-xxsm) {
     width: 100%;
+  }
+  @media (min-width: $screen-w-xsm) {
+    width: 330px;
+  }
+  @media (min-width: $screen-w-sm) {
+    width: 330px;
   }
   @media (min-width: $screen-w-md) {
     width: 330px;
@@ -144,13 +159,13 @@ body {
 .bottom-triangle {
   border-right: solid 15px transparent;
   border-left: solid 15px transparent;
-  border-top: solid 15px $primary;
+  border-top: solid 15px $primary-gray;
   transform: translateY(15px);
 }
 
 // login/signup footer
 .home-copyright {
-  color: $secondary;
+  color: $secondary-gray;
   opacity: 80%;
   font-size: 11px;
   font-weight: 600;
@@ -159,10 +174,10 @@ body {
 .home-header-subtitle {
   padding-bottom: 0px;
   text-align: center;
-  color: $secondary;
+  color: $secondary-gray;
   opacity: 80%;
   font-weight: 500;
-  @media (min-width: $screen-w-sm) {
+  @media (min-width: $screen-w-xxsm) {
     font-size: 12px;
   }
   @media (min-width: $screen-w-md) {
@@ -184,10 +199,20 @@ body {
 
 .home-form {
   margin-top: 5rem;
-  @media (min-width: $screen-w-sm) {
+  @media (min-width: $screen-w-xxsm) {
     padding-left: 1.5rem;
     padding-right: 1.5rem;
     width: 100%;
+  }
+  @media (min-width: $screen-w-xsm) {
+    padding-left: 0;
+    padding-right: 0;
+    width: 330px;
+  }
+  @media (min-width: $screen-w-sm) {
+    padding-left: 0;
+    padding-right: 0;
+    width: 330px;
   }
   @media (min-width: $screen-w-md) {
     padding-left: 0;
@@ -209,25 +234,25 @@ body {
 }
 
 .home-input {
-  @media (min-width: $screen-w-sm) {
-    padding: 12px !important;
+  @media (min-width: $screen-w-xxsm) {
+    padding: 12px;
   }
   @media (min-width: $screen-w-md) {
-    padding: 13px !important;
+    padding: 13px;
   }
   @media (min-width: $screen-w-lg) {
-    padding: 13px !important;
+    padding: 13px;
   }
   @media (min-width: $screen-w-xlg) {
-    padding: 13px !important;
+    padding: 13px;
   }
   @media (min-width: $screen-w-xxlg) {
-    padding: 15px !important;
-    font-size: 15px !important;
+    padding: 15px;
+    font-size: 15px;
   }
   @media (min-width: $screen-w-xxxlg) {
-    padding: 17px !important;
-    font-size: 17px !important;
+    padding: 17px;
+    font-size: 17px;
   }
   border: none !important;
   border-radius: 0 0.25rem 0.25rem 0 !important;
@@ -235,118 +260,223 @@ body {
   -webkit-box-shadow: none !important;
 }
 
-.input-group-text {
+.home-content .input-group-text {
   border: none !important;
 }
 
 .home-button {
-  @media (min-width: $screen-w-sm) {
-    padding: 12px !important;
+  @media (min-width: $screen-w-xxsm) {
+    padding: 12px;
   }
   @media (min-width: $screen-w-md) {
-    padding: 13px !important;
+    padding: 13px;
   }
   @media (min-width: $screen-w-lg) {
-    padding: 13px !important;
+    padding: 13px;
   }
   @media (min-width: $screen-w-xlg) {
-    padding: 13px !important;
+    padding: 13px;
   }
   @media (min-width: $screen-w-xxlg) {
-    padding: 15px !important;
-    font-size: 15px !important;
+    padding: 15px;
+    font-size: 15px;
   }
   @media (min-width: $screen-w-xxxlg) {
-    padding: 17px !important;
-    font-size: 17px !important;
+    padding: 17px;
+    font-size: 17px;
   }
-  opacity: 80%;
-  color: $secondary !important;
-  font-weight: 500 !important;
+  color: $secondary-gray;
+  font-weight: 500;
   border: 1px solid #b1b1b1ab !important;
-  background-color: $fourth !important;
+  background-color: $tertiary-gray;
 }
 
 .home-button:hover {
-  background-color: $primary !important;
+  background-color: $primary-gray !important;
 }
 
-/*
-**  NAV
-**
-*/
+/*-----------------------Navigation--------------------------*/
 
-/* Position and sizing of burger button */
-.bm-burger-button {
+.nav-wrapper{
+  flex: 0;
+  width: 100%;
+  background-color:#1f262b;
+  height: 65px;
+  justify-content: space-between;
+  align-items: center;
+  @media (min-width: $screen-w-xsm) {
+    padding: 10px;
+  }
+  @media (min-width: $screen-w-md) {
+    padding: 15px;
+  }
+  @media (min-width: $screen-w-lg) {
+    padding: 20px;
+  }
+}
+
+// right nav menu
+.nav-right-menu {
+  align-items: center;
+}
+
+.nav-right-icon {
+  width: 37px;
+  height: 37px;
+  overflow: hidden;
+  border-radius: 50%;
+  position: relative;
+  margin-right: 4px;
+}
+
+.nav-right-icon img {
+  width:100%;
+  height: auto;
+}
+
+.nav-right-darrow > svg {
+  color: white;
+  width: 15px;
+  height: 15px;
+}
+
+// change hamburger width/height of lines
+.hamburger-react div > div{
+  @media (min-width: $screen-w-xsm) {
+    width: 30px !important;
+    height: 2.5px !important;
+  }
+  @media (min-width: $screen-w-md) {
+    width: 32px !important;
+    height: 3px !important;
+  }
+  @media (min-width: $screen-w-lg) {
+    width: 33px !important;
+    height: 3px !important;
+  }
+}
+
+// nav-hamburger wrapper
+.nav-hamburger {
+  position: static;
+  z-index: 99;
+  color: white;
+}
+
+// fixed position hamburger to follow side nav on scroll
+.nav-hamburger.active {
   position: fixed;
-  width: 36px;
-  height: 30px;
-  left: 36px;
-  top: 36px;
 }
 
-/* Color/shape of burger icon bars */
-.bm-burger-bars {
-  background: #373a47;
-}
-
-/* Color/shape of burger icon bars on hover*/
-.bm-burger-bars-hover {
-  background: #a90000;
-}
-
-/* Position and sizing of clickable cross button */
-.bm-cross-button {
-  height: 24px;
-  width: 24px;
-}
-
-/* Color/shape of close button cross */
-.bm-cross {
-  background: #bdc3c7;
-}
-
-/*
-Sidebar wrapper styles
-Note: Beware of modifying this element as it can break the animations - you should not need to touch it in most cases
-*/
-.bm-menu-wrap {
+// side-nav closed
+.side-nav {
+  height: 100vh;
+  @media (min-width: $screen-w-xsm) {
+    width: 240px;
+  }
+  @media (min-width: $screen-w-md) {
+    width: 250px;
+  }
+  @media (min-width: $screen-w-lg) {
+    width: 260px;
+  }
   position: fixed;
-  height: 100%;
+  z-index: 10;
+  top: 0;
+  background-color: #1f262b;
+  left: -100%;
+  transition: 850ms;
+  padding-top: 85px;
 }
 
-/* General sidebar styles */
-.bm-menu {
-  background: #373a47;
-  padding: 2.5em 1.5em 0;
-  font-size: 1.15em;
+// side-nav open
+.side-nav.active {
+  left: 0;
+  transition: 350ms;
 }
 
-/* Morph shape necessary with bubble or elastic */
-.bm-morph-shape {
-  fill: #373a47;
+// background when sidenav opens, blocks scroll and adds opacity
+.side-nav-screen-background{
+  height: 100vh;
+  background-color:black;
+  opacity: 45%;
+  width: 100%;
+  position:fixed;
+  top:0;
+  left: 0;
+  z-index: 1;
 }
 
-/* Wrapper for item list */
-.bm-item-list {
-  color: #b8b7ad;
-  padding: 0.8em;
+// nav items 
+.side-nav-item {
+  margin-left: 0px;
+  display: flex;
+  @media (min-width: $screen-w-xsm) {
+    height: 67px;
+  }
+  @media (min-width: $screen-w-md) {
+    height: 70px;
+  }
+  @media (min-width: $screen-w-lg) {
+    height: 75px;
+  }
 }
 
-/* Individual item */
-.bm-item {
-  display: inline-block;
+// side nav items on hover
+.side-nav-item:hover {
+  background-color: #30393f86;
+}
+// nav items link tag
+.side-nav-item a {
+  font-weight: 600;
+  width: 100%;
+  text-decoration: none;
+  display: flex;
+  color: rgb(255, 255, 255);
+  align-items: center;
+  @media (min-width: $screen-w-xsm) {
+    padding: 0 13px;
+  }
+  @media (min-width: $screen-w-md) {
+    padding: 0 18px;
+  }
+  @media (min-width: $screen-w-lg) {
+    padding: 0 22px;
+  }
 }
 
-/* Styling of overlay */
-.bm-overlay {
-  background: rgba(0, 0, 0, 0.3);
+// side-nav-item text
+.side-nav-item-text {
+  margin-left: 25px;
+  @media (min-width: $screen-w-xsm) {
+    font-size: 0.84em;
+  }
+  @media (min-width: $screen-w-md) {
+    font-size: 0.87em;
+  }
+  @media (min-width: $screen-w-lg) {
+    font-size: 0.90em;
+  }
 }
 
-// responsive table
-.react-bootstrap-table table {
-  table-layout: auto;
+// side-nav-item icons
+.side-nav-item-icon > svg {
+  @media (min-width: $screen-w-xsm) {
+    width: 2.5em;
+    height: 2.5em;
+  }
+  @media (min-width: $screen-w-md) {
+    width: 2.7em;
+    height: 2.7em;
+  }
+  @media (min-width: $screen-w-lg) {
+    width: 2.8em;
+    height: 2.8em;
+  }
+  color: white;
 }
+
+/*-----------------------Devices--------------------------*/
 
 // hide uneeded sr-only label in device table
 .sr-only {
@@ -384,4 +514,265 @@ Note: Beware of modifying this element as it can break the animations - you shou
   content: "";
 }
 
+/*-----------------------Device Details--------------------------*/
 
+#device-details-container{
+  background-color: $tertiary-gray;
+  max-width: 100%;
+  height: 100vh;
+  min-height: 0;  
+  display: flex;
+  flex-direction: column;
+}
+
+.device-details-wrapper{
+  @media (min-width: $screen-w-xsm) {
+    padding-top: 12px;
+  }
+  @media (min-width: $screen-w-sm) {
+    padding-top: 12px;
+  }
+  @media (min-width: $screen-w-md) {
+    padding-top: 15px;
+  }
+  @media (min-width: $screen-w-lg) {
+    padding-top: 25px;
+  }
+  @media (min-width: $screen-w-xlg) {
+    padding-top: 30px;
+  }
+  background-color: $tertiary-gray;
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+// first device table
+.device-details-table > tbody > tr > td{
+  color: white;
+  border-bottom: 0;
+  border-top: 0;
+  @media (min-width: $screen-w-xsm) {
+    font-size: 0.87em;
+  }
+  @media (min-width: $screen-w-md) {
+    font-size: 0.87em;
+  }
+  @media (min-width: $screen-w-lg) {
+    font-size: 0.84em;
+  }
+  @media (min-width: $screen-w-xlg) {
+    font-size: 0.9em;
+  }
+}
+
+.device-details-table-dark{
+  width: 85%;
+}
+
+// used to float td in table to the right
+.float-right {
+  float: right;
+}
+
+//----------------- ACCORDIONS
+
+// border-radius button (in front of header)
+.device-details-accordion .accordion-item .accordion-button{
+  border-top-left-radius: 7px;
+  border-top-right-radius: 7px;
+}
+
+// add padding for mobile for second accordion
+.device-details-second-accordion {
+  @media (min-width: $screen-w-xsm) {
+    padding-top: 12px;
+  }
+  @media (min-width: $screen-w-sm) {
+    padding-top: 12px;
+  }
+  @media (min-width: $screen-w-md) {
+    padding-top: 15px;
+  }
+  @media (min-width: $screen-w-lg) {
+    padding-top: 0px;
+  }
+  @media (min-width: $screen-w-xlg) {
+    padding-top: 0px;
+  }
+}
+
+// border-radius header
+.device-details-accordion .accordion-header {
+  border-top-left-radius: 7px;
+  border-top-right-radius: 7px;
+}
+
+// accordion top bar
+.device-details-accordion .accordion-button {
+  height: 2.4em;
+  color: white;
+  background-color: $quarternary-gray;
+  box-shadow: none;
+  font-size: 0.64em;
+}
+
+// h2 inside top bar
+.device-details-accordion h2 {
+  background-color: $quarternary-gray;
+}
+
+// dropdown arrow colour not collapsed
+.device-details-accordion .accordion-button:not(.collapsed)::after {
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23b5b5b5'%3e%3cpath fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/%3e%3c/svg%3e");
+}
+
+// dropdown arrow colour collapsed
+.device-details-accordion .accordion-button:after {
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23b5b5b5'%3e%3cpath fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/%3e%3c/svg%3e");
+}
+
+// accordion body
+.device-details-accordion .accordion-body {
+  border-bottom-left-radius: 7px;
+  border-bottom-right-radius: 7px;
+  background-color: $quinary-gray;
+  font-size: 0.95em;
+  @media (min-width: $screen-w-sm) {
+    min-height: 0px;
+  }
+  @media (min-width: $screen-w-md) {
+    min-height: 0px;
+  }
+  @media (min-width: $screen-w-lg) {
+    min-height: 370px;
+  }
+  @media (min-width: $screen-w-xlg) {
+    min-height: 365px;
+  }
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+// accordion item
+.device-details-accordion .accordion-item {
+  border-radius: 12px;
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
+}
+
+// accordion body darker version
+.dark-accordion .accordion-body {
+  background-color: #393F49;
+  @media (min-width: $screen-w-xsm) {
+    min-height: 150px;
+  }
+  @media (min-width: $screen-w-md) {
+    min-height: 250px;
+  }
+  @media (min-width: $screen-w-xlg) {
+    min-height: 250px;
+  }
+}
+
+// accordion button darker version
+.dark-accordion .accordion-button {
+  font-size: 0.50em;
+  height: 3.4em;
+}
+
+//----------------- TABS
+
+// add padding for different media queries for tab component
+.device-details-tabs {
+  @media (min-width: $screen-w-xsm) {
+    padding-top: 12px;
+    padding-bottom: 20px;
+  }
+  @media (min-width: $screen-w-sm) {
+    padding-top: 12px;
+    padding-bottom: 25px;
+  }
+  @media (min-width: $screen-w-md) {
+    padding-top: 15px;
+    padding-bottom: 30px;
+  }
+  @media (min-width: $screen-w-lg) {
+    padding-top: 25px;
+    padding-bottom: 40px;
+  }
+  @media (min-width: $screen-w-xlg) {
+    padding-top: 25px;
+    padding-bottom: 40px;
+  }
+}
+
+// tab bar
+.device-details-tabs .nav-tabs {
+  background-color: $quarternary-gray;
+  border-bottom: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  padding-top: 7px;
+  padding-bottom: 7px;
+  margin: 0px;
+  border-top-left-radius: 7px;
+  border-top-right-radius: 7px;
+}
+
+// tab nav link items
+.device-details-tabs .nav-tabs .nav-item .nav-link {
+  padding-right: 25px;
+  padding-left: 25px;
+  font-size: 1em;
+  background-color: none;
+  color: rgb(158, 158, 158);
+  &:hover{
+    border-color: $quarternary-gray
+  }
+}
+
+// alter css when nav-link tabs are active
+.device-details-tabs .nav-tabs .nav-item .nav-link.active {
+  color: #ffffff;
+  background-color: $quarternary-gray;
+  border-color: $quarternary-gray
+}
+
+// background div for a tab 
+.tab-body {
+  border-bottom-left-radius: 7px;
+  border-bottom-right-radius: 7px;
+  background-color: $quinary-gray;
+  @media (min-width: $screen-w-xsm) {
+    padding: 15px 5px;
+  }
+  @media (min-width: $screen-w-sm) {
+    padding: 20px 20px;
+  }
+  @media (min-width: $screen-w-md) {
+    padding: 25px 25px;
+  }
+  @media (min-width: $screen-w-lg) {
+    padding: 30px 17px;
+  }
+  @media (min-width: $screen-w-xlg) {
+    padding: 30px 25px;
+  }
+}
+
+// tab widgets padding between them
+.tab-widget-padding {
+  @media (min-width: $screen-w-md) {
+    padding: 0px 0px;
+  }
+  @media (min-width: $screen-w-lg) {
+    padding: 0px 8px;
+  }
+  @media (min-width: $screen-w-xlg) {
+    padding: 0px 18px;
+  }
+}

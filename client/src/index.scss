@@ -17,16 +17,6 @@ code {
     monospace;
 }
 
-.background-image-login{
-  background-image: url("assets/updated-login-background-light.png");
-  background-repeat: no-repeat;
-  background-size: cover;
-  background-position: top;
-  min-height: 100%;
-  height: 100vh;
-  position: relative;
-}
-
 // Must be imported after to overwrite colors.
 @import '~bootstrap/dist/css/bootstrap.min.css';
 @import '~react-bootstrap-table-next/dist/react-bootstrap-table2.min.css';
