@@ -278,7 +278,7 @@ class TestSystemReportClass(unittest.TestCase):
                 })
 
         self.test_report.add_startup_network_info()
-        section=self.test_report.get_section('network_')
+        section=self.test_report.get_section('wifi_')
         actual_result = tuple(section)
 
         self.assertTupleEqual(actual_result, expected_result)

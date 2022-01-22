@@ -191,7 +191,7 @@ class SysReport:
         net_info['ipv6Address'] = ip.get('ipv6')
         net_info['macAdress'] = ip.get('mac')
 
-        self.set_section('network_', net_info)
+        self.set_section('wifi_', net_info)
 
     @classmethod
     def fetch_total_memory(cls):
