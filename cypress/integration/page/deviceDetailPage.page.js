@@ -6,7 +6,7 @@ const testUser = {
 };
 
 const loginAndDevicesPage = () => {
-  cy.visit('/');
+  cy.visit("/");
 
   cy.get("input[name=email1]").type(testUser.email);
   cy.get("input[name=password1]").type(testUser.password);
@@ -27,14 +27,14 @@ describe("Devices Page", () => {
     cy.url().should("include", "device");
 
     // check if card headers are present
-    cy.contains("Device").should('be.visible');
-    cy.contains("CPU").should('be.visible');
-    cy.contains("Memory").should('be.visible');
-    cy.contains("Disk").should('be.visible');
-    cy.contains("CPU Usage").should('be.visible');
-    cy.contains("Memory Usage").should('be.visible');
-    cy.contains("Disk Usage").should('be.visible');
-    cy.contains("Wifi Usage").should('be.visible');
-    cy.contains("Additional Information").should('be.visible');
-  })
-})
+    cy.contains("Device").should("be.visible");
+    cy.contains("CPU").should("be.visible");
+    cy.contains("Memory").should("be.visible");
+    cy.contains("Disk").should("be.visible");
+    cy.contains("CPU Usage").should("be.visible");
+    cy.contains("Memory Usage").should("be.visible");
+    cy.contains("Disk Usage").should("be.visible");
+    cy.contains("Wifi Usage").should("be.visible");
+    cy.contains("Additional Information").should("be.visible");
+  });
+});

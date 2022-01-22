@@ -22,23 +22,11 @@ const lighthouseConfig = {
 };
 
 describe("1. LightHouse Tests", () => {
-  // it("1.1 Landing Page", () => {
-  //   cy.visit('/')
-  //   cy.lighthouse(lighthouseThreshold,  lighthouseConfig)
-  // })
-  // it("1.2 Devices Page", () => {
-  //   cy.visit("/");
-
-  //   cy.get("input[name=email1]").type(testUser.email);
-  //   cy.get("input[name=password1]").type(testUser.password);
-  //   cy.get("button[type=submit]").click();
-  //   cy.get("div[class=hamburger-react]").click();
-  //   cy.get('a[href*="/devices"]').click();
-
-  //   cy.lighthouse(lighthouseThreshold,  lighthouseConfig)
-  // })
-  it("1.3 Landing Page", () => {
-    cy.visit("/");
+  it("1.1 Landing Page", () => {
+    cy.visit('/')
+    cy.lighthouse(lighthouseThreshold,  lighthouseConfig)
+  })
+  it("1.2 Devices Page", () => {
     cy.visit("/");
 
     cy.get("input[name=email1]").type(testUser.email);
@@ -46,8 +34,19 @@ describe("1. LightHouse Tests", () => {
     cy.get("button[type=submit]").click();
     cy.get("div[class=hamburger-react]").click();
     cy.get('a[href*="/devices"]').click();
-    cy.wait(2000);
-    cy.get('a[href*="/device"]').click(0);
+
+    cy.lighthouse(lighthouseThreshold,  lighthouseConfig)
+  })
+  it("1.3 Landing Page", () => {
+    cy.visit("/");
+
+    cy.get("input[name=email1]").type(testUser.email);
+    cy.get("input[name=password1]").type(testUser.password);
+    cy.get("button[type=submit]").click();
+    cy.get("div[class=hamburger-react]").click();
+    cy.get('a[href*="/devices"]').click();
+    cy.wait(1000);
+    cy.get('a[href*="/device"]').eq(1).click();
 
     cy.lighthouse(lighthouseThreshold, lighthouseConfig);
   });
