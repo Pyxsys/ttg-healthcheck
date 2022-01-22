@@ -43,6 +43,7 @@ class Runner:
         self.report.add_startup_memory_info()
         self.report.add_startup_disk_info()
         self.report.add_startup_cpu_info()
+        self.report.add_startup_network_info()
 
     def sleep(self):
         time.sleep(self.get_config()['report_delay'])
@@ -73,7 +74,6 @@ class SysReport:
     # Constants
     _R_DIGIT_PATTERN = '(\d+)'
     
-
     # Initializes instance attributes.
     def __init__(self):
         self.report_message = {}
@@ -182,13 +182,16 @@ class SysReport:
         net_info=dict()
 
         ip=SysReport.fetch_net_adapter_addrs(adapter_name)
+        ip_connection = SysReport.fetch_net_wan_adapter_info(adapter_name)
 
         net_info['adapterName'] = ip.get('adapterName')
-        #net_info['SSID'] =
-        #net_info['connectionType'] = 
+        net_info['SSID'] = ip_connection.get('SSID')
+        net_info['connectionType'] = ip_connection.get('connectionType')
         net_info['ipv4Address'] = ip.get('ipv4')
         net_info['ipv6Address'] = ip.get('ipv6')
         net_info['macAdress'] = ip.get('mac')
+
+        self.set_section('network_', net_info)
 
     @classmethod
     def fetch_total_memory(cls):
@@ -437,7 +440,7 @@ class SysReport:
         return int(buffer[0])
 
     @classmethod
-    def fetch_adapter_network_info(cls, adapter_name = None):
+    def fetch_net_wan_adapter_info(cls, adapter_name = None):
         output = dict()
         #assign default values if there is no wifi found
         output['SSID'] = 'NOT AVAILABLE'
@@ -470,7 +473,6 @@ class SysReport:
                 output['connectionType'] = buffer[0][0]
 
         return output
-
     
     @classmethod
     def fetch_net_adapter_addrs(cls, adapter_name = None):
@@ -503,8 +505,7 @@ class SysReport:
         
         return ips
 
-        
-        
+
 
 def main(config, mode):
     runner=Runner(config)

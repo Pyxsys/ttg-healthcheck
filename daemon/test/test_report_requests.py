@@ -3,6 +3,7 @@ import json
 import requests
 import unittest
 import timeit
+from unittest.mock import MagicMock
 
 # Include src directory for imports
 sys.path.append('../')
@@ -38,8 +39,22 @@ class TestRunner(unittest.TestCase):
         self.assertEqual(len(missing_sections), 0, msg=missing_sections)
 
     def testRunnerGeneratingStartupReport(self):
-        expected_sections={'deviceId', 'memory_', 'disk_', 'cpu_', 'timestamp'}
+        expected_sections={'deviceId', 'memory_', 'disk_', 'cpu_', 'network_', 'timestamp'}
         missing_sections=[]
+
+        SysReport.fetch_net_wan_adapter_info = MagicMock(
+            return_value = {
+                'SSID': 'TARGET_WIFI_SSID',
+                'connectionType': '802.11ac'
+                })
+
+        SysReport.fetch_net_adapter_addrs = MagicMock(
+            return_value = {
+                'adapterName': 'target_adapter', 
+                'ipv6': 'feed::fade:1111:face:1111',
+                'ipv4': '9.99.0.999',
+                'mac': 'FE-ED-FE-ED-11-11'
+                })
 
         self.test_runner.gen_startup_report()
         section_list=list(self.test_runner.get_report().keys())

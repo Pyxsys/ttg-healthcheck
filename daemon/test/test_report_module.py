@@ -235,7 +235,7 @@ class TestSystemReportClass(unittest.TestCase):
         psutil.LINUX = MagicMock(return_value = False)
 
         with patch('os.popen', new=mock_open(read_data = MOCK_ADAPTER_TERMINAL_OUTPUT)):
-            actual_result = SysReport.fetch_adapter_network_info('Wi-Fly')
+            actual_result = SysReport.fetch_net_wan_adapter_info('Wi-Fly')
 
         expected_result = {
             "SSID": 'TARGET_WIFI_SSID', 
@@ -245,14 +245,13 @@ class TestSystemReportClass(unittest.TestCase):
         self.assertDictEqual(actual_result, expected_result)
 
     def testFetchingAdapterNetworkInfoLUX(self):
-        #TODO
         MOCK_ADAPTER_TERMINAL_OUTPUT='wlan0     IEEE 802.11ac  ESSID:"TARGET_WIFI_SSID"  \n          Mode:Managed  Frequency:2.437 GHz  Access Point: 20:AA:4B:A3:63:39   \n          Bit Rate=54 Mb/s   Tx-Power=14 dBm   \n          Retry short limit:7   RTS thr:off   Fragment thr:off\n          Power Management:on\n          Link Quality=67/70  Signal level=-43 dBm  \n          Rx invalid nwid:0  Rx invalid crypt:0  Rx invalid frag:0\n          Tx excessive retries:0  Invalid misc:218   Missed beacon:0'
 
         psutil.WINDOWS = MagicMock(return_value = False)
         psutil.LINUX = MagicMock(return_value = True)
 
         with patch('os.popen', new=mock_open(read_data = MOCK_ADAPTER_TERMINAL_OUTPUT)):
-            actual_result = SysReport.fetch_adapter_network_info()
+            actual_result = SysReport.fetch_net_wan_adapter_info()
 
         expected_result = {
             "SSID": 'TARGET_WIFI_SSID', 
@@ -260,6 +259,29 @@ class TestSystemReportClass(unittest.TestCase):
             }
         
         self.assertDictEqual(actual_result, expected_result)
+
+    def testAddingStaticNetworkInfo(self):
+        expected_result = ('adapterName', 'SSID', 'connectionType', 'ipv4Address', 'ipv6Address', 'macAdress')
+
+        SysReport.fetch_net_wan_adapter_info = MagicMock(
+            return_value = {
+                'SSID': 'TARGET_WIFI_SSID',
+                'connectionType': '802.11ac'
+                })
+
+        SysReport.fetch_net_adapter_addrs = MagicMock(
+            return_value = {
+                'adapterName': 'target_adapter', 
+                'ipv6': 'feed::fade:1111:face:1111',
+                'ipv4': '9.99.0.999',
+                'mac': 'FE-ED-FE-ED-11-11'
+                })
+
+        self.test_report.add_startup_network_info()
+        section=self.test_report.get_section('network_')
+        actual_result = tuple(section)
+
+        self.assertTupleEqual(actual_result, expected_result)
 
 if __name__ == '__main__':
     unittest.main()
