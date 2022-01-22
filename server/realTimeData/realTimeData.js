@@ -188,7 +188,6 @@ const monitorRealTimeDataCollections = () => {
   })
 }
 
-
 const getQueryStringParams = (params, url) => {
   const regEx = new RegExp('[?&]' + params + '=([^&#]*)')
   const value = regEx.exec(decodeURIComponent(url))
