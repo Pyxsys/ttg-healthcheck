@@ -54,7 +54,6 @@ const processDeviceInfo = (payload) => {
     memory_,
     disk_,
     wifi_,
-    network_,
   } = payload
 
   let disk = processDiskStaticInfo(disk_)
