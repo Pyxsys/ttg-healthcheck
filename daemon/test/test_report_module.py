@@ -189,16 +189,8 @@ class TestSystemReportClass(unittest.TestCase):
                 snicaddr(family=AddressFamily.AF_INET, address='9.99.0.999', netmask='255.255.0.0', broadcast=None, ptp=None), 
                 snicaddr(family=AddressFamily.AF_INET6, address='feed::fade:1111:face:1111', netmask=None, broadcast=None, ptp=None)
                 ]
-        mockdict['Wi-Fi'] = [
-                snicaddr(family=psutil.AF_LINK, address='FE-ED-FE-ED-11-11', netmask=None, broadcast=None, ptp=None), 
-                snicaddr(family=AddressFamily.AF_INET, address='9.99.0.999', netmask='255.255.0.0', broadcast=None, ptp=None), 
-                snicaddr(family=AddressFamily.AF_INET6, address='feed::fade:1111:face:1111', netmask=None, broadcast=None, ptp=None)
-                ]
-        mockdict[expected_result] = [
-                snicaddr(family=psutil.AF_LINK, address='FE-ED-FE-ED-11-11', netmask=None, broadcast=None, ptp=None), 
-                snicaddr(family=AddressFamily.AF_INET, address='9.99.0.999', netmask='255.255.0.0', broadcast=None, ptp=None), 
-                snicaddr(family=AddressFamily.AF_INET6, address='feed::fade:1111:face:1111', netmask=None, broadcast=None, ptp=None)
-                ]
+        mockdict['Wi-Fi'] = mockdict['wlan0']
+        mockdict[expected_result] = mockdict['wlan0']
 
         psutil.net_if_addrs = MagicMock(return_value = mockdict)
         actual_result = SysReport.fetch_net_adapter_addrs(expected_result).get('adapterName')
@@ -261,14 +253,14 @@ class TestSystemReportClass(unittest.TestCase):
 
         SysReport.fetch_net_wan_adapter_info = MagicMock(
             return_value = {
-                'SSID': 'TARGET_WIFI_SSID',
-                'connectionType': '802.11ac'
+                'SSID': 'mock_network_5GHz',
+                'connectionType': '802.11dd'
                 })
 
         SysReport.fetch_net_adapter_addrs = MagicMock(
             return_value = {
                 'adapterName': 'target_adapter', 
-                'ipv6': 'feed::fade:1111:face:1111',
+                'ipv6': '1111::1111:1111:1111:1111',
                 'ipv4': '9.99.0.999',
                 'mac': 'FE-ED-FE-ED-11-11'
                 })
