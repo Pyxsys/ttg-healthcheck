@@ -1,8 +1,4 @@
-from datetime import datetime
-from io import FileIO
-from msilib.schema import File
 import sys, os
-from unittest import mock
 import psutil
 import unittest
 from unittest.mock import patch, MagicMock, mock_open
