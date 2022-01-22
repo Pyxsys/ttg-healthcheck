@@ -72,6 +72,7 @@ class Runner:
 class SysReport:
     # Constants
     _R_DIGIT_PATTERN = '(\d+)'
+    
 
     # Initializes instance attributes.
     def __init__(self):
@@ -411,7 +412,7 @@ class SysReport:
             return 0
 
         extract=os.popen(command)
-        buffer=re.findall(pattern, extract.read(),  re.MULTILINE)
+        buffer=re.findall(pattern, extract.read(), re.MULTILINE)
         extract.close()
 
         return int(buffer[0])
@@ -448,8 +449,7 @@ class SysReport:
             pattern = "(?:Name\s+:\s" + re.escape(adapter) + "(?:\\n.+){5}SSID\s+:\s(.+)(?:\\n.+){3}Radio\stype.+:\s(.+)(?:\\n.+){7}Signal\s+: (\d{,2}))"
             
             extract = os.popen(command)
-            k = extract.read()
-            buffer = re.findall(pattern, k, re.MULTILINE)
+            buffer = re.findall(pattern, extract.read(), re.MULTILINE)
             extract.close()
 
             if len(buffer) > 0:
@@ -458,6 +458,16 @@ class SysReport:
         
         if psutil.LINUX:
             adapter = adapter_name if adapter_name is not None else 'wlan0'
+            command = 'iwconfig ' + adapter
+            pattern = "(?:\S+ +IEEE (\S+)  ESSID:\"(\S+)\".+\n)"
+
+            extract = os.popen(command)
+            buffer = re.findall(pattern, extract.read(), re.MULTILINE)
+            extract.close()
+
+            if len(buffer) > 0:
+                output['SSID'] = buffer[0][1]
+                output['connectionType'] = buffer[0][0]
 
         return output
 

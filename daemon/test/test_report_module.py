@@ -234,7 +234,7 @@ class TestSystemReportClass(unittest.TestCase):
         psutil.WINDOWS = MagicMock(return_value = True)
         psutil.LINUX = MagicMock(return_value = False)
 
-        with patch('os.popen', new=mock_open(read_data = MOCK_ADAPTER_TERMINAL_OUTPUT)) as _m:
+        with patch('os.popen', new=mock_open(read_data = MOCK_ADAPTER_TERMINAL_OUTPUT)):
             actual_result = SysReport.fetch_adapter_network_info('Wi-Fly')
 
         expected_result = {
@@ -246,12 +246,12 @@ class TestSystemReportClass(unittest.TestCase):
 
     def testFetchingAdapterNetworkInfoLUX(self):
         #TODO
-        MOCK_ADAPTER_TERMINAL_OUTPUT=''
+        MOCK_ADAPTER_TERMINAL_OUTPUT='wlan0     IEEE 802.11ac  ESSID:"TARGET_WIFI_SSID"  \n          Mode:Managed  Frequency:2.437 GHz  Access Point: 20:AA:4B:A3:63:39   \n          Bit Rate=54 Mb/s   Tx-Power=14 dBm   \n          Retry short limit:7   RTS thr:off   Fragment thr:off\n          Power Management:on\n          Link Quality=67/70  Signal level=-43 dBm  \n          Rx invalid nwid:0  Rx invalid crypt:0  Rx invalid frag:0\n          Tx excessive retries:0  Invalid misc:218   Missed beacon:0'
 
         psutil.WINDOWS = MagicMock(return_value = False)
         psutil.LINUX = MagicMock(return_value = True)
 
-        with patch('os.popen', new=mock_open(read_data = MOCK_ADAPTER_TERMINAL_OUTPUT)) as _m:
+        with patch('os.popen', new=mock_open(read_data = MOCK_ADAPTER_TERMINAL_OUTPUT)):
             actual_result = SysReport.fetch_adapter_network_info()
 
         expected_result = {
