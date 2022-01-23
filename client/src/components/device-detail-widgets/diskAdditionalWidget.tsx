@@ -5,7 +5,7 @@ import {Col, Table, Accordion} from 'react-bootstrap';
 // Custom
 import {Device} from '../../types/queries';
 
-const diskAdditionalWidget = (props: {deviceStatic: Device}) => {
+const diskAdditionalWidget = (props: { deviceStatic: Device }) => {
   const deviceStatic: Device = props.deviceStatic;
 
   return (
@@ -29,19 +29,25 @@ const diskAdditionalWidget = (props: {deviceStatic: Device}) => {
                 <tr className="border-bottom">
                   <td className="w-50">Type</td>
                   <td className="float-right">
-                    {deviceStatic?.disk?.disks.map((disk) => disk.type).join(', ') || 'N/A'}
+                    {deviceStatic?.disk?.disks
+                        .map((disk) => disk.type)
+                        .join(', ') || 'N/A'}
                   </td>
                 </tr>
                 <tr className="border-bottom">
                   <td className="w-50">Model</td>
                   <td className="float-right">
-                    {deviceStatic?.disk?.disks.map((disk) => disk.model).join(', ') || 'N/A'}
+                    {deviceStatic?.disk?.disks
+                        .map((disk) => disk.model)
+                        .join(', ') || 'N/A'}
                   </td>
                 </tr>
                 <tr className="border-bottom">
                   <td className="w-50">Size</td>
                   <td className="float-right">
-                    {deviceStatic?.disk?.disks.map((disk) => disk.size).join(', ') || 'N/A'}
+                    {deviceStatic?.disk?.disks
+                        .map((disk) => disk.size)
+                        .join(', ') || 'N/A'}
                   </td>
                 </tr>
               </tbody>

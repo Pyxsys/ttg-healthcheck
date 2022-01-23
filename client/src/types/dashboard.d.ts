@@ -10,7 +10,6 @@ export interface Dashboard {
   widgets: DashboardWidget[]
 }
 
-
 export interface IDashboardQuery extends IQuery {
   userId: string
   'widgets.widgetType'?: string

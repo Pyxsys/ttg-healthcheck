@@ -36,7 +36,7 @@
     "all-lint:fix": "concurrently \"npm run lint:fix --prefix server\" \"npm run lint:fix --prefix client\"",
     "all-test": "concurrently \"npm run test --prefix server\" \"cd client/src && npx cypress run\" \"npx cypress run\"",
     "all-test:coverage": "concurrently \"npm run test:coverage --prefix server\"  \"cd client/src && npx cypress run && npx nyc report\" \"npx cypress run && npx nyc report\" ",
-    "all-test:staged":  "concurrently \"npm run test:coverage --prefix server\"  \"cd client/src && npx cypress run\" \"npx cypress run\" "
+    "all-test:staged": "concurrently \"npm run test:coverage --prefix server\"  \"cd client/src && npx cypress run\" \"npx cypress run\" "
   },
   "dependencies": {
     "react-burger-menu": "^3.0.6"

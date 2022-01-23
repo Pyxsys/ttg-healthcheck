@@ -11,7 +11,9 @@ interface AuthObject {
   setUser: (active: UserObject) => void
 }
 
-const AuthContext = Contextualizer.createContext<AuthObject>(AppServices.Authentication);
+const AuthContext = Contextualizer.createContext<AuthObject>(
+    AppServices.Authentication,
+);
 
 /**
  * @return {AuthObject} user information and authentication status
