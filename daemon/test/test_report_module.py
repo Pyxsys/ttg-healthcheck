@@ -1,8 +1,7 @@
 import sys, os
-from unittest import mock
 import psutil
 import unittest
-from unittest.mock import patch, MagicMock, mock_open
+from unittest.mock import  MagicMock, mock_open, patch
 from psutil._common import scpufreq, snicaddr
 from socket import AddressFamily
 
@@ -28,6 +27,24 @@ class TestSystemReportClass(unittest.TestCase):
             "Bill Dew" : {"age": 21}
         }
     }
+
+    @classmethod
+    def getPSUTIL_NET_IF_ADDRS__MO(cls):
+        # Constant-dictionary assigned to function due to unittest patching not
+        # keeping mocks indpenedent when elements are popped. This causes subsequent tests
+        # mocking the same dict to alos have those elements popped
+        return {
+        'wlan0' : [
+            snicaddr(family=psutil.AF_LINK, address='FE-ED-FE-ED-11-11', netmask=None, broadcast=None, ptp=None), 
+            snicaddr(family=AddressFamily.AF_INET, address='9.99.0.999', netmask='255.255.0.0', broadcast=None, ptp=None), 
+            snicaddr(family=AddressFamily.AF_INET6, address='feed::fade:1111:face:1111', netmask=None, broadcast=None, ptp=None)
+            ],
+        'Wi-Fi' : [
+            snicaddr(family=psutil.AF_LINK, address='FE-ED-FE-ED-00-00', netmask=None, broadcast=None, ptp=None), 
+            snicaddr(family=AddressFamily.AF_INET, address='9.99.999.0', netmask='255.255.0.0', broadcast=None, ptp=None), 
+            snicaddr(family=AddressFamily.AF_INET6, address='feed::fade:1111:1111:1111', netmask=None, broadcast=None, ptp=None)
+            ]
+        }
 
     def setUp(self):
         self.test_report=SysReport()
@@ -182,37 +199,30 @@ class TestSystemReportClass(unittest.TestCase):
         self.assertGreaterEqual(actual_result,1)
 
     def testFetchingAdapterName(self):
-        mockdict = dict()
-        expected_result = 'target_adapter'
-
-        mockdict['wlan0'] = [
-                snicaddr(family=psutil.AF_LINK, address='FE-ED-FE-ED-11-11', netmask=None, broadcast=None, ptp=None), 
-                snicaddr(family=AddressFamily.AF_INET, address='9.99.0.999', netmask='255.255.0.0', broadcast=None, ptp=None), 
-                snicaddr(family=AddressFamily.AF_INET6, address='feed::fade:1111:face:1111', netmask=None, broadcast=None, ptp=None)
-                ]
-        mockdict['Wi-Fi'] = mockdict['wlan0']
-        mockdict[expected_result] = mockdict['wlan0']
-
-        with patch('psutil.net_if_addrs', return_value = mockdict):
+        expected_result = 'wlan0'
+        with patch('psutil.net_if_addrs', return_value = self.getPSUTIL_NET_IF_ADDRS__MO()):
             actual_result = SysReport.fetch_net_adapter_addrs(expected_result).get('adapterName')
 
-        self.assertEquals(actual_result, expected_result)
+        self.assertEqual(actual_result, expected_result)
 
     def testFetchingIpv4Address(self):
-        actual_result=SysReport.fetch_net_adapter_addrs(None).get('ipv4')
         ipv4_pattern = '(?:\d{1,3}\.){3}\d{1,3}'
+        with patch('psutil.net_if_addrs', return_value = self.getPSUTIL_NET_IF_ADDRS__MO()):
+            actual_result=SysReport.fetch_net_adapter_addrs(None).get('ipv4')
 
         self.assertRegex(actual_result, ipv4_pattern)
 
     def testFetchingIpv6Address(self):
-        actual_result=SysReport.fetch_net_adapter_addrs(None).get('ipv6')
-        ipv6_pattern = '(?:(?:\d|[a-f]){0,4}:){5}(?:\d|[a-f]){0,4}'
+        ipv6_pattern = '(?:(?:\d|[a-f]){0,4}:){5}(?:\d|[a-f]){0,4}' 
+        with patch('psutil.net_if_addrs', return_value = self.getPSUTIL_NET_IF_ADDRS__MO()):
+            actual_result=SysReport.fetch_net_adapter_addrs(None).get('ipv6')
 
         self.assertRegex(actual_result.lower(), ipv6_pattern)
 
     def testFetchingMacAddress(self):
-        actual_result=SysReport.fetch_net_adapter_addrs(None).get('mac')
         mac_pattern = '[0-9a-f]{2}([-:]?)[0-9a-f]{2}(\\1[0-9a-f]{2}){4}$'
+        with patch('psutil.net_if_addrs', return_value = self.getPSUTIL_NET_IF_ADDRS__MO()):
+            actual_result=SysReport.fetch_net_adapter_addrs(None).get('mac')
 
         self.assertRegex(actual_result.lower(), mac_pattern)
 
