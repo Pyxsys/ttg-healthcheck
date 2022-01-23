@@ -129,6 +129,14 @@ const mockStartupPayload = {
     processors: 16,
     sockets: 1,
   },
+  wifi_: {
+    adapterName: 'target_adapter',
+    SSID: 'TARGET_WIFI_SSID',
+    connectionType: '802.11ac',
+    ipv4Address: '9.99.0.999',
+    ipv6Address: 'feed::fade:1111:face:1111',
+    macAdress: 'FE-ED-FE-ED-11-11',
+  },
 }
 
 const mockLogPayload1 = {
