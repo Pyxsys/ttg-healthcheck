@@ -1,9 +1,9 @@
-from datetime import datetime
 import sys, os
 import psutil
 import unittest
-from unittest.mock import MagicMock
-from psutil._common import scpufreq
+from unittest.mock import  MagicMock, mock_open, patch
+from psutil._common import scpufreq, snicaddr
+from socket import AddressFamily
 
 # Include src directory for imports
 sys.path.append('../')
@@ -28,11 +28,26 @@ class TestSystemReportClass(unittest.TestCase):
         }
     }
 
+    @classmethod
+    def getPSUTIL_NET_IF_ADDRS__MO(cls):
+        # Constant-dictionary assigned to function due to unittest patching not
+        # keeping mocks indpenedent when elements are popped. This causes subsequent tests
+        # mocking the same dict to alos have those elements popped
+        return {
+        'wlan0' : [
+            snicaddr(family=psutil.AF_LINK, address='FE-ED-FE-ED-11-11', netmask=None, broadcast=None, ptp=None), 
+            snicaddr(family=AddressFamily.AF_INET, address='9.99.0.999', netmask='255.255.0.0', broadcast=None, ptp=None), 
+            snicaddr(family=AddressFamily.AF_INET6, address='feed::fade:1111:face:1111', netmask=None, broadcast=None, ptp=None)
+            ],
+        'Wi-Fi' : [
+            snicaddr(family=psutil.AF_LINK, address='FE-ED-FE-ED-00-00', netmask=None, broadcast=None, ptp=None), 
+            snicaddr(family=AddressFamily.AF_INET, address='9.99.999.0', netmask='255.255.0.0', broadcast=None, ptp=None), 
+            snicaddr(family=AddressFamily.AF_INET6, address='feed::fade:1111:1111:1111', netmask=None, broadcast=None, ptp=None)
+            ]
+        }
+
     def setUp(self):
         self.test_report=SysReport()
-
-
-
 
     def tearDown(self):
         del self.test_report
@@ -183,6 +198,73 @@ class TestSystemReportClass(unittest.TestCase):
         actual_result=SysReport.fetch_cpu_sockets()
         self.assertGreaterEqual(actual_result,1)
 
+    def testFetchingAdapterName(self):
+        expected_result = 'wlan0'
+        with patch('psutil.net_if_addrs', return_value = self.getPSUTIL_NET_IF_ADDRS__MO()):
+            actual_result = SysReport.fetch_net_adapter_addrs(expected_result).get('adapterName')
+
+        self.assertEqual(actual_result, expected_result)
+
+    def testFetchingIpv4Address(self):
+        ipv4_pattern = '(?:\d{1,3}\.){3}\d{1,3}'
+        with patch('psutil.net_if_addrs', return_value = self.getPSUTIL_NET_IF_ADDRS__MO()):
+            actual_result=SysReport.fetch_net_adapter_addrs(None).get('ipv4')
+
+        self.assertRegex(actual_result, ipv4_pattern)
+
+    def testFetchingIpv6Address(self):
+        ipv6_pattern = '(?:(?:\d|[a-f]){0,4}:){5}(?:\d|[a-f]){0,4}' 
+        with patch('psutil.net_if_addrs', return_value = self.getPSUTIL_NET_IF_ADDRS__MO()):
+            actual_result=SysReport.fetch_net_adapter_addrs(None).get('ipv6')
+
+        self.assertRegex(actual_result.lower(), ipv6_pattern)
+
+    def testFetchingMacAddress(self):
+        mac_pattern = '[0-9a-f]{2}([-:]?)[0-9a-f]{2}(\\1[0-9a-f]{2}){4}$'
+        with patch('psutil.net_if_addrs', return_value = self.getPSUTIL_NET_IF_ADDRS__MO()):
+            actual_result=SysReport.fetch_net_adapter_addrs(None).get('mac')
+
+        self.assertRegex(actual_result.lower(), mac_pattern)
+
+    @patch('psutil.WINDOWS', return_value=True)
+    @patch('psutil.LINUX', return_value=False)
+    def testFetchingAdapterNetworkInfoWIN(self, m1, m2):
+        
+        MOCK_ADAPTER_TERMINAL_OUTPUT='There is 1 interface on the system:\n\n    Name                   : Wi-Fly\n    Description            : foobar 999MHz\n    GUID                   : ace11ace-ace1-ace1-ace1-aceaceaceace\n    Physical address       : aa:aa:aa:aa:aa:aa\n    State                  : connected\n    SSID                   : TARGET_WIFI_SSID\n    BSSID                  : bb:bb:bb:b:bb:bb\n    Network type           : Infrastructure\n    Radio type             : 802.11ac\n    Authentication         : WPA2-Personal\n    Cipher                 : CCMP\n    Connection mode        : Auto Connect\n    Channel                : 000\n    Receive rate (Mbps)    : 999\n    Transmit rate (Mbps)   : 999\n    Signal                 : 81%\n    Profile                : TARGET_WIFI_SSID\n\n    Hosted network status  : Not available'
+        with patch('os.popen', new=mock_open(read_data = MOCK_ADAPTER_TERMINAL_OUTPUT)):
+            actual_result = SysReport.fetch_net_wan_adapter_info('Wi-Fly')
+
+        expected_result = {
+            "SSID": 'TARGET_WIFI_SSID', 
+            "connectionType": '802.11ac'
+            }
+        
+        self.assertDictEqual(actual_result, expected_result)
+
+    @patch('psutil.WINDOWS', return_value=False)
+    @patch('psutil.LINUX', return_value=True)
+    def testFetchingAdapterNetworkInfoLUX(self, m1, m2):
+        MOCK_ADAPTER_TERMINAL_OUTPUT='wlan0     IEEE 802.11ac  ESSID:"TARGET_WIFI_SSID"  \n          Mode:Managed  Frequency:2.437 GHz  Access Point: 20:AA:4B:A3:63:39   \n          Bit Rate=54 Mb/s   Tx-Power=14 dBm   \n          Retry short limit:7   RTS thr:off   Fragment thr:off\n          Power Management:on\n          Link Quality=67/70  Signal level=-43 dBm  \n          Rx invalid nwid:0  Rx invalid crypt:0  Rx invalid frag:0\n          Tx excessive retries:0  Invalid misc:218   Missed beacon:0'
+        with patch('os.popen', new=mock_open(read_data = MOCK_ADAPTER_TERMINAL_OUTPUT)):
+            actual_result = SysReport.fetch_net_wan_adapter_info()
+
+        expected_result = {
+            "SSID": 'TARGET_WIFI_SSID', 
+            "connectionType": '802.11ac'
+            }
+        
+        self.assertDictEqual(actual_result, expected_result)
+
+    @patch('daemon.src.system_report.SysReport.fetch_net_wan_adapter_info', return_value = { 'SSID': 'mock_network_5GHz', 'connectionType': '802.11dd'})
+    @patch('daemon.src.system_report.SysReport.fetch_net_adapter_addrs', return_value = { 'adapterName': 'target_adapter',  'ipv6': '1111::1111:1111:1111:1111', 'ipv4': '9.99.0.999', 'mac': 'FE-ED-FE-ED-11-11'})
+    def testAddingStaticNetworkInfo(self, m1, m2):
+        expected_result = ('adapterName', 'SSID', 'connectionType', 'ipv4Address', 'ipv6Address', 'macAdress')
+
+        self.test_report.add_startup_network_info()
+        section=self.test_report.get_section('wifi_')
+        actual_result = tuple(section)
+
+        self.assertTupleEqual(actual_result, expected_result)
 
 if __name__ == '__main__':
     unittest.main()
