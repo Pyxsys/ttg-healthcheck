@@ -89,7 +89,12 @@ const DevicePage = () => {
     return (
       <div className="devices-column-h d-flex justify-content-left align-items-center">
         <div className="devices-uuid-text devices-font">
-          <Link to={{pathname: '/device', state: {id: cell}}}>{cell}</Link>
+          <Link
+            className="white"
+            to={{pathname: '/device', state: {id: cell}}}
+          >
+            {cell}
+          </Link>
         </div>
       </div>
     );
