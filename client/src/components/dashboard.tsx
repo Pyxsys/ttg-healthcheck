@@ -82,7 +82,7 @@ const DashboardPage = () => {
       <Navbar />
       <div id="page-wrap" className="h-100 overflow-auto container">
         dashboard
-        <img className="gear-dash" alt="asdf"></img>
+        <input type="image" className="gear-dash"></input>
         {/* For Testing Purposes Only */}
         <div className="pt-5 d-flex flex-column">
           <h5>For Testing Purposes</h5>
