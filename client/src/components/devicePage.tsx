@@ -90,7 +90,7 @@ const DevicePage = () => {
       <div className="devices-column-h d-flex justify-content-left align-items-center">
         <div className="devices-uuid-text devices-font">
           <Link
-            className="white"
+            className="text-white"
             to={{pathname: '/device', state: {id: cell}}}
           >
             {cell}
