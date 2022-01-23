@@ -83,7 +83,9 @@ const DevicePage = () => {
     };
   }, []);
 
-  const idFormatter = (cell: {} | null | undefined) => {
+  type cell = any | null | undefined
+
+  const idFormatter = (cell: cell) => {
     return (
       <div className="devices-column-h d-flex justify-content-left align-items-center">
         <div className="devices-uuid-text devices-font">
@@ -93,7 +95,7 @@ const DevicePage = () => {
     );
   };
 
-  const pieUsageFormatter = (cell: {} | null | undefined) => {
+  const pieUsageFormatter = (cell: cell) => {
     return (
       <div className="d-flex justify-content-end align-items-center">
         <div className="text-truncate devices-font">
@@ -107,7 +109,7 @@ const DevicePage = () => {
     );
   };
 
-  const signalStrengthFormatter = (cell: {} | null | undefined) => {
+  const signalStrengthFormatter = (cell: cell) => {
     return (
       <div className="d-flex flex-column">
         <div className="d-flex justify-content-end align-items-center">
