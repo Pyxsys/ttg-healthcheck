@@ -1,5 +1,6 @@
 // 3rd Party
 import React, {useState} from 'react';
+import {Button, Modal} from 'react-bootstrap';
 import {useAuth} from '../context/authContext';
 import {queryDashboard, saveDashboard} from '../services/dashboard.service';
 import {notificationService} from '../services/notification.service';
@@ -8,15 +9,15 @@ import '../App.scss';
 
 // Custom
 import Navbar from './Navbar';
-
 const DashboardPage = () => {
   const {user} = useAuth();
   const [dashboard, setDashboard] = useState({} as Dashboard);
-
   /* -------------------------
    * For Testing Purposes Only
    * -------------------------
    */
+  const [showModal, setShowModal] = useState(false);
+  const handleShow = () => setShowModal(true);
   const saveValidDash = () => {
     const body = {
       userId: user._id,
@@ -82,7 +83,15 @@ const DashboardPage = () => {
       <Navbar />
       <div id="page-wrap" className="h-100 overflow-auto container">
         dashboard
-        <input type="image" className="gear-dash"></input>
+        <img className="rect-dash"></img>
+        <Modal show={showModal}>
+          <Modal.Header>Modal Head part</Modal.Header>
+          <Modal.Body>Hi, React modal is here</Modal.Body>
+          <Modal.Footer>
+            <Button>Close Modal</Button>
+          </Modal.Footer>
+        </Modal>
+        <Button onClick={() => handleShow()}>Second</Button>
         {/* For Testing Purposes Only */}
         <div className="pt-5 d-flex flex-column">
           <h5>For Testing Purposes</h5>
