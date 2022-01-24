@@ -1,12 +1,13 @@
 // 3rd Party
 import React from 'react';
 import {Col, Table, Accordion} from 'react-bootstrap';
+import {format} from 'fecha';
 
 // Custom
-import {Device} from '../../types/queries';
+import {DeviceLog} from '../../types/queries';
 
-const DiskAdditionalWidget = (props: {deviceStatic: Device}) => {
-  const deviceStatic: Device = props.deviceStatic;
+const cpuUsageWidget = (props: { deviceDynamic: DeviceLog }) => {
+  const deviceDynamic: DeviceLog = props.deviceDynamic;
 
   return (
     <Col className="device-details-accordion dark-accordion pt-3 pb-3">
@@ -14,34 +15,39 @@ const DiskAdditionalWidget = (props: {deviceStatic: Device}) => {
         <Accordion.Item eventKey="0">
           <Accordion.Header>
             <div className="d-flex w-100 justify-content-around">
-              Additional Disk Information
+              CPU Usage Information
             </div>
           </Accordion.Header>
           <Accordion.Body>
             <Table className="device-details-table device-details-table-dark">
               <tbody>
                 <tr className="border-bottom">
-                  <td>Capacity:</td>
+                  <td className="w-50">Usage</td>
                   <td className="float-right">
-                    {deviceStatic?.disk?.capacity || 'N/A'}
+                    {deviceDynamic?.cpu?.usageSpeed || 'N/A'}%
                   </td>
                 </tr>
                 <tr className="border-bottom">
-                  <td className="w-50">Type</td>
+                  <td>Number of Processes</td>
                   <td className="float-right">
-                    {deviceStatic?.disk?.disks.map((disk) => disk.type).join(', ') || 'N/A'}
+                    {deviceDynamic?.cpu?.numProcesses || 'N/A'}
                   </td>
                 </tr>
                 <tr className="border-bottom">
-                  <td className="w-50">Model</td>
+                  <td>Threads Sleeping</td>
                   <td className="float-right">
-                    {deviceStatic?.disk?.disks.map((disk) => disk.model).join(', ') || 'N/A'}
+                    {deviceDynamic?.cpu?.threadsSleeping || 'N/A'}
                   </td>
                 </tr>
                 <tr className="border-bottom">
-                  <td className="w-50">Size</td>
+                  <td>Timestamp</td>
                   <td className="float-right">
-                    {deviceStatic?.disk?.disks.map((disk) => disk.size).join(', ') || 'N/A'}
+                    {deviceDynamic?.timestamp ?
+                      format(
+                          new Date(deviceDynamic?.timestamp),
+                          'MMM DD, YYYY, h:mm:ss A',
+                      ) :
+                      'N/A'}
                   </td>
                 </tr>
               </tbody>
@@ -53,4 +59,4 @@ const DiskAdditionalWidget = (props: {deviceStatic: Device}) => {
   );
 };
 
-export default DiskAdditionalWidget;
+export default cpuUsageWidget;

@@ -5,7 +5,7 @@ import {Col, Table, Accordion} from 'react-bootstrap';
 // Custom
 import {Device} from '../../types/queries';
 
-const CpuAdditionalWidget = (props: {deviceStatic: Device}) => {
+const cpuAdditionalWidget = (props: { deviceStatic: Device }) => {
   const deviceStatic: Device = props.deviceStatic;
 
   return (
@@ -77,4 +77,4 @@ const CpuAdditionalWidget = (props: {deviceStatic: Device}) => {
   );
 };
 
-export default CpuAdditionalWidget;
+export default cpuAdditionalWidget;

@@ -1,13 +1,12 @@
 // 3rd Party
 import React from 'react';
 import {Col, Table, Accordion} from 'react-bootstrap';
-import {format} from 'fecha';
 
 // Custom
-import {DeviceLog} from '../../types/queries';
+import {Device} from '../../types/queries';
 
-const MemoryUsageWidget = (props: {deviceDynamic: DeviceLog}) => {
-  const deviceDynamic: DeviceLog = props.deviceDynamic;
+const wifiAdditionalWidget = (props: { deviceStatic: Device }) => {
+  const deviceStatic: Device = props.deviceStatic;
 
   return (
     <Col className="device-details-accordion dark-accordion pt-3 pb-3">
@@ -15,39 +14,40 @@ const MemoryUsageWidget = (props: {deviceDynamic: DeviceLog}) => {
         <Accordion.Item eventKey="0">
           <Accordion.Header>
             <div className="d-flex w-100 justify-content-around">
-              Memory Usage Information
+              Additional Wifi Information
             </div>
           </Accordion.Header>
           <Accordion.Body>
             <Table className="device-details-table device-details-table-dark">
               <tbody>
                 <tr className="border-bottom">
-                  <td className="w-50">inUse</td>
+                  <td>Adapter Name</td>
                   <td className="float-right">
-                    {deviceDynamic?.memory?.inUse || 'N/A'}
+                    {deviceStatic?.wifi?.adapterName || 'N/A'}
                   </td>
                 </tr>
                 <tr className="border-bottom">
-                  <td>Available</td>
+                  <td className="w-50">SSID</td>
                   <td className="float-right">
-                    {deviceDynamic?.memory?.available || 'N/A'}
+                    {deviceStatic?.wifi?.SSID || 'N/A'}
                   </td>
                 </tr>
                 <tr className="border-bottom">
-                  <td>Cached</td>
+                  <td className="w-50">Connection Type</td>
                   <td className="float-right">
-                    {deviceDynamic?.memory?.cached || 'N/A'}
+                    {deviceStatic?.wifi?.connectionType || 'N/A'}
                   </td>
                 </tr>
                 <tr className="border-bottom">
-                  <td>Timestamp</td>
+                  <td className="w-50">IPV4 Address</td>
                   <td className="float-right">
-                    {deviceDynamic?.timestamp ?
-                      format(
-                          new Date(deviceDynamic?.timestamp),
-                          'MMM DD, YYYY, h:mm:ss A',
-                      ) :
-                      'N/A'}
+                    {deviceStatic?.wifi?.ipv4Address || 'N/A'}
+                  </td>
+                </tr>
+                <tr className="border-bottom">
+                  <td className="w-50">IPV6 Address</td>
+                  <td className="float-right">
+                    {deviceStatic?.wifi?.ipv6Address || 'N/A'}
                   </td>
                 </tr>
               </tbody>
@@ -59,4 +59,4 @@ const MemoryUsageWidget = (props: {deviceDynamic: DeviceLog}) => {
   );
 };
 
-export default MemoryUsageWidget;
+export default wifiAdditionalWidget;

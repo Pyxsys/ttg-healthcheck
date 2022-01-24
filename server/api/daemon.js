@@ -53,7 +53,7 @@ const processDeviceInfo = (payload) => {
     cpu_,
     memory_,
     disk_,
-    wifi,
+    wifi_,
   } = payload
 
   let disk = processDiskStaticInfo(disk_)
@@ -69,7 +69,7 @@ const processDeviceInfo = (payload) => {
     cpu: cpu_,
     memory: memory_,
     disk,
-    wifi,
+    wifi: wifi_,
   }
 }
 

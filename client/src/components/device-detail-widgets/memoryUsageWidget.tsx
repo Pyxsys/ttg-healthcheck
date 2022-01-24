@@ -6,7 +6,7 @@ import {format} from 'fecha';
 // Custom
 import {DeviceLog} from '../../types/queries';
 
-const WifiUsageWidget = (props: {deviceDynamic: DeviceLog}) => {
+const memoryUsageWidget = (props: { deviceDynamic: DeviceLog }) => {
   const deviceDynamic: DeviceLog = props.deviceDynamic;
 
   return (
@@ -15,28 +15,28 @@ const WifiUsageWidget = (props: {deviceDynamic: DeviceLog}) => {
         <Accordion.Item eventKey="0">
           <Accordion.Header>
             <div className="d-flex w-100 justify-content-around">
-              Wifi Usage Information
+              Memory Usage Information
             </div>
           </Accordion.Header>
           <Accordion.Body>
             <Table className="device-details-table device-details-table-dark">
               <tbody>
                 <tr className="border-bottom">
-                  <td className="w-50">Send Speed</td>
+                  <td className="w-50">inUse</td>
                   <td className="float-right">
-                    {deviceDynamic?.wifi?.sendSpeed || 'N/A'}
+                    {deviceDynamic?.memory?.inUse || 'N/A'}
                   </td>
                 </tr>
                 <tr className="border-bottom">
-                  <td>Receive Speed</td>
+                  <td>Available</td>
                   <td className="float-right">
-                    {deviceDynamic?.wifi?.receiveSpeed || 'N/A'}
+                    {deviceDynamic?.memory?.available || 'N/A'}
                   </td>
                 </tr>
                 <tr className="border-bottom">
-                  <td>Signal Strength</td>
+                  <td>Cached</td>
                   <td className="float-right">
-                    {deviceDynamic?.wifi?.signalStrength || 'N/A'}
+                    {deviceDynamic?.memory?.cached || 'N/A'}
                   </td>
                 </tr>
                 <tr className="border-bottom">
@@ -59,4 +59,4 @@ const WifiUsageWidget = (props: {deviceDynamic: DeviceLog}) => {
   );
 };
 
-export default WifiUsageWidget;
+export default memoryUsageWidget;

@@ -7,16 +7,17 @@ import {Col, Row, Table, Accordion, Tabs, Tab} from 'react-bootstrap';
 import Navbar from './Navbar';
 import {Device, DeviceLog, IResponse} from '../types/queries';
 import {useRealTimeService} from '../context/realTimeContext';
-import Pie from './common/pieWheel';
-import CpuUsageWidget from './device-detail-widgets/cpuUsage';
-import CpuAdditionalWidget from './device-detail-widgets/cpuAdditional';
-import DiskUsageWidget from './device-detail-widgets/diskUsage';
-import DiskAdditionalWidget from './device-detail-widgets/diskAdditional';
-import MemoryUsageWidget from './device-detail-widgets/memoryUsage';
-import MemoryAdditionalWidget from './device-detail-widgets/memoryAdditional';
-import WifiUsageWidget from './device-detail-widgets/wifiUsage';
-import WifiAdditionalWidget from './device-detail-widgets/wifiAdditional';
-import SignalStrength from './common/signalStrength';
+import PieWheel from './common/pieWheel';
+import CpuUsageWidget from './device-detail-widgets/cpuUsageWidget';
+import CpuAdditionalWidget from './device-detail-widgets/cpuAdditionalWidget';
+import DiskUsageWidget from './device-detail-widgets/diskUsageWidget';
+import DiskAdditionalWidget from './device-detail-widgets/diskAdditionalWidget';
+import MemoryUsageWidget from './device-detail-widgets/memoryUsageWidget';
+import MemoryAdditionalWidget from './device-detail-widgets/memoryAdditionalWidget';
+import WifiUsageWidget from './device-detail-widgets/wifiUsageWidget';
+import WifiAdditionalWidget from './device-detail-widgets/wifiAdditionalWidget';
+import {SignalStrength} from './common/signalStrength';
+import ProcessTable from './device-detail-widgets/processTable';
 
 const DeviceDetailPage = (props: any) => {
   const deviceId: string = props.location.state.id;
@@ -76,183 +77,243 @@ const DeviceDetailPage = (props: any) => {
   return (
     <div id="device-details-container">
       <Navbar />
-      <div id="device-details-wrapper" className="h-100 container pe-0 ps-0">
-        <Row>
-          <Col>
-            <Row className="gx-5">
-              <Col
-                xs={12}
-                sm={12}
-                md={12}
-                lg={12}
-                xl={4}
-                className="device-details-accordion"
-              >
-                <Accordion defaultActiveKey="0" flush>
-                  <Accordion.Item eventKey="0">
-                    <Accordion.Header>
-                      <div className="d-flex w-100 justify-content-around">
-                        Device
-                      </div>
-                    </Accordion.Header>
-                    <Accordion.Body>
-                      <Table className="device-details-table" id="device-details-table">
-                        <tbody>
-                          <tr>
-                            <td className="w-50">ID</td>
-                            <td>{deviceId}</td>
-                          </tr>
-                          <tr>
-                            <td>Name</td>
-                            <td>{deviceData?.name}</td>
-                          </tr>
-                          <tr>
-                            <td>Description</td>
-                            <td>{deviceData?.description}</td>
-                          </tr>
-                          <tr>
-                            <td>Connection Type</td>
-                            <td>{deviceData?.connectionType}</td>
-                          </tr>
-                          <tr>
-                            <td>Status</td>
-                            <td>{deviceData?.status}</td>
-                          </tr>
-                          <tr>
-                            <td>Provider</td>
-                            <td>{deviceData?.provider}</td>
-                          </tr>
-                          <tr>
-                            <td>Hardware Name</td>
-                            <td>{deviceData?.hardware?.harwareName}</td>
-                          </tr>
-                        </tbody>
-                      </Table>
-                    </Accordion.Body>
-                  </Accordion.Item>
-                </Accordion>
-              </Col>
-              <Col
-                xs={12}
-                sm={12}
-                md={12}
-                lg={12}
-                xl={8}
-                className="device-details-accordion"
-              >
-                <Accordion defaultActiveKey="0" flush>
-                  <Accordion.Item eventKey="0">
-                    <Accordion.Header>
-                      <div className="d-flex w-100 justify-content-around">
-                        <div>CPU</div>
-                        <div>Memory</div>
-                        <div>Disk</div>
-                        <div>Wifi</div>
-                      </div>
-                    </Accordion.Header>
-                    <Accordion.Body>
-                      <div className="d-flex justify-content-center">
-                        <div>
-                          <Pie
-                            percentage={
-                              deviceLogsData?.cpu?.aggregatedPercentage
-                            }
-                            text={true}
-                          />
+      <div className="device-details-wrapper">
+        <div className="h-100 container pe-2 ps-2">
+          <Row>
+            <Col>
+              <Row className="gx-4">
+                <Col
+                  xs={12}
+                  sm={12}
+                  md={12}
+                  lg={4}
+                  xl={4}
+                  className="device-details-accordion"
+                >
+                  <Accordion defaultActiveKey="0" flush>
+                    <Accordion.Item eventKey="0">
+                      <Accordion.Header>
+                        <div className="d-flex w-100 justify-content-around">
+                          Device
                         </div>
-                        <div>
-                          <Pie
-                            percentage={
-                              deviceLogsData?.memory?.aggregatedPercentage
-                            }
-                            text={true}
-                          />
+                      </Accordion.Header>
+                      <Accordion.Body>
+                        <Table className="device-details-table">
+                          <tbody>
+                            <tr>
+                              <td
+                                className="w-50"
+                                style={{fontWeight: '600'}}
+                              >
+                                ID
+                              </td>
+                              <td style={{fontStyle: 'italic'}}>
+                                {deviceId}
+                              </td>
+                            </tr>
+                            <tr>
+                              <td style={{fontWeight: '600'}}>Name</td>
+                              <td style={{fontStyle: 'italic'}}>
+                                {deviceData?.name}
+                              </td>
+                            </tr>
+                            <tr>
+                              <td style={{fontWeight: '600'}}>Description</td>
+                              <td style={{fontStyle: 'italic'}}>
+                                {deviceData?.description}
+                              </td>
+                            </tr>
+                            <tr>
+                              <td style={{fontWeight: '600'}}>
+                                Connection Type
+                              </td>
+                              <td style={{fontStyle: 'italic'}}>
+                                {deviceData?.connectionType}
+                              </td>
+                            </tr>
+                            <tr>
+                              <td style={{fontWeight: '600'}}>Status</td>
+                              <td style={{fontStyle: 'italic'}}>
+                                {deviceData?.status}
+                              </td>
+                            </tr>
+                            <tr>
+                              <td style={{fontWeight: '600'}}>Provider</td>
+                              <td style={{fontStyle: 'italic'}}>
+                                {deviceData?.provider}
+                              </td>
+                            </tr>
+                            <tr>
+                              <td style={{fontWeight: '600'}}>
+                                Hardware Name
+                              </td>
+                              <td style={{fontStyle: 'italic'}}>
+                                {deviceData?.hardware?.harwareName}
+                              </td>
+                            </tr>
+                          </tbody>
+                        </Table>
+                      </Accordion.Body>
+                    </Accordion.Item>
+                  </Accordion>
+                </Col>
+                <Col
+                  xs={12}
+                  sm={12}
+                  md={12}
+                  lg={8}
+                  xl={8}
+                  className="device-details-accordion device-details-second-accordion"
+                >
+                  <Accordion defaultActiveKey="0" flush>
+                    <Accordion.Item eventKey="0">
+                      <Accordion.Header>
+                        <div className="d-flex w-100 justify-content-around">
+                          <div>CPU</div>
+                          <div>Memory</div>
+                          <div>Disk</div>
+                          <div>Wifi</div>
                         </div>
-                        <div>
-                          <Pie
-                            percentage={
-                              deviceLogsData?.disk?.partitions?.reduce(
-                                  (sum, p) => sum + p.percent,
-                                  0,
-                              ) / deviceLogsData?.disk?.partitions?.length
-                            }
-                            text={true}
-                          />
+                      </Accordion.Header>
+                      <Accordion.Body>
+                        <div className="d-flex justify-content-center">
+                          <div>
+                            <PieWheel
+                              percentage={
+                                deviceLogsData?.cpu?.aggregatedPercentage
+                              }
+                              text={true}
+                            />
+                          </div>
+                          <div>
+                            <PieWheel
+                              percentage={
+                                deviceLogsData?.memory?.aggregatedPercentage
+                              }
+                              text={true}
+                            />
+                          </div>
+                          <div>
+                            <PieWheel
+                              percentage={
+                                deviceLogsData?.disk?.partitions?.reduce(
+                                    (sum, p) => sum + p.percent,
+                                    0,
+                                ) / deviceLogsData?.disk?.partitions?.length
+                              }
+                              text={true}
+                            />
+                          </div>
+                          <div>
+                            <SignalStrength
+                              level={Number(
+                                  deviceLogsData?.wifi?.signalStrength,
+                              )}
+                              showText={true}
+                            />
+                          </div>
                         </div>
-                        <div>
-                          <SignalStrength level={Number(deviceLogsData?.wifi?.signalStrength)} showText={true} />
-                        </div>
+                      </Accordion.Body>
+                    </Accordion.Item>
+                  </Accordion>
+                </Col>
+              </Row>
+              <Row>
+                <Col className="device-details-tabs">
+                  <Tabs defaultActiveKey="cpu">
+                    <Tab eventKey="cpu" title="CPU">
+                      <div className="tab-body d-flex justify-content-center">
+                        <Row className="w-100">
+                          <Col xs={12} sm={12} md={12} lg={6} xl={6}>
+                            <div className="tab-widget-padding w-100">
+                              <CpuUsageWidget
+                                deviceDynamic={deviceLogsData}
+                              ></CpuUsageWidget>
+                            </div>
+                          </Col>
+                          <Col xs={12} sm={12} md={12} lg={6} xl={6}>
+                            <div className="tab-widget-padding w-100">
+                              <CpuAdditionalWidget
+                                deviceStatic={deviceData}
+                              ></CpuAdditionalWidget>
+                            </div>
+                          </Col>
+                        </Row>
                       </div>
-                    </Accordion.Body>
-                  </Accordion.Item>
-                </Accordion>
-              </Col>
-            </Row>
-            <Row className="pt-5 pb-5">
-              <Col className="device-details-tabs">
-                <Tabs defaultActiveKey="cpu">
-                  <Tab eventKey="cpu" title="CPU">
-                    <div className="tab-body d-flex justify-content-around py-4">
-                      <div className="px-5 w-100">
-                        <CpuUsageWidget
+                    </Tab>
+                    <Tab eventKey="memory" title="Memory">
+                      <div className="tab-body d-flex justify-content-center">
+                        <Row className="w-100">
+                          <Col xs={12} sm={12} md={12} lg={6} xl={6}>
+                            <div className="tab-widget-padding w-100">
+                              <MemoryUsageWidget
+                                deviceDynamic={deviceLogsData}
+                              ></MemoryUsageWidget>
+                            </div>
+                          </Col>
+                          <Col xs={12} sm={12} md={12} lg={6} xl={6}>
+                            <div className="tab-widget-padding w-100">
+                              <MemoryAdditionalWidget
+                                deviceStatic={deviceData}
+                              ></MemoryAdditionalWidget>
+                            </div>
+                          </Col>
+                        </Row>
+                      </div>
+                    </Tab>
+                    <Tab eventKey="disk" title="Disk">
+                      <div className="tab-body d-flex justify-content-around">
+                        <Row className="w-100">
+                          <Col xs={12} sm={12} md={12} lg={6} xl={6}>
+                            <div className="tab-widget-padding w-100">
+                              <DiskUsageWidget
+                                deviceDynamic={deviceLogsData}
+                              ></DiskUsageWidget>
+                            </div>
+                          </Col>
+                          <Col xs={12} sm={12} md={12} lg={6} xl={6}>
+                            <div className="tab-widget-padding w-100">
+                              <DiskAdditionalWidget
+                                deviceStatic={deviceData}
+                              ></DiskAdditionalWidget>
+                            </div>
+                          </Col>
+                        </Row>
+                      </div>
+                    </Tab>
+                    <Tab eventKey="wifi" title="Wifi">
+                      <div className="tab-body d-flex justify-content-around">
+                        <Row className="w-100">
+                          <Col xs={12} sm={12} md={12} lg={6} xl={6}>
+                            <div className="tab-widget-padding w-100">
+                              <WifiUsageWidget
+                                deviceDynamic={deviceLogsData}
+                              ></WifiUsageWidget>
+                            </div>
+                          </Col>
+                          <Col xs={12} sm={12} md={12} lg={6} xl={6}>
+                            <div className="tab-widget-padding w-100">
+                              <WifiAdditionalWidget
+                                deviceStatic={deviceData}
+                              ></WifiAdditionalWidget>
+                            </div>
+                          </Col>
+                        </Row>
+                      </div>
+                    </Tab>
+                    <Tab eventKey="processes" title="Processes">
+                      <div className="tab-body">
+                        <ProcessTable
                           deviceDynamic={deviceLogsData}
-                        ></CpuUsageWidget>
+                        ></ProcessTable>
                       </div>
-                      <div className="px-5 w-100">
-                        <CpuAdditionalWidget
-                          deviceStatic={deviceData}
-                        ></CpuAdditionalWidget>
-                      </div>
-                    </div>
-                  </Tab>
-                  <Tab eventKey="memory" title="Memory">
-                    <div className="tab-body d-flex justify-content-around py-4">
-                      <div className="px-5 w-100">
-                        <MemoryUsageWidget
-                          deviceDynamic={deviceLogsData}
-                        ></MemoryUsageWidget>
-                      </div>
-                      <div className="px-5 w-100">
-                        <MemoryAdditionalWidget
-                          deviceStatic={deviceData}
-                        ></MemoryAdditionalWidget>
-                      </div>
-                    </div>
-                  </Tab>
-                  <Tab eventKey="disk" title="Disk">
-                    <div className="tab-body d-flex justify-content-around py-4">
-                      <div className="px-5 w-100">
-                        <DiskUsageWidget
-                          deviceDynamic={deviceLogsData}
-                        ></DiskUsageWidget>
-                      </div>
-                      <div className="px-5 w-100">
-                        <DiskAdditionalWidget
-                          deviceStatic={deviceData}
-                        ></DiskAdditionalWidget>
-                      </div>
-                    </div>
-                  </Tab>
-                  <Tab eventKey="wifi" title="Wifi">
-                    <div className="tab-body d-flex justify-content-around py-4">
-                      <div className="px-5 w-100">
-                        <WifiUsageWidget
-                          deviceDynamic={deviceLogsData}
-                        ></WifiUsageWidget>
-                      </div>
-                      <div className="px-5 w-100">
-                        <WifiAdditionalWidget
-                          deviceStatic={deviceData}
-                        ></WifiAdditionalWidget>
-                      </div>
-                    </div>
-                  </Tab>
-                  <Tab eventKey="processes" title="Processes"></Tab>
-                </Tabs>
-              </Col>
-            </Row>
-          </Col>
-        </Row>
+                    </Tab>
+                  </Tabs>
+                </Col>
+              </Row>
+            </Col>
+          </Row>
+        </div>
       </div>
     </div>
   );

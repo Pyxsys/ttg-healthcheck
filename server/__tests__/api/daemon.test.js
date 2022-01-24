@@ -60,6 +60,14 @@ describe('Test Device formatters', () => {
     expect(doc.cpu.cores).toBe(mockStartupPayload.cpu_.cores)
     expect(doc.cpu.processors).toBe(mockStartupPayload.cpu_.processors)
     expect(doc.cpu.sockets).toBe(mockStartupPayload.cpu_.sockets)
+
+    expect(doc.wifi.adapterName).toBe(mockStartupPayload.wifi_.adapterName)
+    expect(doc.wifi.SSID).toBe(mockStartupPayload.wifi_.SSID)
+    expect(doc.wifi.connectionType).toBe(
+      mockStartupPayload.wifi_.connectionType
+    )
+    expect(doc.wifi.ipv4Address).toBe(mockStartupPayload.wifi_.ipv4Address)
+    expect(doc.wifi.ipv6Address).toBe(mockStartupPayload.wifi_.ipv6Address)
   })
 })
 

@@ -3,7 +3,7 @@ const testUser = {
   name: "test",
   password: Cypress.env("test_password"),
   email: "cypress@gmail.com",
-  role: "user",
+  role: "user"
 };
 
 describe("Login Page", () => {
