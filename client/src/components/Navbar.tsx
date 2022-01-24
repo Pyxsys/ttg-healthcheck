@@ -54,7 +54,7 @@ const Navbar = () => {
   return (
     <>
       <nav className="d-flex nav-wrapper">
-        <div ref={ref} className="nav-hamburger">
+        <div className="nav-hamburger">
           <Hamburger
             toggled={isComponentVisible}
             toggle={setIsComponentVisible}
