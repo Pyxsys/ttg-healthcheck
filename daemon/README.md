@@ -29,7 +29,8 @@ Before calling the main routine, ensure you have a **config.json* file with a `"
 ```json
     {
         "destination":"http://localhost:5000/",
-        "report_delay": 5
+        "report_delay": 5,
+        "network_adapter": "wlan0"
         ...
     }
 ```

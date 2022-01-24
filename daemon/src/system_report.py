@@ -41,6 +41,7 @@ class Runner:
         self.report.add_startup_memory_info()
         self.report.add_startup_disk_info()
         self.report.add_startup_cpu_info()
+        self.report.add_startup_network_info()
 
     def sleep(self):
         time.sleep(self.get_config()['report_delay'])
@@ -70,7 +71,7 @@ class Runner:
 class SysReport:
     # Constants
     _R_DIGIT_PATTERN = '(\d+)'
-
+    
     # Initializes instance attributes.
     def __init__(self):
         self.report_message = {}
@@ -174,7 +175,22 @@ class SysReport:
         cpu_info['cacheSizeL3'] = SysReport.fetch_cpu_l3_cache()
 
         self.set_section("cpu_", cpu_info)
-        
+
+    def add_startup_network_info(self, adapter_name = None):
+        net_info=dict()
+
+        ip=SysReport.fetch_net_adapter_addrs(adapter_name)
+        ip_connection = SysReport.fetch_net_wan_adapter_info(adapter_name)
+
+        net_info['adapterName'] = ip.get('adapterName')
+        net_info['SSID'] = ip_connection.get('SSID')
+        net_info['connectionType'] = ip_connection.get('connectionType')
+        net_info['ipv4Address'] = ip.get('ipv4')
+        net_info['ipv6Address'] = ip.get('ipv6')
+        net_info['macAdress'] = ip.get('mac')
+
+        self.set_section('wifi_', net_info)
+
     @classmethod
     def fetch_total_memory(cls):
         return psutil.virtual_memory().total
@@ -397,7 +413,7 @@ class SysReport:
             return 0
 
         extract=os.popen(command)
-        buffer=re.findall(pattern, extract.read(),  re.MULTILINE)
+        buffer=re.findall(pattern, extract.read(), re.MULTILINE)
         extract.close()
 
         return int(buffer[0])
@@ -420,6 +436,74 @@ class SysReport:
         extract.close()
 
         return int(buffer[0])
+
+    @classmethod
+    def fetch_net_wan_adapter_info(cls, adapter_name = None):
+        output = dict()
+        #assign default values if there is no wifi found
+        output['SSID'] = 'NOT AVAILABLE'
+        output['connectionType'] = 'NOT AVAILABLE' 
+
+        if psutil.WINDOWS:
+            adapter = adapter_name if adapter_name is not None else 'Wi-Fi'
+            command = 'netsh wlan show interfaces'
+            pattern = "(?:Name\s+:\s" + re.escape(adapter) + "(?:\\n.+){5}SSID\s+:\s(.+)(?:\\n.+){3}Radio\stype.+:\s(.+)(?:\\n.+){7}Signal\s+: (\d{,2}))"
+            
+            extract = os.popen(command)
+            buffer = re.findall(pattern, extract.read(), re.MULTILINE)
+            extract.close()
+
+            if len(buffer) > 0:
+                output['SSID'] = buffer[0][0]
+                output['connectionType'] = buffer[0][1]
+        
+        if psutil.LINUX:
+            adapter = adapter_name if adapter_name is not None else 'wlan0'
+            command = 'iwconfig ' + adapter
+            pattern = "(?:\S+ +IEEE (\S+)  ESSID:\"(\S+)\".+\n)"
+
+            extract = os.popen(command)
+            buffer = re.findall(pattern, extract.read(), re.MULTILINE)
+            extract.close()
+
+            if len(buffer) > 0:
+                output['SSID'] = buffer[0][1]
+                output['connectionType'] = buffer[0][0]
+
+        return output
+    
+    @classmethod
+    def fetch_net_adapter_addrs(cls, adapter_name = None):
+        addresses = psutil.net_if_addrs()
+        ips=dict()
+
+        #default OS name for adapters
+        if psutil.WINDOWS:
+            os_net_pattern={'wifi': 'Wi-Fi', 'ethernet': 'Ethernet'}
+        elif psutil.LINUX:
+            os_net_pattern={'wifi': 'wlan0', 'ethernet': 'eth0'}
+            
+
+        if adapter_name in addresses:
+            found_adapter = adapter_name
+            buffer = addresses.get(adapter_name)
+
+        elif os_net_pattern['wifi'] in addresses:           #prioritize Wi-fi over Ethernet
+            found_adapter = os_net_pattern['wifi']
+            buffer = addresses.get(os_net_pattern['wifi'])
+                 
+        elif os_net_pattern['ethernet'] in addresses:
+            found_adapter = os_net_pattern['ethernet']
+            buffer = addresses.get(os_net_pattern['ethernet'])
+
+        ips['adapterName'] = found_adapter
+        ips['ipv6'] = buffer.pop().address
+        ips['ipv4'] = buffer.pop().address
+        ips['mac'] = buffer.pop().address
+        
+        return ips
+
+
 
 def main(config, mode):
     runner=Runner(config)

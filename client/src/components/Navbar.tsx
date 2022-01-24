@@ -4,9 +4,7 @@ import {Link} from 'react-router-dom';
 import axios from 'axios';
 import {Squash as Hamburger} from 'hamburger-react';
 import {DiRasberryPi} from 'react-icons/di';
-import {GoTriangleDown} from 'react-icons/go';
-import {MdOutlineSpaceDashboard, MdAnalytics, MdLogout} from 'react-icons/md';
-import {CgProfile} from 'react-icons/cg';
+import {MdOutlineSpaceDashboard, MdLogout} from 'react-icons/md';
 // Custom
 import {useAuth} from '../context/authContext';
 import useComponentVisible from './common/useComponentVisible';
@@ -23,18 +21,6 @@ const SideNavData = [
     title: 'Devices',
     path: '/devices',
     icon: <DiRasberryPi />,
-    cName: 'side-nav-item',
-  },
-  {
-    title: 'Analytics',
-    path: '/analytics',
-    icon: <MdAnalytics />,
-    cName: 'side-nav-item',
-  },
-  {
-    title: 'Profile',
-    path: '/profile',
-    icon: <CgProfile />,
     cName: 'side-nav-item',
   },
   {
@@ -68,19 +54,11 @@ const Navbar = () => {
   return (
     <>
       <nav className="d-flex nav-wrapper">
-        <div ref={ref} className="nav-hamburger">
+        <div className="nav-hamburger">
           <Hamburger
             toggled={isComponentVisible}
             toggle={setIsComponentVisible}
           />
-        </div>
-        <div className="nav-right-menu d-flex">
-          <div className="nav-right-icon">
-            <img src="https://avatarfiles.alphacoders.com/247/247895.jpg"></img>
-          </div>
-          <div className="nav-right-darrow">
-            <GoTriangleDown />
-          </div>
         </div>
         {isComponentVisible ? (
           <div ref={ref} className="side-nav active">
