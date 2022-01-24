@@ -16,7 +16,7 @@ import MemoryUsageWidget from './device-detail-widgets/memoryUsageWidget';
 import MemoryAdditionalWidget from './device-detail-widgets/memoryAdditionalWidget';
 import WifiUsageWidget from './device-detail-widgets/wifiUsageWidget';
 import WifiAdditionalWidget from './device-detail-widgets/wifiAdditionalWidget';
-import SignalStrength from './common/signalStrength';
+import {SignalStrength} from './common/signalStrength';
 import ProcessTable from './device-detail-widgets/processTable';
 
 const DeviceDetailPage = (props: any) => {

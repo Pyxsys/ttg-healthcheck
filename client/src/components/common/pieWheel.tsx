@@ -63,7 +63,7 @@ const wheelColor = (percentage: number) => {
   let backgroundColour = '';
   let colour = '';
   if (!percentage) {
-    backgroundColour = '#3F4651';
+    backgroundColour = '#C4C4C4';
   }
   if (percentage > 0 && percentage <= 40) {
     backgroundColour = 'rgb(166, 187, 155)';

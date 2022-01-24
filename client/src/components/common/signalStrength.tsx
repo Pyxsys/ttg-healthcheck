@@ -140,4 +140,4 @@ const SignalStrength = ({level, showText}: ISignalStrengthInput) => {
   );
 };
 
-export default SignalStrength;
+export {SignalStrength, signalText};
