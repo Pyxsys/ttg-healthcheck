@@ -340,22 +340,6 @@ body {
   height: 15px;
 }
 
-// change hamburger width/height of lines
-.hamburger-react div > div{
-  @media (min-width: $screen-w-xsm) {
-    width: 30px !important;
-    height: 2.5px !important;
-  }
-  @media (min-width: $screen-w-md) {
-    width: 32px !important;
-    height: 3px !important;
-  }
-  @media (min-width: $screen-w-lg) {
-    width: 33px !important;
-    height: 3px !important;
-  }
-}
-
 // nav-hamburger wrapper
 .nav-hamburger {
   position: static;
@@ -426,6 +410,7 @@ body {
 .side-nav-item:hover {
   background-color: #30393f86;
 }
+
 // nav items link tag
 .side-nav-item a {
   font-weight: 600;
@@ -476,7 +461,236 @@ body {
   color: white;
 }
 
-/*-----------------------Devices--------------------------*/
+
+/*
+**  Device table Page
+**
+*/
+
+// Device table content
+
+.devices-content {
+  background-color: $tertiary-gray;
+  @media (min-width: $screen-w-sm) {
+    min-height: 500px;
+  }
+  @media (min-width: $screen-w-md) {
+    min-height: 500px;
+  }
+  @media (min-width: $screen-w-lg) {
+    min-height: 500px;
+  }
+  @media (min-width: $screen-w-xlg) {
+    min-height: 550px;
+  }
+  @media (min-width: $screen-w-xxlg) {
+    min-height: 550px;
+  }
+  @media (min-width: $screen-w-xxxlg) {
+    min-height: 550px;
+  }
+}
+
+.devices-column {
+  @media (min-width: $screen-w-xxsm) {
+    height: 50px;
+    width: 50px;
+  }
+  @media (min-width: $screen-w-xsm) {
+    height: 50px;
+    width: 50px;
+  }
+  @media (min-width: $screen-w-sm) {
+    height: 50px;
+    width: 50px;
+  }
+  @media (min-width: $screen-w-md) {
+    height: 60px;
+    width: 60px;
+  }
+  @media (min-width: $screen-w-lg) {
+    height: 60px;
+    width: 60px;
+  }
+  @media (min-width: $screen-w-xlg) {
+    height: 110px;
+    width: 110px;
+  }
+  @media (min-width: $screen-w-xxlg) {
+    height: 120px;
+    width: 120px;
+  }
+  @media (min-width: $screen-w-xxxlg) {
+    height: 120px;
+    width: 120px;
+  }
+}
+
+.devices-column-h {
+  @media (min-width: $screen-w-xxsm) {
+    height: 50px;
+    max-width: 100px;
+  }
+  @media (min-width: $screen-w-xsm) {
+    height: 50px;
+    max-width: 100px;
+  }
+  @media (min-width: $screen-w-sm) {
+    height: 50px;
+    max-width: 100px;
+  }
+  @media (min-width: $screen-w-md) {
+    height: 60px;
+    max-width: 120px;
+  }
+  @media (min-width: $screen-w-lg) {
+    height: 60px;
+    max-width: 120px;
+  }
+  @media (min-width: $screen-w-xlg) {
+    height: 110px;
+    max-width: 220px;
+  }
+  @media (min-width: $screen-w-xxlg) {
+    height: 120px;
+    max-width: 240px;
+  }
+  @media (min-width: $screen-w-xxxlg) {
+    height: 120px;
+    max-width: 240px;
+  }
+}
+
+.devices-uuid-text{
+  @media (min-width: $screen-w-xxsm) {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  @media (min-width: $screen-w-xsm) {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  @media (min-width: $screen-w-sm) {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  @media (min-width: $screen-w-md) {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    
+  }
+  @media (min-width: $screen-w-lg) {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  @media (min-width: $screen-w-xlg) {
+    word-wrap: break-word !important;
+    word-break: break-word !important;
+    overflow: unset;
+    text-overflow: unset;
+    white-space: unset;
+  }
+  @media (min-width: $screen-w-xxlg) {
+    word-wrap: break-word !important;
+    word-break: break-word !important;
+    overflow: unset;
+    text-overflow: unset;
+    white-space: unset;
+  }
+  @media (min-width: $screen-w-xxxlg) {
+    word-wrap: break-word !important;
+    word-break: break-word !important;
+    overflow: unset;
+    text-overflow: unset;
+    white-space: unset;
+  }
+}
+
+.devices-font {
+  font-size: 1.2em;
+}
+
+.devices-table {
+  margin-top: 8rem;
+  margin-left: 2rem;
+}
+
+.react-bootstrap-table table {
+  --bs-table-striped-color: white;
+  table-layout: auto;
+  border: $tertiary-gray !important;
+}
+
+.react-bootstrap-table table thead tr {
+  color: white;
+  background-color: $quarternary-gray;
+}
+
+.react-bootstrap-table table tbody tr td {
+  text-align: -webkit-center !important;
+}
+
+.devices-table-header-formatter{
+  display: flex;
+  flex-direction: row;
+}
+
+.react-bootstrap-table table tbody tr:nth-child(odd) {
+  color: white;
+  background-color: $quinary-gray;
+}
+
+.react-bootstrap-table table tbody tr:nth-child(even) {
+  color: white;
+  background-color: $quarternary-gray;
+}
+
+.device-icon{
+  color: $secondary-gray;
+}
+
+.device-span{
+  color: $secondary-gray;
+}
+
+// caret
+.caret {
+  color: $secondary-gray;
+  display: inline-block;
+  width: 0;
+  height: 0;
+  margin-left: 2px;
+  vertical-align: middle;
+  border-top: 4px dashed;
+  border-top: 4px solid \9;
+  border-right: 4px solid transparent;
+  border-left: 4px solid transparent;
+}
+
+.dropup .caret, .navbar-fixed-bottom .dropdown .caret {
+  border-top: 0;
+  border-bottom: 4px dashed;
+  border-bottom: 4px solid \9;
+  content: "";
+}
+
+// footer
+
+.devices-copyright {
+  color: $secondary-gray;
+  opacity: 80%;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.devices-footer {
+  background-color: $tertiary-gray;
+}
 
 // hide uneeded sr-only label in device table
 .sr-only {
@@ -493,27 +707,6 @@ body {
   white-space: nowrap; 
 }
 
-// create carets to be used in the table
-.caret {
-  display: inline-block;
-  width: 0;
-  height: 0;
-  margin-left: 2px;
-  vertical-align: middle;
-  border-top: 4px dashed;
-  border-top: 4px solid \9;
-  border-right: 4px solid transparent;
-  border-left: 4px solid transparent;
-}
-
-// create carret when clicked
-.dropup .caret, .navbar-fixed-bottom .dropdown .caret {
-  border-top: 0;
-  border-bottom: 4px dashed;
-  border-bottom: 4px solid \9;
-  content: "";
-}
-
 /*-----------------------Device Details--------------------------*/
 
 #device-details-container{
@@ -524,6 +717,7 @@ body {
   display: flex;
   flex-direction: column;
 }
+
 
 .device-details-wrapper{
   @media (min-width: $screen-w-xsm) {
@@ -660,6 +854,7 @@ body {
   border-radius: 12px;
   border-bottom-left-radius: 10px;
   border-bottom-right-radius: 10px;
+  background-color: transparent;
 }
 
 // accordion body darker version

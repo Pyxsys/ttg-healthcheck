@@ -8,9 +8,11 @@ import filterFactory, {textFilter} from 'react-bootstrap-table2-filter';
 import {BsChevronLeft, BsChevronRight} from 'react-icons/bs';
 
 // Custom
-import Navbar from './Navbar';
 import {DeviceLog, IResponse} from '../types/queries';
 import {useRealTimeService} from '../context/realTimeContext';
+import Navbar from './Navbar';
+import PieWheel from './common/pieWheel';
+import {SignalStrength, signalText} from './common/signalStrength';
 
 const DevicePage = () => {
   // Readonly Values
@@ -19,6 +21,7 @@ const DevicePage = () => {
 
   const [deviceData, setDeviceData] = useState([] as DeviceLog[]);
   const [page, setPage] = useState(initialPage);
+  const [totalPages, setTotalPages] = useState(0);
 
   const realTimeDataService = useRealTimeService();
 
@@ -38,6 +41,7 @@ const DevicePage = () => {
       params: {
         limit: pageSize,
         skip: skip,
+        Total: true,
       },
     };
     const deviceResponse = await axios.get<IResponse<string>>(
@@ -45,6 +49,7 @@ const DevicePage = () => {
         deviceIdQuery,
     );
     const deviceIds = deviceResponse.data.Results;
+    setTotalPages(Math.ceil(deviceResponse.data.Total / pageSize));
 
     const latestDevicesResponse = await axios.get<IResponse<DeviceLog>>(
         'api/device-logs/latest',
@@ -78,11 +83,63 @@ const DevicePage = () => {
     };
   }, []);
 
-  const idFormatter = (cell: {} | null | undefined) => {
+  type cell = any | null | undefined
+
+  const idFormatter = (cell: cell) => {
     return (
-      <>
-        <Link to={{pathname: '/device', state: {id: cell}}}>{cell}</Link>
-      </>
+      <div className="devices-column-h d-flex justify-content-left align-items-center">
+        <div className="devices-uuid-text devices-font">
+          <Link
+            className="text-white"
+            to={{pathname: '/device', state: {id: cell}}}
+          >
+            {cell}
+          </Link>
+        </div>
+      </div>
+    );
+  };
+
+  const pieUsageFormatter = (cell: cell) => {
+    return (
+      <div className="d-flex justify-content-end align-items-center">
+        <div className="text-truncate devices-font">
+          {Number(cell).toFixed(2)}
+          {cell ? '%' : ''}
+        </div>
+        <div className="ps-2 devices-column">
+          <PieWheel percentage={Number(cell)} text={false} />
+        </div>
+      </div>
+    );
+  };
+
+  const signalStrengthFormatter = (cell: cell) => {
+    return (
+      <div className="d-flex flex-column">
+        <div className="d-flex justify-content-end align-items-center">
+          <div className="text-truncate devices-font">
+            {signalText(Number(cell))}
+          </div>
+          <div className="ps-2 devices-column">
+            <SignalStrength level={Number(cell)} showText={false} />
+          </div>
+        </div>
+      </div>
+    );
+  };
+
+  const uuidFirstHeaderFormatter = (
+      column: any,
+      colIndex: any,
+      {sortElement, filterElement}: any,
+  ) => {
+    return (
+      <div className="devices-first-header-formatter">
+        {column.text}
+        {sortElement}
+        <span className='ps-2'>{filterElement}</span>
+      </div>
     );
   };
 
@@ -92,12 +149,9 @@ const DevicePage = () => {
       {sortElement, filterElement}: any,
   ) => {
     return (
-      <div style={{display: 'flex', flexDirection: 'column'}}>
+      <div className="devices-table-header-formatter">
         {column.text}
-        <div style={{display: 'flex', flexDirection: 'row'}}>
-          {filterElement}
-          {sortElement}
-        </div>
+        {sortElement}
       </div>
     );
   };
@@ -111,63 +165,83 @@ const DevicePage = () => {
       }),
       sort: true,
       formatter: idFormatter,
-      headerFormatter: uuidHeaderFormatter,
+      headerFormatter: uuidFirstHeaderFormatter,
     },
-
     {
       dataField: 'cpu.aggregatedPercentage',
       text: 'CPU',
       sort: true,
+      formatter: pieUsageFormatter,
+      headerFormatter: uuidHeaderFormatter,
     },
     {
       dataField: 'memory.aggregatedPercentage',
       text: 'Memory',
       sort: true,
+      formatter: pieUsageFormatter,
+      headerFormatter: uuidHeaderFormatter,
     },
-
     {
-      dataField: 'timestamp',
-      text: 'Uptime',
+      dataField: 'disk.aggregatedPercentage',
+      text: 'Disk',
       sort: true,
+      formatter: pieUsageFormatter,
+      headerFormatter: uuidHeaderFormatter,
+    },
+    {
+      dataField: 'wifi.signalStrength',
+      text: 'Network',
+      sort: true,
+      formatter: signalStrengthFormatter,
+      headerFormatter: uuidHeaderFormatter,
     },
   ];
 
   return (
-    <div id="outer-container">
-      <Navbar />
-      <div id="page-wrap" className="h-100 overflow-auto container">
-        <Row className="flex-nowrap h-100">
-          <Col>
-            <div className="">
-              <h1 className="text-primary mb-5 mt-5">Devices</h1>
-              <BootstrapTable
-                keyField="id"
-                data={deviceData}
-                columns={columns}
-                filter={filterFactory()}
-                wrapperClasses="table-responsive"
-              />
-              <h4>Change Page</h4>
-              <div className="d-flex align-items-center">
-                <i
-                  className="pe-2"
-                  role="button"
-                  onClick={() => setPage(page > 1 ? page - 1 : 1)}
-                >
-                  <BsChevronLeft />
-                </i>
-                <span>Page {page}</span>
-                <i
-                  className="ps-2"
-                  role="button"
-                  onClick={() => setPage(page + 1)}
-                >
-                  <BsChevronRight />
-                </i>
+    <div className="h-100 d-flex flex-column">
+      <div id="outer-container">
+        <Navbar />
+      </div>
+
+      <div className="flex-grow-1 d-flex flex-column align-items-center devices-content">
+        <div id="page-wrap" className="h-100 overflow-auto container">
+          <Row className="flex-nowrap h-100">
+            <Col>
+              <div className="devices-table ">
+                <BootstrapTable
+                  striped={true}
+                  keyField="deviceId"
+                  data={deviceData}
+                  columns={columns}
+                  filter={filterFactory()}
+                  sort={{dataField: 'deviceId', order: 'desc'}}
+                />
+                <div className="d-flex justify-content-end">
+                  <i
+                    className="pe-2 device-icon"
+                    role="button"
+                    onClick={() => setPage(page > 1 ? page - 1 : 1)}
+                  >
+                    <BsChevronLeft />
+                  </i>
+                  <span className="device-span">Page {page}</span>
+                  <i
+                    className="ps-2 device-icon"
+                    role="button"
+                    onClick={() => setPage(page < totalPages ? page + 1 : page)}
+                  >
+                    <BsChevronRight />
+                  </i>
+                </div>
               </div>
-            </div>
-          </Col>
-        </Row>
+            </Col>
+          </Row>
+        </div>
+      </div>
+      <div className="d-flex justify-content-center devices-footer">
+        <div className="pt-1 pb-3 devices-copyright">
+          &#169; SOEN490 TTG-HEALTCHECK
+        </div>
       </div>
     </div>
   );

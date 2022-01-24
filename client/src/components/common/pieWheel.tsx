@@ -2,9 +2,9 @@ import React from 'react';
 import styled, {keyframes} from 'styled-components';
 
 interface PieWheel {
-  percentage: number,
-  colour?: string,
-  backgroundColour?: string,
+  percentage: number
+  colour?: string
+  backgroundColour?: string
   text?: boolean
 }
 
@@ -15,14 +15,14 @@ const Text = ({percentage}: PieWheel) => {
   }
   return (
     <text
-      x='50%'
-      y='50%'
-      dominantBaseline='central'
-      textAnchor='middle'
+      x="50%"
+      y="50%"
+      dominantBaseline="central"
+      textAnchor="middle"
       fontSize={'1em'}
-      stroke='white'
-      strokeWidth='1px'
-      dy='-0.1em'
+      stroke="white"
+      strokeWidth="1px"
+      dy="-0.1em"
     >
       {percentage.toFixed(0)}%
     </text>
@@ -40,16 +40,22 @@ const strokePct = (percentage: number) => {
 };
 
 // color fill and animation
-const Circle = styled.circle.attrs((props: {colour: string, percentage: number, animate: boolean}) => props)`
+const Circle = styled.circle.attrs(
+    (props: { colour: string; percentage: number; animate: boolean }) => props,
+)`
   r: 52;
   cx: 100;
   cy: 100;
   fill: transparent;
-  stroke-dashoffset: ${(props) => props.percentage ? strokePct(props.percentage) : 0};
-  stroke: ${(props) => strokePct(props.percentage) !== (2 * Math.PI * 52) ? () => props.colour : ''};
+  stroke-dashoffset: ${(props) =>
+    props.percentage ? strokePct(props.percentage) : 0};
+  stroke: ${(props) =>
+    strokePct(props.percentage) !== 2 * Math.PI * 52 ? () => props.colour : ''};
   stroke-width: 2.4rem;
-  stroke-dasharray: ${(2 * Math.PI * 52)};
-  animation: ${(props) => props.animate ? () => fillColour(strokePct(props.percentage)) : ''} 0.4s linear;
+  stroke-dasharray: ${2 * Math.PI * 52};
+  animation: ${(props) =>
+      props.animate ? () => fillColour(strokePct(props.percentage)) : ''}
+    0.4s linear;
 `;
 
 // wheel colour depending on percentage
@@ -57,7 +63,7 @@ const wheelColor = (percentage: number) => {
   let backgroundColour = '';
   let colour = '';
   if (!percentage) {
-    backgroundColour = '#3F4651';
+    backgroundColour = '#C4C4C4';
   }
   if (percentage > 0 && percentage <= 40) {
     backgroundColour = 'rgb(166, 187, 155)';
@@ -80,10 +86,10 @@ const pieWheel = ({percentage, text}: PieWheel) => {
   return (
     <svg width="100%" height="100%" viewBox="0 0 200 200">
       <g transform={`rotate(-90 ${'100 100'})`} width="180" height="180">
-        <Circle colour={backgroundColour} percentage={100} animate={false}/>
+        <Circle colour={backgroundColour} percentage={100} animate={false} />
         <Circle colour={colour} percentage={percentage} animate={true}></Circle>
       </g>
-      {text ? <Text percentage={percentage}/> : '' }
+      {text ? <Text percentage={percentage} /> : ''}
     </svg>
   );
 };
