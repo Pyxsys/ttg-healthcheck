@@ -687,6 +687,7 @@ body {
   min-height: 0;  
   display: flex;
   flex-direction: column;
+  color: white;
 }
 .gear-dash{
   content: url('components/dashboard-widgets/gear.png');
@@ -696,9 +697,13 @@ body {
 }
 .rect-dash{
   content: url('components/dashboard-widgets/square.png');
-  height: 70px;
-  width: 70px;
+  height: 300px;
+  width: 450px;
 
+}
+.modal-overlay{
+  background-color: $tertiary-gray;
+  color: white;
 }
 
 // footer

@@ -18,6 +18,7 @@ const DashboardPage = () => {
    */
   const [showModal, setShowModal] = useState(false);
   const handleShow = () => setShowModal(true);
+  const closeShow = () => setShowModal(false);
   const saveValidDash = () => {
     const body = {
       userId: user._id,
@@ -85,10 +86,31 @@ const DashboardPage = () => {
         dashboard
         <img className="rect-dash"></img>
         <Modal show={showModal}>
-          <Modal.Header>Modal Head part</Modal.Header>
-          <Modal.Body>Hi, React modal is here</Modal.Body>
-          <Modal.Footer>
-            <Button>Close Modal</Button>
+          <Modal.Header className="modal-overlay">Modal Head part</Modal.Header>
+          <Modal.Body className="modal-overlay">
+            Hi, React modal is here
+            <div className="dropdown-menu">
+              <a href="" className="dropdown-item">
+                New Patient
+              </a>
+              <a href="" className="dropdown-item">
+                Established Patient
+              </a>
+              <a
+                href="#response"
+                className="dropdown-item"
+                data-toggle="modal"
+                data-target="response"
+              >
+                Responsibilities
+              </a>
+              <a href="" className="dropdown-item">
+                link 4
+              </a>
+            </div>
+          </Modal.Body>
+          <Modal.Footer className="modal-overlay">
+            <Button onClick={() => closeShow()}>Close Modal</Button>
           </Modal.Footer>
         </Modal>
         <Button onClick={() => handleShow()}>Second</Button>

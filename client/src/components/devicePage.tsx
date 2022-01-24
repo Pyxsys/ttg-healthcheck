@@ -138,7 +138,7 @@ const DevicePage = () => {
       <div className="devices-first-header-formatter">
         {column.text}
         {sortElement}
-        <span className='ps-2'>{filterElement}</span>
+        <span className="ps-2">{filterElement}</span>
       </div>
     );
   };
