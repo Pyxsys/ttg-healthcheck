@@ -993,3 +993,12 @@ body {
     padding: 0px 18px;
   }
 }
+
+/* Modal Styling */
+
+.modal-background {
+  background-color: $tertiary-gray;
+}
+.modal-custom-width {
+  max-width: none;
+}
