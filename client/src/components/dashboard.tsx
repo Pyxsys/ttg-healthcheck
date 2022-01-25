@@ -12,6 +12,7 @@ import CpuUsageWidget from './device-detail-widgets/cpuUsageWidget';
 import {DeviceLog} from '../types/queries';
 import {useModalService} from '../context/modal.context';
 import AddWidgetModal from './dashboard-widgets/addWidgetModal';
+import {FaPlus} from 'react-icons/fa';
 
 const DashboardPage = () => {
   const modalService = useModalService();
@@ -90,39 +91,36 @@ const DashboardPage = () => {
       <Navbar />
       <div id="page-wrap" className="h-100 overflow-auto container">
         dashboard
-        <img className="rect-dash"></img>
         <button
-          className="btn btn-secondary"
+          className="btn btn-secondary mb-3"
           onClick={() =>
             modalService.open(<AddWidgetModal />, 'lg', {width: 60})
           }
         >
           Display Modal
         </button>
-        <div>
-          {dashboard?.widgets?.map((widget, index) => (
-            <div key={`${widget.widgetType}_${index}`}>
-              {widget.widgetType === 'cpu' ? (
-                <div>
-                  <CpuUsageWidget
-                    deviceDynamic={{} as DeviceLog}
-                  ></CpuUsageWidget>
-                </div>
-              ) : (
+
+        <div className='d-flex flex-wrap'>
+          {dashboard?.widgets?.map((widget, index) =>
+            <div className='w-30 px-5' key={`${widget.widgetType}_${index}`}>
+              {widget.widgetType === 'CPU' ?
+                <div><CpuUsageWidget deviceDynamic={{} as DeviceLog}></CpuUsageWidget></div> :
                 <></>
-              )}
-              {widget.widgetType === 'memory' ? (
-                <div>
-                  <CpuUsageWidget
-                    deviceDynamic={{} as DeviceLog}
-                  ></CpuUsageWidget>
-                </div>
-              ) : (
+              }
+              {widget.widgetType === 'Memory' ?
+                <div><CpuUsageWidget deviceDynamic={{} as DeviceLog}></CpuUsageWidget></div> :
                 <></>
-              )}
+              }
+            </div>,
+          )}
+          <div role='button' className='d-flex justify-content-center w-30' style={{height: '360px', border: '4px dashed '}}
+            onClick={() => modalService.open(<AddWidgetModal />, 'lg', {width: 60})}>
+            <div className='d-flex justify-content-center align-items-center w-30 h-100'>
+              <FaPlus color='white' style={{width: '100%', height: '100%'}}/>
             </div>
-          ))}
+          </div>
         </div>
+
         {/* For Testing Purposes Only */}
         <div className="pt-5 d-flex flex-column">
           <h5>For Testing Purposes</h5>
