@@ -678,6 +678,35 @@ body {
   border-bottom: 4px solid \9;
   content: "";
 }
+
+// footer
+
+.devices-copyright {
+  color: $secondary-gray;
+  opacity: 80%;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.devices-footer {
+  background-color: $tertiary-gray;
+}
+
+// hide uneeded sr-only label in device table
+.sr-only {
+  border: 0;
+  padding: 0;
+  margin: 0;
+  position: absolute !important;
+  height: 1px; 
+  width: 1px;
+  overflow: hidden;
+  clip: rect(1px 1px 1px 1px); 
+  clip: rect(1px, 1px, 1px, 1px);
+  clip-path: inset(50%); 
+  white-space: nowrap; 
+}
+
 /*-----------------------Dashboard-------------------------------*/
 
 #dashboard-container{
@@ -706,32 +735,9 @@ body {
   color: white;
 }
 
-// footer
-
-.devices-copyright {
-  color: $secondary-gray;
-  opacity: 80%;
-  font-size: 11px;
-  font-weight: 600;
-}
-
-.devices-footer {
-  background-color: $tertiary-gray;
-}
-
-// hide uneeded sr-only label in device table
-.sr-only {
-  border: 0;
-  padding: 0;
-  margin: 0;
-  position: absolute !important;
-  height: 1px; 
-  width: 1px;
-  overflow: hidden;
-  clip: rect(1px 1px 1px 1px); 
-  clip: rect(1px, 1px, 1px, 1px);
-  clip-path: inset(50%); 
-  white-space: nowrap; 
+.dashboard-dashed-box{
+  height: '360px'; 
+  border: '4px dashed';
 }
 
 /*-----------------------Device Details--------------------------*/

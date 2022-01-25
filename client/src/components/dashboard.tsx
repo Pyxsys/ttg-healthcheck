@@ -18,6 +18,18 @@ const DashboardPage = () => {
   const modalService = useModalService();
   const {user} = useAuth();
   const [dashboard, setDashboard] = useState({} as Dashboard);
+  const [hover, setHover] = useState(false);
+  const hoverStyleBox = {
+    color: hover ? 'white' : 'grey',
+    height: '360px',
+    border: '4px dashed',
+  };
+  const hoverStyleIcon = {
+    color: hover ? 'white' : 'grey',
+    width: '100%',
+    height: '100%',
+  };
+
   /* -------------------------
    * For Testing Purposes Only
    * -------------------------
@@ -89,34 +101,46 @@ const DashboardPage = () => {
   return (
     <div id="dashboard-container">
       <Navbar />
-      <div id="page-wrap" className="h-100 overflow-auto container">
-        dashboard
-        <button
-          className="btn btn-secondary mb-3"
-          onClick={() =>
-            modalService.open(<AddWidgetModal />, 'lg', {width: 60})
-          }
-        >
-          Display Modal
-        </button>
-
-        <div className='d-flex flex-wrap'>
-          {dashboard?.widgets?.map((widget, index) =>
-            <div className='w-30 px-5' key={`${widget.widgetType}_${index}`}>
-              {widget.widgetType === 'CPU' ?
-                <div><CpuUsageWidget deviceDynamic={{} as DeviceLog}></CpuUsageWidget></div> :
+      <div
+        id="page-wrap"
+        className="h-100 overflow-auto container pe-2 ps-2 pt-5"
+      >
+        <div className="d-flex flex-wrap">
+          {dashboard?.widgets?.map((widget, index) => (
+            <div className="w-30 px-5" key={`${widget.widgetType}_${index}`}>
+              {widget.widgetType === 'CPU' ? (
+                <div>
+                  <CpuUsageWidget
+                    deviceDynamic={{} as DeviceLog}
+                  ></CpuUsageWidget>
+                </div>
+              ) : (
                 <></>
-              }
-              {widget.widgetType === 'Memory' ?
-                <div><CpuUsageWidget deviceDynamic={{} as DeviceLog}></CpuUsageWidget></div> :
+              )}
+              {widget.widgetType === 'Memory' ? (
+                <div>
+                  <CpuUsageWidget
+                    deviceDynamic={{} as DeviceLog}
+                  ></CpuUsageWidget>
+                </div>
+              ) : (
                 <></>
-              }
-            </div>,
-          )}
-          <div role='button' className='d-flex justify-content-center w-30' style={{height: '360px', border: '4px dashed '}}
-            onClick={() => modalService.open(<AddWidgetModal />, 'lg', {width: 60})}>
-            <div className='d-flex justify-content-center align-items-center w-30 h-100'>
-              <FaPlus color='white' style={{width: '100%', height: '100%'}}/>
+              )}
+            </div>
+          ))}
+          <div
+            onClickCapture={() => setHover(true)}
+            onMouseOver={() => setHover(true)}
+            onMouseOut={() => setHover(false)}
+            role="button"
+            className="d-flex justify-content-center w-30"
+            style={hoverStyleBox}
+            onClick={() =>
+              modalService.open(<AddWidgetModal />, 'lg', {width: 60})
+            }
+          >
+            <div className="d-flex justify-content-center align-items-center w-30 h-100">
+              <FaPlus color="white" style={hoverStyleIcon} />
             </div>
           </div>
         </div>
