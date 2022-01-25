@@ -1,6 +1,5 @@
 // 3rd Party
 import React, {useState} from 'react';
-import {Button, Modal} from 'react-bootstrap';
 import {useAuth} from '../context/authContext';
 import {queryDashboard, saveDashboard} from '../services/dashboard.service';
 import {notificationService} from '../services/notification.service';
@@ -9,15 +8,19 @@ import '../App.scss';
 
 // Custom
 import Navbar from './Navbar';
+import CpuUsageWidget from './device-detail-widgets/cpuUsageWidget';
+import {DeviceLog} from '../types/queries';
+import {useModalService} from '../context/modal.context';
+import AddWidgetModal from './dashboard-widgets/addWidgetModal';
+
 const DashboardPage = () => {
+  const modalService = useModalService();
   const {user} = useAuth();
   const [dashboard, setDashboard] = useState({} as Dashboard);
   /* -------------------------
    * For Testing Purposes Only
    * -------------------------
    */
-  const [showModal, setShowModal] = useState(false);
-  const handleShow = () => setShowModal(true);
   const saveValidDash = () => {
     const body = {
       userId: user._id,
@@ -78,20 +81,34 @@ const DashboardPage = () => {
    * -------------------------
    */
 
+  modalService.onPrimaryClicked = () => {
+    console.log('Save Clicked');
+  };
+
   return (
     <div id="dashboard-container">
       <Navbar />
       <div id="page-wrap" className="h-100 overflow-auto container">
         dashboard
         <img className="rect-dash"></img>
-        <Modal show={showModal}>
-          <Modal.Header>Modal Head part</Modal.Header>
-          <Modal.Body>Hi, React modal is here</Modal.Body>
-          <Modal.Footer>
-            <Button>Close Modal</Button>
-          </Modal.Footer>
-        </Modal>
-        <Button onClick={() => handleShow()}>Second</Button>
+        <button className='btn btn-secondary' onClick={() => modalService.open(<AddWidgetModal />, 'lg', {width: 60})}>Display Modal</button>
+
+
+        <div>
+          {dashboard?.widgets?.map((widget, index) =>
+            <div key={`${widget.widgetType}_${index}`}>
+              {widget.widgetType === 'cpu' ?
+                <div><CpuUsageWidget deviceDynamic={{} as DeviceLog}></CpuUsageWidget></div> :
+                <></>
+              }
+              {widget.widgetType === 'memory' ?
+                <div><CpuUsageWidget deviceDynamic={{} as DeviceLog}></CpuUsageWidget></div> :
+                <></>
+              }
+            </div>,
+          )}
+        </div>
+
         {/* For Testing Purposes Only */}
         <div className="pt-5 d-flex flex-column">
           <h5>For Testing Purposes</h5>
