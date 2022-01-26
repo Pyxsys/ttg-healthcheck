@@ -68,7 +68,7 @@ const Navbar = () => {
           {SideNavData.map((item, index) => {
             return (
               <>
-                <div key={index} className={item.cName}>
+                <div key={index} className={item.cName} onClick={() => setOpen(false)}>
                   <Link
                     to={item.path}
                     onClick={
