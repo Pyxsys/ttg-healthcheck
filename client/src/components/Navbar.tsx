@@ -1,13 +1,14 @@
 import React from 'react';
+import {useState} from 'react';
 // 3rd Party
 import {Link} from 'react-router-dom';
 import axios from 'axios';
 import {Squash as Hamburger} from 'hamburger-react';
 import {DiRasberryPi} from 'react-icons/di';
 import {MdOutlineSpaceDashboard, MdLogout} from 'react-icons/md';
+import useOnclickOutside from 'react-cool-onclickoutside';
 // Custom
 import {useAuth} from '../context/authContext';
-import useComponentVisible from './common/useComponentVisible';
 
 // side nav items
 const SideNavData = [
@@ -32,9 +33,10 @@ const SideNavData = [
 ];
 
 const Navbar = () => {
-  // event listener to close outside side-nav
-  const {ref, isComponentVisible, setIsComponentVisible} =
-    useComponentVisible();
+  const [isOpen, setOpen] = useState(false);
+  const ref = useOnclickOutside(() => {
+    setOpen(false);
+  });
   const {setUser, setIsAuthenticated} = useAuth();
   const logout = async (e: React.ChangeEvent<any>) => {
     e.preventDefault();
@@ -53,40 +55,40 @@ const Navbar = () => {
 
   return (
     <>
-      <nav className="d-flex nav-wrapper">
-        <div className="nav-hamburger">
+      <div className="d-flex nav-wrapper">
+        <div ref={ref} className="nav-hamburger">
           <Hamburger
-            toggled={isComponentVisible}
-            toggle={setIsComponentVisible}
+            toggled={isOpen}
+            toggle={setOpen}
           />
         </div>
-        {isComponentVisible ? (
-          <div ref={ref} className="side-nav active">
-            {SideNavData.map((item, index) => {
-              return (
-                <>
-                  <div key={index} className={item.cName}>
-                    <Link
-                      to={item.path}
-                      onClick={
-                        item.title == 'Logout' ? (e) => logout(e) : (e) => null
-                      }
-                    >
-                      <span className="side-nav-item-icon">{item.icon} </span>
-                      <span className="side-nav-item-text">{item.title}</span>
-                    </Link>
-                  </div>
-                </>
-              );
-            })}
-          </div>
-        ) : (
-          <div className="side-nav"></div>
-        )}
-        {isComponentVisible && (
-          <div className="side-nav-screen-background"></div>
-        )}
-      </nav>
+      </div>
+      {isOpen ? (
+        <div ref={ref} className="side-nav active">
+          {SideNavData.map((item, index) => {
+            return (
+              <>
+                <div key={index} className={item.cName}>
+                  <Link
+                    to={item.path}
+                    onClick={
+                      item.title == 'Logout' ? (e) => logout(e) : (e) => null
+                    }
+                  >
+                    <span className="side-nav-item-icon">{item.icon} </span>
+                    <span className="side-nav-item-text">{item.title}</span>
+                  </Link>
+                </div>
+              </>
+            );
+          })}
+        </div>
+      ) : (
+        <div className="side-nav"></div>
+      )}
+      {isOpen && (
+        <div className="side-nav-screen-background"></div>
+      )}
     </>
   );
 };
