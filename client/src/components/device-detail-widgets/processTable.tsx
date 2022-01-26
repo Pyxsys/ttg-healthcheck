@@ -39,7 +39,7 @@ const processTable = (props: { deviceDynamic: DeviceLog }) => {
   return (
     <div className="p-2 process-table">
       <BootstrapTable
-        headerClasses="border"
+        headerClasses="border text-center"
         striped={true}
         keyField="pid"
         data={processes}
