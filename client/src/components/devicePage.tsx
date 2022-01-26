@@ -8,18 +8,21 @@ import filterFactory, {textFilter} from 'react-bootstrap-table2-filter';
 import {BsChevronLeft, BsChevronRight} from 'react-icons/bs';
 
 // Custom
-import {DeviceLog, IResponse} from '../types/queries';
+import {Device, DeviceLog, IResponse} from '../types/queries';
 import {useRealTimeService} from '../context/realTimeContext';
 import Navbar from './Navbar';
 import PieWheel from './common/pieWheel';
 import {SignalStrength, signalText} from './common/signalStrength';
+import {TableDevice} from '../types/tables';
+
 
 const DevicePage = () => {
   // Readonly Values
   const initialPage: number = 1;
   const pageSize: number = 10;
 
-  const [deviceData, setDeviceData] = useState([] as DeviceLog[]);
+
+  const [deviceTableData, setDeviceTableData] = useState([] as TableDevice[]);
   const [page, setPage] = useState(initialPage);
   const [totalPages, setTotalPages] = useState(0);
 
@@ -27,29 +30,30 @@ const DevicePage = () => {
 
   const initialRealTimeData = () => {
     realTimeDataService.getRealTimeData((newDevice) => {
-      setDeviceData((prevState) =>
-        prevState.map((device) =>
-          device.deviceId === newDevice.deviceId ? newDevice : device,
-        ),
+      setDeviceTableData((prevState) =>
+        prevState.map((device) => ({
+          static: device.static,
+          dynamic: device.static.deviceId === newDevice.deviceId ? newDevice : device.dynamic,
+        })),
       );
     });
   };
 
   const queryTable = async () => {
     const skip: number = (page - 1) * pageSize;
-    const deviceIdQuery = {
+    const deviceQuery = {
       params: {
         limit: pageSize,
         skip: skip,
         Total: true,
       },
     };
-    const deviceResponse = await axios.get<IResponse<string>>(
-        'api/device/ids',
-        deviceIdQuery,
+    const deviceResponse = await axios.get<IResponse<Device>>(
+        'api/device',
+        deviceQuery,
     );
-    const deviceIds = deviceResponse.data.Results;
-    setTotalPages(Math.ceil(deviceResponse.data.Total / pageSize));
+    const devices = deviceResponse.data.Results;
+    const deviceIds = devices.map((device) => device.deviceId);
 
     const latestDevicesResponse = await axios.get<IResponse<DeviceLog>>(
         'api/device-logs/latest',
@@ -57,7 +61,15 @@ const DevicePage = () => {
     );
     const latestDevices = latestDevicesResponse.data.Results;
 
-    setDeviceData(latestDevices);
+    const tableDevices = devices.map((staticDevice) => ({
+      static: staticDevice,
+      dynamic: latestDevices.find(
+          (device) => device.deviceId === staticDevice.deviceId,
+      ),
+    }));
+
+    setTotalPages(Math.ceil(deviceResponse.data.Total / pageSize));
+    setDeviceTableData(tableDevices);
     realTimeDataService.setDeviceIds(deviceIds);
   };
 
@@ -95,6 +107,16 @@ const DevicePage = () => {
           >
             {cell}
           </Link>
+        </div>
+      </div>
+    );
+  };
+
+  const nameFormatter = (cell: cell) => {
+    return (
+      <div className="devices-column-h d-flex justify-content-left align-items-center">
+        <div className="devices-uuid-text devices-font">
+          {cell}
         </div>
       </div>
     );
@@ -158,7 +180,7 @@ const DevicePage = () => {
 
   const columns = [
     {
-      dataField: 'deviceId',
+      dataField: 'static.deviceId',
       text: 'UUID',
       filter: textFilter({
         placeholder: 'Filter by UUID...',
@@ -168,28 +190,35 @@ const DevicePage = () => {
       headerFormatter: uuidFirstHeaderFormatter,
     },
     {
-      dataField: 'cpu.aggregatedPercentage',
+      dataField: 'static.name',
+      text: 'Name',
+      sort: true,
+      formatter: nameFormatter,
+      headerFormatter: uuidHeaderFormatter,
+    },
+    {
+      dataField: 'dynamic.cpu.aggregatedPercentage',
       text: 'CPU',
       sort: true,
       formatter: pieUsageFormatter,
       headerFormatter: uuidHeaderFormatter,
     },
     {
-      dataField: 'memory.aggregatedPercentage',
+      dataField: 'dynamic.memory.aggregatedPercentage',
       text: 'Memory',
       sort: true,
       formatter: pieUsageFormatter,
       headerFormatter: uuidHeaderFormatter,
     },
     {
-      dataField: 'disk.aggregatedPercentage',
+      dataField: 'dynamic.disk.aggregatedPercentage',
       text: 'Disk',
       sort: true,
       formatter: pieUsageFormatter,
       headerFormatter: uuidHeaderFormatter,
     },
     {
-      dataField: 'wifi.signalStrength',
+      dataField: 'dynamic.wifi.signalStrength',
       text: 'Network',
       sort: true,
       formatter: signalStrengthFormatter,
@@ -210,11 +239,11 @@ const DevicePage = () => {
               <div className="devices-table ">
                 <BootstrapTable
                   striped={true}
-                  keyField="deviceId"
-                  data={deviceData}
+                  keyField="static.deviceId"
+                  data={deviceTableData}
                   columns={columns}
                   filter={filterFactory()}
-                  sort={{dataField: 'deviceId', order: 'desc'}}
+                  sort={{dataField: 'static.deviceId', order: 'desc'}}
                 />
                 <div className="d-flex justify-content-end">
                   <i

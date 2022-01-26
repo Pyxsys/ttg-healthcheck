@@ -1,3 +1,5 @@
+import {Device, DeviceLog} from './queries';
+
 export interface DevicesColumns {
   id: string
   location?: string
@@ -5,4 +7,9 @@ export interface DevicesColumns {
   memoryUsage: number
   diskUsage?: number
   uptime: number
+}
+
+export interface TableDevice {
+  static: Device
+  dynamic?: DeviceLog
 }
