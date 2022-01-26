@@ -1013,3 +1013,7 @@ body {
 .modal-custom-width {
   max-width: none;
 }
+
+.process-table table thead tr{
+  border: $tertiary-gray !important;
+}

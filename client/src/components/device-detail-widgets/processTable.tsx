@@ -37,7 +37,7 @@ const processTable = (props: { deviceDynamic: DeviceLog }) => {
   ];
 
   return (
-    <div className="p-2">
+    <div className="p-2 process-table">
       <BootstrapTable
         headerClasses="border"
         striped={true}
