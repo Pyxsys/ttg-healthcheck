@@ -5,6 +5,7 @@ $tertiary-gray: #30353d;
 $quarternary-gray: #3F4651;
 $quinary-gray: #4C535F;
 
+$white: #fff;
 $gray-100: #c2c2c2;
 $gray-200: #9b9b9b;
 $gray-300: #888888;
@@ -14,6 +15,7 @@ $gray-600: #424242;
 $gray-700: #2c2c2c;
 $gray-800: #1d1d1d;
 $gray-900: #101010;
+$black: #000;
 
 // Media query sizes
 $screen-w-xxsm: 0px;
@@ -24,6 +26,15 @@ $screen-w-lg: 991px;
 $screen-w-xlg: 1200px;
 $screen-w-xxlg: 1940px;
 $screen-w-xxxlg: 2350px;
+
+// Tables
+$table-primary-bg: #3F4651;
+$table-secondary-bg: lighten($table-primary-bg, 5%);
+$table-header-bg: darken($table-primary-bg, 5%);
+$table-cell-padding: 0.5em;
+$table-cell-padding-sm: 0.25em;
+$table-border-color: #30353D;
+$table-border-width: 1px;
 
 html,
 body {
@@ -41,15 +52,19 @@ body {
   }
 }
 
+.cursor-pointer {
+  cursor: pointer;
+}
+
 /*-----------------------Login/Signup--------------------------*/
 
 // Custom scrollbar only for computers
 @media only screen and (min-width: $screen-w-xsm) {
   &::-webkit-scrollbar,             // The whole scrollbar (background)
-		&::-webkit-scrollbar-track,       // The track where the handle can go
-    &::-webkit-scrollbar-track-piece, // The Track that was selected
-		&::-webkit-scrollbar-thumb,       // The draggable handle
-		&::-webkit-scrollbar-corner {
+  &::-webkit-scrollbar-track,       // The track where the handle can go
+  &::-webkit-scrollbar-track-piece, // The Track that was selected
+  &::-webkit-scrollbar-thumb,       // The draggable handle
+  &::-webkit-scrollbar-corner {
     // The intersection of the horizontal and vertical scrollbar
     background-color: $gray-600;
     background-clip: padding-box; // <== make the border work
@@ -467,31 +482,12 @@ body {
 **
 */
 
-// Device table content
-
 .devices-content {
   background-color: $tertiary-gray;
-  @media (min-width: $screen-w-sm) {
-    min-height: 500px;
-  }
-  @media (min-width: $screen-w-md) {
-    min-height: 500px;
-  }
-  @media (min-width: $screen-w-lg) {
-    min-height: 500px;
-  }
-  @media (min-width: $screen-w-xlg) {
-    min-height: 550px;
-  }
-  @media (min-width: $screen-w-xxlg) {
-    min-height: 550px;
-  }
-  @media (min-width: $screen-w-xxxlg) {
-    min-height: 550px;
-  }
+  min-height: 230px;
 }
 
-.devices-column {
+.pie-wheel-size {
   @media (min-width: $screen-w-xxsm) {
     height: 50px;
     width: 50px;
@@ -513,8 +509,8 @@ body {
     width: 60px;
   }
   @media (min-width: $screen-w-xlg) {
-    height: 110px;
-    width: 110px;
+    height: 75px;
+    width: 75px;
   }
   @media (min-width: $screen-w-xxlg) {
     height: 120px;
@@ -523,72 +519,43 @@ body {
   @media (min-width: $screen-w-xxxlg) {
     height: 120px;
     width: 120px;
-  }
-}
-
-.devices-column-h {
-  @media (min-width: $screen-w-xxsm) {
-    height: 50px;
-    max-width: 100px;
-  }
-  @media (min-width: $screen-w-xsm) {
-    height: 50px;
-    max-width: 100px;
-  }
-  @media (min-width: $screen-w-sm) {
-    height: 50px;
-    max-width: 100px;
-  }
-  @media (min-width: $screen-w-md) {
-    height: 60px;
-    max-width: 120px;
-  }
-  @media (min-width: $screen-w-lg) {
-    height: 60px;
-    max-width: 120px;
-  }
-  @media (min-width: $screen-w-xlg) {
-    height: 110px;
-    max-width: 220px;
-  }
-  @media (min-width: $screen-w-xxlg) {
-    height: 120px;
-    max-width: 240px;
-  }
-  @media (min-width: $screen-w-xxxlg) {
-    height: 120px;
-    max-width: 240px;
   }
 }
 
 .devices-uuid-text{
   @media (min-width: $screen-w-xxsm) {
+    max-width: 100px;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
   }
   @media (min-width: $screen-w-xsm) {
+    max-width: 100px;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
   }
   @media (min-width: $screen-w-sm) {
+    max-width: 100px;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
   }
   @media (min-width: $screen-w-md) {
+    max-width: 120px;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
     
   }
   @media (min-width: $screen-w-lg) {
+    max-width: 120px;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
   }
   @media (min-width: $screen-w-xlg) {
+    max-width: 220px;
     word-wrap: break-word !important;
     word-break: break-word !important;
     overflow: unset;
@@ -596,6 +563,7 @@ body {
     white-space: unset;
   }
   @media (min-width: $screen-w-xxlg) {
+    max-width: 240px;
     word-wrap: break-word !important;
     word-break: break-word !important;
     overflow: unset;
@@ -603,6 +571,7 @@ body {
     white-space: unset;
   }
   @media (min-width: $screen-w-xxxlg) {
+    max-width: 240px;
     word-wrap: break-word !important;
     word-break: break-word !important;
     overflow: unset;
@@ -615,39 +584,66 @@ body {
   font-size: 1.2em;
 }
 
-.devices-table {
-  margin-top: 8rem;
-  margin-left: 2rem;
+.table-container {
+  border-radius: 5px;
 }
 
-.react-bootstrap-table table {
-  --bs-table-striped-color: white;
-  table-layout: auto;
-  border: $tertiary-gray !important;
-}
+.cerebellum-table {
 
-.react-bootstrap-table table thead tr {
-  color: white;
-  background-color: $quarternary-gray;
-}
+  // Row
+  thead tr {
+    height: 60px;
+    background-color: $table-header-bg;
 
-.react-bootstrap-table table tbody tr td {
-  text-align: -webkit-center !important;
-}
+    &.sticky-header {
+      position: -webkit-sticky;
+      position: sticky;
+      top: 0;
+      z-index: 2;
+    }
+  }
+  tbody tr {
+    height: 48px;
+    &:nth-child(even) {
+      background-color: $table-primary-bg;
+    }
+    &:nth-child(odd) {
+      background-color: $table-secondary-bg;
+    }
+  }
+  
+  tr {
+    border-width: 0;
+    align-items: center;
+    box-sizing: border-box;
+  }
 
-.devices-table-header-formatter{
-  display: flex;
-  flex-direction: row;
-}
-
-.react-bootstrap-table table tbody tr:nth-child(odd) {
-  color: white;
-  background-color: $quinary-gray;
-}
-
-.react-bootstrap-table table tbody tr:nth-child(even) {
-  color: white;
-  background-color: $quarternary-gray;
+  // Cell
+  th {
+    padding-top: $table-cell-padding;
+    padding-bottom: $table-cell-padding;
+    padding: $table-cell-padding;
+    border-bottom: $table-border-width*2 solid $gray-800;
+    border-right: $table-border-width solid darken($table-border-color, 5%);
+  }
+  td {
+    border-right: $table-border-width solid $table-border-color;
+    border-bottom: $table-border-width solid $table-border-color;
+  }
+  th,
+  td {
+    padding: $table-cell-padding;
+    text-align: center;
+    vertical-align: middle;
+  }
+  th:first-of-type,
+  td:first-of-type {
+    padding-left: 24px;
+  }
+  th:last-of-type,
+  td:last-of-type {
+    padding-right: 24px;
+  }
 }
 
 .device-icon{
@@ -690,21 +686,6 @@ body {
 
 .devices-footer {
   background-color: $tertiary-gray;
-}
-
-// hide uneeded sr-only label in device table
-.sr-only {
-  border: 0;
-  padding: 0;
-  margin: 0;
-  position: absolute !important;
-  height: 1px; 
-  width: 1px;
-  overflow: hidden;
-  clip: rect(1px 1px 1px 1px); 
-  clip: rect(1px, 1px, 1px, 1px);
-  clip-path: inset(50%); 
-  white-space: nowrap; 
 }
 
 /*-----------------------Device Details--------------------------*/
