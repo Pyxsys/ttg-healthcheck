@@ -2,7 +2,6 @@
 import React, {Dispatch, SetStateAction, useEffect, useState} from 'react';
 import axios from 'axios';
 import {Link} from 'react-router-dom';
-import {BsChevronLeft, BsChevronRight} from 'react-icons/bs';
 
 // Custom
 import {Device, DeviceLog, IResponse} from '../types/queries';
@@ -11,6 +10,7 @@ import Navbar from './Navbar';
 import PieWheel from './common/pieWheel';
 import {SignalStrength, signalText} from './common/signalStrength';
 import {TableDevice} from '../types/tables';
+import Pagination from './common/pagination';
 
 
 const useDebounce = (initialValue = '', delay: number) => {
@@ -248,17 +248,9 @@ const DevicePage = () => {
             </table>
           </div>
 
-          <div className="d-flex pt-2 ms-auto">
-            <i className={`pe-2 device-icon ${page > 1 ? 'cursor-pointer' : ''}`}
-              onClick={() => setPage(page > 1 ? page - 1 : 1)}
-            >
-              <BsChevronLeft />
-            </i>
-            <span className="device-span user-select-none">Page {page} of {totalPages}</span>
-            <i className={`ps-2 device-icon ${page < totalPages ? 'cursor-pointer' : ''}`}
-              onClick={() => setPage(page < totalPages ? page + 1 : page)}>
-              <BsChevronRight />
-            </i>
+
+          <div className="d-flex py-2 ms-auto">
+            <Pagination page={page} totalPages={totalPages} onPageChanged={(page) => setPage(page)} />
           </div>
         </div>
       </div>
