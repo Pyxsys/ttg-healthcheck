@@ -32,7 +32,7 @@ const Pagination = ({page, totalPages, onPageChanged}: {page: number, totalPages
           >
             <span className={`lead ${index === 0 ? 'text-muted' : 'text-white'}`}>{page + index}</span>
           </button> :
-          <></>
+          <div key={`pagination_${page + index}`} ></div>
       ))}
 
       {page + range[range.length-1] < totalPages ?
