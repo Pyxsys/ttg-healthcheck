@@ -1,7 +1,5 @@
 /* eslint-disable jest/expect-expect */
 Cypress.env();
-import runLogin from './common/runLogin'
-import checkPageLoadTime from './common/checkPageLoadTime'
 import {lighthouseThreshold, lighthouseConfig} from './common/lighthouseThresholds'
 
 
