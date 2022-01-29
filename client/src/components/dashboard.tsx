@@ -3,7 +3,7 @@ import React, {useState} from 'react';
 import {useAuth} from '../context/authContext';
 import {queryDashboard, saveDashboard} from '../services/dashboard.service';
 import {notificationService} from '../services/notification.service';
-import {Dashboard} from '../types/dashboard';
+import {Dashboard, DashboardWidget} from '../types/dashboard';
 import '../App.scss';
 
 // Custom
@@ -101,8 +101,29 @@ const DashboardPage = () => {
 
   modalService.onPrimaryClicked = () => {
     console.log('Save Clicked');
+    if (dashboard.widgets?.length > 0) {
+      const wids = dashboard.widgets as DashboardWidget[];
+      console.log(wids);
+      wids.push({
+        widgetType: widgetType,
+        options: deviceName,
+      } as DashboardWidget);
+      setDashboard({
+        ...dashboard,
+        widgets: wids,
+      });
+    } else {
+      setDashboard({
+        ...dashboard,
+        widgets: [
+          {
+            widgetType: widgetType,
+            options: deviceName,
+          },
+        ],
+      });
+    }
   };
-
   return (
     <div id="dashboard-container">
       <Navbar />

@@ -23,8 +23,8 @@ const AddWidgetModal = ({setType, setName}: Props) => {
             }}
           >
             <option value=""></option>
-            <option value="cpu">CPU</option>
-            <option value="mem">Memory</option>
+            <option value="CPU">CPU</option>
+            <option value="Memory">Memory</option>
           </select>
         </div>
         {types ? (
