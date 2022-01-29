@@ -2,6 +2,7 @@
 Cypress.env();
 import runLogin from './common/runLogin'
 import checkPageLoadTime from './common/checkPageLoadTime'
+import {lighthouseThreshold, lighthouseConfig} from './common/lighthouseThresholds'
 
 const testUser = {
   name: "test2",
@@ -9,29 +10,10 @@ const testUser = {
   email: "cypress@gmail.com"
 };
 
-// These can be changed per case directly in the function call
-const lighthouseThreshold = {
-  performance: 70,
-  accessibility: 90,
-  "best-practices": 85,
-  seo: 85,
-  pwa: 60
-};
 
-const lighthouseConfig = {
-  formFactor: "desktop",
-  screenEmulation: {
-    mobile: false,
-    disabled: true
-  }
-};
 
-describe("1. LightHouse Tests", () => {
-  it("1.1 Landing Page", () => {
-    cy.visit("/");
-    cy.lighthouse(lighthouseThreshold, lighthouseConfig);
-  });
-  it("1.2 Devices Page", () => {
+describe("1. LightHouse", () => {
+  it("1.1 Devices Page", () => {
     cy.visit("/");
 
     cy.get("input[name=email1]").type(testUser.email);
@@ -39,21 +21,6 @@ describe("1. LightHouse Tests", () => {
     cy.get("button[type=submit]").click();
     cy.get("div[class=hamburger-react]").click();
     cy.get('a[href*="/devices"]').click();
-
-    cy.lighthouse(lighthouseThreshold, lighthouseConfig);
-  });
-  it("1.3 Device Detail Page", () => {
-    cy.visit("/");
-
-    cy.get("input[name=email1]").type(testUser.email);
-    cy.get("input[name=password1]").type(testUser.password);
-    cy.get("button[type=submit]").click();
-    cy.get("div[class=hamburger-react]").click();
-    cy.get('a[href*="/devices"]').click();
-    cy.wait(1000);
-    cy.get('a[href*="/device"]')
-      .eq(1)
-      .click("left");
 
     cy.lighthouse(lighthouseThreshold, lighthouseConfig);
   });
@@ -69,9 +36,7 @@ describe("Test 1: Check to ensure that the various components on the device page
       }
     })
       .its("performance")
-      .then(performance => {
-        runLogin();
-      });
+      .then(performance => {runLogin()});
 
     cy.visit("/devices", {
       onBeforeLoad: win => {
@@ -89,7 +54,7 @@ describe("Test 1: Check to ensure that the various components on the device page
           .find("tr")
           .should("be.visible")
           .then(() => performance.mark("end-loading"))
-          .then(() => checkPageLoadTime(4000));
+          .then(() => { checkPageLoadTime(performance,4000)});
       });
   });
 
@@ -101,9 +66,7 @@ describe("Test 1: Check to ensure that the various components on the device page
       }
     })
       .its("performance")
-      .then(performance => {
-        runLogin();
-      });
+      .then(performance => {runLogin()});
 
     cy.visit("/devices", {
       onBeforeLoad: win => {
@@ -129,7 +92,7 @@ describe("Test 1: Check to ensure that the various components on the device page
           .get(".device-details-tabs")
           .should("be.visible")
           .then(() => performance.mark("end-loading"))
-          .then(() => checkPageLoadTime(4000));
+          .then(() => {checkPageLoadTime(performance, 4000)});
       });
   });
 });

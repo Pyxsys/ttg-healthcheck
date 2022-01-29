@@ -31,8 +31,7 @@ module.exports = (on, config) => {
   })
 
   on("task", {
-    lighthouse: lighthouse((lighthouseReport)),
-    pa11y: pa11y((pa11yReport))
+    lighthouse: lighthouse(),
   })
 
   // add other tasks to be registered here
