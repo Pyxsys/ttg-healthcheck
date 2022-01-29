@@ -10,7 +10,7 @@ const testUser = {
 const lighthouseThreshold = {
   performance: 70,
   accessibility: 90,
-  'best-practices': 85,
+  "best-practices": 85,
   pwa: 60,
   seo: 85
 };

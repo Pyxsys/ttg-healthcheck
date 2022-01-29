@@ -53,6 +53,14 @@ To run these tests, you'll need to use Cypress. It is already a part of our dev 
 * From your command line go into `client -> src` and run `npx cypress open` if you want to execute the tests manually or run `npx cypress run` if you desire to execute the tests headlessly in your terminal instead..
 * From there, a Cypress GUI will open up. You can either run all the tests that are in the test folder by click run all or run individual test file by clicking on the file itself.
 
+### Performance and Load Tests
+
+To run these tests, you'll again need to use Cypress and Jmeter. It is already a part of our dev dependencies and only requires `npm install` in the root folder. You will also need to have the Front-End and Back-End running locally. That can be done by running `npm run dev` in the root folder. All the performance tests are found in `cypress -> integration`. Load Tests can be found in loadTests folder.
+
+* In the command line, run `npx cypress open` to get the gui where you can navigate to the exact tests you want. The tests can also be run via command line only by entering `npx cypress run` and all the tests will be run in order.
+
+* In order to run JMeter you need to have JMeter installed on your computer. Once you start the application you can then open the JMeter files in the folder listend above. Then just press the run test button at the top of the program.
+
 ### Daemon Tests
 
 * From you command line, go to the daemon folder of the project and run `coverage run --branch -m unittest -v`

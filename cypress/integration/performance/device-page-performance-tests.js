@@ -11,8 +11,8 @@ const lighthouseThreshold = {
   performance: 70,
   accessibility: 90,
   "best-practices": 85,
-  pwa: 60,
-  seo: 85
+  seo: 85,
+  pwa: 60
 };
 
 const lighthouseConfig = {
@@ -50,7 +50,7 @@ describe("1. LightHouse Tests", () => {
     cy.wait(1000);
     cy.get('a[href*="/device"]')
       .eq(1)
-      .click();
+      .click("left");
 
     cy.lighthouse(lighthouseThreshold, lighthouseConfig);
   });
@@ -81,7 +81,10 @@ describe("Test 1: Check to ensure that the various components on the device page
       .its("performance")
       .then(performance => {
         cy.get("table")
-          .should("have.class", "table table-striped table-bordered")
+          .should(
+            "have.class",
+            "cerebellum-table table-striped text-white overflow-auto w-100 m-1"
+          )
           .should("be.visible")
           .find("tr")
           .should("be.visible")
@@ -97,7 +100,6 @@ describe("Test 1: Check to ensure that the various components on the device page
 
   it("Test 1.1: Checks to ensure that a devices table loads in under 4000 milliseconds.", () => {
     // Go to login page
-    cy.viewport(1920, 1080);
     cy.visit("/", {
       onBeforeLoad: win => {
         win.performance.mark("start-loading");
@@ -119,9 +121,9 @@ describe("Test 1: Check to ensure that the various components on the device page
       .its("performance")
       .then(performance => {
         cy.get(
-          ":nth-child(1) > :nth-child(1) > .devices-column-h > .devices-uuid-text > .text-white"
+          ":nth-child(1) > :nth-child(1) > .devices-uuid-text > .text-white"
         )
-          .click()
+          .click("left")
           .get(':nth-child(1) > [style="font-style: italic;"]')
           .should("be.visible")
           .get(":nth-child(1) > svg")
