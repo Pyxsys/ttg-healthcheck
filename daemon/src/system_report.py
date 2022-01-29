@@ -207,11 +207,10 @@ class SysReport:
         extract=os.popen(command)
         str_buffer=re.findall(pattern, extract.read(), re.MULTILINE)
         extract.close()
-        str_as_num = str_buffer[0].strip()
+        str_as_num = re.findall(r"[-+]?(?:\d*\.\d+|\d+)", str_buffer[0])
 
         if psutil.WINDOWS:
-            substr = str_as_num[29:31]
-            str_as_float = float(substr)
+            str_as_float = float(str_as_num[0])
             if str_as_float > 80:
                 net_strength = 'Strong'
             elif str_as_float > 50:
@@ -219,7 +218,7 @@ class SysReport:
             else:
                 net_strength = 'Weak'
         elif psutil.LINUX:
-            str_as_float = float(str_as_num[16:19])
+            str_as_float = float(str_as_num[0])
             if str_as_float > -20:
                 net_strength = 'Strong'
             elif str_as_float > -50:
