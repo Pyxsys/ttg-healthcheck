@@ -6,11 +6,11 @@ import {DeviceLog, Process} from '../../types/queries';
 import {ColumnDetail} from '../../types/tables';
 import ViewTable from '../common/viewTable';
 
-interface processTableInputs {
+interface ProcessTableInputs {
   deviceDynamic: DeviceLog
 }
 
-const processTable = (props: processTableInputs) => {
+const ProcessTable = (props: ProcessTableInputs) => {
   const processes: Process[] = props.deviceDynamic?.processes || [];
 
   const column: ColumnDetail[] = [
@@ -34,4 +34,4 @@ const processTable = (props: processTableInputs) => {
   );
 };
 
-export default processTable;
+export default ProcessTable;
