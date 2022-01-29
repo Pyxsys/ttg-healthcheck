@@ -202,7 +202,7 @@ class SysReport:
             pattern = "^\s+Signal\s+:\s+[0-9]+"
         elif psutil.LINUX:
             command = "sudo iw dev wlan0 scan"
-            pattern = "^\s+signal:\s+-[0-9]+"
+            pattern = "(?:signal: (-?\d+) dBm)"
 
         extract=os.popen(command)
         str_buffer=re.findall(pattern, extract.read(), re.MULTILINE)
