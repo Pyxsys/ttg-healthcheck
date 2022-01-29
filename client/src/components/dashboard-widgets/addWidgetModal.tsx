@@ -6,8 +6,9 @@ import React, {useState} from 'react';
 import PropTypes from 'prop-types';
 type Props = {
   setType: Function
+  setName: Function
 }
-const AddWidgetModal = ({setType}: Props) => {
+const AddWidgetModal = ({setType, setName}: Props) => {
   const [types, setTypes] = useState('');
   return (
     <>
@@ -31,7 +32,12 @@ const AddWidgetModal = ({setType}: Props) => {
             <div className="border-bottom my-2">Options</div>
             <div className="d-flex justify-content-around pt-2">
               <span>Device UUID/Name</span>
-              <input type="text" />
+              <input
+                onChange={(e) => {
+                  setName(e.target.value);
+                }}
+                type="text"
+              />
             </div>
           </>
         ) : (

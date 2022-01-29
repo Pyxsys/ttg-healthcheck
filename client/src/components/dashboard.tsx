@@ -19,7 +19,7 @@ import {FaPlus} from 'react-icons/fa';
 
 const DashboardPage = () => {
   const [widgetType, setWidgetType] = useState('');
-  // const [deviceName, setDeviceName] = useState('');
+  const [deviceName, setDeviceName] = useState('');
   const modalService = useModalService();
   const {user} = useAuth();
   const [dashboard, setDashboard] = useState({} as Dashboard);
@@ -139,6 +139,7 @@ const DashboardPage = () => {
               setHover(true);
               console.log('hello');
               console.log(widgetType);
+              console.log(deviceName);
             }}
             onMouseOut={() => setHover(false)}
             role="button"
@@ -146,7 +147,10 @@ const DashboardPage = () => {
             style={hoverStyleBox}
             onClick={() =>
               modalService.open(
-                  <AddWidgetModal setType={setWidgetType} />,
+                  <AddWidgetModal
+                    setType={setWidgetType}
+                    setName={setDeviceName}
+                  />,
                   'lg',
                   {width: 60},
               )
