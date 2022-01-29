@@ -56,38 +56,9 @@ describe("1. LightHouse Tests", () => {
   });
 });
 
-// Check to ensure that the various pages related to login load in a reasonable amount of time.
-describe("Test 2: Check to ensure that the various pages related to login load in a reasonable amount of time.", () => {
-  it("Test 2.1: Make sure that the login page load in under 3000ms.", () => {
-    // Go to login page
-    cy.visit("/", {
-      onBeforeLoad: win => {
-        win.performance.mark("start-loading");
-      }
-    })
-      .its("performance")
-      .then(performance => {
-        //Ensure all appropriate fields have loaded
-        cy.get("input[name=email1]").should("be.visible");
-        cy.get("input[name=password1]").should("be.visible");
-        cy.get("button")
-          .contains("Login")
-          .should("be.visible");
-        cy.get("button")
-          .contains("Register")
-          .should("be.visible")
-
-          .then(() => performance.mark("end-loading"))
-          .then(() => {
-            performance.measure("pageLoad", "start-loading", "end-loading");
-            const measure = performance.getEntriesByName("pageLoad")[0];
-            const duration = measure.duration;
-            assert.isAtMost(duration, 3000);
-          });
-      });
-  });
-
-  it("Test 2.2: Checks to ensure that the devices page loads in under 2000 milliseconds.", () => {
+// Check to ensure that the various components on the device page are properly loaded.
+describe("Test 1: Check to ensure that the various components on the device page are properly loaded.", () => {
+  it("Test 1.1: Checks to ensure that the devices table loads in under 4000 milliseconds.", () => {
     // Go to login page
     cy.visit("/", {
       onBeforeLoad: win => {
@@ -110,21 +81,23 @@ describe("Test 2: Check to ensure that the various pages related to login load i
       .its("performance")
       .then(performance => {
         cy.get("table")
-          .should("have.class", "table table-bordered")
+          .should("have.class", "table table-striped table-bordered")
           .should("be.visible")
-
+          .find("tr")
+          .should("be.visible")
           .then(() => performance.mark("end-loading"))
           .then(() => {
             performance.measure("pageLoad", "start-loading", "end-loading");
             const measure = performance.getEntriesByName("pageLoad")[0];
             const duration = measure.duration;
-            assert.isAtMost(duration, 2000);
+            assert.isAtMost(duration, 4000);
           });
       });
   });
 
-  it("Test 2.3: Checks to ensure that the dashboard loads in in under 2000 milliseconds.", () => {
+  it("Test 1.1: Checks to ensure that a devices table loads in under 4000 milliseconds.", () => {
     // Go to login page
+    cy.viewport(1920, 1080);
     cy.visit("/", {
       onBeforeLoad: win => {
         win.performance.mark("start-loading");
@@ -138,22 +111,35 @@ describe("Test 2: Check to ensure that the various pages related to login load i
         cy.get("div[class=hamburger-react]").click();
       });
 
-    cy.visit("/dashboard", {
+    cy.visit("/devices", {
       onBeforeLoad: win => {
         win.performance.mark("start-loading");
       }
     })
       .its("performance")
       .then(performance => {
-        cy.get("div")
-          .contains("dashboard", { matchCase: false })
-
+        cy.get(
+          ":nth-child(1) > :nth-child(1) > .devices-column-h > .devices-uuid-text > .text-white"
+        )
+          .click()
+          .get(':nth-child(1) > [style="font-style: italic;"]')
+          .should("be.visible")
+          .get(":nth-child(1) > svg")
+          .should("be.visible")
+          .get(":nth-child(2) > svg")
+          .should("be.visible")
+          .get(":nth-child(3) > svg")
+          .should("be.visible")
+          .get(":nth-child(4) > svg")
+          .should("be.visible")
+          .get(".device-details-tabs")
+          .should("be.visible")
           .then(() => performance.mark("end-loading"))
           .then(() => {
             performance.measure("pageLoad", "start-loading", "end-loading");
             const measure = performance.getEntriesByName("pageLoad")[0];
             const duration = measure.duration;
-            assert.isAtMost(duration, 2000);
+            assert.isAtMost(duration, 4000);
           });
       });
   });
