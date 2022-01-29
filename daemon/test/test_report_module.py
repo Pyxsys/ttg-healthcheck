@@ -226,8 +226,8 @@ class TestSystemReportClass(unittest.TestCase):
 
         self.assertRegex(actual_result.lower(), mac_pattern)
 
-    @patch('psutil.WINDOWS', return_value=True)
-    @patch('psutil.LINUX', return_value=False)
+    @patch('daemon.src.system_report.SysReport.is_windows', return_value=True)
+    @patch('daemon.src.system_report.SysReport.is_linux', return_value=False)
     def testFetchingAdapterNetworkInfoWIN(self, m1, m2):
         
         MOCK_ADAPTER_TERMINAL_OUTPUT='There is 1 interface on the system:\n\n    Name                   : Wi-Fly\n    Description            : foobar 999MHz\n    GUID                   : ace11ace-ace1-ace1-ace1-aceaceaceace\n    Physical address       : aa:aa:aa:aa:aa:aa\n    State                  : connected\n    SSID                   : TARGET_WIFI_SSID\n    BSSID                  : bb:bb:bb:b:bb:bb\n    Network type           : Infrastructure\n    Radio type             : 802.11ac\n    Authentication         : WPA2-Personal\n    Cipher                 : CCMP\n    Connection mode        : Auto Connect\n    Channel                : 000\n    Receive rate (Mbps)    : 999\n    Transmit rate (Mbps)   : 999\n    Signal                 : 81%\n    Profile                : TARGET_WIFI_SSID\n\n    Hosted network status  : Not available'
@@ -241,8 +241,8 @@ class TestSystemReportClass(unittest.TestCase):
         
         self.assertDictEqual(actual_result, expected_result)
 
-    @patch('psutil.WINDOWS', return_value=False)
-    @patch('psutil.LINUX', return_value=True)
+    @patch('daemon.src.system_report.SysReport.is_windows', return_value=False)
+    @patch('daemon.src.system_report.SysReport.is_linux', return_value=True)
     def testFetchingAdapterNetworkInfoLUX(self, m1, m2):
         MOCK_ADAPTER_TERMINAL_OUTPUT='wlan0     IEEE 802.11ac  ESSID:"TARGET_WIFI_SSID"  \n          Mode:Managed  Frequency:2.437 GHz  Access Point: 20:AA:4B:A3:63:39   \n          Bit Rate=54 Mb/s   Tx-Power=14 dBm   \n          Retry short limit:7   RTS thr:off   Fragment thr:off\n          Power Management:on\n          Link Quality=67/70  Signal level=-43 dBm  \n          Rx invalid nwid:0  Rx invalid crypt:0  Rx invalid frag:0\n          Tx excessive retries:0  Invalid misc:218   Missed beacon:0'
         with patch('os.popen', new=mock_open(read_data = MOCK_ADAPTER_TERMINAL_OUTPUT)):
