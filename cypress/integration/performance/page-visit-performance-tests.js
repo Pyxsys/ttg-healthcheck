@@ -23,6 +23,13 @@ const lighthouseConfig = {
   }
 };
 
+const runLogin = () => {
+  cy.get("input[name=email1]").type(testUser.email);
+  cy.get("input[name=password1]").type(testUser.password);
+  cy.get("button[type=submit]").click();
+  cy.get("div[class=hamburger-react]").click();
+};
+
 describe("1. LightHouse Tests", () => {
   it("1.1 Landing Page", () => {
     cy.visit("/");
@@ -96,10 +103,7 @@ describe("Test 2: Check to ensure that the various pages related to login load i
     })
       .its("performance")
       .then(performance => {
-        cy.get("input[name=email1]").type(testUser.email);
-        cy.get("input[name=password1]").type(testUser.password);
-        cy.get("button[type=submit]").click();
-        cy.get("div[class=hamburger-react]").click();
+        runLogin();
       });
 
     cy.visit("/devices", {
@@ -110,7 +114,10 @@ describe("Test 2: Check to ensure that the various pages related to login load i
       .its("performance")
       .then(performance => {
         cy.get("table")
-          .should("have.class", "table table-bordered")
+          .should(
+            "have.class",
+            "cerebellum-table table-striped text-white overflow-auto w-100 m-1"
+          )
           .should("be.visible")
 
           .then(() => performance.mark("end-loading"))
@@ -132,10 +139,7 @@ describe("Test 2: Check to ensure that the various pages related to login load i
     })
       .its("performance")
       .then(performance => {
-        cy.get("input[name=email1]").type(testUser.email);
-        cy.get("input[name=password1]").type(testUser.password);
-        cy.get("button[type=submit]").click();
-        cy.get("div[class=hamburger-react]").click();
+        runLogin();
       });
 
     cy.visit("/dashboard", {

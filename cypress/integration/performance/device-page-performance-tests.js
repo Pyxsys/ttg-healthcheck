@@ -23,6 +23,13 @@ const lighthouseConfig = {
   }
 };
 
+const runLogin = () => {
+  cy.get("input[name=email1]").type(testUser.email);
+  cy.get("input[name=password1]").type(testUser.password);
+  cy.get("button[type=submit]").click();
+  cy.get("div[class=hamburger-react]").click();
+};
+
 describe("1. LightHouse Tests", () => {
   it("1.1 Landing Page", () => {
     cy.visit("/");
@@ -39,7 +46,7 @@ describe("1. LightHouse Tests", () => {
 
     cy.lighthouse(lighthouseThreshold, lighthouseConfig);
   });
-  it("1.3 Landing Page", () => {
+  it("1.3 Device Detail Page", () => {
     cy.visit("/");
 
     cy.get("input[name=email1]").type(testUser.email);
@@ -67,10 +74,7 @@ describe("Test 1: Check to ensure that the various components on the device page
     })
       .its("performance")
       .then(performance => {
-        cy.get("input[name=email1]").type(testUser.email);
-        cy.get("input[name=password1]").type(testUser.password);
-        cy.get("button[type=submit]").click();
-        cy.get("div[class=hamburger-react]").click();
+        runLogin();
       });
 
     cy.visit("/devices", {
@@ -107,10 +111,7 @@ describe("Test 1: Check to ensure that the various components on the device page
     })
       .its("performance")
       .then(performance => {
-        cy.get("input[name=email1]").type(testUser.email);
-        cy.get("input[name=password1]").type(testUser.password);
-        cy.get("button[type=submit]").click();
-        cy.get("div[class=hamburger-react]").click();
+        runLogin();
       });
 
     cy.visit("/devices", {
