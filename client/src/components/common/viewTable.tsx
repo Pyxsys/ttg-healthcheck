@@ -12,7 +12,7 @@ interface ViewTableInputs<T> {
   initialOrderBy?: string
 }
 
-const useDebounce = (initialValue = '', delay: number) => {
+const useDebounce = (initialValue: string, delay: number) => {
   const [actualValue, setActualValue] = useState(initialValue);
   const [debounceValue, setDebounceValue] = useState(initialValue);
   useEffect(() => {
