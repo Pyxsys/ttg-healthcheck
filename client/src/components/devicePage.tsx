@@ -13,6 +13,7 @@ import {ColumnDetail, TableDevice} from '../types/tables';
 import Pagination from './common/pagination';
 import ViewTable from './common/viewTable';
 
+type CellValue = string | number | undefined;
 
 const DevicePage = () => {
   // Readonly Values
@@ -83,7 +84,7 @@ const DevicePage = () => {
     };
   }, []);
 
-  const PieWheelCell = (cellValue: string | number | undefined) =>
+  const PieWheelCell = (cellValue: CellValue) =>
     <div className="d-flex justify-content-end align-items-center">
       <div className="text-truncate devices-font">
         {Number(cellValue).toFixed(2)}
@@ -98,7 +99,7 @@ const DevicePage = () => {
     key: 'static.deviceId',
     name: 'UUID',
     filter: true,
-    override: (cellValue: string | number | undefined, device: TableDevice) =>
+    override: (cellValue: CellValue, device: TableDevice) =>
       <div className="devices-uuid-text devices-font mx-auto h-100 py-3">
         <Link className="text-white"
           to={{pathname: '/device', state: {id: device.static.deviceId}}}
@@ -129,7 +130,7 @@ const DevicePage = () => {
   {
     key: 'dynamic.wifi.signalStrength',
     name: 'Network',
-    override: (cellValue: string | number | undefined) =>
+    override: (cellValue: CellValue) =>
       <div className="d-flex flex-column">
         <div className="d-flex justify-content-end align-items-center">
           <div className="text-truncate devices-font">
