@@ -102,7 +102,7 @@ const DevicePage = () => {
     override: (cellValue: CellValue, device: TableDevice) =>
       <div className="devices-uuid-text devices-font mx-auto h-100 py-3">
         <Link className="text-white"
-          to={{pathname: '/device', state: {id: device.static.deviceId}}}
+          to={{pathname: '/device', search: `?Id=${device.static.deviceId}`}}
         >
           {cellValue}
         </Link>
