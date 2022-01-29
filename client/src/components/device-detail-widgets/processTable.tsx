@@ -1,52 +1,35 @@
 // 3rd Party
 import React from 'react';
-import BootstrapTable, {ColumnDescription} from 'react-bootstrap-table-next';
 
 // Custom
 import {DeviceLog, Process} from '../../types/queries';
+import {ColumnDetail} from '../../types/tables';
+import ViewTable from '../common/viewTable';
 
-const processTable = (props: { deviceDynamic: DeviceLog }) => {
+interface processTableInputs {
+  deviceDynamic: DeviceLog
+}
+
+const processTable = (props: processTableInputs) => {
   const processes: Process[] = props.deviceDynamic?.processes || [];
-  const columns: ColumnDescription[] = [
-    {
-      dataField: 'pid',
-      text: 'ID',
-      sort: true,
-    },
-    {
-      dataField: 'name',
-      text: 'Name',
-      sort: true,
-      style: {minWidth: '20%'},
-    },
-    {
-      dataField: 'cpu.usagePercentage',
-      text: 'CPU',
-      sort: true,
-    },
-    {
-      dataField: 'memory.usagePercentage',
-      text: 'Memory',
-      sort: true,
-    },
-    {
-      dataField: 'status',
-      text: 'Status',
-      sort: true,
-    },
+
+  const column: ColumnDetail[] = [
+    {key: 'pid', name: 'ID'},
+    {key: 'name', name: 'Name'},
+    {key: 'cpu.usagePercentage', name: 'CPU'},
+    {key: 'memory.usagePercentage', name: 'Memory'},
+    {key: 'status', name: 'Status'},
   ];
 
   return (
     <div className="p-2">
-      <BootstrapTable
-        headerClasses="border"
-        striped={true}
-        keyField="pid"
-        data={processes}
-        columns={columns}
-        wrapperClasses="table-responsive"
-        sort={{dataField: 'name', order: 'asc'}}
-      />
+      <div className='flex-grow-1 overflow-auto table-container mt-5 p-1'>
+        <ViewTable
+          tableData={processes}
+          columns={column}
+          initialOrderBy='pid'
+        />
+      </div>
     </div>
   );
 };
