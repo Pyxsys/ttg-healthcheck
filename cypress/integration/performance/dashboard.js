@@ -4,18 +4,19 @@ import runLogin from './common/runLogin'
 import checkPageLoadTime from './common/checkPageLoadTime'
 import {lighthouseThreshold, lighthouseConfig} from './common/lighthouseThresholds'
 
-
+const testUser = {
+    name: "test23",
+    password: Cypress.env("test_password"),
+    email: "cypress@gmail.com"
+  };
+  
 describe("1. LightHouse", () => {
     it("1.1 dashboard Page", () => {
       cy.visit("/");
-
-      cy.get("input[name=email1]").type(testUser.email);
-      cy.get("input[name=password1]").type(testUser.password);
-      cy.get("button[type=submit]").click();
+      runLogin()
       cy.visit("/dashboard");
-
-
       cy.lighthouse(lighthouseThreshold, lighthouseConfig);
+      
     });
 });
 
@@ -28,7 +29,10 @@ describe("2. Check to ensure that the various pages related to login load in a r
           }
         })
           .its("performance")
-          .then(performance => {runLogin()});
+          .then(performance => {
+              runLogin();
+              cy.get("div[class=hamburger-react]").click();
+            });
     
         cy.visit("/dashboard", {
           onBeforeLoad: win => {

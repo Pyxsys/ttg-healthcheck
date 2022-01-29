@@ -3,15 +3,13 @@ Cypress.env();
 import runLogin from './common/runLogin'
 import checkPageLoadTime from './common/checkPageLoadTime'
 import {lighthouseThreshold, lighthouseConfig} from './common/lighthouseThresholds'
-
+  
 
 describe("1. LightHouse", () => {
     it("1.1 Device Detail Page", () => {
         cy.visit("/");
+        runLogin();
     
-        cy.get("input[name=email1]").type(testUser.email);
-        cy.get("input[name=password1]").type(testUser.password);
-        cy.get("button[type=submit]").click();
         cy.get("div[class=hamburger-react]").click();
         cy.get('a[href*="/devices"]').click();
         cy.wait(1000);
@@ -34,7 +32,10 @@ describe("2 Check to ensure that the various components on the device detail pag
         }
       })
         .its("performance")
-        .then(performance => {runLogin()});
+        .then(performance => {
+            runLogin()
+            cy.get("div[class=hamburger-react]").click();
+        });
   
       cy.visit("/devices", {
         onBeforeLoad: win => {

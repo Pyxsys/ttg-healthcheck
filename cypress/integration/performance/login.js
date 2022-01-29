@@ -1,7 +1,9 @@
 /* eslint-disable jest/expect-expect */
 Cypress.env();
-import {lighthouseThreshold, lighthouseConfig} from './common/lighthouseThresholds'
-
+import {
+  lighthouseThreshold,
+  lighthouseConfig,
+} from "./common/lighthouseThresholds";
 
 describe("1. LightHouse", () => {
   it("1.1 Landing Page", () => {
@@ -15,18 +17,16 @@ describe("2. Check to ensure that the various pages related to login load in a r
   it("2.1 Make sure that the login page load in under 3000ms.", () => {
     // Go to login page
     cy.visit("/", {
-      onBeforeLoad: win => {
+      onBeforeLoad: (win) => {
         win.performance.mark("start-loading");
-      }
+      },
     })
       .its("performance")
-      .then(performance => {
+      .then((performance) => {
         //Ensure all appropriate fields have loaded
         cy.get("input[name=email1]").should("be.visible");
         cy.get("input[name=password1]").should("be.visible");
-        cy.get("button")
-          .contains("Login")
-          .should("be.visible");
+        cy.get("button").contains("Login").should("be.visible");
         cy.get("button")
           .contains("Register")
           .should("be.visible")
