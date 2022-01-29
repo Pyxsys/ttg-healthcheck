@@ -201,15 +201,7 @@ class SysReport:
             command = "netsh wlan show interfaces"
             pattern = "^\s+Signal\s+:\s+"
         elif psutil.LINUX:
-            temp1 = os.popen("sudo iw dev")
-            list_wifi_names=re.findall("\s+Interface\s+", temp1.read(), re.MULTILINE)
-            device_wifi_name=list_wifi_names[0]
-            temp1.close()
-
-            temp2 = os.popen("sudo ifconfig " +device_wifi_name +" up")
-            temp2.close()
-
-            command = "sudo iw dev " +device_wifi_name +" link"
+            command = "sudo iw dev wlan0 scan"
             pattern = "^\s+signal:\s+"
 
         extract=os.popen(command)

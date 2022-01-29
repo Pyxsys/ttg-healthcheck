@@ -255,6 +255,28 @@ class TestSystemReportClass(unittest.TestCase):
         
         self.assertDictEqual(actual_result, expected_result)
 
+    @patch('psutil.WINDOWS', return_value=True)
+    @patch('psutil.LINUX', return_value=False)
+    def testFetchingNetworkStrengthInfoWIN(self, m1, m2):
+        MOCK_ADAPTER_TERMINAL_OUTPUT='There is 1 interface on the system:\n    Name                   : Wi-Fi\n    Description            : Intel(R) Dual Band Wireless-AC\n    GUID                   : 5a889epd-460c-436f-a04c-a218b5hhe14dc\n    Physical address       : 98:8e:46:5a:18:e7\n    State                  : connected\n    SSID                   : BELL123\n    BSSID                  : 7u:r4:eb:6y:9i:m5\n    Network type           : Infrastructure\n    Radio type             : 802.11n\n    Authentication         : WPA2-Personal\n    Cipher                 : CCMP\n    Connection mode        : Profile\n    Channel                : 10\n    Receive rate (Mbps)    : 72.2\n    Transmit rate (Mbps)   : 72.2\n    Signal                 : 99%\n    Profile                : BELL443\n\n    Hosted network status  : Not available'
+        with patch('os.popen', new=mock_open(read_data = MOCK_ADAPTER_TERMINAL_OUTPUT)):
+            actual_result = SysReport.fetch_network_strength()
+        
+        expected_result = 'Strong'
+
+        self.assertEqual(actual_result, expected_result)
+
+    @patch('psutil.WINDOWS', return_value=False)
+    @patch('psutil.LINUX', return_value=True)
+    def testFetchingNetworkStrengthInfoLUX(self, m1, m2):
+        MOCK_ADAPTER_TERMINAL_OUTPUT='Connected to 00:19:e6:8d:55:64 (on wlan0)\n        SSID: wsiit\n        freq: 2437\n        RX: 18444610 bytes (94857 packets)\n        TX: 2554688 bytes (17365 packets)\n        signal: -60 dBm\n        tx bitrate: 54.0 MBit/s\n\n        bss flags:	short-preamble short-slot-time\n        dtim period:	0\nbeacon int:	100'
+        with patch('os.popen', new=mock_open(read_data = MOCK_ADAPTER_TERMINAL_OUTPUT)):
+            actual_result = SysReport.fetch_network_strength()
+        
+        expected_result = 'Medium'
+
+        self.assertEqual(actual_result, expected_result)
+
     @patch('daemon.src.system_report.SysReport.fetch_net_wan_adapter_info', return_value = { 'SSID': 'mock_network_5GHz', 'connectionType': '802.11dd'})
     @patch('daemon.src.system_report.SysReport.fetch_net_adapter_addrs', return_value = { 'adapterName': 'target_adapter',  'ipv6': '1111::1111:1111:1111:1111', 'ipv4': '9.99.0.999', 'mac': 'FE-ED-FE-ED-11-11'})
     def testAddingStaticNetworkInfo(self, m1, m2):
