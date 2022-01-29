@@ -160,7 +160,7 @@ const DevicePage = () => {
             />
           </div>
           <div className="d-flex py-2 ms-auto">
-            <Pagination page={page} totalPages={totalPages} onPageChanged={(page) => setPage(page)} />
+            <Pagination page={page} totalPages={totalPages} onPageChanged={(newPage) => setPage(newPage)} />
           </div>
         </div>
       </div>
