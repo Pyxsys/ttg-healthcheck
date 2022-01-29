@@ -2,8 +2,12 @@
 import React, {useState} from 'react';
 
 // Custom
-
-const AddWidgetModal = () => {
+// import {DisplayWidget} from '../../types/displayWidget';
+import PropTypes from 'prop-types';
+type Props = {
+  setType: Function
+}
+const AddWidgetModal = ({setType}: Props) => {
   const [types, setTypes] = useState('');
   return (
     <>
@@ -14,6 +18,7 @@ const AddWidgetModal = () => {
           <select
             onChange={(e) => {
               setTypes(e.target.value);
+              setType(e.target.value);
             }}
           >
             <option value=""></option>
@@ -35,6 +40,10 @@ const AddWidgetModal = () => {
       </div>
     </>
   );
+};
+
+AddWidgetModal.propTypes = {
+  setType: PropTypes.func.isRequired,
 };
 
 export default AddWidgetModal;

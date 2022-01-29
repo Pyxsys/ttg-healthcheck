@@ -8,14 +8,18 @@ import '../App.scss';
 
 // Custom
 import Navbar from './Navbar';
+// import {DisplayWidget} from '../types/displayWidget';
 import CpuUsageWidget from './device-detail-widgets/cpuUsageWidget';
 import MemoryUsageWidget from './device-detail-widgets/memoryUsageWidget';
 import {DeviceLog} from '../types/queries';
 import {useModalService} from '../context/modal.context';
 import AddWidgetModal from './dashboard-widgets/addWidgetModal';
 import {FaPlus} from 'react-icons/fa';
+// import {Interface} from 'readline';
 
 const DashboardPage = () => {
+  const [widgetType, setWidgetType] = useState('');
+  // const [deviceName, setDeviceName] = useState('');
   const modalService = useModalService();
   const {user} = useAuth();
   const [dashboard, setDashboard] = useState({} as Dashboard);
@@ -131,13 +135,21 @@ const DashboardPage = () => {
           ))}
           <div
             onClickCapture={() => setHover(true)}
-            onMouseOver={() => setHover(true)}
+            onMouseOver={() => {
+              setHover(true);
+              console.log('hello');
+              console.log(widgetType);
+            }}
             onMouseOut={() => setHover(false)}
             role="button"
             className="d-flex justify-content-center w-30"
             style={hoverStyleBox}
             onClick={() =>
-              modalService.open(<AddWidgetModal />, 'lg', {width: 60})
+              modalService.open(
+                  <AddWidgetModal setType={setWidgetType} />,
+                  'lg',
+                  {width: 60},
+              )
             }
           >
             <div className="d-flex justify-content-center align-items-center w-30 h-100">
