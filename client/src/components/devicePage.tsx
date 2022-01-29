@@ -83,11 +83,22 @@ const DevicePage = () => {
     };
   }, []);
 
+  const PieWheelCell = (cellValue: string | number | undefined) =>
+    <div className="d-flex justify-content-end align-items-center">
+      <div className="text-truncate devices-font">
+        {Number(cellValue).toFixed(2)}
+        {cellValue ? '%' : ''}
+      </div>
+      <div className="ps-2 pie-wheel-size">
+        <PieWheel percentage={Number(cellValue)} text={false} />
+      </div>
+    </div>;
+
   const column: ColumnDetail[] = [{
     key: 'static.deviceId',
     name: 'UUID',
     filter: true,
-    override: (cellValue, device: TableDevice) =>
+    override: (cellValue: string | number | undefined, device: TableDevice) =>
       <div className="devices-uuid-text devices-font mx-auto h-100 py-3">
         <Link className="text-white"
           to={{pathname: '/device', state: {id: device.static.deviceId}}}
@@ -103,49 +114,22 @@ const DevicePage = () => {
   {
     key: 'dynamic.cpu.aggregatedPercentage',
     name: 'CPU',
-    override: (cellValue) =>
-      <div className="d-flex justify-content-end align-items-center">
-        <div className="text-truncate devices-font">
-          {Number(cellValue).toFixed(2)}
-          {cellValue ? '%' : ''}
-        </div>
-        <div className="ps-2 pie-wheel-size">
-          <PieWheel percentage={Number(cellValue)} text={false} />
-        </div>
-      </div>,
+    override: PieWheelCell,
   },
   {
     key: 'dynamic.memory.aggregatedPercentage',
     name: 'Memory',
-    override: (cellValue) =>
-      <div className="d-flex justify-content-end align-items-center">
-        <div className="text-truncate devices-font">
-          {Number(cellValue).toFixed(2)}
-          {cellValue ? '%' : ''}
-        </div>
-        <div className="ps-2 pie-wheel-size">
-          <PieWheel percentage={Number(cellValue)} text={false} />
-        </div>
-      </div>,
+    override: PieWheelCell,
   },
   {
     key: 'dynamic.disk.partitions.0.percent',
     name: 'Disk',
-    override: (cellValue) =>
-      <div className="d-flex justify-content-end align-items-center">
-        <div className="text-truncate devices-font">
-          {Number(cellValue).toFixed(2)}
-          {cellValue ? '%' : ''}
-        </div>
-        <div className="ps-2 pie-wheel-size">
-          <PieWheel percentage={Number(cellValue)} text={false} />
-        </div>
-      </div>,
+    override: PieWheelCell,
   },
   {
     key: 'dynamic.wifi.signalStrength',
     name: 'Network',
-    override: (cellValue) =>
+    override: (cellValue: string | number | undefined) =>
       <div className="d-flex flex-column">
         <div className="d-flex justify-content-end align-items-center">
           <div className="text-truncate devices-font">
