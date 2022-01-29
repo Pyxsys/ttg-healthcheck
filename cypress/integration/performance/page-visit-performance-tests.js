@@ -8,9 +8,9 @@ const testUser = {
 
 // These can be changed per case directly in the function call
 const lighthouseThreshold = {
-  perfomance: 70,
+  performance: 70,
   accessibility: 90,
-  "best-practice": 85,
+  'best-practices': 85,
   pwa: 60,
   seo: 85
 };
