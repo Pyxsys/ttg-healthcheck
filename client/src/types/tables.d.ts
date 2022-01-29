@@ -13,3 +13,10 @@ export interface TableDevice {
   static: Device
   dynamic?: DeviceLog
 }
+
+export interface ColumnDetail {
+  key: string
+  name: string
+  filter?: boolean
+  override?: (value: number | string | undefined, object: any) => JSX.Element
+}
