@@ -118,8 +118,10 @@ class SysReport:
         #in MB per second
         megabytes_sent = network_info[0]/(1024*1024)
         megabytes_recv = network_info[1]/(1024*1024)
+        #signal strength
+        signal_strength = SysReport.fetch_network_strength()
         #send as tuple
-        self.set_section("network", (megabytes_sent, megabytes_recv))
+        self.set_section("network", (megabytes_sent, megabytes_recv, signal_strength))
 
     def add_timestamp(self):
         self.set_section("timestamp",datetime.now().isoformat())
@@ -190,6 +192,41 @@ class SysReport:
         net_info['macAdress'] = ip.get('mac')
 
         self.set_section('wifi_', net_info)
+
+    @classmethod
+    def fetch_network_strength(cls):
+        net_strength = 'Uknown'
+
+        if psutil.WINDOWS:
+            command = "netsh wlan show interfaces"
+            pattern = "^\s+Signal\s+:\s+"
+        elif psutil.LINUX:
+            command = "sudo iw dev wlan0 scan"
+            pattern = "^\s+signal:\s+"
+
+        extract=os.popen(command)
+        str_buffer=re.findall(pattern, extract.read(), re.MULTILINE)
+        extract.close()
+        str_as_num = str_buffer[0].strip()
+
+        if psutil.WINDOWS:
+            str_as_float = float(str_as_num[:-1])
+            if str_as_float > 80:
+                net_strength = 'Strong'
+            elif str_as_float > 50:
+                net_strength = 'Medium'
+            else:
+                net_strength = 'Weak'
+        elif psutil.LINUX:
+            str_as_float = float(str_as_num)
+            if str_as_float > -20:
+                net_strength = 'Strong'
+            elif str_as_float > -50:
+                net_strength = 'Medium'
+            else:
+                net_strength = 'Weak'
+
+        return net_strength
 
     @classmethod
     def fetch_total_memory(cls):
