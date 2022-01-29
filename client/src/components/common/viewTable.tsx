@@ -32,8 +32,8 @@ const ViewTable = (props: ViewTableInputs<any>) => {
     setFilterKey(props.columns.find((c) => c.filter)?.key || '');
   }, []);
 
-  const getAttribute = (object: any, attr: string): number | string | undefined => {
-    const attributes = attr.split('.');
+  const getAttribute = (object: any, attribute: string): number | string | undefined => {
+    const attributes = attribute.split('.');
     return attributes.reduce((prev, attr) => prev ? prev[attr] : undefined, object);
   };
 
