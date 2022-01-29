@@ -199,10 +199,10 @@ class SysReport:
 
         if psutil.WINDOWS:
             command = "netsh wlan show interfaces"
-            pattern = "^\s+Signal\s+:\s+\d+"
+            pattern = "^\s+Signal\s+:\s+[0-9]+"
         elif psutil.LINUX:
             command = "sudo iw dev wlan0 scan"
-            pattern = "^\s*signal:\s+-\d+"
+            pattern = "^\s+signal:\s+-[0-9]+"
 
         extract=os.popen(command)
         str_buffer=re.findall(pattern, extract.read(), re.MULTILINE)
@@ -210,7 +210,8 @@ class SysReport:
         str_as_num = str_buffer[0].strip()
 
         if psutil.WINDOWS:
-            str_as_float = float(str_as_num[29:31])
+            substr = str_as_num[29:31]
+            str_as_float = float(substr)
             if str_as_float > 80:
                 net_strength = 'Strong'
             elif str_as_float > 50:
