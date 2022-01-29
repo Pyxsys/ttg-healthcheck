@@ -1,5 +1,8 @@
 /* eslint-disable jest/expect-expect */
 Cypress.env();
+import runLogin from './common/runLogin'
+import checkPageLoadTime from './common/checkPageLoadTime'
+
 const testUser = {
   name: "test2",
   password: Cypress.env("test_password"),
@@ -21,13 +24,6 @@ const lighthouseConfig = {
     mobile: false,
     disabled: true
   }
-};
-
-const runLogin = () => {
-  cy.get("input[name=email1]").type(testUser.email);
-  cy.get("input[name=password1]").type(testUser.password);
-  cy.get("button[type=submit]").click();
-  cy.get("div[class=hamburger-react]").click();
 };
 
 describe("1. LightHouse Tests", () => {
@@ -93,12 +89,7 @@ describe("Test 1: Check to ensure that the various components on the device page
           .find("tr")
           .should("be.visible")
           .then(() => performance.mark("end-loading"))
-          .then(() => {
-            performance.measure("pageLoad", "start-loading", "end-loading");
-            const measure = performance.getEntriesByName("pageLoad")[0];
-            const duration = measure.duration;
-            assert.isAtMost(duration, 4000);
-          });
+          .then(() => checkPageLoadTime(4000));
       });
   });
 
@@ -138,12 +129,7 @@ describe("Test 1: Check to ensure that the various components on the device page
           .get(".device-details-tabs")
           .should("be.visible")
           .then(() => performance.mark("end-loading"))
-          .then(() => {
-            performance.measure("pageLoad", "start-loading", "end-loading");
-            const measure = performance.getEntriesByName("pageLoad")[0];
-            const duration = measure.duration;
-            assert.isAtMost(duration, 4000);
-          });
+          .then(() => checkPageLoadTime(4000));
       });
   });
 });
