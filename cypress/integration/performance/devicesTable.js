@@ -30,7 +30,6 @@ describe("2. Check to ensure that the various components on the device page are 
         runLogin()
         cy.get("div[class=hamburger-react]").click();
       });
-
     cy.visit("/devices", {
       onBeforeLoad: win => {
         win.performance.mark("start-loading");
