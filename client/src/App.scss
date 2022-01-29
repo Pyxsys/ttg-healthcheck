@@ -620,9 +620,6 @@ body {
 
   // Cell
   th {
-    padding-top: $table-cell-padding;
-    padding-bottom: $table-cell-padding;
-    padding: $table-cell-padding;
     border-bottom: $table-border-width*2 solid $gray-800;
     border-right: $table-border-width solid darken($table-border-color, 5%);
   }
