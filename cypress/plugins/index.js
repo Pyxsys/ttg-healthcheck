@@ -26,15 +26,13 @@ const { lighthouse, pa11y, prepareAudit } = require("cypress-audit");
 module.exports = (on, config) => {
   require('@cypress/code-coverage/task')(on, config)
 
-  on("before:browser:launch", (browser = {}, launchOptions) => {
+  on("before:browser:launch", (browser, launchOptions) => {
     prepareAudit(launchOptions)
   })
 
   on("task", {
-    lighthouse: lighthouse((lighthouseReport) => {
-    }),
-    pa11y: pa11y((pa11yReport) => {
-    })
+    lighthouse: lighthouse((lighthouseReport)),
+    pa11y: pa11y((pa11yReport))
   })
 
   // add other tasks to be registered here
