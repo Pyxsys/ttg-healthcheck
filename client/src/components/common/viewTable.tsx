@@ -68,6 +68,19 @@ const ViewTable = (props: ViewTableInputs<any>) => {
     }
   };
 
+  const orderByIcon = (orderValue: string): JSX.Element => {
+    if (orderBy !== orderValue) {
+      return <div className="d-flex">
+        <span className='dropdown'><i className='caret'></i></span>
+        <span className='dropup'><i className='caret'></i></span>
+      </div>;
+    }
+    if (orderByAsc) {
+      return <span className='dropup px-1'><i className='caret'></i></span>;
+    }
+    return <span className='dropdown px-1'><i className='caret'></i></span>;
+  };
+
   return (
     <table className="cerebellum-table table-striped text-white overflow-auto w-100 m-1">
       <thead>
@@ -77,18 +90,7 @@ const ViewTable = (props: ViewTableInputs<any>) => {
               <div className='d-flex align-items-center'>
                 <span>{column.name}</span>
                 <div className='ps-2'>
-                  {orderBy === column.key ?
-                    <>{orderByAsc ?
-                        <span className='dropup px-1'><i className='caret'></i></span> :
-                        <span className='dropdown px-1'><i className='caret'></i></span>}
-                    </> :
-                    <>
-                      <div className="d-flex">
-                        <span className='dropdown'><i className='caret'></i></span>
-                        <span className='dropup'><i className='caret'></i></span>
-                      </div>
-                    </>
-                  }
+                  {orderByIcon(column.key)}
                 </div>
                 {column.filter ?
                   <label className='ps-2 user-select-none'>
