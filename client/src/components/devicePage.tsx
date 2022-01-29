@@ -175,20 +175,8 @@ const DevicePage = () => {
               initialOrderBy={initialOrderBy}
             />
           </div>
-
-          <div className='d-flex'>
-            <input type='checkbox' className='btn btn-primary' onClick={(e) => {
-              setPage(1);
-              setTotalPages((e.target as any).checked ? 10 : Math.ceil(deviceTableData.length / pageSize));
-            }} />
-            <label className='text-white'>Toggle To Test Pagination</label>
-
-
-            <div className="d-flex py-2 ms-auto">
-              <Pagination page={page} totalPages={totalPages} onPageChanged={(page) => setPage(page)} />
-            </div>
-
-
+          <div className="d-flex py-2 ms-auto">
+            <Pagination page={page} totalPages={totalPages} onPageChanged={(page) => setPage(page)} />
           </div>
         </div>
       </div>
