@@ -212,14 +212,8 @@ class SysReport:
             command = "sudo iw dev wlan0 scan"
             pattern = "^\s+signal:\s+-*[0-9]+"
 
-
-        print("windows ", SysReport.is_windows())
-        print("linux ", SysReport.is_linux())
-        print(command)
-        print(pattern)
         extract=os.popen(command)
         str_buffer=re.findall(pattern, extract.read(), re.MULTILINE)
-        print(str_buffer)
         extract.close()
         str_as_num = re.findall(r"[-+]?(?:\d*\.\d+|\d+)", str_buffer[0])
 
