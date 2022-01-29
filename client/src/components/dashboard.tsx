@@ -9,6 +9,7 @@ import '../App.scss';
 // Custom
 import Navbar from './Navbar';
 import CpuUsageWidget from './device-detail-widgets/cpuUsageWidget';
+import MemoryUsageWidget from './device-detail-widgets/memoryUsageWidget';
 import {DeviceLog} from '../types/queries';
 import {useModalService} from '../context/modal.context';
 import AddWidgetModal from './dashboard-widgets/addWidgetModal';
@@ -119,9 +120,9 @@ const DashboardPage = () => {
               )}
               {widget.widgetType === 'Memory' ? (
                 <div>
-                  <CpuUsageWidget
+                  <MemoryUsageWidget
                     deviceDynamic={{} as DeviceLog}
-                  ></CpuUsageWidget>
+                  ></MemoryUsageWidget>
                 </div>
               ) : (
                 <></>

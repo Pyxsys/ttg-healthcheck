@@ -57,10 +57,7 @@ const Navbar = () => {
     <>
       <div className="d-flex nav-wrapper">
         <div ref={ref} className="nav-hamburger">
-          <Hamburger
-            toggled={isOpen}
-            toggle={setOpen}
-          />
+          <Hamburger toggled={isOpen} toggle={setOpen} />
         </div>
       </div>
       {isOpen ? (
@@ -68,7 +65,11 @@ const Navbar = () => {
           {SideNavData.map((item, index) => {
             return (
               <>
-                <div key={index} className={item.cName} onClick={() => setOpen(false)}>
+                <div
+                  key={index}
+                  className={item.cName}
+                  onClick={() => setOpen(false)}
+                >
                   <Link
                     to={item.path}
                     onClick={
@@ -86,9 +87,7 @@ const Navbar = () => {
       ) : (
         <div className="side-nav"></div>
       )}
-      {isOpen && (
-        <div className="side-nav-screen-background"></div>
-      )}
+      {isOpen && <div className="side-nav-screen-background"></div>}
     </>
   );
 };
