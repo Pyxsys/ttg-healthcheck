@@ -11,7 +11,7 @@ export const loginAndNavigate = (endpoint) => {
             runLogin()
             cy.get("div[class=hamburger-react]").click();
         });
-        cy.visit(endpoint, {
+        return cy.visit(endpoint, {
             onBeforeLoad: win => {
               win.performance.mark("start-loading");
             }
