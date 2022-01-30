@@ -11,7 +11,7 @@ const WifiStaticSchema = new mongoose.Schema({
 const WifiDynamicSchema = new mongoose.Schema({
   sendSpeed: Number,
   receiveSpeed: Number,
-  signalStrength: String,
+  signalStrength: Number,
 })
 
 module.exports = {
