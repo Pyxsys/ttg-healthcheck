@@ -3,6 +3,7 @@ Cypress.env();
 import runLogin from './common/runLogin'
 import checkPageLoadTime from './common/checkPageLoadTime'
 import {lighthouseThreshold, lighthouseConfig} from './common/lighthouseThresholds'
+import { loginAndNavigate } from './common/loginAndNavigate';
   
 
 describe("1. LightHouse", () => {
@@ -25,23 +26,7 @@ describe("1. LightHouse", () => {
 // Check to ensure that the various components on the device page are properly loaded.
 describe("2 Check to ensure that the various components on the device detail page are properly loaded.", () => {
     it("2.1 Checks to ensure that the devices detail page loads in under 4000 milliseconds.", () => {
-      // Go to login page
-      cy.visit("/", {
-        onBeforeLoad: win => {
-          win.performance.mark("start-loading");
-        }
-      })
-        .its("performance")
-        .then(performance => {
-            runLogin()
-            cy.get("div[class=hamburger-react]").click();
-        });
-  
-      cy.visit("/devices", {
-        onBeforeLoad: win => {
-          win.performance.mark("start-loading");
-        }
-      })
+      loginAndNavigate("/devices")
         .its("performance")
         .then(performance => {
           cy.get(
