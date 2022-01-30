@@ -3,5 +3,19 @@
   "env": {
     "test_password": "test",
     "admin_password": "admin"
+  },
+  "lighthouseThreshold" : {
+    "performance": 60,
+    "accessibility": 90,
+    "best-practices": 85,
+    "seo": 85, 
+    "pwa": 50
+  },
+  "lighthouseConfig" : {
+    "formFactor" : "desktop",
+    "screenEmulation": {
+      "disabled" : true,
+      "mobile" : false
+    }
   }
 }

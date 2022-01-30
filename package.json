@@ -5,6 +5,7 @@
     "babel-plugin-istanbul": "^6.1.1",
     "concurrently": "^6.2.2",
     "cypress": "^9.0.0",
+    "cypress-audit": "^1.1.0",
     "husky": "^4.3.8",
     "istanbul-lib-coverage": "^3.2.0",
     "lint-staged": "^8.2.1",
@@ -34,9 +35,9 @@
     "install-all-deps": "concurrently \"npm install\" \"npm run server-dependencies\" \"npm run client-dependencies\"",
     "all-lint:check": "concurrently \"npm run lint --prefix server\" \"npm run lint --prefix client\"",
     "all-lint:fix": "concurrently \"npm run lint:fix --prefix server\" \"npm run lint:fix --prefix client\"",
-    "all-test": "concurrently \"npm run test --prefix server\" \"cd client/src && npx cypress run\" \"npx cypress run\"",
-    "all-test:coverage": "concurrently \"npm run test:coverage --prefix server\"  \"cd client/src && npx cypress run && npx nyc report\" \"npx cypress run && npx nyc report\" ",
-    "all-test:staged":  "concurrently \"npm run test:coverage --prefix server\"  \"cd client/src && npx cypress run\" \"npx cypress run\" "
+    "all-test": "concurrently \"npm run test --prefix server\" \"cd client && npx cypress run\" \"npx cypress run\"",
+    "all-test:coverage": "concurrently \"npm run test:coverage --prefix server\"  \"cd client && npx cypress run && npx nyc report\" \"npx cypress run && npx nyc report\" ",
+    "all-test:staged":  "concurrently \"npm run test:coverage --prefix server\"  \"cd client && npx cypress run\" \"npx cypress run\" "
   },
   "dependencies": {
     "react-burger-menu": "^3.0.6"
