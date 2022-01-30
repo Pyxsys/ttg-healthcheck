@@ -136,7 +136,7 @@ const processWifiLogInfo = (payload) => {
   //compute values
   const sendSpeed = network[0]
   const receiveSpeed = network[1]
-  const signalStrength = 0
+  const signalStrength = network[2]
 
   return {
     sendSpeed,

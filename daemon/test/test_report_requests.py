@@ -27,8 +27,9 @@ class TestRunner(unittest.TestCase):
     def testRunnerClassInitialization(self):
         self.assertIsInstance(self.test_runner, Runner, msg=None)
 
-    def testRunnerGeneratingReport(self):
-        expected_sections={'deviceId', 'processes', 'memory', 'disk', 'timestamp'}
+    @patch('daemon.src.system_report.SysReport.fetch_network_strength', return_value='Medium')
+    def testRunnerGeneratingReport(self, m1):
+        expected_sections={'deviceId', 'processes', 'memory', 'network', 'disk', 'timestamp'}
         missing_sections=[]
 
         self.test_runner.gen_report()
