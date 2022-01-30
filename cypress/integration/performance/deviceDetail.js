@@ -3,7 +3,7 @@ Cypress.env();
 import runLogin from './common/runLogin'
 import checkPageLoadTime from './common/checkPageLoadTime'
 import {lighthouseThreshold, lighthouseConfig} from './common/lighthouseThresholds'
-import { loginAndNavigate } from './common/loginAndNavigate';
+import {loginAndNavigate} from './common/loginAndNavigate';
   
 
 describe("1. LightHouse", () => {
