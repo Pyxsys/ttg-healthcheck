@@ -1,4 +1,6 @@
 
+import {runLogin} from './common/runLogin';
+
 export const loginAndNavigate = (endpoint) => {
       // Go to login page
       cy.visit("/", {
