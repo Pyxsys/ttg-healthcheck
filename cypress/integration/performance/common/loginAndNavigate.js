@@ -1,5 +1,4 @@
-
-import {runLogin} from './common/runLogin';
+import { runLogin } from "./runLogin";
 
 export const loginAndNavigate = (endpoint) => {
       // Go to login page
