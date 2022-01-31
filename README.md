@@ -55,7 +55,7 @@ To run these tests, you'll need to use Cypress. It is already a part of our dev 
 
 ### Performance and Load Tests
 
-To run these tests, you'll again need to use Cypress and Jmeter. It is already a part of our dev dependencies and only requires `npm install` in the root folder. You will also need to have the Front-End and Back-End running locally. That can be done by running `npm run dev` in the root folder. All the performance tests are found in `cypress -> integration`. Load Tests can be found in loadTests folder.
+To run these tests, you'll again need to use Cypress and Jmeter. It is already a part of our dev dependencies and only requires `npm install` in the root folder. You will also need to have the Front-End and Back-End running locally. That can be done by running `npm run dev` in the root folder. All the performance tests are found in `cypress -> integration -> end-to-end -> performance` . Load Tests can be found in loadTests folder.
 
 * In the command line, run `npx cypress open` to get the gui where you can navigate to the exact tests you want. The tests can also be run via command line only by entering `npx cypress run` and all the tests will be run in order.
 
