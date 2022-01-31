@@ -19,7 +19,11 @@ const useDebounce = (initialValue: string, delay: number) => {
     const debounceId = setTimeout(() => setDebounceValue(actualValue), delay);
     return () => clearTimeout(debounceId);
   }, [actualValue, delay]);
-  return [actualValue, debounceValue, setActualValue] as [string, string, Dispatch<SetStateAction<string>>];
+  return [actualValue, debounceValue, setActualValue] as [
+    string,
+    string,
+    Dispatch<SetStateAction<string>>
+  ];
 };
 
 const ViewTable = (props: ViewTableInputs<any>) => {
@@ -32,14 +36,22 @@ const ViewTable = (props: ViewTableInputs<any>) => {
     setFilterKey(props.columns.find((c) => c.filter)?.key || '');
   }, []);
 
-  const getAttribute = (object: any, attribute: string): number | string | undefined => {
+  const getAttribute = (
+      object: any,
+      attribute: string,
+  ): number | string | undefined => {
     const attributes = attribute.split('.');
-    return attributes.reduce((prev, attr) => prev ? prev[attr] : undefined, object);
+    return attributes.reduce(
+        (prev, attr) => (prev ? prev[attr] : undefined),
+        object,
+    );
   };
 
   const filterTable = (device: any): boolean => {
     const value = getAttribute(device, filterKey) || '';
-    return String(value).toLocaleLowerCase().includes(delayedFilter.toLocaleLowerCase());
+    return String(value)
+        .toLocaleLowerCase()
+        .includes(delayedFilter.toLocaleLowerCase());
   };
 
   const sortTable = (device1: any, device2: any): number => {
@@ -70,64 +82,89 @@ const ViewTable = (props: ViewTableInputs<any>) => {
 
   const orderByIcon = (orderValue: string): JSX.Element => {
     if (orderBy !== orderValue) {
-      return <div className="d-flex">
-        <span className='dropdown'><i className='caret'></i></span>
-        <span className='dropup'><i className='caret'></i></span>
-      </div>;
+      return (
+        <div className="d-flex">
+          <span className="dropdown">
+            <i className="caret"></i>
+          </span>
+          <span className="dropup">
+            <i className="caret"></i>
+          </span>
+        </div>
+      );
     }
     if (orderByAsc) {
-      return <span className='dropup px-1'><i className='caret'></i></span>;
+      return (
+        <span className="dropup px-1">
+          <i className="caret"></i>
+        </span>
+      );
     }
-    return <span className='dropdown px-1'><i className='caret'></i></span>;
+    return (
+      <span className="dropdown px-1">
+        <i className="caret"></i>
+      </span>
+    );
   };
 
   return (
     <table className="cerebellum-table table-striped text-white overflow-auto w-100 m-1">
       <thead>
-        <tr className='sticky-header'>
-          {props.columns.map((column) =>
-            <th key={column.key} tabIndex={0} className='cursor-pointer' onClick={() => selectOrderBy(column.key)}>
-              <div className='d-flex align-items-center'>
+        <tr className="sticky-header">
+          {props.columns.map((column) => (
+            <th
+              key={column.key}
+              tabIndex={0}
+              className="cursor-pointer"
+              onClick={() => selectOrderBy(column.key)}
+            >
+              <div className="d-flex align-items-center">
                 <span>{column.name}</span>
-                <div className='ps-2'>
-                  {orderByIcon(column.key)}
-                </div>
-                {column.filter ?
-                  <label className='ps-2 user-select-none'>
-                    <input type="text" className="form-control" placeholder={`Filter by ${column.name}..."`} value={actualFilter}
-                      onClick={(e) => e.stopPropagation()} onChange={(e) => setFilter(e.target.value)} />
-                  </label> :
+                <div className="ps-2">{orderByIcon(column.key)}</div>
+                {column.filter ? (
+                  <label className="ps-2 user-select-none">
+                    <input
+                      type="text"
+                      className="form-control"
+                      placeholder={`Filter by ${column.name}..."`}
+                      value={actualFilter}
+                      onClick={(e) => e.stopPropagation()}
+                      onChange={(e) => setFilter(e.target.value)}
+                    />
+                  </label>
+                ) : (
                   <></>
-                }
+                )}
               </div>
-            </th>,
-          )}
+            </th>
+          ))}
         </tr>
       </thead>
-      <tbody className='overflow-auto'>
+      <tbody className="overflow-auto">
         {props.tableData
             .filter(filterTable)
             .sort(sortTable)
-            .slice(props.page && props.pageSize ?
-                (props.page-1)*props.pageSize :
-                0,
-              props.page && props.pageSize ?
-                (props.page-1)*props.pageSize+props.pageSize :
-                undefined,
+            .slice(
+            props.page && props.pageSize ?
+              (props.page - 1) * props.pageSize :
+              0,
+            props.page && props.pageSize ?
+              (props.page - 1) * props.pageSize + props.pageSize :
+              undefined,
             )
-            .map((data, index) =>
+            .map((data, index) => (
               <tr key={`view_table_${index}`}>
-                {props.columns.map((column) =>
+                {props.columns.map((column) => (
                   <td key={column.key}>
-                    {column.override ?
-                      column.override(getAttribute(data, column.key), data) :
-                      <span>{getAttribute(data, column.key)}</span>
-                    }
-                  </td>,
-                )}
-              </tr>,
-            )
-        }
+                    {column.override ? (
+                    column.override(getAttribute(data, column.key), data)
+                  ) : (
+                    <span>{getAttribute(data, column.key)}</span>
+                  )}
+                  </td>
+                ))}
+              </tr>
+            ))}
       </tbody>
     </table>
   );

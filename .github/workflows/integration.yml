@@ -81,9 +81,9 @@ jobs:
         coverage run --branch -m unittest -v
         coverage report
     
-  E2E_Test:
+  UI_Tests:
     # The type of runner that the job will run on
-    name: E2E_Test
+    name: UI_Tests
     runs-on: ubuntu-latest
 
     strategy:
@@ -118,38 +118,4 @@ jobs:
     - name: Code Coverage
       run: npx nyc report
       
-  Client_Test:
-    # The type of runner that the job will run on
-    name: Client_Test
-    runs-on: ubuntu-latest
-
-    strategy:
-      matrix:
-        node-version: [14.x] # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
-
-    steps:
-    - name: Checkout repository
-      uses: actions/checkout@v2
-
-    - name: Set up Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v2
-      with:
-        node-version: ${{ matrix.node-version }}
-        cache: 'npm'
-
-    - name: Install Dependencies
-      run: |
-        npm ci --prefix client
-            
-    - name: Cypress Run
-      uses: cypress-io/github-action@v2
-      with:
-        project: ./client
-        start: npm start --prefix client
-        wait-on: http://localhost:3000
-        
-    - name: Code Coverage
-      run: |
-        cd client
-        npx nyc report 
   

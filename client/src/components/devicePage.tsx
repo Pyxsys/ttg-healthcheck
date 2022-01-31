@@ -13,7 +13,7 @@ import {ColumnDetail, TableDevice} from '../types/tables';
 import Pagination from './common/pagination';
 import ViewTable from './common/viewTable';
 
-type CellValue = string | number | undefined;
+type CellValue = string | number | undefined
 
 const DevicePage = () => {
   // Readonly Values
@@ -32,7 +32,10 @@ const DevicePage = () => {
       setDeviceTableData((prevState) =>
         prevState.map((device) => ({
           static: device.static,
-          dynamic: device.static.deviceId === newDevice.deviceId ? newDevice : device.dynamic,
+          dynamic:
+            device.static.deviceId === newDevice.deviceId ?
+              newDevice :
+              device.dynamic,
         })),
       );
     });
@@ -84,7 +87,7 @@ const DevicePage = () => {
     };
   }, []);
 
-  const PieWheelCell = (cellValue: CellValue) =>
+  const PieWheelCell = (cellValue: CellValue) => (
     <div className="d-flex justify-content-end align-items-center">
       <div className="text-truncate devices-font">
         {Number(cellValue).toFixed(2)}
@@ -93,55 +96,64 @@ const DevicePage = () => {
       <div className="ps-2 pie-wheel-size">
         <PieWheel percentage={Number(cellValue)} text={false} />
       </div>
-    </div>;
+    </div>
+  );
 
-  const column: ColumnDetail[] = [{
-    key: 'static.deviceId',
-    name: 'UUID',
-    filter: true,
-    override: (cellValue: CellValue, device: TableDevice) =>
-      <div className="devices-uuid-text devices-font mx-auto h-100 py-3">
-        <Link className="text-white"
-          to={{pathname: '/device', search: `?Id=${device.static.deviceId}`}}
-        >
-          {cellValue}
-        </Link>
-      </div>,
-  },
-  {
-    key: 'static.name',
-    name: 'Name',
-  },
-  {
-    key: 'dynamic.cpu.aggregatedPercentage',
-    name: 'CPU',
-    override: PieWheelCell,
-  },
-  {
-    key: 'dynamic.memory.aggregatedPercentage',
-    name: 'Memory',
-    override: PieWheelCell,
-  },
-  {
-    key: 'dynamic.disk.partitions.0.percent',
-    name: 'Disk',
-    override: PieWheelCell,
-  },
-  {
-    key: 'dynamic.wifi.signalStrength',
-    name: 'Network',
-    override: (cellValue: CellValue) =>
-      <div className="d-flex flex-column">
-        <div className="d-flex justify-content-end align-items-center">
-          <div className="text-truncate devices-font">
-            {signalText(Number(cellValue))}
-          </div>
-          <div className="ps-2 pie-wheel-size">
-            <SignalStrength level={Number(cellValue)} showText={false} />
+  const column: ColumnDetail[] = [
+    {
+      key: 'static.deviceId',
+      name: 'UUID',
+      filter: true,
+      override: (cellValue: CellValue, device: TableDevice) => (
+        <div className="devices-uuid-text devices-font mx-auto h-100 py-3">
+          <Link
+            className="text-white"
+            to={{
+              pathname: '/device',
+              search: `?Id=${device.static.deviceId}`,
+            }}
+          >
+            {cellValue}
+          </Link>
+        </div>
+      ),
+    },
+    {
+      key: 'static.name',
+      name: 'Name',
+    },
+    {
+      key: 'dynamic.cpu.aggregatedPercentage',
+      name: 'CPU',
+      override: PieWheelCell,
+    },
+    {
+      key: 'dynamic.memory.aggregatedPercentage',
+      name: 'Memory',
+      override: PieWheelCell,
+    },
+    {
+      key: 'dynamic.disk.partitions.0.percent',
+      name: 'Disk',
+      override: PieWheelCell,
+    },
+    {
+      key: 'dynamic.wifi.signalStrength',
+      name: 'Network',
+      override: (cellValue: CellValue) => (
+        <div className="d-flex flex-column">
+          <div className="d-flex justify-content-end align-items-center">
+            <div className="text-truncate devices-font">
+              {signalText(Number(cellValue))}
+            </div>
+            <div className="ps-2 pie-wheel-size">
+              <SignalStrength level={Number(cellValue)} showText={false} />
+            </div>
           </div>
         </div>
-      </div>,
-  }];
+      ),
+    },
+  ];
 
   return (
     <div className="h-100 d-flex flex-column">
@@ -150,8 +162,8 @@ const DevicePage = () => {
       </div>
 
       <div className="flex-grow-1 d-flex flex-column align-items-center overflow-auto devices-content">
-        <div className='flex-grow-1 d-flex flex-column overflow-auto container'>
-          <div className='flex-grow-1 overflow-auto table-container mt-5 p-1'>
+        <div className="flex-grow-1 d-flex flex-column overflow-auto container">
+          <div className="flex-grow-1 overflow-auto table-container mt-5 p-1">
             <ViewTable
               tableData={deviceTableData}
               page={page}
@@ -161,7 +173,11 @@ const DevicePage = () => {
             />
           </div>
           <div className="d-flex py-2 ms-auto">
-            <Pagination page={page} totalPages={totalPages} onPageChanged={(newPage) => setPage(newPage)} />
+            <Pagination
+              page={page}
+              totalPages={totalPages}
+              onPageChanged={(newPage) => setPage(newPage)}
+            />
           </div>
         </div>
       </div>
