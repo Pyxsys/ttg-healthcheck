@@ -11,11 +11,6 @@ const invalidUser = {
   email: "invalidemail@gmail.com"
 };
 
-const testCredentials = {
-  passwordInput: 'input[name="password"]',
-  passwordValue: 'Password',
-};
-
 const validatePlaceholder = (input, term) => {
   cy.get(`${input}`)
     .invoke("attr", "placeholder")
@@ -41,8 +36,8 @@ describe("1. See if certain headers and labels and buttons are visible.", () => 
     validatePlaceholder(emailInput, emailValue);
   });
   it("1.3 Check to see if the placeholder 'Password' is visible in the application", () => {
-    const passwordInput = testCredentials.passwordInput;
-    const passwordValue = testCredentials.passwordValue;
+    const passwordInput = Cypress.env("passwordInput1");
+    const passwordValue = Cypress.env("passwordValue");
     // Assert that the following writing can be seen by the user.
     validatePlaceholder(passwordInput, passwordValue);
   });

@@ -1,11 +1,5 @@
+/* eslint-disable jest/expect-expect */
 Cypress.env();
-
-const testCredentials = {
-  passwordInput: 'input[name="password"]',
-  passwordValue: 'Password',
-  passwordInpute2: 'input[name="password2"]',
-  passwordValue: 'Confirm Password',
-};
 
 const validatePlaceholder = (input, term) => {
   cy.get(`${input}`)
@@ -33,14 +27,14 @@ describe("1. See if certain headers and labels and buttons are visible.", () => 
     validatePlaceholder(emailInput, emailValue);
   });
   it("1.3 Check to see if the placeholder 'Choose Password' is visible in the application", () => {
-    const passwordInput = testCredentials.passwordInput;
-    const passwordValue = testCredentials.passwordValue;
+    const passwordInput = Cypress.env("passwordInput");
+    const passwordValue =  Cypress.env("passwordValue");
     // Assert that the following writing can be seen by the user.
     validatePlaceholder(passwordInput, passwordValue);
   });
   it("1.4 Check to see if the placeholder 'Confirm Password' is visible in the application", () => {
-    const password2Input = testCredentials.passwordInput2;
-    const password2Value = testCredentials.passwordValue2;
+    const password2Input = Cypress.env("passwordInput2");
+    const password2Value = Cypress.env("passwordValueConfirm");
     // Assert that the following writing can be seen by the user.
     validatePlaceholder(password2Input, password2Value);
   });
