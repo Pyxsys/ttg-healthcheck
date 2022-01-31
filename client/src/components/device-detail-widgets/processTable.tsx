@@ -22,12 +22,8 @@ const ProcessTable = (props: ProcessTableInputs) => {
   ];
 
   return (
-    <div className='flex-grow-1 overflow-auto p-2'>
-      <ViewTable
-        tableData={processes}
-        columns={column}
-        initialOrderBy='pid'
-      />
+    <div className="flex-grow-1 overflow-auto p-2">
+      <ViewTable tableData={processes} columns={column} initialOrderBy="pid" />
     </div>
   );
 };

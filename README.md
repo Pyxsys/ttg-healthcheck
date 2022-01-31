@@ -48,9 +48,9 @@ To run these tests, you'll need a MongoDB database on your local machine.
 * From your command line go into the server folder of the project and run `npm run test` or `npm run test:coverage` if you wish to see the coverage.
 
 ### Client Unit Tests
-To run these tests, you'll need to use Cypress. It is already a part of our dev dependencies and only requires `npm install` in the client folder. You will also need to have the Front-End running locally. That can be done by running `npm start` in the client folder.All the tests are found in `cypress -> integration`.
+To run these tests, you'll need to use Cypress. It is already a part of our dev dependencies and only requires `npm install` in in the root directory. You will also need to have the application running locally. That can be done by running `npm run dev` in the root of the project. All the tests are found in `cypress -> integration -> front-end`.
 
-* From your command line go into `client -> src` and run `npx cypress open` if you want to execute the tests manually or run `npx cypress run` if you desire to execute the tests headlessly in your terminal instead..
+* In the root of the project, run `npx cypress open` if you want to execute the tests manually or run `npx cypress run` if you desire to execute the tests headlessly in your terminal instead.
 * From there, a Cypress GUI will open up. You can either run all the tests that are in the test folder by click run all or run individual test file by clicking on the file itself.
 
 ### Performance and Load Tests
@@ -66,7 +66,7 @@ To run these tests, you'll again need to use Cypress and Jmeter. It is already a
 * From you command line, go to the daemon folder of the project and run `coverage run --branch -m unittest -v`
 
 ### End-To-End Tests
-To run these tests, you'll need to use Cypress. It is already a part of our dev dependencies and only requires `npm install` in the client folder. You will also need to have the application running locally. That can be done by running `npm run dev` in the root of the project. All the tests are found in `cypress -> integration`.
+To run these tests, you'll need to use Cypress. It is already a part of our dev dependencies and only requires `npm install` in the root directory. You will also need to have the application running locally. That can be done by running `npm run dev` in the root of the project. All the tests are found in `cypress -> integration -> end-to-end`.
 
 * In the root of the project, run `npx cypress open` if you want to execute the tests manually or run `npx cypress run` if you desire to execute the tests headlessly in your terminal instead.
 * From there, a Cypress GUI will open up. You can either run all the tests that are in the test folder by click run all or run individual test file by clicking on the file itself.
