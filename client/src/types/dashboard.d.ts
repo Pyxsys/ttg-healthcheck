@@ -16,5 +16,5 @@ export interface Dashboard {
 export interface IDashboardQuery extends IQuery {
   userId: string
   'widgets.widgetType'?: string
-  'widgets.options'?: string
+  'widgets.options'?: WidgetOptions
 }
