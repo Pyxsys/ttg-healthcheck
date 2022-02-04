@@ -37,6 +37,7 @@ const DashboardPage = () => {
     height: '100%',
   };
   const queryDeviceData = async () => {
+    console.log('hello');
     if (dashboard.widgets && dashboard.widgets.length > 0) {
       const deviceIds = dashboard?.widgets?.map(
           (widget) => widget.options.deviceId,
