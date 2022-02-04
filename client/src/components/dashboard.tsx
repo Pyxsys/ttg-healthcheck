@@ -54,6 +54,9 @@ const DashboardPage = () => {
   };
   useEffect(() => {
     queryDeviceData();
+  }, [dashboard]);
+  useEffect(() => {
+    viewDash();
   }, []);
   const saveDash = () => {
     saveDashboard(dashboard)
