@@ -260,8 +260,8 @@ const DashboardPage = () => {
                 <div className="d-flex flex-column">
                   <span className="border-bottom fw-bold pt-2">Widgets</span>
                   <div className="d-flex flex-column pt-2">
-                    {dashboard.widgets.map((w) => (
-                      <div key={w.widgetType} className="d-flex">
+                    {dashboard.widgets.map((w, index) => (
+                      <div key={`${w.widgetType}_${index}`} className="d-flex">
                         <div className="d-flex flex-column">
                           <span className="border-bottom fw-bold">
                             Widget Type
