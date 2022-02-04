@@ -1,5 +1,6 @@
 // 3rd Party
-import React, {useState} from 'react';
+import axios from 'axios';
+import React, {useEffect, useState} from 'react';
 import {useAuth} from '../context/authContext';
 import {queryDashboard, saveDashboard} from '../services/dashboard.service';
 import {notificationService} from '../services/notification.service';
@@ -11,13 +12,14 @@ import Navbar from './Navbar';
 // import {DisplayWidget} from '../types/displayWidget';
 import CpuUsageWidget from './device-detail-widgets/cpuUsageWidget';
 import MemoryUsageWidget from './device-detail-widgets/memoryUsageWidget';
-import {DeviceLog} from '../types/queries';
+import {DeviceLog, IResponse} from '../types/queries';
 import {useModalService} from '../context/modal.context';
 import AddWidgetModal from './dashboard-widgets/addWidgetModal';
 import {FaPlus} from 'react-icons/fa';
 // import {Interface} from 'readline';
 
 const DashboardPage = () => {
+  const [deviceData, setDeviceData] = useState({} as DeviceLog[]);
   const [widgetType, setWidgetType] = useState('');
   const [deviceName, setDeviceName] = useState('');
   const modalService = useModalService();
@@ -34,7 +36,21 @@ const DashboardPage = () => {
     width: '100%',
     height: '100%',
   };
+  const queryDeviceData = async () => {
+    if (dashboard.widgets && dashboard.widgets.length > 0) {
+      const deviceIds = dashboard?.widgets?.map((widget) => widget.options);
+      const latestDevicesResponse = await axios.get<IResponse<DeviceLog>>(
+          'api/device-logs/latest',
+          {params: {Ids: deviceIds?.join(',')}},
+      );
+      const latestDevices = latestDevicesResponse.data.Results;
 
+      setDeviceData(latestDevices);
+    }
+  };
+  useEffect(() => {
+    queryDeviceData();
+  });
   /* -------------------------
    * For Testing Purposes Only
    * -------------------------
@@ -137,7 +153,7 @@ const DashboardPage = () => {
               {widget.widgetType === 'CPU' ? (
                 <div>
                   <CpuUsageWidget
-                    deviceDynamic={{} as DeviceLog}
+                    deviceDynamic={deviceData[index] as DeviceLog}
                   ></CpuUsageWidget>
                 </div>
               ) : (
@@ -146,7 +162,7 @@ const DashboardPage = () => {
               {widget.widgetType === 'Memory' ? (
                 <div>
                   <MemoryUsageWidget
-                    deviceDynamic={{} as DeviceLog}
+                    deviceDynamic={deviceData[index] as DeviceLog}
                   ></MemoryUsageWidget>
                 </div>
               ) : (
