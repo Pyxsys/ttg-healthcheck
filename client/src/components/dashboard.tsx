@@ -61,11 +61,17 @@ const DashboardPage = () => {
       widgets: [
         {
           widgetType: 'CPU',
-          options: '{deviceID: test2}',
+          options: {
+            deviceId: 'TEST3C2D-C033-7B87-4B31-244BFX931D14',
+            deviceName: 'test1',
+          },
         },
         {
           widgetType: 'Memory',
-          options: '{deviceID: test1, size: 12}',
+          options: {
+            deviceId: 'test2',
+            deviceName: 'test1',
+          },
         },
       ],
     };
@@ -122,7 +128,10 @@ const DashboardPage = () => {
       console.log(wids);
       wids.push({
         widgetType: widgetType,
-        options: deviceName,
+        options: {
+          deviceId: deviceName,
+          deviceName: deviceName,
+        },
       } as DashboardWidget);
       setDashboard({
         ...dashboard,
@@ -134,7 +143,10 @@ const DashboardPage = () => {
         widgets: [
           {
             widgetType: widgetType,
-            options: deviceName,
+            options: {
+              deviceId: deviceName,
+              deviceName: deviceName,
+            },
           },
         ],
       });
