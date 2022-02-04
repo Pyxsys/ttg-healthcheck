@@ -1,8 +1,13 @@
 const mongoose = require('mongoose')
 
+const WidgetOptionsSchema = new mongoose.Schema({
+  deviceId: String,
+  deviceName: String,
+})
+
 const DashboardWidgetSchema = new mongoose.Schema({
   widgetType: String,
-  options: String,
+  options: WidgetOptionsSchema,
 })
 
 const DashboardSchema = new mongoose.Schema({

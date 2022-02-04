@@ -81,9 +81,10 @@ router.post('/login', async (req, res) => {
 // verify authentication
 router.get('/authenticate', auth, async (req, res) => {
   const user = await User.findOne({ _id: req.userId })
-  return res
-    .status(200)
-    .json({ isAuthenticated: true, user: { _id: user._id, name: user.name, role: user.role } })
+  return res.status(200).json({
+    isAuthenticated: true,
+    user: { _id: user._id, name: user.name, role: user.role },
+  })
 })
 
 // log out user
