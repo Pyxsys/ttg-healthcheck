@@ -55,6 +55,18 @@ const DashboardPage = () => {
   useEffect(() => {
     queryDeviceData();
   });
+  const saveDash = () => {
+    saveDashboard(dashboard)
+        .catch((error) => {
+          notificationService.error(`Error: ${error.response.data}`);
+          return null;
+        })
+        .then((a) => {
+          if (a) {
+            notificationService.success(`Success: ${a}`);
+          }
+        });
+  };
   /* -------------------------
    * For Testing Purposes Only
    * -------------------------
@@ -225,6 +237,9 @@ const DashboardPage = () => {
             <button className="btn btn-success" onClick={() => saveValidDash()}>
               Save A Valid Dash
             </button>
+            <button className="btn btn-success" onClick={() => saveDash()}>
+              Save A New Dash
+            </button>
             <button
               className="btn btn-danger ms-2"
               onClick={() => saveInvalidDash()}
@@ -257,7 +272,7 @@ const DashboardPage = () => {
                           <span className="border-bottom fw-bold">
                             Widget Options
                           </span>
-                          <span>{w.options}</span>
+                          <span>{JSON.stringify(w.options)}</span>
                         </div>
                       </div>
                     ))}
