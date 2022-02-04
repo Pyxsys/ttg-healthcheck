@@ -38,7 +38,10 @@ const DashboardPage = () => {
   };
   const queryDeviceData = async () => {
     if (dashboard.widgets && dashboard.widgets.length > 0) {
-      const deviceIds = dashboard?.widgets?.map((widget) => widget.options);
+      const deviceIds = dashboard?.widgets?.map(
+          (widget) => widget.options.deviceId,
+      );
+      console.log(deviceIds);
       const latestDevicesResponse = await axios.get<IResponse<DeviceLog>>(
           'api/device-logs/latest',
           {params: {Ids: deviceIds?.join(',')}},
