@@ -19,7 +19,7 @@ import {FaPlus} from 'react-icons/fa';
 // import {Interface} from 'readline';
 
 const DashboardPage = () => {
-  const [deviceData, setDeviceData] = useState({} as DeviceLog[]);
+  const [deviceData, setDeviceData] = useState([] as DeviceLog[]);
   const [widgetType, setWidgetType] = useState('');
   const [deviceName, setDeviceName] = useState('');
   const modalService = useModalService();
@@ -181,7 +181,7 @@ const DashboardPage = () => {
               {widget.widgetType === 'CPU' ? (
                 <div>
                   <CpuUsageWidget
-                    deviceDynamic={deviceData[index] as DeviceLog}
+                    deviceDynamic={deviceData.find((e) => e.deviceId == widget.options.deviceId) as DeviceLog}
                   ></CpuUsageWidget>
                 </div>
               ) : (
@@ -190,7 +190,7 @@ const DashboardPage = () => {
               {widget.widgetType === 'Memory' ? (
                 <div>
                   <MemoryUsageWidget
-                    deviceDynamic={deviceData[index] as DeviceLog}
+                    deviceDynamic={deviceData.find((e) => e.deviceId == widget.options.deviceId) as DeviceLog}
                   ></MemoryUsageWidget>
                 </div>
               ) : (
