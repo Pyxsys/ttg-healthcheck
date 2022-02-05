@@ -70,6 +70,12 @@ const DashboardPage = () => {
           }
         });
   };
+  const resetDash = () => {
+    setDashboard({
+      userId: user._id,
+      widgets: [] as DashboardWidget[],
+    });
+  };
   /* -------------------------
    * For Testing Purposes Only
    * -------------------------
@@ -184,7 +190,11 @@ const DashboardPage = () => {
               {widget.widgetType === 'CPU' ? (
                 <div>
                   <CpuUsageWidget
-                    deviceDynamic={deviceData.find((e) => e.deviceId == widget.options.deviceId) as DeviceLog}
+                    deviceDynamic={
+                      deviceData.find(
+                          (e) => e.deviceId == widget.options.deviceId,
+                      ) as DeviceLog
+                    }
                   ></CpuUsageWidget>
                 </div>
               ) : (
@@ -193,7 +203,11 @@ const DashboardPage = () => {
               {widget.widgetType === 'Memory' ? (
                 <div>
                   <MemoryUsageWidget
-                    deviceDynamic={deviceData.find((e) => e.deviceId == widget.options.deviceId) as DeviceLog}
+                    deviceDynamic={
+                      deviceData.find(
+                          (e) => e.deviceId == widget.options.deviceId,
+                      ) as DeviceLog
+                    }
                   ></MemoryUsageWidget>
                 </div>
               ) : (
@@ -248,6 +262,9 @@ const DashboardPage = () => {
               onClick={() => saveInvalidDash()}
             >
               Save An Invalid Dash
+            </button>
+            <button className="btn btn-danger ms-2" onClick={() => resetDash()}>
+              Reset Dashboard
             </button>
             <button className="btn btn-info ms-2" onClick={() => viewDash()}>
               View Saved Dash
