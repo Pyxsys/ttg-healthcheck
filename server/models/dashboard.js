@@ -11,7 +11,7 @@ const DashboardWidgetSchema = new mongoose.Schema({
 })
 
 const DashboardSchema = new mongoose.Schema({
-  userId: mongoose.SchemaTypes.ObjectId,
+  userId: String,
   widgets: [DashboardWidgetSchema],
 })
 
