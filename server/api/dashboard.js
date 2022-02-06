@@ -5,7 +5,7 @@ const auth = require('../middleware/auth.js')
 const { Dashboards, DashboardSchema } = require('../models/dashboard.js')
 const { parseQuery } = require('./common/filter')
 
-// get multiple devices with param options (limit, multiple attributes, orderBy, orderValue)
+// save a dashboard with a userId and widgets
 router.post('/', auth, async (req, res) => {
   const { userId, widgets } = req.body
 
@@ -33,7 +33,7 @@ router.post('/', auth, async (req, res) => {
   return res.status(200).send('Save Successful')
 })
 
-// get multiple devices with param options (limit, multiple attributes, orderBy, orderValue)
+// get multiple dashboards with param options (limit, multiple attributes, orderBy)
 router.get('/', auth, async (req, res) => {
   const [query, options] = parseQuery(Object(req.query), DashboardSchema)
 
