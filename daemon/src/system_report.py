@@ -93,7 +93,7 @@ class SysReport:
         process_buffer = list()
 
         #Initialize start time for process diagnostic scan
-        for proc in psutil.process_iter():
+        for proc in SysScrubber.fetch_all_processes():
             proc.cpu_percent()
             process_buffer.append(proc)
 
@@ -102,7 +102,7 @@ class SysReport:
         for proc in process_buffer:
             try:
                 process_info_dictionary = proc.as_dict(attrs=['name', 'pid', 'status'])
-                process_info_dictionary['cpu_percent']      = round(proc.cpu_percent() / psutil.cpu_count(), 7)
+                process_info_dictionary['cpu_percent']      = round(proc.cpu_percent() / SysScrubber.fetch_cpu_count(), 7)
                 process_info_dictionary['memory_percent']   = round(proc.memory_percent(), 7)
                 process_info_dictionary['rss'] = proc.memory_info()[0]
                 process_info_dictionary['vms'] = proc.memory_info()[1]
@@ -114,7 +114,7 @@ class SysReport:
         self.set_section("processes", process_list)
 
     def add_system_network_usage(self):
-        network_info = psutil.net_io_counters()
+        network_info = SysScrubber.fetch_net_io_counters()
         #in MB per second
         megabytes_sent = network_info[0]/(1024*1024)
         megabytes_recv = network_info[1]/(1024*1024)
@@ -149,7 +149,7 @@ class SysReport:
         self.set_section("memory_", memory_dictionary)
 
     def add_memory_usage_info(self):
-        tmp_dict = psutil.virtual_memory()._asdict()
+        tmp_dict = SysScrubber.fetch_virtual_memory()
         memory_dictionary = {key: tmp_dict[key] for key in tmp_dict.keys() & {'available', 'used', 'free', 'percent'}}
 
         self.set_section("memory", memory_dictionary)
@@ -167,11 +167,11 @@ class SysReport:
         self.set_section("disk", disk_usage)
 
     def add_startup_cpu_info(self):
-        cpu_info=dict()
-        cpu_info['baseSpeed'] = psutil.cpu_freq().max
+        cpu_info = dict()
+        cpu_info['baseSpeed'] = SysScrubber.fetch_cpu_freq()
         cpu_info['sockets'] = SysScrubber.fetch_cpu_sockets()
-        cpu_info['processors'] = psutil.cpu_count(logical=True)
-        cpu_info['cores'] = psutil.cpu_count(logical=False)
+        cpu_info['processors'] = SysScrubber.fetch_cpu_count(logical=True)
+        cpu_info['cores'] = SysScrubber.fetch_cpu_count(logical=False)
         cpu_info['cacheSizeL1'] = SysScrubber.fetch_cpu_l1_cache(cores=psutil.cpu_count(logical=False))
         cpu_info['cacheSizeL2'] = SysScrubber.fetch_cpu_l2_cache()
         cpu_info['cacheSizeL3'] = SysScrubber.fetch_cpu_l3_cache()
@@ -179,9 +179,9 @@ class SysReport:
         self.set_section("cpu_", cpu_info)
 
     def add_startup_network_info(self, adapter_name = None):
-        net_info=dict()
+        net_info = dict()
 
-        ip=SysScrubber.fetch_net_adapter_addrs(adapter_name)
+        ip = SysScrubber.fetch_net_adapter_addrs(adapter_name)
         ip_connection = SysScrubber.fetch_net_wan_adapter_info(adapter_name)
 
         net_info['adapterName'] = ip.get('adapterName')
@@ -205,9 +205,24 @@ class SysScrubber:
     def is_linux(cls):
         return psutil.LINUX
 
+    # ---------------------
+    # Process Fetch Methods
+    # ---------------------
+    @classmethod
+    def fetch_all_processes(cls):
+        return psutil.process_iter()
+
     # -----------------
     # CPU Fetch Methods
     # -----------------
+    @classmethod
+    def fetch_cpu_freq(cls):
+        return psutil.cpu_freq().max
+
+    @classmethod
+    def fetch_cpu_count(cls, logical=True):
+        return psutil.cpu_count(logical=logical)
+
     @classmethod
     def fetch_cpu_l1_cache(cls, cores = None):
         l1_size = 0
@@ -297,6 +312,10 @@ class SysScrubber:
     # --------------------
     # Memory Fetch Methods
     # --------------------
+    @classmethod
+    def fetch_virtual_memory(cls):
+        return psutil.virtual_memory()._asdict()
+
     @classmethod
     def fetch_total_memory(cls):
         return psutil.virtual_memory().total
@@ -462,6 +481,10 @@ class SysScrubber:
     # ---------------------
     # Network Fetch Methods
     # ---------------------
+    @classmethod
+    def fetch_net_io_counters(cls):
+        return psutil.net_io_counters()
+
     @classmethod
     def fetch_network_strength(cls):
         net_strength = 'Unknown'
