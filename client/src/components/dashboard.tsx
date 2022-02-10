@@ -18,6 +18,7 @@ import {Dashboard, DashboardWidget} from '../types/dashboard';
 
 const DashboardPage = () => {
   const [deviceData, setDeviceData] = useState([] as DeviceTotal[]);
+  const [allDeviceIds, setAllDeviceIds] = useState([] as String[]);
   const [widgetType, setWidgetType] = useState('');
   const [deviceName, setDeviceName] = useState('');
   const modalService = useModalService();
@@ -39,7 +40,7 @@ const DashboardPage = () => {
     const deviceResponse = await axios.get<IResponse<Device>>('api/device', {});
     const devices = deviceResponse.data.Results;
     const deviceIds = devices.map((device) => device.deviceId);
-
+    setAllDeviceIds(deviceIds);
     const deviceLogsQuery = {params: {Ids: deviceIds.join(',')}};
     const latestDevicesResponse = await axios.get<IResponse<DeviceLog>>(
         'api/device-logs/latest',
@@ -97,7 +98,9 @@ const DashboardPage = () => {
   };
 
   const getWidgetHMTL = (widget: DashboardWidget): JSX.Element => {
-    const device = deviceData.find((e) => e.static.deviceId == widget.options.deviceId);
+    const device = deviceData.find(
+        (e) => e.static.deviceId == widget.options.deviceId,
+    );
     const staticDevice = device?.static;
     const dynamicDevice = device?.dynamic;
     if (!staticDevice || !dynamicDevice) {
@@ -106,17 +109,17 @@ const DashboardPage = () => {
 
     switch (widget.widgetType) {
       case 'CPU':
-        return <CpuUsageWidget
-          deviceDynamic={dynamicDevice}
-        ></CpuUsageWidget>;
+        return <CpuUsageWidget deviceDynamic={dynamicDevice}></CpuUsageWidget>;
       case 'CPU-Static':
-        return <CpuAdditionalWidget
-          deviceStatic={staticDevice}
-        ></CpuAdditionalWidget>;
+        return (
+          <CpuAdditionalWidget
+            deviceStatic={staticDevice}
+          ></CpuAdditionalWidget>
+        );
       case 'Memory':
-        return <MemoryUsageWidget
-          deviceDynamic={dynamicDevice}
-        ></MemoryUsageWidget>;
+        return (
+          <MemoryUsageWidget deviceDynamic={dynamicDevice}></MemoryUsageWidget>
+        );
       default:
         return <></>;
     }

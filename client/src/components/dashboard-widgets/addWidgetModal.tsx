@@ -1,5 +1,6 @@
 // 3rd Party
 import React, {useState} from 'react';
+import SelectSearch from 'react-select-search';
 
 // Custom
 // import {DisplayWidget} from '../../types/displayWidget';
