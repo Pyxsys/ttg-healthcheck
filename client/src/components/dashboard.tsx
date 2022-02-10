@@ -195,6 +195,7 @@ const DashboardPage = () => {
                   <AddWidgetModal
                     setType={setWidgetType}
                     setName={setDeviceName}
+                    ids={allDeviceIds}
                   />,
                   'lg',
                   {width: 60},
