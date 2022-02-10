@@ -1,6 +1,7 @@
 // 3rd Party
 import React, {useState} from 'react';
-import SelectSearch from 'react-select-search';
+import SelectSearch, {SelectSearchOption} from 'react-select-search';
+import Fuse from 'fuse.js';
 
 // Custom
 // import {DisplayWidget} from '../../types/displayWidget';
@@ -11,13 +12,24 @@ type Props = {
   ids: String[]
 }
 
-interface options {
-  name: string
-  value: string
-}
-const AddWidgetModal = ({setType, setName, ids}: Props) => {
-  const idOptions = [] as options[];
+const fuzzySearch = (options: SelectSearchOption[]) => {
+  const fuse = new Fuse(options, {
+    keys: ['name', 'groupName', 'items.name'],
+    threshold: 0.3,
+  });
 
+  return (value: string) => {
+    if (!value.length) {
+      return options;
+    }
+
+    return fuse.search(value);
+  };
+};
+const AddWidgetModal = ({setType, setName, ids}: Props) => {
+  const idOptions = ids.map((e) => {
+    return {name: e as string, value: e as string};
+  });
   const [types, setTypes] = useState('');
   return (
     <>
@@ -41,12 +53,13 @@ const AddWidgetModal = ({setType, setName, ids}: Props) => {
             <div className="border-bottom my-2">Options</div>
             <div className="d-flex justify-content-around pt-2">
               <span>Device UUID/Name</span>
-              <input
-                onChange={(e) => {
-                  setName(e.target.value);
-                }}
-                type="text"
-              />
+              <SelectSearch
+                search={true}
+                filterOptions={fuzzySearch}
+                options={idOptions}
+              >
+                {' '}
+              </SelectSearch>
             </div>
           </>
         ) : (
