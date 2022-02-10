@@ -1,23 +1,23 @@
 // 3rd Party
 import axios from 'axios';
 import React, {useEffect, useState} from 'react';
-import {useAuth} from '../context/authContext';
-import {queryDashboard, saveDashboard} from '../services/dashboard.service';
-import {notificationService} from '../services/notification.service';
-import {Dashboard, DashboardWidget} from '../types/dashboard';
-import '../App.scss';
 
 // Custom
 import Navbar from './Navbar';
 import CpuUsageWidget from './device-detail-widgets/cpuUsageWidget';
+import CpuAdditionalWidget from './device-detail-widgets/cpuAdditionalWidget';
 import MemoryUsageWidget from './device-detail-widgets/memoryUsageWidget';
-import {DeviceLog, IResponse} from '../types/queries';
+import {Device, DeviceLog, DeviceTotal, IResponse} from '../types/queries';
 import {useModalService} from '../context/modal.context';
 import AddWidgetModal from './dashboard-widgets/addWidgetModal';
 import {FaPlus} from 'react-icons/fa';
+import {useAuth} from '../context/authContext';
+import {queryDashboard, saveDashboard} from '../services/dashboard.service';
+import {notificationService} from '../services/notification.service';
+import {Dashboard, DashboardWidget} from '../types/dashboard';
 
 const DashboardPage = () => {
-  const [deviceData, setDeviceData] = useState([] as DeviceLog[]);
+  const [deviceData, setDeviceData] = useState([] as DeviceTotal[]);
   const [widgetType, setWidgetType] = useState('');
   const [deviceName, setDeviceName] = useState('');
   const modalService = useModalService();
@@ -36,18 +36,25 @@ const DashboardPage = () => {
   };
 
   const queryDeviceData = async () => {
-    if (dashboard.widgets && dashboard.widgets.length > 0) {
-      const deviceIds = dashboard?.widgets?.map(
-          (widget) => widget.options.deviceId,
-      );
-      const latestDevicesResponse = await axios.get<IResponse<DeviceLog>>(
-          'api/device-logs/latest',
-          {params: {Ids: deviceIds?.join(',')}},
-      );
-      const latestDevices = latestDevicesResponse.data.Results;
+    const deviceResponse = await axios.get<IResponse<Device>>('api/device', {});
+    const devices = deviceResponse.data.Results;
+    const deviceIds = devices.map((device) => device.deviceId);
 
-      setDeviceData(latestDevices);
-    }
+    const deviceLogsQuery = {params: {Ids: deviceIds.join(',')}};
+    const latestDevicesResponse = await axios.get<IResponse<DeviceLog>>(
+        'api/device-logs/latest',
+        deviceLogsQuery,
+    );
+    const latestDevices = latestDevicesResponse.data.Results;
+
+    const dashboardDevices = devices.map((staticDevice) => ({
+      static: staticDevice,
+      dynamic: latestDevices.find(
+          (device) => device.deviceId === staticDevice.deviceId,
+      ),
+    }));
+
+    setDeviceData(dashboardDevices);
   };
 
   useEffect(() => {
@@ -89,6 +96,32 @@ const DashboardPage = () => {
     });
   };
 
+  const getWidgetHMTL = (widget: DashboardWidget): JSX.Element => {
+    const device = deviceData.find((e) => e.static.deviceId == widget.options.deviceId);
+    const staticDevice = device?.static;
+    const dynamicDevice = device?.dynamic;
+    if (!staticDevice || !dynamicDevice) {
+      return <></>;
+    }
+
+    switch (widget.widgetType) {
+      case 'CPU':
+        return <CpuUsageWidget
+          deviceDynamic={dynamicDevice}
+        ></CpuUsageWidget>;
+      case 'CPU-Static':
+        return <CpuAdditionalWidget
+          deviceStatic={staticDevice}
+        ></CpuAdditionalWidget>;
+      case 'Memory':
+        return <MemoryUsageWidget
+          deviceDynamic={dynamicDevice}
+        ></MemoryUsageWidget>;
+      default:
+        return <></>;
+    }
+  };
+
   modalService.onPrimaryClicked = () => {
     if (dashboard.widgets?.length > 0) {
       const wids = dashboard.widgets as DashboardWidget[];
@@ -118,6 +151,7 @@ const DashboardPage = () => {
       });
     }
   };
+
   return (
     <div id="dashboard-container">
       <Navbar />
@@ -140,34 +174,10 @@ const DashboardPage = () => {
         <div className="d-flex flex-wrap pt-3">
           {dashboard?.widgets?.map((widget, index) => (
             <div className="w-30 px-5" key={`${widget.widgetType}_${index}`}>
-              {widget.widgetType === 'CPU' ? (
-                <div>
-                  <CpuUsageWidget
-                    deviceDynamic={
-                      deviceData.find(
-                          (e) => e.deviceId == widget.options.deviceId,
-                      ) as DeviceLog
-                    }
-                  ></CpuUsageWidget>
-                </div>
-              ) : (
-                <></>
-              )}
-              {widget.widgetType === 'Memory' ? (
-                <div>
-                  <MemoryUsageWidget
-                    deviceDynamic={
-                      deviceData.find(
-                          (e) => e.deviceId == widget.options.deviceId,
-                      ) as DeviceLog
-                    }
-                  ></MemoryUsageWidget>
-                </div>
-              ) : (
-                <></>
-              )}
+              {getWidgetHMTL(widget)}
             </div>
           ))}
+
           <div
             onClickCapture={() => setHover(true)}
             onMouseOver={() => {

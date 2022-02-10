@@ -4,12 +4,12 @@ import axios from 'axios';
 import {Link} from 'react-router-dom';
 
 // Custom
-import {Device, DeviceLog, IResponse} from '../types/queries';
+import {Device, DeviceLog, DeviceTotal, IResponse} from '../types/queries';
 import {useRealTimeService} from '../context/realTimeContext';
 import Navbar from './Navbar';
 import PieWheel from './common/pieWheel';
 import {SignalStrength, signalText} from './common/signalStrength';
-import {ColumnDetail, TableDevice} from '../types/tables';
+import {ColumnDetail} from '../types/tables';
 import Pagination from './common/pagination';
 import ViewTable from './common/viewTable';
 
@@ -21,7 +21,7 @@ const DevicePage = () => {
   const pageSize: number = 10;
   const initialOrderBy: string = 'static.deviceId';
 
-  const [deviceTableData, setDeviceTableData] = useState([] as TableDevice[]);
+  const [deviceTableData, setDeviceTableData] = useState([] as DeviceTotal[]);
   const [page, setPage] = useState(initialPage);
   const [totalPages, setTotalPages] = useState(0);
 
@@ -104,7 +104,7 @@ const DevicePage = () => {
       key: 'static.deviceId',
       name: 'UUID',
       filter: true,
-      override: (cellValue: CellValue, device: TableDevice) => (
+      override: (cellValue: CellValue, device: DeviceTotal) => (
         <div className="devices-uuid-text devices-font mx-auto h-100 py-3">
           <Link
             className="text-white"

@@ -39,6 +39,11 @@ export interface DeviceLog {
   processes: Process[]
 }
 
+export interface DeviceTotal {
+  static: Device
+  dynamic?: DeviceLog
+}
+
 export interface Process {
   name: string
   pid: number
