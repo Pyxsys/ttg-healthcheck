@@ -97,7 +97,9 @@ const DashboardPage = () => {
   };
 
   const getWidgetHMTL = (widget: DashboardWidget): JSX.Element => {
-    const device = deviceData.find((e) => e.static.deviceId == widget.options.deviceId);
+    const device = deviceData.find(
+        (e) => e.static.deviceId == widget.options.deviceId,
+    );
     const staticDevice = device?.static;
     const dynamicDevice = device?.dynamic;
     if (!staticDevice || !dynamicDevice) {
@@ -106,17 +108,17 @@ const DashboardPage = () => {
 
     switch (widget.widgetType) {
       case 'CPU':
-        return <CpuUsageWidget
-          deviceDynamic={dynamicDevice}
-        ></CpuUsageWidget>;
+        return <CpuUsageWidget deviceDynamic={dynamicDevice}></CpuUsageWidget>;
       case 'CPU-Static':
-        return <CpuAdditionalWidget
-          deviceStatic={staticDevice}
-        ></CpuAdditionalWidget>;
+        return (
+          <CpuAdditionalWidget
+            deviceStatic={staticDevice}
+          ></CpuAdditionalWidget>
+        );
       case 'Memory':
-        return <MemoryUsageWidget
-          deviceDynamic={dynamicDevice}
-        ></MemoryUsageWidget>;
+        return (
+          <MemoryUsageWidget deviceDynamic={dynamicDevice}></MemoryUsageWidget>
+        );
       default:
         return <></>;
     }
