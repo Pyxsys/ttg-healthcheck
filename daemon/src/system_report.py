@@ -118,8 +118,10 @@ class SysReport:
         #in MB per second
         megabytes_sent = network_info[0]/(1024*1024)
         megabytes_recv = network_info[1]/(1024*1024)
+        #signal strength
+        signal_strength = SysReport.fetch_network_strength()
         #send as tuple
-        self.set_section("network", (megabytes_sent, megabytes_recv))
+        self.set_section("network", (megabytes_sent, megabytes_recv, signal_strength))
 
     def add_timestamp(self):
         self.set_section("timestamp",datetime.now().isoformat())
@@ -192,16 +194,58 @@ class SysReport:
         self.set_section('wifi_', net_info)
 
     @classmethod
+    def is_windows(cls):
+        return psutil.WINDOWS
+    
+    @classmethod
+    def is_linux(cls):
+        return psutil.LINUX
+
+    @classmethod
+    def fetch_network_strength(cls):
+        net_strength = 'Unknown'
+
+        if SysReport.is_windows():
+            command = "netsh wlan show interfaces"
+            pattern = "^\s+Signal\s+:\s+[0-9]+"
+        elif SysReport.is_linux():
+            command = "sudo iw dev wlan0 scan"
+            pattern = "^\s+signal:\s+-*[0-9]+"
+
+        extract=os.popen(command)
+        str_buffer=re.findall(pattern, extract.read(), re.MULTILINE)
+        extract.close()
+        str_as_num = re.findall(r"[-+]?(?:\d*\.\d+|\d+)", str_buffer[0])
+
+        if SysReport.is_windows():
+            str_as_float = float(str_as_num[0])
+            if str_as_float > 80:
+                net_strength = 'Strong'
+            elif str_as_float > 50:
+                net_strength = 'Medium'
+            else:
+                net_strength = 'Weak'
+        elif SysReport.is_linux():
+            str_as_float = float(str_as_num[0])
+            if str_as_float > -20:
+                net_strength = 'Strong'
+            elif str_as_float > -50:
+                net_strength = 'Medium'
+            else:
+                net_strength = 'Weak'
+
+        return net_strength
+
+    @classmethod
     def fetch_total_memory(cls):
         return psutil.virtual_memory().total
 
     @classmethod
     def fetch_memory_form_factor(cls):
-        os_type = sys.platform.lower()
         flags = re.MULTILINE
         ff_list = list()
 
-        if "win" in os_type:
+        if SysReport.is_windows():
             command = "wmic memorychip get formfactor"
             pattern = '([0-9]{1,2})'
             decoder = {
@@ -231,7 +275,7 @@ class SysReport:
                 "23": "LGA",
                 "24": "FB-DIMM"
             }
-        elif "linux" in os_type:
+        elif SysReport.is_linux():
             command = "sudo dmidecode -t memory | grep -i speed "
             pattern = 'Form Factor: (.+)'
 
@@ -244,9 +288,9 @@ class SysReport:
             return ff_list
 
         for x in form_factors:
-            if "win" in os_type:
+            if SysReport.is_windows():
                 ff_list.append(decoder[x])
-            elif "linux" in os_type:
+            elif SysReport.is_linux():
                 ff_list.append(x[13::]) if not x.strip() else ff_list.append("Unkown")
 
         return ff_list
@@ -256,7 +300,7 @@ class SysReport:
         pd_list = list()
         flags = re.MULTILINE
 
-        if psutil.WINDOWS:
+        if SysReport.is_windows():
             command="wmic diskdrive get model,size"
             pattern=".+\s{2}\d+\n?"
 
@@ -282,7 +326,7 @@ class SysReport:
 
                 pd_list.append(temp_dict)
 
-        elif psutil.LINUX:
+        elif SysReport.is_linux():
             command="sudo fdisk -l"
             pattern="^(?:Disk )/(?:\S+/)+(\S+):(?:.*)\ (\d+)\ bytes.+\n^Disk model:\ (.*)(?:\s{2,})\n"
 
@@ -355,14 +399,14 @@ class SysReport:
     def fetch_cpu_l1_cache(cls, cores = None):
         l1_size = 0
 
-        if psutil.WINDOWS:
+        if SysReport.is_windows():
             command='wmic os get osarchitecture | findstr /r "[0-9][0-9]"'
             pattern=cls._R_DIGIT_PATTERN
 
             if cores == None:
                 cores = 1   #minimum 1 core must be given for windows OS
 
-        elif psutil.LINUX:
+        elif SysReport.is_linux():
             command='getconf -a | grep LEVEL1_ICACHE_SIZE'
             pattern='(?:LEVEL1_ICACHE_SIZE\s+(\d+))'
         
@@ -373,7 +417,7 @@ class SysReport:
         buffer=re.findall(pattern, extract.read(),  re.MULTILINE)
         extract.close()
 
-        if psutil.WINDOWS:
+        if SysReport.is_windows():
             l1_size = cores * int(buffer[0])
         else:
             l1_size = int(buffer[0])
@@ -382,11 +426,11 @@ class SysReport:
 
     @classmethod
     def fetch_cpu_l2_cache(cls):
-        if psutil.WINDOWS:
+        if SysReport.is_windows():
             command='wmic cpu get L2CacheSize | findstr /r "[0-9][0-9]"'
             pattern=cls._R_DIGIT_PATTERN
 
-        elif psutil.LINUX:
+        elif SysReport.is_linux():
             command='getconf -a | grep CACHE_SIZE'
             pattern='(?:LEVEL2_\S?CACHE_SIZE\s+(\d+))'
 
@@ -401,11 +445,11 @@ class SysReport:
 
     @classmethod
     def fetch_cpu_l3_cache(cls):
-        if psutil.WINDOWS:
+        if SysReport.is_windows():
             command='wmic cpu get L3CacheSize | findstr /r "[0-9][0-9]"'
             pattern=cls._R_DIGIT_PATTERN
 
-        elif psutil.LINUX:
+        elif SysReport.is_linux():
             command='getconf -a | grep CACHE_SIZE'
             pattern='(?:LEVEL3_\S?CACHE_SIZE\s+(\d+))'
 
@@ -420,11 +464,11 @@ class SysReport:
 
     @classmethod
     def fetch_cpu_sockets(cls):
-        if psutil.WINDOWS:
+        if SysReport.is_windows():
             command='powershell.exe -Command "@(Get-CimInstance -ClassName Win32_Processor).Count"'
             pattern=cls._R_DIGIT_PATTERN
 
-        elif psutil.LINUX:
+        elif SysReport.is_linux():
             command='lscpu | egrep Socket'
             pattern='(?:Socket\(s\):\s+(\d+))'
 
@@ -444,7 +488,7 @@ class SysReport:
         output['SSID'] = 'NOT AVAILABLE'
         output['connectionType'] = 'NOT AVAILABLE' 
 
-        if psutil.WINDOWS:
+        if SysReport.is_windows():
             adapter = adapter_name if adapter_name is not None else 'Wi-Fi'
             command = 'netsh wlan show interfaces'
             pattern = "(?:Name\s+:\s" + re.escape(adapter) + "(?:\\n.+){5}SSID\s+:\s(.+)(?:\\n.+){3}Radio\stype.+:\s(.+)(?:\\n.+){7}Signal\s+: (\d{,2}))"
@@ -457,7 +501,7 @@ class SysReport:
                 output['SSID'] = buffer[0][0]
                 output['connectionType'] = buffer[0][1]
         
-        if psutil.LINUX:
+        if SysReport.is_linux():
             adapter = adapter_name if adapter_name is not None else 'wlan0'
             command = 'iwconfig ' + adapter
             pattern = "(?:\S+ +IEEE (\S+)  ESSID:\"(\S+)\".+\n)"
@@ -478,9 +522,9 @@ class SysReport:
         ips=dict()
 
         #default OS name for adapters
-        if psutil.WINDOWS:
+        if SysReport.is_windows():
             os_net_pattern={'wifi': 'Wi-Fi', 'ethernet': 'Ethernet'}
-        elif psutil.LINUX:
+        elif SysReport.is_linux():
             os_net_pattern={'wifi': 'wlan0', 'ethernet': 'eth0'}
             
 

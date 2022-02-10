@@ -21,8 +21,18 @@
 //   // `config` is the resolved Cypress config
 // };
 
+const { lighthouse, pa11y, prepareAudit } = require("cypress-audit");
+
 module.exports = (on, config) => {
   require('@cypress/code-coverage/task')(on, config)
+
+  on("before:browser:launch", (browser, launchOptions) => {
+    prepareAudit(launchOptions)
+  })
+
+  on("task", {
+    lighthouse: lighthouse(),
+  })
 
   // add other tasks to be registered here
 

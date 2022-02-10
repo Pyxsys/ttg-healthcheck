@@ -2,6 +2,26 @@
   "baseUrl": "http://localhost:3000/",
   "env": {
     "test_password": "test",
-    "admin_password": "admin"
+    "admin_password": "admin",
+    "passwordInput": "input[name='password']",
+    "passwordValue": "Password",
+    "passwordValueConfirm": "Confirm Password",
+    "passwordInput1": "input[name='password1']",
+    "passwordInput2": "input[name='password2']"
+
+  },
+  "lighthouseThreshold" : {
+    "performance": 60,
+    "accessibility": 90,
+    "best-practices": 85,
+    "seo": 85, 
+    "pwa": 50
+  },
+  "lighthouseConfig" : {
+    "formFactor" : "desktop",
+    "screenEmulation": {
+      "disabled" : true,
+      "mobile" : false
+    }
   }
 }

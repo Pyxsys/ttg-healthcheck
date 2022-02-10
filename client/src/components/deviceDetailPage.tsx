@@ -20,7 +20,14 @@ import {SignalStrength} from './common/signalStrength';
 import ProcessTable from './device-detail-widgets/processTable';
 
 const DeviceDetailPage = (props: any) => {
-  const deviceId: string = props.location.state.id;
+  const getSearchParam = (key: string): string => {
+    const search: string = props.location.search;
+    const allParams = search.replace('?', '').split('&');
+    const found = allParams.find((param) => param.startsWith(`${key}=`));
+    return found?.split('=')[1] || '';
+  };
+
+  const deviceId: string = getSearchParam('Id');
   const [deviceData, setDeviceData] = useState({} as Device);
   const [deviceLogsData, setDeviceLogsData] = useState({} as DeviceLog);
 
@@ -34,6 +41,8 @@ const DeviceDetailPage = (props: any) => {
   };
 
   const queryLogs = async () => {
+    if (!deviceId) return;
+
     const queryParams = {
       deviceId: deviceId,
       limit: 1,
@@ -108,7 +117,7 @@ const DeviceDetailPage = (props: any) => {
                                 ID
                               </td>
                               <td style={{fontStyle: 'italic'}}>
-                                {deviceId}
+                                {deviceData?.deviceId}
                               </td>
                             </tr>
                             <tr>

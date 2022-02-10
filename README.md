@@ -48,19 +48,27 @@ To run these tests, you'll need a MongoDB database on your local machine.
 * From your command line go into the server folder of the project and run `npm run test` or `npm run test:coverage` if you wish to see the coverage.
 
 ### Client Unit Tests
-To run these tests, you'll need to use Cypress. It is already a part of our dev dependencies and only requires `npm install` in the client folder. You will also need to have the Front-End running locally. That can be done by running `npm start` in the client folder.All the tests are found in `cypress -> integration`.
+To run these tests, you'll need to use Cypress. It is already a part of our dev dependencies and only requires `npm install` in in the root directory. You will also need to have the application running locally. That can be done by running `npm run dev` in the root of the project. All the tests are found in `cypress -> integration -> front-end`.
 
-* From your command line go into `client -> src` and run `npx cypress open`.
+* In the root of the project, run `npx cypress open` if you want to execute the tests manually or run `npx cypress run` if you desire to execute the tests headlessly in your terminal instead.
 * From there, a Cypress GUI will open up. You can either run all the tests that are in the test folder by click run all or run individual test file by clicking on the file itself.
+
+### Performance and Load Tests
+
+To run these tests, you'll again need to use Cypress and Jmeter. It is already a part of our dev dependencies and only requires `npm install` in the root folder. You will also need to have the Front-End and Back-End running locally. That can be done by running `npm run dev` in the root folder. All the performance tests are found in `cypress -> integration -> end-to-end -> performance` . Load Tests can be found in loadTests folder.
+
+* In the command line, run `npx cypress open` to get the gui where you can navigate to the exact tests you want. The tests can also be run via command line only by entering `npx cypress run` and all the tests will be run in order.
+
+* In order to run JMeter you need to have JMeter installed on your computer. Once you start the application you can then open the JMeter files in the folder listend above. Then just press the run test button at the top of the program.
 
 ### Daemon Tests
 
 * From you command line, go to the daemon folder of the project and run `coverage run --branch -m unittest -v`
 
 ### End-To-End Tests
-To run these tests, you'll need to use Cypress. It is already a part of our dev dependencies and only requires `npm install` in the client folder. You will also need to have the application running locally. That can be done by running `npm run dev` in the root of the project. All the tests are found in `cypress -> integration`.
+To run these tests, you'll need to use Cypress. It is already a part of our dev dependencies and only requires `npm install` in the root directory. You will also need to have the application running locally. That can be done by running `npm run dev` in the root of the project. All the tests are found in `cypress -> integration -> end-to-end`.
 
-* In the root of the project, run `npx cypress open`.
+* In the root of the project, run `npx cypress open` if you want to execute the tests manually or run `npx cypress run` if you desire to execute the tests headlessly in your terminal instead.
 * From there, a Cypress GUI will open up. You can either run all the tests that are in the test folder by click run all or run individual test file by clicking on the file itself.
 
 ## Coding Convention
@@ -81,3 +89,19 @@ We are using the following rules for our coding covention:
 * Ashraf Khalil
 * James El Tayar
 * Michael Takenaka
+
+## Acceptance Test Videos
+### Login
+https://user-images.githubusercontent.com/21341750/153103328-bf7a50b5-7dbd-462e-8afa-69d51f3ca01e.mp4
+
+### Logout
+https://user-images.githubusercontent.com/21341750/153103337-4577a4a2-44bf-4e6f-9080-3a8c319add0b.mp4
+
+### Register
+https://user-images.githubusercontent.com/21341750/153103345-281d5191-9b55-491e-a29b-5451c8e40a84.mp4
+
+### Devices 
+https://user-images.githubusercontent.com/21341750/153103357-7583525e-3890-4ffb-b6b2-63b359ce7e23.mp4
+
+### Device Details
+https://user-images.githubusercontent.com/21341750/153103366-075d76c4-336a-4305-a642-ac86ac81a06e.mp4

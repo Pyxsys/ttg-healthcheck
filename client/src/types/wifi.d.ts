@@ -9,5 +9,5 @@ export interface WifiStatic {
 export interface WifiDynamic {
   sendSpeed: number
   receiveSpeed: number
-  signalStrength: string
+  signalStrength: number
 }
