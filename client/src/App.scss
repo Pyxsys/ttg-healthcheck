@@ -734,6 +734,41 @@ body {
   border: '4px dashed';
 }
 
+/* Modal Styling */
+
+.modal-background {
+  background-color: $tertiary-gray;
+}
+
+.modal-custom-width {
+  width: 100%;
+}
+
+.modal-footer {
+  border-top: $tertiary-gray;
+  display: flex; 
+  flex-direction: column;
+  justify-content: center;
+}
+
+.process-table table thead tr{
+  border: $tertiary-gray !important;
+}
+
+.modal-buttons {
+  color: $secondary-gray;
+  font-weight: 500;
+  border: 1px solid #b1b1b1ab !important;
+  background-color: $tertiary-gray;
+  width: 100%;
+}
+
+.modal-options {
+  border-bottom: 1px solid #999898 !important;
+  color: #999898;
+}
+
+
 /*-----------------------Device Details--------------------------*/
 
 #device-details-container{
@@ -999,38 +1034,5 @@ body {
   }
 }
 
-/* Modal Styling */
-
-.modal-background {
-  background-color: $tertiary-gray;
-}
-
-.modal-custom-width {
-  width: 100%;
-}
-
-.modal-footer {
-  border-top: $tertiary-gray;
-  display: flex; 
-  flex-direction: column;
-  justify-content: center;
-}
-
-.process-table table thead tr{
-  border: $tertiary-gray !important;
-}
-
-.modal-buttons {
-  color: $secondary-gray;
-  font-weight: 500;
-  border: 1px solid #b1b1b1ab !important;
-  background-color: $tertiary-gray;
-  width: 100%;
-}
-
-.modal-options {
-  border-bottom: 1px solid #999898 !important;
-  color: #999898;
-}
 
 
