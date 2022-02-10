@@ -702,6 +702,7 @@ body {
 
 /*-----------------------Dashboard-------------------------------*/
 
+
 #dashboard-container{
   background-color: $tertiary-gray;
   max-width: 100%;
@@ -1003,10 +1004,32 @@ body {
 .modal-background {
   background-color: $tertiary-gray;
 }
+
 .modal-custom-width {
-  max-width: none;
+  width: 100%;
+}
+
+.modal-footer {
+  border-top: $tertiary-gray;
+  display: flex; 
+  flex-direction: column;
+  justify-content: center;
 }
 
 .process-table table thead tr{
   border: $tertiary-gray !important;
 }
+
+.modal-buttons {
+  color: $secondary-gray;
+  font-weight: 500;
+  border: 1px solid #b1b1b1ab !important;
+  background-color: $tertiary-gray;
+  width: 100%;
+}
+
+.modal-options {
+  border-bottom: 1px solid #999898 !important;
+  color: #999898;
+}
+
