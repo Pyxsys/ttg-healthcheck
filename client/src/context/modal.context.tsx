@@ -114,10 +114,10 @@ const ModalService = ({children}: any) => {
           {modalContent}
         </Modal.Body>
         {primaryText || secondaryText ? (
-          <Modal.Footer className="modal-background modal-footer">
+          <Modal.Footer className="modal-background d-flex justify-flex-end">
             {secondaryText ? (
               <button
-                className="btn modal-buttons"
+                className="btn btn-secondary"
                 onClick={() => {
                   modalService?.onSecondaryClicked();
                   setShow(false);
@@ -130,7 +130,7 @@ const ModalService = ({children}: any) => {
             )}
             {primaryText ? (
               <button
-                className="btn modal-buttons"
+                className="btn btn-primary ms-5"
                 onClick={() => {
                   modalService?.onPrimaryClicked();
                   setShow(false);
