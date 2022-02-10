@@ -1,12 +1,21 @@
 // 3rd Party
 import React, {useState} from 'react';
+import SelectSearch from 'react-select-search';
 
 import PropTypes from 'prop-types';
 type Props = {
   setType: Function
   setName: Function
+  ids: String[]
 }
-const AddWidgetModal = ({setType, setName}: Props) => {
+
+interface options {
+  name: string
+  value: string
+}
+const AddWidgetModal = ({setType, setName, ids}: Props) => {
+  const idOptions = [] as options[];
+
   const [types, setTypes] = useState('');
   return (
     <>

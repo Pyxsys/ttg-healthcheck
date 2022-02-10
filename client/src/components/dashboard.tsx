@@ -18,6 +18,7 @@ import {Dashboard, DashboardWidget} from '../types/dashboard';
 
 const DashboardPage = () => {
   const [deviceData, setDeviceData] = useState([] as DeviceTotal[]);
+  const [allDeviceIds, setAllDeviceIds] = useState([] as String[]);
   const [widgetType, setWidgetType] = useState('');
   const [deviceName, setDeviceName] = useState('');
   const modalService = useModalService();
@@ -39,7 +40,7 @@ const DashboardPage = () => {
     const deviceResponse = await axios.get<IResponse<Device>>('api/device', {});
     const devices = deviceResponse.data.Results;
     const deviceIds = devices.map((device) => device.deviceId);
-
+    setAllDeviceIds(deviceIds);
     const deviceLogsQuery = {params: {Ids: deviceIds.join(',')}};
     const latestDevicesResponse = await axios.get<IResponse<DeviceLog>>(
         'api/device-logs/latest',
@@ -194,6 +195,7 @@ const DashboardPage = () => {
                   <AddWidgetModal
                     setType={setWidgetType}
                     setName={setDeviceName}
+                    ids={allDeviceIds}
                   />,
                   'lg',
                   {width: 60},
