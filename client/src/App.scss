@@ -712,18 +712,6 @@ body {
   flex-direction: column;
   color: white;
 }
-.gear-dash{
-  content: url('components/dashboard-widgets/gear.png');
-  height: 70px;
-  width: 70px;
-  float: right;
-}
-.rect-dash{
-  content: url('components/dashboard-widgets/square.png');
-  height: 300px;
-  width: 450px;
-
-}
 .modal-overlay{
   background-color: $tertiary-gray;
   color: white;
