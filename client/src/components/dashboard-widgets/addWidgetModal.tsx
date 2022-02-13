@@ -23,8 +23,14 @@ const AddWidgetModal = ({setType, setName, ids}: Props) => {
             }}
           >
             <option value=""></option>
-            <option value="CPU">CPU</option>
-            <option value="Memory">Memory</option>
+            <option value="CPU-Dynamic">CPU</option>
+            <option value="CPU-Static">CPU Additional</option>
+            <option value="Memory-Dynamic">Memory</option>
+            <option value="Memory-Static">Memory Additional</option>
+            <option value="Disk-Dynamic">Disk</option>
+            <option value="Disk-Static">Disk Additional</option>
+            <option value="Network-Dynamic">Network</option>
+            <option value="Network-Static">Network Additional</option>
           </select>
         </div>
         {types ? (
@@ -32,12 +38,7 @@ const AddWidgetModal = ({setType, setName, ids}: Props) => {
             <div className="modal-options my-2">Options</div>
             <div className="d-flex justify-content-around pt-2">
               <span>Device UUID/Name</span>
-              <input
-                onChange={(e) => {
-                  setName(e.target.value);
-                }}
-                type="text"
-              />
+              <input type="text" onChange={(e) => setName(e.target.value)} />
             </div>
           </>
         ) : (
