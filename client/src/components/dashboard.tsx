@@ -23,14 +23,18 @@ import WifiUsageWidget from './device-detail-widgets/wifiUsageWidget';
 import WifiAdditionalWidget from './device-detail-widgets/wifiAdditionalWidget';
 
 const DashboardPage = () => {
+  const {user} = useAuth();
+  const modalService = useModalService();
+
+  const [dashboard, setDashboard] = useState({} as Dashboard);
   const [deviceData, setDeviceData] = useState([] as DeviceTotal[]);
   const [allDeviceIds, setAllDeviceIds] = useState([] as String[]);
   const [widgetType, setWidgetType] = useState('');
   const [deviceName, setDeviceName] = useState('');
-  const modalService = useModalService();
-  const {user} = useAuth();
-  const [dashboard, setDashboard] = useState({} as Dashboard);
   const [hover, setHover] = useState(false);
+  const [dashboardModified, setDashboardModified] = useState(false);
+
+
   const hoverStyleBox = {
     color: hover ? 'white' : 'grey',
     height: '360px',
@@ -88,8 +92,14 @@ const DashboardPage = () => {
     queryDashboard({userId: user._id}).then((dashboard) => {
       if (dashboard) {
         setDashboard(dashboard);
+        setDashboardModified(false);
       }
     });
+  };
+
+  const addWidgetType = (widgetType: string) => {
+    setDashboardModified(true);
+    setWidgetType(widgetType);
   };
 
   const saveDash = () => {
@@ -100,6 +110,7 @@ const DashboardPage = () => {
         })
         .then((a) => {
           if (a) {
+            setDashboardModified(false);
             notificationService.success(`Success: ${a}`);
           }
         });
@@ -110,66 +121,85 @@ const DashboardPage = () => {
       userId: user._id,
       widgets: [] as DashboardWidget[],
     });
+    setDashboardModified(true);
   };
 
   const getWidgetHMTL = (widget: DashboardWidget): JSX.Element => {
     const device = deviceData.find(
-        (e) => e.static.deviceId == widget.options.deviceId,
+        (e) => e.static.deviceId === widget.options.deviceId,
     );
     const staticDevice = device?.static;
-    const dynamicDevice = device?.dynamic;
-    if (!staticDevice || !dynamicDevice) {
+    if (!staticDevice) {
       return <></>;
     }
-
     switch (widget.widgetType) {
-      case 'CPU-Dynamic':
-        return <CpuUsageWidget deviceDynamic={dynamicDevice}></CpuUsageWidget>;
       case 'CPU-Static':
         return (
           <CpuAdditionalWidget
             deviceStatic={staticDevice}
           ></CpuAdditionalWidget>
         );
-      case 'Memory-Dynamic':
-        return (
-          <MemoryUsageWidget deviceDynamic={dynamicDevice}></MemoryUsageWidget>
-        );
       case 'Memory-Static':
         return (
-          <MemoryAdditionalWidget deviceStatic={staticDevice}></MemoryAdditionalWidget>
-        );
-      case 'Disk-Dynamic':
-        return (
-          <DiskUsageWidget deviceDynamic={dynamicDevice}></DiskUsageWidget>
+          <MemoryAdditionalWidget
+            deviceStatic={staticDevice}
+          ></MemoryAdditionalWidget>
         );
       case 'Disk-Static':
         return (
-          <DiskAdditionalWidget deviceStatic={staticDevice}></DiskAdditionalWidget>
-        );
-      case 'Network-Dynamic':
-        return (
-          <WifiUsageWidget deviceDynamic={dynamicDevice}></WifiUsageWidget>
+          <DiskAdditionalWidget
+            deviceStatic={staticDevice}
+          ></DiskAdditionalWidget>
         );
       case 'Network-Static':
         return (
-          <WifiAdditionalWidget deviceStatic={staticDevice}></WifiAdditionalWidget>
+          <WifiAdditionalWidget
+            deviceStatic={staticDevice}
+          ></WifiAdditionalWidget>
         );
-      default:
-        return <></>;
     }
+
+    const dynamicDevice = device?.dynamic;
+    if (!dynamicDevice) {
+      return <></>;
+    }
+    switch (widget.widgetType) {
+      case 'CPU-Dynamic':
+        return <CpuUsageWidget
+          deviceDynamic={dynamicDevice}
+        ></CpuUsageWidget>;
+      case 'Memory-Dynamic':
+        return (
+          <MemoryUsageWidget
+            deviceDynamic={dynamicDevice}
+          ></MemoryUsageWidget>
+        );
+      case 'Disk-Dynamic':
+        return (
+          <DiskUsageWidget
+            deviceDynamic={dynamicDevice}
+          ></DiskUsageWidget>
+        );
+      case 'Network-Dynamic':
+        return (
+          <WifiUsageWidget
+            deviceDynamic={dynamicDevice}
+          ></WifiUsageWidget>
+        );
+    }
+    return <></>;
   };
 
   modalService.onPrimaryClicked = () => {
     if (dashboard.widgets?.length > 0) {
-      const wids = dashboard.widgets as DashboardWidget[];
+      const wids: DashboardWidget[] = dashboard.widgets;
       wids.push({
         widgetType: widgetType,
         options: {
           deviceId: deviceName,
           deviceName: deviceName,
         },
-      } as DashboardWidget);
+      });
       setDashboard({
         ...dashboard,
         widgets: wids,
@@ -198,14 +228,14 @@ const DashboardPage = () => {
         className="h-100 overflow-auto pe-2 ps-2"
       >
         <div className="d-flex pt-2 justify-content-end">
-          <button className="btn btn-success" onClick={() => saveDash()}>
-            Save The Current Dashboard
-          </button>
-          <button className="btn btn-danger ms-2" onClick={() => resetDash()}>
+          <button className="btn btn-secondary" onClick={() => resetDash()}>
             Clear Dashboard
           </button>
-          <button className="btn btn-info ms-2" onClick={() => viewDash()}>
-            Undo All Changes
+          <button className="btn btn-secondary ms-2" disabled={!dashboardModified} onClick={() => saveDash()}>
+            Save Changes
+          </button>
+          <button className="btn btn-secondary ms-2" disabled={!dashboardModified} onClick={() => viewDash()}>
+            Cancel Changes
           </button>
         </div>
 
@@ -226,7 +256,7 @@ const DashboardPage = () => {
             onClick={() =>
               modalService.open(
                   <AddWidgetModal
-                    setType={setWidgetType}
+                    setType={addWidgetType}
                     setName={setDeviceName}
                     ids={allDeviceIds}
                   />,
