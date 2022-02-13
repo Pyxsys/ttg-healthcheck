@@ -37,8 +37,6 @@ const DashboardPage = () => {
 
   const hoverStyleBox = {
     color: hover ? 'white' : 'grey',
-    height: '360px',
-    border: '4px dashed',
   };
   const hoverStyleIcon = {
     color: hover ? 'white' : 'grey',
@@ -239,34 +237,37 @@ const DashboardPage = () => {
           </button>
         </div>
 
-        <div className="container d-flex flex-wrap pt-3">
+        <div className="container d-flex flex-wrap py-3">
+          {/* Dashboard Widgets */}
           {dashboard?.widgets?.map((widget, index) => (
-            <div className="w-30 px-5" key={`${widget.widgetType}_${index}`}>
+            <div className="widget-width px-4" key={`${widget.widgetType}_${index}`}>
               {getWidgetHMTL(widget)}
             </div>
           ))}
 
-          <div
-            onClickCapture={() => setHover(true)}
-            onMouseOver={() => setHover(true)}
-            onMouseOut={() => setHover(false)}
-            role="button"
-            className="d-flex justify-content-center w-30"
-            style={hoverStyleBox}
-            onClick={() =>
-              modalService.open(
-                  <AddWidgetModal
-                    setType={addWidgetType}
-                    setName={setDeviceName}
-                    ids={allDeviceIds}
-                  />,
-                  'lg',
-                  {width: 60},
-              )
-            }
-          >
-            <div className="d-flex justify-content-center align-items-center w-30 h-100">
-              <FaPlus color="white" style={hoverStyleIcon} />
+          {/* Add New Widget */}
+          <div className="widget-width px-4">
+            <div
+              role="button"
+              className="d-flex justify-content-center dashboard-dashed-box"
+              style={hoverStyleBox}
+              onMouseOver={() => setHover(true)}
+              onMouseOut={() => setHover(false)}
+              onClick={() =>
+                modalService.open(
+                    <AddWidgetModal
+                      setType={addWidgetType}
+                      setName={setDeviceName}
+                      ids={allDeviceIds}
+                    />,
+                    'lg',
+                    {width: 60},
+                )
+              }
+            >
+              <div className="w-25">
+                <FaPlus color="white" style={hoverStyleIcon} />
+              </div>
             </div>
           </div>
         </div>

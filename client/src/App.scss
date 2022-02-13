@@ -4,6 +4,7 @@ $secondary-gray: #f8f9fa;
 $tertiary-gray: #30353d;
 $quarternary-gray: #3F4651;
 $quinary-gray: #4C535F;
+$secondary: #f8f9fa;
 
 $white: #fff;
 $gray-100: #c2c2c2;
@@ -712,14 +713,28 @@ body {
   flex-direction: column;
   color: white;
 }
+
+.widget-width {
+  @media (min-width: $screen-w-xsm) {
+    width: 100%;
+  }
+  @media (min-width: $screen-w-lg) {
+    width: 50%;
+  }
+  @media (min-width: $screen-w-xlg) {
+    width: 33.33%;
+  }
+}
+
 .modal-overlay{
   background-color: $tertiary-gray;
   color: white;
 }
 
 .dashboard-dashed-box{
-  height: '360px'; 
-  border: '4px dashed';
+  height: 360px;
+  width: 100%;
+  border: 4px dashed;
 }
 
 /* Modal Styling */
