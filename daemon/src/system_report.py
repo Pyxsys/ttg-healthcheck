@@ -201,13 +201,12 @@ class SysScrubber:
     # ----------------------    
     @classmethod
     def fetch_device_uuid(self):
-        os_type = sys.platform.lower()
         pattern = '[a-zA-Z0-9]{8}(?:-[a-zA-Z0-9]{4}){3}-[a-zA-Z0-9]{12}'
         flags=re.MULTILINE
 
-        if "win" in os_type:
+        if SysScrubber.is_windows():
             command = "wmic csproduct get uuid"
-        elif "linux" in os_type:
+        elif SysScrubber.is_linux():
             command = "sudo dmidecode -s system-uuid"
 
         extract=os.popen(command)
