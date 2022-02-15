@@ -4,7 +4,7 @@ import './App.scss';
 import {Route} from 'react-router-dom';
 import PrivateRoute from './routes/privateRoute';
 import Login from './components/login';
-import Dashboard from './components/dashboard';
+import Dashboard from './components/dashboardPage';
 import AdminPanel from './components/adminPanel';
 import Signup from './components/signup';
 import DevicePage from './components/devicePage';
