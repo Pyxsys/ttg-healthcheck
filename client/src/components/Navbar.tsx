@@ -1,5 +1,4 @@
-import React from 'react';
-import {useState} from 'react';
+import React, {useState} from 'react';
 // 3rd Party
 import {Link} from 'react-router-dom';
 import axios from 'axios';
