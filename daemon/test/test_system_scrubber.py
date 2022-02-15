@@ -145,6 +145,15 @@ class TestSystemScrubberMemory(unittest.TestCase):
             for x in actual_result:     #Ensure results are not empty
                 self.assertEquals(x,'DIMM')
 
+    @patch('daemon.src.system_report.SysScrubber.is_windows', return_value=True)
+    @patch('daemon.src.system_report.SysScrubber.is_linux', return_value=False)
+    def testFetchingUnknownMemoryFormFactorList(self,m1,m2):
+        MOCK_ADAPTER_TERMINAL_OUTPUT='FormFactor'
+        with patch('os.popen', new=mock_open(read_data = MOCK_ADAPTER_TERMINAL_OUTPUT)):
+            actual_result = SysScrubber.fetch_memory_form_factor()
+            for x in actual_result:     #Ensure results are not empty
+                self.assertEquals(x,'Unknown')
+
 class TestSystemScrubberDisk(unittest.TestCase):
 
     def testFetchingTotalDiskCapacity(self):
