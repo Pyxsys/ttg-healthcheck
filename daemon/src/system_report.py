@@ -366,7 +366,7 @@ class SysScrubber:
                 "24": "FB-DIMM"
             }
         elif SysScrubber.is_linux():
-            command = "sudo dmidecode -t memory | grep -i speed "
+            command = "sudo dmidecode memory | grep 'Form Factor'"
             pattern = 'Form Factor: (.+)'
 
         extract=os.popen(command)
@@ -381,7 +381,7 @@ class SysScrubber:
             if SysScrubber.is_windows():
                 ff_list.append(decoder[x])
             elif SysScrubber.is_linux():
-                ff_list.append(x[13::]) if not x.strip() else ff_list.append("Unkown")
+                ff_list.append(x)
 
         return ff_list
 

@@ -127,10 +127,23 @@ class TestSystemScrubberMemory(unittest.TestCase):
         actual_result=SysScrubber.fetch_total_memory()
         self.assertGreater(actual_result, 0)
 
-    def testFetchingMemoryFormFactorList(self):
-        actual_result = SysScrubber.fetch_memory_form_factor()
-        for x in actual_result:     #Ensure results are not empty
-            self.assertTrue(x)
+    @patch('daemon.src.system_report.SysScrubber.is_windows', return_value=True)
+    @patch('daemon.src.system_report.SysScrubber.is_linux', return_value=False)
+    def testFetchingMemoryFormFactorListWIN(self,m1,m2):
+        MOCK_ADAPTER_TERMINAL_OUTPUT='FormFactor\n8\n8\n\n'
+        with patch('os.popen', new=mock_open(read_data = MOCK_ADAPTER_TERMINAL_OUTPUT)):
+            actual_result = SysScrubber.fetch_memory_form_factor()
+            for x in actual_result:     #Ensure results are not empty
+                self.assertEquals(x,'DIMM')
+
+    @patch('daemon.src.system_report.SysScrubber.is_windows', return_value=False)
+    @patch('daemon.src.system_report.SysScrubber.is_linux', return_value=True)
+    def testFetchingMemoryFormFactorListLUX(self,m1,m2):     
+        MOCK_ADAPTER_TERMINAL_OUTPUT='     Form Factor: DIMM\n     Form Factor: DIMM'
+        with patch('os.popen', new=mock_open(read_data = MOCK_ADAPTER_TERMINAL_OUTPUT)):
+            actual_result = SysScrubber.fetch_memory_form_factor()
+            for x in actual_result:     #Ensure results are not empty
+                self.assertEquals(x,'DIMM')
 
 class TestSystemScrubberDisk(unittest.TestCase):
 
