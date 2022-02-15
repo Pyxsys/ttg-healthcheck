@@ -287,8 +287,7 @@ class TestSystemScrubberWifi(unittest.TestCase):
             }
         
         self.assertDictEqual(actual_result, expected_result)
-
-    
+  
     @patch('daemon.src.system_report.SysScrubber.is_windows', return_value=False)
     @patch('daemon.src.system_report.SysScrubber.is_linux', return_value=True)
     def testFetchingAdapterNetworkInfoLUX(self, m1, m2):
@@ -302,8 +301,6 @@ class TestSystemScrubberWifi(unittest.TestCase):
             }
         
         self.assertDictEqual(actual_result, expected_result)
-
-
     
     @patch('daemon.src.system_report.SysScrubber.is_windows', return_value=True)
     @patch('daemon.src.system_report.SysScrubber.is_linux', return_value=False)
