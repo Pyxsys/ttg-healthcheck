@@ -125,20 +125,8 @@ class SysReport:
         self.set_section("timestamp",datetime.now().isoformat())
 
     def add_device_uuid(self):
-        os_type = sys.platform.lower()
-        pattern = '[a-zA-Z0-9]{8}(?:-[a-zA-Z0-9]{4}){3}-[a-zA-Z0-9]{12}'
-        flags=re.MULTILINE
-
-        if "win" in os_type:
-            command = "wmic csproduct get uuid"
-        elif "linux" in os_type:
-            command = "sudo dmidecode -s system-uuid"
-
-        extract=os.popen(command)
-        uuid=re.findall(pattern, extract.read(), flags)[0]
-        extract.close()
-
-        self.set_section("deviceId", uuid.upper())
+        uuid=SysScrubber.fetch_device_uuid()
+        self.set_section("deviceId", uuid)
 
     def add_startup_memory_info(self):
         memory_dictionary = dict()
@@ -207,6 +195,26 @@ class SysScrubber:
     @classmethod
     def is_linux(cls):
         return psutil.LINUX
+
+    # ----------------------
+    # General Methods
+    # ----------------------    
+    @classmethod
+    def fetch_device_uuid(self):
+        os_type = sys.platform.lower()
+        pattern = '[a-zA-Z0-9]{8}(?:-[a-zA-Z0-9]{4}){3}-[a-zA-Z0-9]{12}'
+        flags=re.MULTILINE
+
+        if "win" in os_type:
+            command = "wmic csproduct get uuid"
+        elif "linux" in os_type:
+            command = "sudo dmidecode -s system-uuid"
+
+        extract=os.popen(command)
+        uuid=re.findall(pattern, extract.read(), flags)[0]
+        extract.close()
+
+        return uuid.upper()
 
     # ---------------------
     # Process Fetch Methods

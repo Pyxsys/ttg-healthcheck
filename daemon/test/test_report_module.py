@@ -78,7 +78,8 @@ class TestSystemReportClass(unittest.TestCase):
         actual_result=self.test_report.get_section("timestamp")
         self.assertIsNotNone(actual_result)
 
-    def testAddingDeviceIdToReport(self):
+    @patch('daemon.src.system_report.SysScrubber.fetch_device_uuid', return_value='01234567-89AB-CDEF-FEDC-BA9876543210')
+    def testAddingDeviceIdToReport(self, m1):
         self.test_report.add_device_uuid()
         actual_result=self.test_report.get_section("deviceId")
         self.assertRegex(actual_result,'^[a-zA-Z0-9]{8}(?:-[a-zA-Z0-9]{4}){3}-[a-zA-Z0-9]{12}$')

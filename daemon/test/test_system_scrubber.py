@@ -9,6 +9,27 @@ from socket import AddressFamily
 sys.path.append('../')
 from daemon.src.system_report import SysScrubber, SysReport
 
+class TestSystemScrubberGeneral(unittest.TestCase):
+
+    @patch('daemon.src.system_report.SysScrubber.is_windows', return_value=True)
+    @patch('daemon.src.system_report.SysScrubber.is_linux', return_value=False)
+    def testFetchingUuidWIN(self,m1,m2):
+
+        MOCK_ADAPTER_TERMINAL_OUTPUT='UUID\n01234567-89AB-CDEF-FEDC-BA9876543210\n\n'
+        with patch('os.popen', new=mock_open(read_data = MOCK_ADAPTER_TERMINAL_OUTPUT)):
+
+            actual_result = SysScrubber.fetch_device_uuid()
+            self.assertEquals(actual_result,'01234567-89AB-CDEF-FEDC-BA9876543210')
+
+    @patch('daemon.src.system_report.SysScrubber.is_windows', return_value=False)
+    @patch('daemon.src.system_report.SysScrubber.is_linux', return_value=True)
+    def testFetchingUuidLUX(self,m1,m2):
+
+        MOCK_ADAPTER_TERMINAL_OUTPUT='01234567-89ab-cdef-fedc-ba9876543210'
+        with patch('os.popen', new=mock_open(read_data = MOCK_ADAPTER_TERMINAL_OUTPUT)):
+
+            actual_result = SysScrubber.fetch_device_uuid()
+            self.assertEquals(actual_result,'01234567-89AB-CDEF-FEDC-BA9876543210')
 
 class TestSystemScrubberCPU(unittest.TestCase):
     
