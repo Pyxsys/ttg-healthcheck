@@ -44,9 +44,7 @@ const ModalService = ({children}: any) => {
   const [fullscreen, setFullscreen] = useState(false);
 
   const [stylingClass, setStylingClass] = useState('');
-  // const [bodyClassName, setBodyClassName] = useState('');
 
-  // const options = {};
   const modalService: IModalService = {
     open: (component, size = 'lg', options) => {
       // Modal Size
