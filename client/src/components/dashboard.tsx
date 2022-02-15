@@ -79,9 +79,9 @@ const DashboardPage = () => {
   };
 
   const viewDash = () => {
-    queryDashboard({userId: user._id}).then((dashboard) => {
-      if (dashboard) {
-        setDashboard(dashboard);
+    queryDashboard({userId: user._id}).then((newDashboard) => {
+      if (newDashboard) {
+        setDashboard(newDashboard);
         setDashboardModified(false);
       }
     });
