@@ -39,9 +39,27 @@ class TestSystemScrubberCPU(unittest.TestCase):
     def tearDown(self):
         del self.test_report
 
-    def testFetchingL1Cache(self):
-        actual_result = SysScrubber.fetch_cpu_l1_cache(cores=psutil.cpu_count(logical=False))
-        self.assertGreaterEqual(int(actual_result), 0)
+    @patch('daemon.src.system_report.SysScrubber.is_windows', return_value=True)
+    @patch('daemon.src.system_report.SysScrubber.is_linux', return_value=False)
+    def testFetchingL1CacheWIN(self,m1,m2):
+        MOCK_ADAPTER_TERMINAL_OUTPUT='64-bit'
+        with patch('os.popen', new=mock_open(read_data = MOCK_ADAPTER_TERMINAL_OUTPUT)):
+            actual_result = SysScrubber.fetch_cpu_l1_cache(cores=None)
+            self.assertEquals(int(actual_result), 64)
+
+    @patch('daemon.src.system_report.SysScrubber.is_windows', return_value=False)
+    @patch('daemon.src.system_report.SysScrubber.is_linux', return_value=True)
+    def testFetchingL1CacheLUX(self,m1,m2):
+        MOCK_ADAPTER_TERMINAL_OUTPUT='LEVEL1_ICACHE_SIZE\t\t\t32768'
+        with patch('os.popen', new=mock_open(read_data = MOCK_ADAPTER_TERMINAL_OUTPUT)):
+            actual_result = SysScrubber.fetch_cpu_l1_cache()
+            self.assertEquals(int(actual_result), 32768)
+
+    @patch('daemon.src.system_report.SysScrubber.is_windows', return_value=False)
+    @patch('daemon.src.system_report.SysScrubber.is_linux', return_value=False)
+    def testFetchingL1CacheNA(self,m1,m2):
+        actual_result = SysScrubber.fetch_cpu_l1_cache()
+        self.assertEquals(int(actual_result), 0)
 
     def testFetchingL2Cache(self):
         actual_result = SysScrubber.fetch_cpu_l2_cache()
