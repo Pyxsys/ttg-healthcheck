@@ -1,14 +1,12 @@
 // 3rd Party
 import React, {useState} from 'react';
 
-import PropTypes from 'prop-types';
 type Props = {
-  setType: Function
-  setName: Function
-  ids: String[]
+  setType: (type: string) => void,
+  setName: (name: string) => void,
 }
 
-const AddWidgetModal = ({setType, setName, ids}: Props) => {
+const AddWidgetModal = ({setType, setName}: Props) => {
   const [types, setTypes] = useState('');
   return (
     <>
@@ -47,10 +45,6 @@ const AddWidgetModal = ({setType, setName, ids}: Props) => {
       </div>
     </>
   );
-};
-
-AddWidgetModal.propTypes = {
-  setType: PropTypes.func.isRequired,
 };
 
 export default AddWidgetModal;

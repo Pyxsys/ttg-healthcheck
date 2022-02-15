@@ -28,7 +28,6 @@ const DashboardPage = () => {
 
   const [dashboard, setDashboard] = useState({} as Dashboard);
   const [deviceData, setDeviceData] = useState([] as DeviceTotal[]);
-  const [allDeviceIds, setAllDeviceIds] = useState([] as String[]);
   const [widgetType, setWidgetType] = useState('');
   const [deviceName, setDeviceName] = useState('');
   const [hover, setHover] = useState(false);
@@ -50,7 +49,6 @@ const DashboardPage = () => {
 
   useEffect(() => {
     viewDash();
-    getAllDeviceIds();
   }, []);
 
   const queryDeviceData = async () => {
@@ -78,12 +76,6 @@ const DashboardPage = () => {
       ),
     }));
     setDeviceData(dashboardDevices);
-  };
-
-  const getAllDeviceIds = async () => {
-    const deviceResponse = await axios.get<IResponse<String>>('api/device/ids');
-    const devices = deviceResponse.data.Results;
-    setAllDeviceIds(devices);
   };
 
   const viewDash = () => {
@@ -302,18 +294,7 @@ const DashboardPage = () => {
           {/* Dashboard Widgets */}
           {dashboard?.widgets?.map((widget, index) => (
             <div className="d-flex flex-column widget-width px-4" key={`${widget.widgetType}_${index}`}>
-              {/* <div className="d-flex bg-dark">
-                <div className="">
-                  <span className="strong">{widget.options.deviceName || widget.options.deviceId}</span>
-                </div>
-                <div className="d-flex align-self-center px-2 ms-auto cursor-pointer"
-                  onClick={() => removeWidget(index)}>
-                  <FaTrashAlt />
-                </div>
-              </div> */}
-              <div className="">
-                {getWidgetHMTL(widget, index)}
-              </div>
+              {getWidgetHMTL(widget, index)}
             </div>
           ))}
 
@@ -330,7 +311,6 @@ const DashboardPage = () => {
                     <AddWidgetModal
                       setType={addWidgetType}
                       setName={setDeviceName}
-                      ids={allDeviceIds}
                     />,
                     'lg',
                     {width: 60},
