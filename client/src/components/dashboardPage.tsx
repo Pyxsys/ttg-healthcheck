@@ -87,9 +87,9 @@ const DashboardPage = () => {
     });
   };
 
-  const addWidgetType = (addWidgetType: string): void => {
+  const addWidgetType = (newWidgetType: string): void => {
+    setWidgetType(newWidgetType);
     setDashboardModified(true);
-    setWidgetType(addWidgetType);
   };
 
   const saveDash = (): void => {
