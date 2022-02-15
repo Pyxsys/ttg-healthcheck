@@ -1,7 +1,7 @@
 // 3rd Party
 import React, {useEffect, useState} from 'react';
 import axios from 'axios';
-import {FaPlus} from 'react-icons/fa';
+import {FaPlus, FaTrashAlt} from 'react-icons/fa';
 
 // Custom
 import Navbar from './Navbar';
@@ -119,6 +119,12 @@ const DashboardPage = () => {
       userId: user._id,
       widgets: [] as DashboardWidget[],
     });
+    setDashboardModified(true);
+  };
+
+  const removeWidget = (index: number): void => {
+    dashboard.widgets.splice(index, 1);
+    setDashboard((prev) => ({...prev, widgets: dashboard.widgets}));
     setDashboardModified(true);
   };
 
@@ -240,8 +246,19 @@ const DashboardPage = () => {
         <div className="container d-flex flex-wrap py-3">
           {/* Dashboard Widgets */}
           {dashboard?.widgets?.map((widget, index) => (
-            <div className="widget-width px-4" key={`${widget.widgetType}_${index}`}>
-              {getWidgetHMTL(widget)}
+            <div className="d-flex flex-column widget-width px-4" key={`${widget.widgetType}_${index}`}>
+              <div className="d-flex bg-dark">
+                <div className="">
+                  <span className="strong">{widget.options.deviceName || widget.options.deviceId}</span>
+                </div>
+                <div className="d-flex align-self-center px-2 ms-auto cursor-pointer"
+                  onClick={() => removeWidget(index)}>
+                  <FaTrashAlt />
+                </div>
+              </div>
+              <div className="">
+                {getWidgetHMTL(widget)}
+              </div>
             </div>
           ))}
 
