@@ -27,7 +27,7 @@ class TestRunner(unittest.TestCase):
     def testRunnerClassInitialization(self):
         self.assertIsInstance(self.test_runner, Runner, msg=None)
 
-    @patch('daemon.src.system_report.SysReport.fetch_network_strength', return_value='Medium')
+    @patch('daemon.src.system_report.SysScrubber.fetch_network_strength', return_value='Medium')
     def testRunnerGeneratingReport(self, m1):
         expected_sections={'deviceId', 'processes', 'memory', 'network', 'disk', 'timestamp'}
         missing_sections=[]
@@ -40,8 +40,8 @@ class TestRunner(unittest.TestCase):
         self.assertEqual(len(missing_sections), 0, msg=missing_sections)
 
     
-    @patch('daemon.src.system_report.SysReport.fetch_net_wan_adapter_info', return_value = { 'SSID': 'mock_network_5GHz', 'connectionType': '802.11dd'})
-    @patch('daemon.src.system_report.SysReport.fetch_net_adapter_addrs', return_value = { 'adapterName': 'target_adapter',  'ipv6': '1111::1111:1111:1111:1111', 'ipv4': '9.99.0.999', 'mac': 'FE-ED-FE-ED-11-11'})
+    @patch('daemon.src.system_report.SysScrubber.fetch_net_wan_adapter_info', return_value = { 'SSID': 'mock_network_5GHz', 'connectionType': '802.11dd'})
+    @patch('daemon.src.system_report.SysScrubber.fetch_net_adapter_addrs', return_value = { 'adapterName': 'target_adapter',  'ipv6': '1111::1111:1111:1111:1111', 'ipv4': '9.99.0.999', 'mac': 'FE-ED-FE-ED-11-11'})
     def testRunnerGeneratingStartupReport(self, m1, m2):
         expected_sections={'deviceId', 'memory_', 'disk_', 'cpu_', 'wifi_', 'timestamp'}
         missing_sections=[]

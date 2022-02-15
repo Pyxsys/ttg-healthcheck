@@ -69,9 +69,7 @@ class Runner:
         self.sleep()
 
 class SysReport:
-    # Constants
-    _R_DIGIT_PATTERN = '(\d+)'
-    
+      
     # Initializes instance attributes.
     def __init__(self):
         self.report_message = {}
@@ -194,6 +192,11 @@ class SysReport:
         self.set_section('wifi_', net_info)
 
 class SysScrubber:
+    # ----------------------
+    # Constants
+    # ----------------------
+    _R_DIGIT_PATTERN = '(\d+)'
+
     # ----------------------
     # OS Determining Methods
     # ----------------------
