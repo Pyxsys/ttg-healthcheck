@@ -91,6 +91,47 @@ const ModalService = ({children}: any) => {
     },
   };
 
+  const getFooterHTML = (): JSX.Element => {
+    if (!primaryText && !secondaryText) {
+      return <></>;
+    }
+
+    return (
+      <Modal.Footer className="modal-background modal-footer">
+        {secondaryText ? (
+          <button
+            className="btn modal-buttons"
+            onClick={() => {
+              if (modalService.onSecondaryClicked) {
+                modalService.onSecondaryClicked();
+              }
+              setShow(false);
+            }}
+          >
+            {secondaryText}
+          </button>
+        ) : (
+          <></>
+        )}
+        {primaryText ? (
+          <button
+            className="btn modal-buttons"
+            onClick={() => {
+              if (modalService.onPrimaryClicked) {
+                modalService.onPrimaryClicked();
+              }
+              setShow(false);
+            }}
+          >
+            {primaryText}
+          </button>
+        ) : (
+          <></>
+        )}
+      </Modal.Footer>
+    );
+  };
+
   return (
     <>
       <ModalContext.Provider value={modalService}>
@@ -108,42 +149,8 @@ const ModalService = ({children}: any) => {
         <Modal.Body className="modal-background text-white">
           {modalContent}
         </Modal.Body>
-        {primaryText || secondaryText ? (
-          <Modal.Footer className="modal-background modal-footer">
-            {secondaryText ? (
-              <button
-                className="btn modal-buttons"
-                onClick={() => {
-                  if (modalService.onSecondaryClicked) {
-                    modalService.onSecondaryClicked();
-                  }
-                  setShow(false);
-                }}
-              >
-                {secondaryText}
-              </button>
-            ) : (
-              <></>
-            )}
-            {primaryText ? (
-              <button
-                className="btn modal-buttons"
-                onClick={() => {
-                  if (modalService.onPrimaryClicked) {
-                    modalService.onPrimaryClicked();
-                  }
-                  setShow(false);
-                }}
-              >
-                {primaryText}
-              </button>
-            ) : (
-              <></>
-            )}
-          </Modal.Footer>
-        ) : (
-          <></>
-        )}
+
+        {getFooterHTML()}
       </Modal>
     </>
   );
