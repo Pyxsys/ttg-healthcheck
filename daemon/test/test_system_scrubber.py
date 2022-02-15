@@ -32,12 +32,6 @@ class TestSystemScrubberGeneral(unittest.TestCase):
             self.assertEquals(actual_result,'01234567-89AB-CDEF-FEDC-BA9876543210')
 
 class TestSystemScrubberCPU(unittest.TestCase):
-    
-    def setUp(self):
-        self.test_report=SysReport()
-
-    def tearDown(self):
-        del self.test_report
 
     @patch('daemon.src.system_report.SysScrubber.is_windows', return_value=True)
     @patch('daemon.src.system_report.SysScrubber.is_linux', return_value=False)
@@ -128,12 +122,6 @@ class TestSystemScrubberCPU(unittest.TestCase):
         self.assertEquals(actual_result,0)
 
 class TestSystemScrubberMemory(unittest.TestCase):
-
-    def setUp(self):
-        self.test_report=SysReport()
-
-    def tearDown(self):
-        del self.test_report
         
     def testFetchingTotalMemory(self):
         actual_result=SysScrubber.fetch_total_memory()
@@ -145,12 +133,6 @@ class TestSystemScrubberMemory(unittest.TestCase):
             self.assertTrue(x)
 
 class TestSystemScrubberDisk(unittest.TestCase):
-    
-    def setUp(self):
-        self.test_report=SysReport()
-
-    def tearDown(self):
-        del self.test_report
 
     def testFetchingTotalDiskCapacity(self):
         actual_result=SysScrubber.fetch_total_disk_capacity()
@@ -224,13 +206,7 @@ class TestSystemScrubberWifi(unittest.TestCase):
             snicaddr(family=AddressFamily.AF_INET6, address='feed::fade:1111:1111:1111', netmask=None, broadcast=None, ptp=None)
             ]
         }
-
-    def setUp(self):
-        self.test_report=SysReport()
-
-    def tearDown(self):
-        del self.test_report
-        
+       
     def testFetchingAdapterName(self):
         expected_result = 'wlan0'
         with patch('psutil.net_if_addrs', return_value = self.getPSUTIL_NET_IF_ADDRS__MO()):
