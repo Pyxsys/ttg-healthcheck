@@ -186,13 +186,29 @@ class TestSystemScrubberDisk(unittest.TestCase):
                     missing_attributes.append(attribute)
             self.assertEqual(len(missing_attributes), 0, msg=missing_attributes)
 
-    def testFetchingPhysicalDiskList(self):
-        disk_sub_categories = ('model', 'size', 'media')
-        actual_list = SysScrubber.fetch_physical_disks()
+    @patch('daemon.src.system_report.SysScrubber.is_windows', return_value=True)
+    @patch('daemon.src.system_report.SysScrubber.is_linux', return_value=False)
+    def testFetchingPhysicalDiskListWIN(self,m1,m2):
+        MOCK_ADAPTER_TERMINAL_OUTPUT='Model                    Size\nWDC  WDS100T2B0B-00YS70  1000202273280\n\nNumber FriendlyName            SerialNumber MediaType CanPool OperationalStatus HealthStatus Usage            Size\n------ ------------            ------------ --------- ------- ----------------- ------------ -----            ----\n0      WDC  WDS100T2B0B-00YS70 202910802764 SSD       False   OK                Healthy      Auto-Select 931.51 GB\n\n'
+        with patch('os.popen', new=mock_open(read_data = MOCK_ADAPTER_TERMINAL_OUTPUT)):
+            disk_sub_categories = ('model', 'size', 'media')
+            actual_list = SysScrubber.fetch_physical_disks()
 
-        for x in actual_list:
-            actual_result=tuple(x)
-            self.assertTupleEqual(actual_result, disk_sub_categories)
+            for x in actual_list:
+                actual_result=tuple(x)
+                self.assertTupleEqual(actual_result, disk_sub_categories)
+            
+    @patch('daemon.src.system_report.SysScrubber.is_windows', return_value=False)
+    @patch('daemon.src.system_report.SysScrubber.is_linux', return_value=True)
+    def testFetchingPhysicalDiskListLUX(self,m1,m2):
+        MOCK_ADAPTER_TERMINAL_OUTPUT='Disk /dev/sda: 8 GiB, 8589934592 bytes, 16777216 sectors\nDisk model: TEST HARDDISK\nNAME ROTA\nsda\t1\nsr0\t1'
+        with patch('os.popen', new=mock_open(read_data = MOCK_ADAPTER_TERMINAL_OUTPUT)):    
+            disk_sub_categories = ('model', 'size', 'media')
+            actual_list = SysScrubber.fetch_physical_disks()
+
+            for x in actual_list:
+                actual_result=tuple(x)
+                self.assertTupleEqual(actual_result, disk_sub_categories)
 
 class TestSystemScrubberProcess(unittest.TestCase):
 
