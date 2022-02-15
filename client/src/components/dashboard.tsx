@@ -51,7 +51,7 @@ const DashboardPage = () => {
     viewDash();
   }, []);
 
-  const queryDeviceData = async () => {
+  const queryDeviceData = async (): Promise<void> => {
     if (!dashboard?.widgets) {
       return;
     }
@@ -78,7 +78,7 @@ const DashboardPage = () => {
     setDeviceData(dashboardDevices);
   };
 
-  const viewDash = () => {
+  const viewDash = (): void => {
     queryDashboard({userId: user._id}).then((newDashboard) => {
       if (newDashboard) {
         setDashboard(newDashboard);
@@ -87,12 +87,12 @@ const DashboardPage = () => {
     });
   };
 
-  const addWidgetType = (widgetType: string) => {
+  const addWidgetType = (addWidgetType: string): void => {
     setDashboardModified(true);
-    setWidgetType(widgetType);
+    setWidgetType(addWidgetType);
   };
 
-  const saveDash = () => {
+  const saveDash = (): void => {
     saveDashboard(dashboard)
         .catch((error) => {
           notificationService.error(`Error: ${error.response.data}`);
@@ -106,7 +106,7 @@ const DashboardPage = () => {
         });
   };
 
-  const resetDash = () => {
+  const resetDash = (): void => {
     setDashboard({
       userId: user._id,
       widgets: [] as DashboardWidget[],
@@ -120,12 +120,12 @@ const DashboardPage = () => {
     setDashboardModified(true);
   };
 
-  const overrideWidgetHeaderHTML = (widgetName: string, widgetType: string, index: number): JSX.Element => (
+  const overrideWidgetHeaderHTML = (widgetName: string, widgetTitle: string, index: number): JSX.Element => (
     <div className="d-flex w-100">
       <div className="d-flex justify-content-center w-100">
         <div className="d-flex flex-column align-content-center">
           <h6 className="text-truncate text-center">{widgetName}</h6>
-          <div className="text-center">{widgetType}</div>
+          <div className="text-center">{widgetTitle}</div>
         </div>
       </div>
       <div className="d-flex align-self-center px-2 ms-auto cursor-pointer"
@@ -241,7 +241,7 @@ const DashboardPage = () => {
     return <></>;
   };
 
-  modalService.onPrimaryClicked = () => {
+  modalService.onPrimaryClicked = (): void => {
     if (dashboard.widgets?.length > 0) {
       const wids: DashboardWidget[] = dashboard.widgets;
       wids.push({
