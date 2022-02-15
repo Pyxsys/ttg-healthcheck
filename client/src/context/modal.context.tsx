@@ -46,7 +46,7 @@ const ModalService = ({children}: any) => {
   const [stylingClass, setStylingClass] = useState('');
 
   const modalService: IModalService = {
-    open: (component, size = 'lg', options) => {
+    open: (component, size = 'lg', options = undefined) => {
       // Modal Size
       if (size === 'full') {
         setFullscreen(true);
