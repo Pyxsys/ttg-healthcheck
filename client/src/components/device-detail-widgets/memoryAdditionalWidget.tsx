@@ -5,7 +5,7 @@ import {Col, Table, Accordion} from 'react-bootstrap';
 // Custom
 import {Device} from '../../types/queries';
 
-const memoryAdditionalWidget = (props: { deviceStatic: Device }) => {
+const memoryAdditionalWidget = (props: { deviceStatic: Device, overrideHeader?: JSX.Element }) => {
   const deviceStatic: Device = props.deviceStatic;
 
   return (
@@ -13,9 +13,12 @@ const memoryAdditionalWidget = (props: { deviceStatic: Device }) => {
       <Accordion defaultActiveKey="0" flush>
         <Accordion.Item eventKey="0">
           <Accordion.Header>
-            <div className="d-flex w-100 justify-content-around">
-              Additional Memory Information
-            </div>
+            {props.overrideHeader ?
+              props.overrideHeader :
+              <div className="d-flex w-100 justify-content-around">
+                Additional Memory Information
+              </div>
+            }
           </Accordion.Header>
           <Accordion.Body>
             <Table className="device-details-table device-details-table-dark">

@@ -128,7 +128,22 @@ const DashboardPage = () => {
     setDashboardModified(true);
   };
 
-  const getWidgetHMTL = (widget: DashboardWidget): JSX.Element => {
+  const overrideWidgetHeaderHTML = (widgetName: string, widgetType: string, index: number): JSX.Element => (
+    <div className="d-flex w-100">
+      <div className="d-flex justify-content-center w-100">
+        <div className="d-flex flex-column align-content-center">
+          <h6 className="text-truncate text-center">{widgetName}</h6>
+          <div className="text-center">{widgetType}</div>
+        </div>
+      </div>
+      <div className="d-flex align-self-center px-2 ms-auto cursor-pointer"
+        onClick={() => removeWidget(index)}>
+        <FaTrashAlt />
+      </div>
+    </div>
+  );
+
+  const getWidgetHMTL = (widget: DashboardWidget, index: number): JSX.Element => {
     const device = deviceData.find(
         (e) => e.static.deviceId === widget.options.deviceId,
     );
@@ -141,24 +156,44 @@ const DashboardPage = () => {
         return (
           <CpuAdditionalWidget
             deviceStatic={staticDevice}
+            overrideHeader={overrideWidgetHeaderHTML(
+                widget.options.deviceName || widget.options.deviceId,
+                'Additional CPU Information',
+                index,
+            )}
           ></CpuAdditionalWidget>
         );
       case 'Memory-Static':
         return (
           <MemoryAdditionalWidget
             deviceStatic={staticDevice}
+            overrideHeader={overrideWidgetHeaderHTML(
+                widget.options.deviceName || widget.options.deviceId,
+                'Additional Memory Information',
+                index,
+            )}
           ></MemoryAdditionalWidget>
         );
       case 'Disk-Static':
         return (
           <DiskAdditionalWidget
             deviceStatic={staticDevice}
+            overrideHeader={overrideWidgetHeaderHTML(
+                widget.options.deviceName || widget.options.deviceId,
+                'Additional Disk Information',
+                index,
+            )}
           ></DiskAdditionalWidget>
         );
       case 'Network-Static':
         return (
           <WifiAdditionalWidget
             deviceStatic={staticDevice}
+            overrideHeader={overrideWidgetHeaderHTML(
+                widget.options.deviceName || widget.options.deviceId,
+                'Additional Network Information',
+                index,
+            )}
           ></WifiAdditionalWidget>
         );
     }
@@ -171,23 +206,43 @@ const DashboardPage = () => {
       case 'CPU-Dynamic':
         return <CpuUsageWidget
           deviceDynamic={dynamicDevice}
+          overrideHeader={overrideWidgetHeaderHTML(
+              widget.options.deviceName || widget.options.deviceId,
+              'CPU Usage Information',
+              index,
+          )}
         ></CpuUsageWidget>;
       case 'Memory-Dynamic':
         return (
           <MemoryUsageWidget
             deviceDynamic={dynamicDevice}
+            overrideHeader={overrideWidgetHeaderHTML(
+                widget.options.deviceName || widget.options.deviceId,
+                'Memory Usage Information',
+                index,
+            )}
           ></MemoryUsageWidget>
         );
       case 'Disk-Dynamic':
         return (
           <DiskUsageWidget
             deviceDynamic={dynamicDevice}
+            overrideHeader={overrideWidgetHeaderHTML(
+                widget.options.deviceName || widget.options.deviceId,
+                'Disk Usage Information',
+                index,
+            )}
           ></DiskUsageWidget>
         );
       case 'Network-Dynamic':
         return (
           <WifiUsageWidget
             deviceDynamic={dynamicDevice}
+            overrideHeader={overrideWidgetHeaderHTML(
+                widget.options.deviceName || widget.options.deviceId,
+                'Network Usage Information',
+                index,
+            )}
           ></WifiUsageWidget>
         );
     }
@@ -247,7 +302,7 @@ const DashboardPage = () => {
           {/* Dashboard Widgets */}
           {dashboard?.widgets?.map((widget, index) => (
             <div className="d-flex flex-column widget-width px-4" key={`${widget.widgetType}_${index}`}>
-              <div className="d-flex bg-dark">
+              {/* <div className="d-flex bg-dark">
                 <div className="">
                   <span className="strong">{widget.options.deviceName || widget.options.deviceId}</span>
                 </div>
@@ -255,9 +310,9 @@ const DashboardPage = () => {
                   onClick={() => removeWidget(index)}>
                   <FaTrashAlt />
                 </div>
-              </div>
+              </div> */}
               <div className="">
-                {getWidgetHMTL(widget)}
+                {getWidgetHMTL(widget, index)}
               </div>
             </div>
           ))}
