@@ -24,8 +24,8 @@ export interface IModalService {
     options?: ModalOptions
   ): void
   close(): void
-  onPrimaryClicked: ButtonClickedCallback
-  onSecondaryClicked: ButtonClickedCallback
+  onPrimaryClicked?: ButtonClickedCallback
+  onSecondaryClicked?: ButtonClickedCallback
 }
 
 const ModalContext = Contextualizer.createContext<IModalService>(
@@ -89,9 +89,6 @@ const ModalService = ({children}: any) => {
     close: () => {
       setShow(false);
     },
-
-    onPrimaryClicked: () => {},
-    onSecondaryClicked: () => {},
   };
 
   return (
@@ -117,7 +114,9 @@ const ModalService = ({children}: any) => {
               <button
                 className="btn modal-buttons"
                 onClick={() => {
-                  modalService?.onSecondaryClicked();
+                  if (modalService.onSecondaryClicked) {
+                    modalService.onSecondaryClicked();
+                  }
                   setShow(false);
                 }}
               >
@@ -130,7 +129,9 @@ const ModalService = ({children}: any) => {
               <button
                 className="btn modal-buttons"
                 onClick={() => {
-                  modalService?.onPrimaryClicked();
+                  if (modalService.onPrimaryClicked) {
+                    modalService.onPrimaryClicked();
+                  }
                   setShow(false);
                 }}
               >
