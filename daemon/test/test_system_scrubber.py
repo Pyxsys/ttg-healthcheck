@@ -105,9 +105,27 @@ class TestSystemScrubberCPU(unittest.TestCase):
         actual_result = SysScrubber.fetch_cpu_l3_cache()
         self.assertEqual(int(actual_result), 0)
 
-    def testFetchingCPUSockets(self):
+    @patch('daemon.src.system_report.SysScrubber.is_windows', return_value=True)
+    @patch('daemon.src.system_report.SysScrubber.is_linux', return_value=False) 
+    def testFetchingCPUSocketsWIN(self,m1,m2):
+        MOCK_ADAPTER_TERMINAL_OUTPUT='1\n'
+        with patch('os.popen', new=mock_open(read_data = MOCK_ADAPTER_TERMINAL_OUTPUT)):
+            actual_result=SysScrubber.fetch_cpu_sockets()
+            self.assertEquals(actual_result,1)
+    
+    @patch('daemon.src.system_report.SysScrubber.is_windows', return_value=False)
+    @patch('daemon.src.system_report.SysScrubber.is_linux', return_value=True)
+    def testFetchingCPUSocketsLUX(self,m1,m2):
+        MOCK_ADAPTER_TERMINAL_OUTPUT='Socket(s):\t\t\t1\n'
+        with patch('os.popen', new=mock_open(read_data = MOCK_ADAPTER_TERMINAL_OUTPUT)):
+            actual_result=SysScrubber.fetch_cpu_sockets()
+            self.assertEquals(actual_result,1)
+
+    @patch('daemon.src.system_report.SysScrubber.is_windows', return_value=False)
+    @patch('daemon.src.system_report.SysScrubber.is_linux', return_value=False)
+    def testFetchingCPUSocketsNA(self,m1,m2):
         actual_result=SysScrubber.fetch_cpu_sockets()
-        self.assertGreaterEqual(actual_result,1)
+        self.assertEquals(actual_result,0)
 
 class TestSystemScrubberMemory(unittest.TestCase):
 
