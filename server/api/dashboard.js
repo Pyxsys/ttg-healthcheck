@@ -9,7 +9,7 @@ const { parseQuery } = require('./common/filter')
 router.post('/', auth, async (req, res) => {
   const { userId, widgets } = req.body
 
-  if (!(typeof userId === 'string')) {
+  if (typeof userId !== 'string') {
     return res.status(400).send('Invalid: UserId must be a String')
   }
   if (!(widgets instanceof Array)) {
