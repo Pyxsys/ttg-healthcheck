@@ -196,7 +196,7 @@ class SysScrubber:
     # General Methods
     # ----------------------    
     @classmethod
-    def fetch_device_uuid(self):
+    def fetch_device_uuid(cls):
         pattern = '[a-zA-Z0-9]{8}(?:-[a-zA-Z0-9]{4}){3}-[a-zA-Z0-9]{12}'
         flags=re.MULTILINE
 
