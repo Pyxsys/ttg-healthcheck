@@ -89,3 +89,19 @@ We are using the following rules for our coding covention:
 * Ashraf Khalil
 * James El Tayar
 * Michael Takenaka
+
+## Acceptance Test Videos
+### Login
+https://user-images.githubusercontent.com/21341750/153103328-bf7a50b5-7dbd-462e-8afa-69d51f3ca01e.mp4
+
+### Logout
+https://user-images.githubusercontent.com/21341750/153103337-4577a4a2-44bf-4e6f-9080-3a8c319add0b.mp4
+
+### Register
+https://user-images.githubusercontent.com/21341750/153103345-281d5191-9b55-491e-a29b-5451c8e40a84.mp4
+
+### Devices 
+https://user-images.githubusercontent.com/21341750/153103357-7583525e-3890-4ffb-b6b2-63b359ce7e23.mp4
+
+### Device Details
+https://user-images.githubusercontent.com/21341750/153103366-075d76c4-336a-4305-a642-ac86ac81a06e.mp4
