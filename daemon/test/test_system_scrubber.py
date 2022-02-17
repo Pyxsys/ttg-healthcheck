@@ -223,7 +223,7 @@ class TestSystemScrubberProcess(unittest.TestCase):
         self.test_report.add_system_process_info()
 
         process_list=self.test_report.get_section("processes")
-        self.assertTrue(x.name == 'python.exe' for x in process_list)
+        self.assertTrue(x.name == expected_result for x in process_list)
 
 class TestSystemScrubberWifi(unittest.TestCase):
 
