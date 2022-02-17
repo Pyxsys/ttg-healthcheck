@@ -28,24 +28,6 @@ class TestSystemReportClass(unittest.TestCase):
         }
     }
 
-    @classmethod
-    def getPSUTIL_NET_IF_ADDRS__MO(cls):
-        # Constant-dictionary assigned to function due to unittest patching not
-        # keeping mocks indpenedent when elements are popped. This causes subsequent tests
-        # mocking the same dict to alos have those elements popped
-        return {
-        'wlan0' : [
-            snicaddr(family=psutil.AF_LINK, address='FE-ED-FE-ED-11-11', netmask=None, broadcast=None, ptp=None), 
-            snicaddr(family=AddressFamily.AF_INET, address='9.99.0.999', netmask='255.255.0.0', broadcast=None, ptp=None), 
-            snicaddr(family=AddressFamily.AF_INET6, address='feed::fade:1111:face:1111', netmask=None, broadcast=None, ptp=None)
-            ],
-        'Wi-Fi' : [
-            snicaddr(family=psutil.AF_LINK, address='FE-ED-FE-ED-00-00', netmask=None, broadcast=None, ptp=None), 
-            snicaddr(family=AddressFamily.AF_INET, address='9.99.999.0', netmask='255.255.0.0', broadcast=None, ptp=None), 
-            snicaddr(family=AddressFamily.AF_INET6, address='feed::fade:1111:1111:1111', netmask=None, broadcast=None, ptp=None)
-            ]
-        }
-
     def setUp(self):
         self.test_report=SysReport()
 
