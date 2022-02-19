@@ -1,9 +1,6 @@
 // 3rd Party
 import React from 'react';
 
-// Custom
-import '../../App.scss';
-
 const FrontPageWrapper = ({children}: { children: JSX.Element }) => {
   return (
     <div className="h-100 d-flex flex-column">

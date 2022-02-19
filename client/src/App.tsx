@@ -3,12 +3,12 @@ import React from 'react';
 import './App.scss';
 import {Route} from 'react-router-dom';
 import PrivateRoute from './routes/privateRoute';
-import Login from './components/login';
-import Dashboard from './components/dashboardPage';
-import AdminPanel from './components/adminPanel';
-import Signup from './components/signup';
-import DevicePage from './components/devicePage';
-import deviceDetailPage from './components/deviceDetailPage';
+import Signup from './components/pages/signup';
+import Login from './components/pages/login';
+import Dashboard from './components/pages/dashboard';
+import AdminPanel from './components/pages/adminPanel';
+import DevicesTable from './components/pages/devicesTable';
+import deviceDetail from './components/pages/deviceDetail';
 
 function App() {
   return (
@@ -25,13 +25,13 @@ function App() {
         exact
         path="/devices"
         roles={['user', 'admin']}
-        component={DevicePage}
+        component={DevicesTable}
       ></PrivateRoute>
       <PrivateRoute
         exact
         path="/device"
         roles={['user', 'admin']}
-        component={deviceDetailPage}
+        component={deviceDetail}
       ></PrivateRoute>
       <PrivateRoute
         exact

@@ -2,7 +2,7 @@
 import React from 'react';
 
 // Custom
-import {useAuth} from '../context/authContext';
+import {useAuth} from '../../context/authContext';
 
 const AdminPanel = () => {
   const {user} = useAuth();

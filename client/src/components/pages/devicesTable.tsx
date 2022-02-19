@@ -4,19 +4,19 @@ import axios from 'axios';
 import {Link} from 'react-router-dom';
 
 // Custom
-import {IResponse} from '../types/queries';
-import {IDevice, IDeviceLog, IDeviceTotal} from '../types/device';
-import {useRealTimeService} from '../context/realTimeContext';
-import Navbar from './common/Navbar';
-import PieWheel from './common/pieWheel';
-import {SignalStrength, signalText} from './common/signalStrength';
-import {IColumnDetail} from '../types/tables';
-import Pagination from './common/pagination';
-import ViewTable from './common/viewTable';
+import {IResponse} from '../../types/queries';
+import {IDevice, IDeviceLog, IDeviceTotal} from '../../types/device';
+import {useRealTimeService} from '../../context/realTimeContext';
+import Navbar from '../common/Navbar';
+import PieWheel from '../common/pieWheel';
+import {SignalStrength, signalText} from '../common/signalStrength';
+import {IColumnDetail} from '../../types/tables';
+import Pagination from '../common/pagination';
+import ViewTable from '../common/viewTable';
 
 type CellValue = string | number | undefined
 
-const DevicePage = () => {
+const DevicesTable = () => {
   // Readonly Values
   const initialPage: number = 1;
   const pageSize: number = 10;
@@ -192,4 +192,4 @@ const DevicePage = () => {
   );
 };
 
-export default DevicePage;
+export default DevicesTable;

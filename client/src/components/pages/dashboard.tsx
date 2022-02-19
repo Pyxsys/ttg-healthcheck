@@ -4,26 +4,26 @@ import axios from 'axios';
 import {FaPlus, FaTrashAlt} from 'react-icons/fa';
 
 // Custom
-import Navbar from './common/Navbar';
-import {useAuth} from '../context/authContext';
-import {useModalService} from '../context/modal.context';
-import {notificationService} from '../services/notification.service';
-import {queryDashboard, saveDashboard} from '../services/dashboard.service';
-import {IResponse} from '../types/queries';
-import {IDevice, IDeviceLog, IDeviceTotal} from '../types/device';
-import {IDashboard, IDashboardWidget} from '../types/dashboard';
-import AddWidgetModal from './dashboard-widgets/addWidgetModal';
+import Navbar from '../common/Navbar';
+import {useAuth} from '../../context/authContext';
+import {useModalService} from '../../context/modal.context';
+import {notificationService} from '../../services/notification.service';
+import {queryDashboard, saveDashboard} from '../../services/dashboard.service';
+import {IResponse} from '../../types/queries';
+import {IDevice, IDeviceLog, IDeviceTotal} from '../../types/device';
+import {IDashboard, IDashboardWidget} from '../../types/dashboard';
+import AddWidgetModal from '../dashboard-widgets/addWidgetModal';
 // Widgets
-import CpuUsageWidget from './device-detail-widgets/cpuUsageWidget';
-import CpuAdditionalWidget from './device-detail-widgets/cpuAdditionalWidget';
-import MemoryUsageWidget from './device-detail-widgets/memoryUsageWidget';
-import MemoryAdditionalWidget from './device-detail-widgets/memoryAdditionalWidget';
-import DiskUsageWidget from './device-detail-widgets/diskUsageWidget';
-import DiskAdditionalWidget from './device-detail-widgets/diskAdditionalWidget';
-import WifiUsageWidget from './device-detail-widgets/wifiUsageWidget';
-import WifiAdditionalWidget from './device-detail-widgets/wifiAdditionalWidget';
+import CpuUsageWidget from '../device-detail-widgets/cpuUsageWidget';
+import CpuAdditionalWidget from '../device-detail-widgets/cpuAdditionalWidget';
+import MemoryUsageWidget from '../device-detail-widgets/memoryUsageWidget';
+import MemoryAdditionalWidget from '../device-detail-widgets/memoryAdditionalWidget';
+import DiskUsageWidget from '../device-detail-widgets/diskUsageWidget';
+import DiskAdditionalWidget from '../device-detail-widgets/diskAdditionalWidget';
+import WifiUsageWidget from '../device-detail-widgets/wifiUsageWidget';
+import WifiAdditionalWidget from '../device-detail-widgets/wifiAdditionalWidget';
 
-const DashboardPage = () => {
+const Dashboard = () => {
   const {user} = useAuth();
   const modalService = useModalService();
 
@@ -329,4 +329,4 @@ const DashboardPage = () => {
   );
 };
 
-export default DashboardPage;
+export default Dashboard;

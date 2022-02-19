@@ -4,23 +4,23 @@ import axios from 'axios';
 import {Col, Row, Table, Accordion, Tabs, Tab} from 'react-bootstrap';
 
 // Custom
-import Navbar from './common/Navbar';
-import {IResponse} from '../types/queries';
-import {IDevice, IDeviceLog} from '../types/device';
-import {useRealTimeService} from '../context/realTimeContext';
-import PieWheel from './common/pieWheel';
-import CpuUsageWidget from './device-detail-widgets/cpuUsageWidget';
-import CpuAdditionalWidget from './device-detail-widgets/cpuAdditionalWidget';
-import DiskUsageWidget from './device-detail-widgets/diskUsageWidget';
-import DiskAdditionalWidget from './device-detail-widgets/diskAdditionalWidget';
-import MemoryUsageWidget from './device-detail-widgets/memoryUsageWidget';
-import MemoryAdditionalWidget from './device-detail-widgets/memoryAdditionalWidget';
-import WifiUsageWidget from './device-detail-widgets/wifiUsageWidget';
-import WifiAdditionalWidget from './device-detail-widgets/wifiAdditionalWidget';
-import {SignalStrength} from './common/signalStrength';
-import ProcessTable from './device-detail-widgets/processTable';
+import Navbar from '../common/Navbar';
+import {IResponse} from '../../types/queries';
+import {IDevice, IDeviceLog} from '../../types/device';
+import {useRealTimeService} from '../../context/realTimeContext';
+import PieWheel from '../common/pieWheel';
+import CpuUsageWidget from '../device-detail-widgets/cpuUsageWidget';
+import CpuAdditionalWidget from '../device-detail-widgets/cpuAdditionalWidget';
+import DiskUsageWidget from '../device-detail-widgets/diskUsageWidget';
+import DiskAdditionalWidget from '../device-detail-widgets/diskAdditionalWidget';
+import MemoryUsageWidget from '../device-detail-widgets/memoryUsageWidget';
+import MemoryAdditionalWidget from '../device-detail-widgets/memoryAdditionalWidget';
+import WifiUsageWidget from '../device-detail-widgets/wifiUsageWidget';
+import WifiAdditionalWidget from '../device-detail-widgets/wifiAdditionalWidget';
+import {SignalStrength} from '../common/signalStrength';
+import ProcessTable from '../device-detail-widgets/processTable';
 
-const DeviceDetailPage = (props: any) => {
+const DeviceDetail = (props: any) => {
   const getSearchParam = (key: string): string => {
     const search: string = props.location.search;
     const allParams = search.replace('?', '').split('&');
@@ -329,4 +329,4 @@ const DeviceDetailPage = (props: any) => {
   );
 };
 
-export default DeviceDetailPage;
+export default DeviceDetail;
