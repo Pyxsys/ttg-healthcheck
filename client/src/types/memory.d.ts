@@ -1,14 +1,14 @@
-export interface MemoryStatic {
+export interface IMemoryStatic {
   maxSize: number
   formFactor: string
 }
 
-export interface MemoryDynamic {
+export interface IMemoryDynamic {
   inUse: number
   available: number
   cached: number
   aggregatedPercentage: number
 }
-export interface MemoryProcess {
+export interface IMemoryProcess {
   usagePercentage: number
 }

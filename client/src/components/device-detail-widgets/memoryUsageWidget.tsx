@@ -4,10 +4,10 @@ import {Col, Table, Accordion} from 'react-bootstrap';
 import {format} from 'fecha';
 
 // Custom
-import {DeviceLog} from '../../types/queries';
+import {IDeviceLog} from '../../types/device';
 
-const memoryUsageWidget = (props: { deviceDynamic: DeviceLog, overrideHeader?: JSX.Element }) => {
-  const deviceDynamic: DeviceLog = props.deviceDynamic;
+const memoryUsageWidget = (props: { deviceDynamic: IDeviceLog, overrideHeader?: JSX.Element }) => {
+  const deviceDynamic: IDeviceLog = props.deviceDynamic;
 
   return (
     <Col className="device-details-accordion dark-accordion pt-3 pb-3">

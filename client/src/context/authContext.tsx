@@ -2,13 +2,13 @@ import React, {useState, useEffect} from 'react';
 import {useLocation} from 'react-router-dom';
 import AuthService from '../services/authService';
 import Contextualizer, {AppServices} from '../services/context.service';
-import {UserObject} from '../types/users';
+import {IUserObject} from '../types/users';
 
 interface AuthObject {
   isAuthenticated: boolean
   setIsAuthenticated: (active: boolean) => void
-  user: UserObject
-  setUser: (active: UserObject) => void
+  user: IUserObject
+  setUser: (active: IUserObject) => void
 }
 
 const AuthContext = Contextualizer.createContext<AuthObject>(

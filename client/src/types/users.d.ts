@@ -1,4 +1,4 @@
-export interface UserResponse {
+export interface IUserResponse {
   message: string
   user: {
     name: string
@@ -6,7 +6,7 @@ export interface UserResponse {
   }
 }
 
-export interface UserObject {
+export interface IUserObject {
   _id: string
   name: string
   role: string

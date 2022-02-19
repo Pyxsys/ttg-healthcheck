@@ -2,11 +2,11 @@
 import React, {Dispatch, SetStateAction, useEffect, useState} from 'react';
 
 // Custom
-import {ColumnDetail} from '../../types/tables';
+import {IColumnDetail} from '../../types/tables';
 
 interface ViewTableInputs<T> {
   tableData: T[]
-  columns: ColumnDetail[]
+  columns: IColumnDetail[]
   page?: number
   pageSize?: number
   initialOrderBy?: string

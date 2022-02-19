@@ -5,7 +5,8 @@ import {Col, Row, Table, Accordion, Tabs, Tab} from 'react-bootstrap';
 
 // Custom
 import Navbar from './Navbar';
-import {Device, DeviceLog, IResponse} from '../types/queries';
+import {IResponse} from '../types/queries';
+import {IDevice, IDeviceLog} from '../types/device';
 import {useRealTimeService} from '../context/realTimeContext';
 import PieWheel from './common/pieWheel';
 import CpuUsageWidget from './device-detail-widgets/cpuUsageWidget';
@@ -28,8 +29,8 @@ const DeviceDetailPage = (props: any) => {
   };
 
   const deviceId: string = getSearchParam('Id');
-  const [deviceData, setDeviceData] = useState({} as Device);
-  const [deviceLogsData, setDeviceLogsData] = useState({} as DeviceLog);
+  const [deviceData, setDeviceData] = useState({} as IDevice);
+  const [deviceLogsData, setDeviceLogsData] = useState({} as IDeviceLog);
 
   const realTimeDataService = useRealTimeService();
 
@@ -48,13 +49,13 @@ const DeviceDetailPage = (props: any) => {
       limit: 1,
     };
 
-    const deviceResponse = await axios.get<IResponse<Device>>('api/device', {
+    const deviceResponse = await axios.get<IResponse<IDevice>>('api/device', {
       params: queryParams,
     });
     const devices = deviceResponse.data.Results;
     setDeviceData(devices[0] || null);
 
-    const deviceLogResponse = await axios.get<IResponse<DeviceLog>>(
+    const deviceLogResponse = await axios.get<IResponse<IDeviceLog>>(
         'api/device-logs',
         {
           params: queryParams,

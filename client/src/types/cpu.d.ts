@@ -1,4 +1,4 @@
-export interface CpuStatic {
+export interface ICpuStatic {
   baseSpeed: number
   sockets: number
   cores: number
@@ -8,13 +8,13 @@ export interface CpuStatic {
   cacheSizeL3: number
 }
 
-export interface CpuDynamic {
+export interface ICpuDynamic {
   usageSpeed: number
   numProcesses: number
   threadsSleeping: number
   aggregatedPercentage: number
 }
 
-export interface CpuProcess {
+export interface ICpuProcess {
   usagePercentage: number
 }

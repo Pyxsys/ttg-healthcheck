@@ -1,20 +1,20 @@
 import {IQuery} from './queries';
 
-export interface DashboardWidget {
+export interface IDashboardWidget {
   widgetType: string
-  options: WidgetOptions
+  options: IWidgetOptions
 }
-export interface WidgetOptions {
+export interface IWidgetOptions {
   deviceName: string
   deviceId: string
 }
-export interface Dashboard {
+export interface IDashboard {
   userId: string
-  widgets: DashboardWidget[]
+  widgets: IDashboardWidget[]
 }
 
 export interface IDashboardQuery extends IQuery {
   userId: string
   'widgets.widgetType'?: string
-  'widgets.options'?: WidgetOptions
+  'widgets.options'?: IWidgetOptions
 }

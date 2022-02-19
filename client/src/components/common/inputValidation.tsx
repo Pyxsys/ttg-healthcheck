@@ -2,7 +2,7 @@
 import axios from 'axios';
 
 // Custom
-import {UserResponse} from '../../types/users';
+import {IUserResponse} from '../../types/users';
 import {notificationService} from '../../services/notification.service';
 
 const handleIncorrectInput = (
@@ -85,7 +85,7 @@ const sendRequest = async (
   if (login) {
     type = 'login';
   }
-  return axios.post<UserResponse>('api/user/' + type, body).catch((error) => {
+  return axios.post<IUserResponse>('api/user/' + type, body).catch((error) => {
     if (error.response) {
       // Request made and server responded
       notificationService.error(responseError);

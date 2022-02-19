@@ -1,4 +1,4 @@
-export interface DevicesColumns {
+export interface IDevicesColumns {
   id: string
   location?: string
   cpuUsage: number
@@ -7,7 +7,7 @@ export interface DevicesColumns {
   uptime: number
 }
 
-export interface ColumnDetail {
+export interface IColumnDetail {
   key: string
   name: string
   filter?: boolean

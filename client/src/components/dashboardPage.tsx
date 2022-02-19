@@ -9,8 +9,9 @@ import {useAuth} from '../context/authContext';
 import {useModalService} from '../context/modal.context';
 import {notificationService} from '../services/notification.service';
 import {queryDashboard, saveDashboard} from '../services/dashboard.service';
-import {Device, DeviceLog, DeviceTotal, IResponse} from '../types/queries';
-import {Dashboard, DashboardWidget} from '../types/dashboard';
+import {IResponse} from '../types/queries';
+import {IDevice, IDeviceLog, IDeviceTotal} from '../types/device';
+import {IDashboard, IDashboardWidget} from '../types/dashboard';
 import AddWidgetModal from './dashboard-widgets/addWidgetModal';
 // Widgets
 import CpuUsageWidget from './device-detail-widgets/cpuUsageWidget';
@@ -26,8 +27,8 @@ const DashboardPage = () => {
   const {user} = useAuth();
   const modalService = useModalService();
 
-  const [dashboard, setDashboard] = useState({} as Dashboard);
-  const [deviceData, setDeviceData] = useState([] as DeviceTotal[]);
+  const [dashboard, setDashboard] = useState({} as IDashboard);
+  const [deviceData, setDeviceData] = useState([] as IDeviceTotal[]);
   const [widgetType, setWidgetType] = useState('');
   const [deviceName, setDeviceName] = useState('');
   const [hover, setHover] = useState(false);
@@ -58,11 +59,11 @@ const DashboardPage = () => {
     const widgetDeviceIds = dashboard.widgets.map((widget) => widget.options.deviceId);
     // Remove duplicate Device Ids
     const deviceIds = Array.from(new Set(widgetDeviceIds)).join(',');
-    const deviceResponse = await axios.get<IResponse<Device>>(
+    const deviceResponse = await axios.get<IResponse<IDevice>>(
         'api/device',
         {params: {deviceIds: deviceIds}},
     );
-    const latestDevicesResponse = await axios.get<IResponse<DeviceLog>>(
+    const latestDevicesResponse = await axios.get<IResponse<IDeviceLog>>(
         'api/device-logs/latest',
         {params: {Ids: deviceIds}},
     );
@@ -109,7 +110,7 @@ const DashboardPage = () => {
   const resetDash = (): void => {
     setDashboard({
       userId: user._id,
-      widgets: [] as DashboardWidget[],
+      widgets: [] as IDashboardWidget[],
     });
     setDashboardModified(true);
   };
@@ -135,7 +136,7 @@ const DashboardPage = () => {
     </div>
   );
 
-  const getWidgetHMTL = (widget: DashboardWidget, index: number): JSX.Element => {
+  const getWidgetHMTL = (widget: IDashboardWidget, index: number): JSX.Element => {
     const device = deviceData.find(
         (e) => e.static.deviceId === widget.options.deviceId,
     );
@@ -243,7 +244,7 @@ const DashboardPage = () => {
 
   modalService.onPrimaryClicked = (): void => {
     if (dashboard.widgets?.length > 0) {
-      const wids: DashboardWidget[] = dashboard.widgets;
+      const wids: IDashboardWidget[] = dashboard.widgets;
       wids.push({
         widgetType: widgetType,
         options: {
