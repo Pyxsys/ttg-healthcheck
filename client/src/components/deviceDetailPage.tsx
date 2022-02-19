@@ -4,7 +4,7 @@ import axios from 'axios';
 import {Col, Row, Table, Accordion, Tabs, Tab} from 'react-bootstrap';
 
 // Custom
-import Navbar from './Navbar';
+import Navbar from './common/Navbar';
 import {IResponse} from '../types/queries';
 import {IDevice, IDeviceLog} from '../types/device';
 import {useRealTimeService} from '../context/realTimeContext';

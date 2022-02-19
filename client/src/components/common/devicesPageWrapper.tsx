@@ -3,7 +3,7 @@ import React from 'react';
 
 // Custom
 import '../../App.scss';
-import Navbar from '../Navbar';
+import Navbar from './Navbar';
 
 const DevicesPageWrapper = ({children}: { children: JSX.Element }) => {
   return (

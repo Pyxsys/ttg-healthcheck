@@ -7,7 +7,7 @@ import {Link} from 'react-router-dom';
 import {IResponse} from '../types/queries';
 import {IDevice, IDeviceLog, IDeviceTotal} from '../types/device';
 import {useRealTimeService} from '../context/realTimeContext';
-import Navbar from './Navbar';
+import Navbar from './common/Navbar';
 import PieWheel from './common/pieWheel';
 import {SignalStrength, signalText} from './common/signalStrength';
 import {IColumnDetail} from '../types/tables';

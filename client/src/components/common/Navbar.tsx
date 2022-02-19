@@ -7,7 +7,7 @@ import {DiRasberryPi} from 'react-icons/di';
 import {MdOutlineSpaceDashboard, MdLogout} from 'react-icons/md';
 import useOnclickOutside from 'react-cool-onclickoutside';
 // Custom
-import {useAuth} from '../context/authContext';
+import {useAuth} from '../../context/authContext';
 
 // side nav items
 const SideNavData = [

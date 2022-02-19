@@ -4,7 +4,7 @@ import axios from 'axios';
 import {FaPlus, FaTrashAlt} from 'react-icons/fa';
 
 // Custom
-import Navbar from './Navbar';
+import Navbar from './common/Navbar';
 import {useAuth} from '../context/authContext';
 import {useModalService} from '../context/modal.context';
 import {notificationService} from '../services/notification.service';
