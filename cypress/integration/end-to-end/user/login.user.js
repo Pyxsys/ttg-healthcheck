@@ -7,7 +7,7 @@ const testUser = {
 };
 
 describe("Login Page", () => {
-  it("1 Given valid email and password, should redirect to /dashboard on syccessful login", () => {
+  it("1 Given valid email and password, should redirect to /dashboard on successful login", () => {
     // open the landing page
     cy.visit("/");
 
