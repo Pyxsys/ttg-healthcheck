@@ -181,7 +181,7 @@ const DeviceDetailPage = (props: any) => {
                           <div>CPU</div>
                           <div>Memory</div>
                           <div>Disk</div>
-                          <div>Wifi</div>
+                          <div>Network</div>
                         </div>
                       </Accordion.Header>
                       <Accordion.Body>
@@ -290,7 +290,7 @@ const DeviceDetailPage = (props: any) => {
                         </Row>
                       </div>
                     </Tab>
-                    <Tab eventKey="wifi" title="Wifi">
+                    <Tab eventKey="wifi" title="Network">
                       <div className="tab-body d-flex justify-content-around">
                         <Row className="w-100">
                           <Col xs={12} sm={12} md={12} lg={6} xl={6}>
