@@ -1,6 +1,6 @@
 /* eslint-disable require-jsdoc */
 import React from 'react';
-import './App.scss';
+
 import {Route} from 'react-router-dom';
 import PrivateRoute from './routes/privateRoute';
 import Signup from './components/pages/signup';
