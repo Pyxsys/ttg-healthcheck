@@ -1,4 +1,4 @@
-export interface WifiStatic {
+export interface IWifiStatic {
   adapterName: string
   SSID: string
   connectionType: string
@@ -6,7 +6,7 @@ export interface WifiStatic {
   ipv6Address: string
 }
 
-export interface WifiDynamic {
+export interface IWifiDynamic {
   sendSpeed: number
   receiveSpeed: number
   signalStrength: number

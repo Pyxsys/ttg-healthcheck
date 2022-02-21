@@ -5,11 +5,10 @@ import {Button, Form, InputGroup} from 'react-bootstrap';
 import {FaUserAlt, FaKey, FaBolt} from 'react-icons/fa';
 
 // Custom
-import {useAuth} from '../context/authContext';
-import {notificationService} from '../services/notification.service';
-import {handleIncorrectInput, sendRequest} from './common/inputValidation';
-import '../App.scss';
-import FrontPageWrapper from './common/frontPageWrapper';
+import {useAuth} from '../../context/authContext';
+import {notificationService} from '../../services/notification.service';
+import {handleIncorrectInput, sendRequest} from '../common/inputValidation';
+import FrontPageWrapper from '../common/frontPageWrapper';
 
 const Login = () => {
   const {setUser, setIsAuthenticated} = useAuth();

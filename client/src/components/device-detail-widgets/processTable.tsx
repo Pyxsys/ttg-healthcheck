@@ -2,18 +2,18 @@
 import React from 'react';
 
 // Custom
-import {DeviceLog, Process} from '../../types/queries';
-import {ColumnDetail} from '../../types/tables';
+import {IDeviceLog, IProcess} from '../../types/device';
+import {IColumnDetail} from '../../types/tables';
 import ViewTable from '../common/viewTable';
 
 interface ProcessTableInputs {
-  deviceDynamic: DeviceLog
+  deviceDynamic: IDeviceLog
 }
 
 const ProcessTable = (props: ProcessTableInputs) => {
-  const processes: Process[] = props.deviceDynamic?.processes || [];
+  const processes: IProcess[] = props.deviceDynamic?.processes || [];
 
-  const column: ColumnDetail[] = [
+  const column: IColumnDetail[] = [
     {key: 'pid', name: 'ID'},
     {key: 'name', name: 'Name'},
     {key: 'cpu.usagePercentage', name: 'CPU'},

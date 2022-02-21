@@ -1,12 +1,13 @@
 import React, {useState} from 'react';
-import {DeviceLog} from '../types/queries';
+
+import {IDeviceLog} from '../types/device';
 import Contextualizer, {AppServices} from '../services/context.service';
 
 /**
  * Calls the function, when a device log is updated from the database.
  * @param device the updated device
  */
-type RealTimeCallback = (device: DeviceLog) => void
+type RealTimeCallback = (device: IDeviceLog) => void
 
 export interface IRealTimeService {
   // clearDeviceIds(): void;
@@ -52,7 +53,7 @@ const RealTimeService = ({children}: any) => {
         wsClient.onmessage = (msg) => {
           const data = msg.data;
           if (!(data as string).startsWith('message')) {
-            const device: DeviceLog = JSON.parse(data);
+            const device: IDeviceLog = JSON.parse(data);
             callbackFn(device);
           }
         };

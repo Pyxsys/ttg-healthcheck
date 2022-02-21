@@ -62,7 +62,7 @@ describe("2. Devices Page tabs.", () => {
         'div[class="device-details-tabs col"] > ul > li'
       )
       .eq(3)
-      .contains('button', 'Wifi')
+      .contains('button', 'Network')
       .get(
         'div[class="device-details-tabs col"] > ul > li'
       )
@@ -134,7 +134,7 @@ describe("2. Devices Page tabs.", () => {
     cy.contains('Disk Usage Information').should('be.visible');
     cy.contains('Additional Disk Information').should('be.visible');
 
-    // select Wifi tab
+    // select Network tab
     cy.get(
       'div[class="device-details-tabs col"] > ul > li > button'
     )
@@ -149,8 +149,8 @@ describe("2. Devices Page tabs.", () => {
     // make sure all other divs aren't
     cy.get('div[class="tab-content"] > div').not('.tab-pane.active').should('have.length', 4);
     // make sure proper cards are shown
-    cy.contains('Wifi Usage Information').should('be.visible');
-    cy.contains('Additional Wifi Information').should('be.visible');
+    cy.contains('Network Usage Information').should('be.visible');
+    cy.contains('Additional Network Information').should('be.visible');
 
     // select Processes tab
     cy.get(

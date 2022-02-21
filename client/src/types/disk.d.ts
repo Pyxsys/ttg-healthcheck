@@ -1,25 +1,25 @@
-export interface DiskStatic {
+export interface IDiskStatic {
   capacity: number
-  disks: DiskStaticPhysical[]
+  disks: IDiskStaticPhysical[]
 }
 
-interface DiskStaticPhysical {
+interface IDiskStaticPhysical {
   type: string
   model: string
   size: number
 }
 
-export interface DiskDynamic {
-  partitions: DiskDynamicPartition[]
-  disks: DiskDynamicPhysical[]
+export interface IDiskDynamic {
+  partitions: IDiskDynamicPartition[]
+  disks: IDiskDynamicPhysical[]
 }
 
-interface DiskDynamicPartition {
+interface IDiskDynamicPartition {
   path: string
   percent: number
 }
 
-interface DiskDynamicPhysical {
+interface IDiskDynamicPhysical {
   responseTime: number
   readSpeed: number
   writeSpeed: number

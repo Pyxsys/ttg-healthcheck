@@ -40,7 +40,7 @@ describe("All Register test", () => {
     cy.get("button[type=submit]").click();
 
     // assert we are in /dashboard
-    cy.url().should("include", "/dashboard");
+    cy.url().should("include", "dashboard");
   });
 
   it("2.1 Register a user with non matching password should give 'password do not match!' error ", () => {

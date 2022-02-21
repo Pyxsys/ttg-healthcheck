@@ -4,22 +4,23 @@ import axios from 'axios';
 import {Col, Row, Table, Accordion, Tabs, Tab} from 'react-bootstrap';
 
 // Custom
-import Navbar from './Navbar';
-import {Device, DeviceLog, IResponse} from '../types/queries';
-import {useRealTimeService} from '../context/realTimeContext';
-import PieWheel from './common/pieWheel';
-import CpuUsageWidget from './device-detail-widgets/cpuUsageWidget';
-import CpuAdditionalWidget from './device-detail-widgets/cpuAdditionalWidget';
-import DiskUsageWidget from './device-detail-widgets/diskUsageWidget';
-import DiskAdditionalWidget from './device-detail-widgets/diskAdditionalWidget';
-import MemoryUsageWidget from './device-detail-widgets/memoryUsageWidget';
-import MemoryAdditionalWidget from './device-detail-widgets/memoryAdditionalWidget';
-import WifiUsageWidget from './device-detail-widgets/wifiUsageWidget';
-import WifiAdditionalWidget from './device-detail-widgets/wifiAdditionalWidget';
-import {SignalStrength} from './common/signalStrength';
-import ProcessTable from './device-detail-widgets/processTable';
+import Navbar from '../common/Navbar';
+import {IResponse} from '../../types/queries';
+import {IDevice, IDeviceLog} from '../../types/device';
+import {useRealTimeService} from '../../context/realTimeContext';
+import PieWheel from '../common/pieWheel';
+import CpuUsageWidget from '../device-detail-widgets/cpuUsageWidget';
+import CpuAdditionalWidget from '../device-detail-widgets/cpuAdditionalWidget';
+import DiskUsageWidget from '../device-detail-widgets/diskUsageWidget';
+import DiskAdditionalWidget from '../device-detail-widgets/diskAdditionalWidget';
+import MemoryUsageWidget from '../device-detail-widgets/memoryUsageWidget';
+import MemoryAdditionalWidget from '../device-detail-widgets/memoryAdditionalWidget';
+import WifiUsageWidget from '../device-detail-widgets/wifiUsageWidget';
+import WifiAdditionalWidget from '../device-detail-widgets/wifiAdditionalWidget';
+import {SignalStrength} from '../common/signalStrength';
+import ProcessTable from '../device-detail-widgets/processTable';
 
-const DeviceDetailPage = (props: any) => {
+const DeviceDetail = (props: any) => {
   const getSearchParam = (key: string): string => {
     const search: string = props.location.search;
     const allParams = search.replace('?', '').split('&');
@@ -28,8 +29,8 @@ const DeviceDetailPage = (props: any) => {
   };
 
   const deviceId: string = getSearchParam('Id');
-  const [deviceData, setDeviceData] = useState({} as Device);
-  const [deviceLogsData, setDeviceLogsData] = useState({} as DeviceLog);
+  const [deviceData, setDeviceData] = useState({} as IDevice);
+  const [deviceLogsData, setDeviceLogsData] = useState({} as IDeviceLog);
 
   const realTimeDataService = useRealTimeService();
 
@@ -48,13 +49,13 @@ const DeviceDetailPage = (props: any) => {
       limit: 1,
     };
 
-    const deviceResponse = await axios.get<IResponse<Device>>('api/device', {
+    const deviceResponse = await axios.get<IResponse<IDevice>>('api/device', {
       params: queryParams,
     });
     const devices = deviceResponse.data.Results;
     setDeviceData(devices[0] || null);
 
-    const deviceLogResponse = await axios.get<IResponse<DeviceLog>>(
+    const deviceLogResponse = await axios.get<IResponse<IDeviceLog>>(
         'api/device-logs',
         {
           params: queryParams,
@@ -181,7 +182,7 @@ const DeviceDetailPage = (props: any) => {
                           <div>CPU</div>
                           <div>Memory</div>
                           <div>Disk</div>
-                          <div>Wifi</div>
+                          <div>Network</div>
                         </div>
                       </Accordion.Header>
                       <Accordion.Body>
@@ -290,7 +291,7 @@ const DeviceDetailPage = (props: any) => {
                         </Row>
                       </div>
                     </Tab>
-                    <Tab eventKey="wifi" title="Wifi">
+                    <Tab eventKey="wifi" title="Network">
                       <div className="tab-body d-flex justify-content-around">
                         <Row className="w-100">
                           <Col xs={12} sm={12} md={12} lg={6} xl={6}>
@@ -328,4 +329,4 @@ const DeviceDetailPage = (props: any) => {
   );
 };
 
-export default DeviceDetailPage;
+export default DeviceDetail;

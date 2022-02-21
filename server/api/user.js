@@ -38,7 +38,7 @@ router.post('/register', async (req, res) => {
       .status(200)
       .json({
         message: 'Registered successfully',
-        user: { name: name, role: role },
+        user: { _id: newUser._id, name: name, role: role },
       })
   } catch (err) {
     res.status(500).send('Server Error: ' + err.message)
@@ -71,7 +71,7 @@ router.post('/login', async (req, res) => {
       .status(200)
       .json({
         message: 'Logged in',
-        user: { name: user.name, role: user.role },
+        user: { _id: user._id, name: user.name, role: user.role },
       })
   } catch (err) {
     res.status(500).send('Server Error: ' + err.message)
@@ -81,9 +81,10 @@ router.post('/login', async (req, res) => {
 // verify authentication
 router.get('/authenticate', auth, async (req, res) => {
   const user = await User.findOne({ _id: req.userId })
-  return res
-    .status(200)
-    .json({ isAuthenticated: true, user: { name: user.name, role: user.role } })
+  return res.status(200).json({
+    isAuthenticated: true,
+    user: { _id: user._id, name: user.name, role: user.role },
+  })
 })
 
 // log out user

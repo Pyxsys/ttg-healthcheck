@@ -1,5 +1,6 @@
 import React from 'react';
 import AuthProvider from './authContext';
+import ModalService from './modal.context';
 import RealTimeService from './realTimeContext';
 
 /**
@@ -10,9 +11,11 @@ import RealTimeService from './realTimeContext';
 const AppContexts = ({children}: any) => {
   return (
     <>
-      <RealTimeService>
-        <AuthProvider>{children}</AuthProvider>
-      </RealTimeService>
+      <ModalService>
+        <RealTimeService>
+          <AuthProvider>{children}</AuthProvider>
+        </RealTimeService>
+      </ModalService>
     </>
   );
 };

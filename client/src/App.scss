@@ -4,6 +4,7 @@ $secondary-gray: #f8f9fa;
 $tertiary-gray: #30353d;
 $quarternary-gray: #3F4651;
 $quinary-gray: #4C535F;
+$secondary: #f8f9fa;
 
 $white: #fff;
 $gray-100: #c2c2c2;
@@ -685,6 +686,92 @@ body {
   background-color: $tertiary-gray;
 }
 
+// hide uneeded sr-only label in device table
+.sr-only {
+  border: 0;
+  padding: 0;
+  margin: 0;
+  position: absolute !important;
+  height: 1px; 
+  width: 1px;
+  overflow: hidden;
+  clip: rect(1px 1px 1px 1px); 
+  clip: rect(1px, 1px, 1px, 1px);
+  clip-path: inset(50%); 
+  white-space: nowrap; 
+}
+
+/*-----------------------Dashboard-------------------------------*/
+
+
+#dashboard-container{
+  background-color: $tertiary-gray;
+  max-width: 100%;
+  height: 100vh;
+  min-height: 0;  
+  display: flex;
+  flex-direction: column;
+  color: white;
+}
+
+.widget-width {
+  @media (min-width: $screen-w-xsm) {
+    width: 100%;
+  }
+  @media (min-width: $screen-w-lg) {
+    width: 50%;
+  }
+  @media (min-width: $screen-w-xlg) {
+    width: 33.33%;
+  }
+}
+
+.modal-overlay{
+  background-color: $tertiary-gray;
+  color: white;
+}
+
+.dashboard-dashed-box{
+  height: 360px;
+  width: 100%;
+  border: 4px dashed;
+}
+
+/* Modal Styling */
+
+.modal-background {
+  background-color: $tertiary-gray;
+}
+
+.modal-custom-width {
+  width: 100%;
+}
+
+.modal-footer {
+  border-top: $tertiary-gray;
+  display: flex; 
+  flex-direction: column;
+  justify-content: center;
+}
+
+.process-table table thead tr{
+  border: $tertiary-gray !important;
+}
+
+.modal-buttons {
+  color: $secondary-gray;
+  font-weight: 500;
+  border: 1px solid #b1b1b1ab !important;
+  background-color: $tertiary-gray;
+  width: 100%;
+}
+
+.modal-options {
+  border-bottom: 1px solid #999898 !important;
+  color: #999898;
+}
+
+
 /*-----------------------Device Details--------------------------*/
 
 #device-details-container{
@@ -949,3 +1036,6 @@ body {
     padding: 0px 18px;
   }
 }
+
+
+

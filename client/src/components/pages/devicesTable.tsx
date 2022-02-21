@@ -4,24 +4,25 @@ import axios from 'axios';
 import {Link} from 'react-router-dom';
 
 // Custom
-import {Device, DeviceLog, IResponse} from '../types/queries';
-import {useRealTimeService} from '../context/realTimeContext';
-import Navbar from './Navbar';
-import PieWheel from './common/pieWheel';
-import {SignalStrength, signalText} from './common/signalStrength';
-import {ColumnDetail, TableDevice} from '../types/tables';
-import Pagination from './common/pagination';
-import ViewTable from './common/viewTable';
+import {IResponse} from '../../types/queries';
+import {IDevice, IDeviceLog, IDeviceTotal} from '../../types/device';
+import {useRealTimeService} from '../../context/realTimeContext';
+import Navbar from '../common/Navbar';
+import PieWheel from '../common/pieWheel';
+import {SignalStrength, signalText} from '../common/signalStrength';
+import {IColumnDetail} from '../../types/tables';
+import Pagination from '../common/pagination';
+import ViewTable from '../common/viewTable';
 
 type CellValue = string | number | undefined
 
-const DevicePage = () => {
+const DevicesTable = () => {
   // Readonly Values
   const initialPage: number = 1;
   const pageSize: number = 10;
   const initialOrderBy: string = 'static.deviceId';
 
-  const [deviceTableData, setDeviceTableData] = useState([] as TableDevice[]);
+  const [deviceTableData, setDeviceTableData] = useState([] as IDeviceTotal[]);
   const [page, setPage] = useState(initialPage);
   const [totalPages, setTotalPages] = useState(0);
 
@@ -43,14 +44,14 @@ const DevicePage = () => {
 
   const queryTable = async () => {
     const deviceQuery = {params: {Total: true}};
-    const deviceResponse = await axios.get<IResponse<Device>>(
+    const deviceResponse = await axios.get<IResponse<IDevice>>(
         'api/device',
         deviceQuery,
     );
     const devices = deviceResponse.data.Results;
     const deviceIds = devices.map((device) => device.deviceId);
 
-    const latestDevicesResponse = await axios.get<IResponse<DeviceLog>>(
+    const latestDevicesResponse = await axios.get<IResponse<IDeviceLog>>(
         'api/device-logs/latest',
         {params: {Ids: deviceIds.join(',')}},
     );
@@ -99,12 +100,12 @@ const DevicePage = () => {
     </div>
   );
 
-  const column: ColumnDetail[] = [
+  const column: IColumnDetail[] = [
     {
       key: 'static.deviceId',
       name: 'UUID',
       filter: true,
-      override: (cellValue: CellValue, device: TableDevice) => (
+      override: (cellValue: CellValue, device: IDeviceTotal) => (
         <div className="devices-uuid-text devices-font mx-auto h-100 py-3">
           <Link
             className="text-white"
@@ -191,4 +192,4 @@ const DevicePage = () => {
   );
 };
 
-export default DevicePage;
+export default DevicesTable;

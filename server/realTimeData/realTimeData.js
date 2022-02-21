@@ -22,7 +22,10 @@ const realTimeDataCollections = [DeviceLogs.collection.name]
  * @returns the updated client list
  */
 const addClient = (client, deviceIds = []) => {
-  deviceIds = deviceIds?.length > 0 ? deviceIds : []
+  //deviceIds = deviceIds?.length > 0 ? deviceIds : []
+  if (deviceIds == null || deviceIds.length == 0) {
+    deviceIds = []
+  }
   realTimeDataClients.push({ client, deviceIds })
   return realTimeDataClients
 }
