@@ -324,7 +324,7 @@ body {
     padding: 10px;
   }
   @media (min-width: $screen-w-md) {
-    height: 65px;
+    height: 63px;
     padding: 15px;
   }
   @media (min-width: $screen-w-lg) {
@@ -338,12 +338,16 @@ body {
 }
 
 .nav-right-icon {
-  width: 37px;
-  height: 37px;
+  width: 35px;
+  height: 35px;
   overflow: hidden;
   border-radius: 50%;
   position: relative;
   margin-right: 4px;
+}
+
+.nav-right-icon:hover {
+  filter: brightness(1.20);
 }
 
 .nav-right-icon img {
@@ -405,7 +409,7 @@ body {
   position:fixed;
   top:0;
   left: 0;
-  z-index: 1;
+  z-index: 5;
 }
 
 // nav items 
@@ -583,7 +587,7 @@ body {
 }
 
 .devices-font {
-  font-size: 1.05em;
+  font-size: 1.03em;
 }
 
 .table-container {
