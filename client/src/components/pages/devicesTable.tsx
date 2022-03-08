@@ -161,10 +161,9 @@ const DevicesTable = () => {
       <div id="outer-container">
         <Navbar />
       </div>
-
       <div className="flex-grow-1 d-flex flex-column align-items-center overflow-auto devices-content">
         <div className="flex-grow-1 d-flex flex-column overflow-auto container">
-          <div className="flex-grow-1 overflow-auto table-container mt-5 p-1">
+          <div className="flex-grow-1 overflow-auto table-container mt-5">
             <ViewTable
               tableData={deviceTableData}
               page={page}
@@ -182,7 +181,6 @@ const DevicesTable = () => {
           </div>
         </div>
       </div>
-
       <div className="d-flex justify-content-center devices-footer">
         <div className="pt-1 pb-3 devices-copyright">
           &#169; SOEN490 TTG-HEALTCHECK

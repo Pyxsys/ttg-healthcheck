@@ -56,7 +56,7 @@ const Navbar = () => {
     <>
       <div className="d-flex nav-wrapper">
         <div ref={ref} className="nav-hamburger">
-          <Hamburger toggled={isOpen} toggle={setOpen} />
+          <Hamburger toggled={isOpen} toggle={setOpen} size={31}/>
         </div>
       </div>
       {isOpen ? (

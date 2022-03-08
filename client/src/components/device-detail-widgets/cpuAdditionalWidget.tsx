@@ -50,7 +50,7 @@ const cpuAdditionalWidget = (props: { deviceStatic: IDevice, overrideHeader?: JS
                 {deviceStatic?.cpu?.cacheSizeL1 ? (
                   <tr className="border-bottom">
                     <td>Cache Size 1</td>
-                    <td>{deviceStatic?.cpu?.cacheSizeL1}</td>
+                    <td className="float-right">{deviceStatic?.cpu?.cacheSizeL1}</td>
                   </tr>
                 ) : (
                   <></>
@@ -58,7 +58,7 @@ const cpuAdditionalWidget = (props: { deviceStatic: IDevice, overrideHeader?: JS
                 {deviceStatic?.cpu?.cacheSizeL2 ? (
                   <tr className="border-bottom">
                     <td>Cache Size 2</td>
-                    <td>{deviceStatic?.cpu?.cacheSizeL2}</td>
+                    <td className="float-right">{deviceStatic?.cpu?.cacheSizeL2}</td>
                   </tr>
                 ) : (
                   <></>
@@ -66,7 +66,7 @@ const cpuAdditionalWidget = (props: { deviceStatic: IDevice, overrideHeader?: JS
                 {deviceStatic?.cpu?.cacheSizeL3 ? (
                   <tr className="border-bottom">
                     <td>Cache Size 3</td>
-                    <td>{deviceStatic?.cpu?.cacheSizeL3}</td>
+                    <td className="float-right">{deviceStatic?.cpu?.cacheSizeL3}</td>
                   </tr>
                 ) : (
                   <></>

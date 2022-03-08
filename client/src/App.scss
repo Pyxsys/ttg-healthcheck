@@ -317,13 +317,14 @@ body {
   flex: 0;
   width: 100%;
   background-color:#1f262b;
-  height: 65px;
   justify-content: space-between;
   align-items: center;
   @media (min-width: $screen-w-xsm) {
+    height: 60px;
     padding: 10px;
   }
   @media (min-width: $screen-w-md) {
+    height: 65px;
     padding: 15px;
   }
   @media (min-width: $screen-w-lg) {
@@ -331,7 +332,7 @@ body {
   }
 }
 
-// right nav menu
+// right nav menu (currently not there)
 .nav-right-menu {
   align-items: center;
 }
@@ -582,7 +583,7 @@ body {
 }
 
 .devices-font {
-  font-size: 1.2em;
+  font-size: 1.05em;
 }
 
 .table-container {
@@ -590,7 +591,6 @@ body {
 }
 
 .cerebellum-table {
-
   // Row
   thead tr {
     height: 60px;

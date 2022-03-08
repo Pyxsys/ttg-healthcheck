@@ -117,19 +117,19 @@ const DeviceDetail = (props: any) => {
                               >
                                 ID
                               </td>
-                              <td style={{fontStyle: 'italic'}}>
+                              <td>
                                 {deviceData?.deviceId}
                               </td>
                             </tr>
                             <tr>
                               <td style={{fontWeight: '600'}}>Name</td>
-                              <td style={{fontStyle: 'italic'}}>
+                              <td>
                                 {deviceData?.name}
                               </td>
                             </tr>
                             <tr>
                               <td style={{fontWeight: '600'}}>Description</td>
-                              <td style={{fontStyle: 'italic'}}>
+                              <td>
                                 {deviceData?.description}
                               </td>
                             </tr>
@@ -137,19 +137,19 @@ const DeviceDetail = (props: any) => {
                               <td style={{fontWeight: '600'}}>
                                 Connection Type
                               </td>
-                              <td style={{fontStyle: 'italic'}}>
+                              <td>
                                 {deviceData?.connectionType}
                               </td>
                             </tr>
                             <tr>
                               <td style={{fontWeight: '600'}}>Status</td>
-                              <td style={{fontStyle: 'italic'}}>
+                              <td>
                                 {deviceData?.status}
                               </td>
                             </tr>
                             <tr>
                               <td style={{fontWeight: '600'}}>Provider</td>
-                              <td style={{fontStyle: 'italic'}}>
+                              <td>
                                 {deviceData?.provider}
                               </td>
                             </tr>
@@ -157,7 +157,7 @@ const DeviceDetail = (props: any) => {
                               <td style={{fontWeight: '600'}}>
                                 Hardware Name
                               </td>
-                              <td style={{fontStyle: 'italic'}}>
+                              <td>
                                 {deviceData?.hardware?.harwareName}
                               </td>
                             </tr>
@@ -322,6 +322,11 @@ const DeviceDetail = (props: any) => {
                 </Col>
               </Row>
             </Col>
+            <div className="d-flex justify-content-center devices-footer">
+              <div className="pt-1 pb-3 devices-copyright">
+                &#169; SOEN490 TTG-HEALTCHECK
+              </div>
+            </div>
           </Row>
         </div>
       </div>
