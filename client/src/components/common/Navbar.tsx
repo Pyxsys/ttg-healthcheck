@@ -70,9 +70,7 @@ const Navbar = () => {
               >
                 <Link
                   to={item.path}
-                  onClick={
-                    item.title == 'Logout' ? (e) => logout(e) : (e) => null
-                  }
+                  onClick={(e) => item.title == 'Logout' ? logout(e) : null}
                 >
                   <span className="side-nav-item-icon">{item.icon} </span>
                   <span className="side-nav-item-text">{item.title}</span>
