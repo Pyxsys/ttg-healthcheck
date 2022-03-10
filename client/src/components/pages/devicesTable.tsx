@@ -244,33 +244,48 @@ const DevicesTable = () => {
     switch (equality) {
       case Equality.LTE:
         return (compareValue: number | undefined) =>
-          compareValue !== undefined && compareValue <= value;
+          compareValue !== undefined &&
+          compareValue !== null &&
+          compareValue <= value;
       case Equality.LT:
         return (compareValue: number | undefined) =>
-          compareValue !== undefined && compareValue < value;
+          compareValue !== undefined &&
+          compareValue !== null &&
+          compareValue < value;
       case Equality.E:
         return (compareValue: number | undefined) =>
-          compareValue !== undefined && compareValue === value;
+          compareValue !== undefined &&
+          compareValue !== null &&
+          compareValue === value;
       case Equality.GT:
         return (compareValue: number | undefined) =>
-          compareValue !== undefined && compareValue > value;
+          compareValue !== undefined &&
+          compareValue !== null &&
+          compareValue > value;
       case Equality.GTE:
         return (compareValue: number | undefined) =>
-          compareValue !== undefined && compareValue >= value;
+          compareValue !== undefined &&
+          compareValue !== null &&
+          compareValue >= value;
       case Equality.StrictEqual:
         return (compareValue: number | undefined) =>
-          compareValue !== undefined && compareValue === value;
+          compareValue !== undefined &&
+          compareValue !== null &&
+          compareValue === value;
       case Equality.StartsWith:
         return (compareValue: string | undefined) =>
           compareValue !== undefined &&
+          compareValue !== null &&
           compareValue.toLowerCase().startsWith((value as string).toLowerCase());
       case Equality.EndsWith:
         return (compareValue: string | undefined) =>
           compareValue !== undefined &&
+          compareValue !== null &&
           compareValue.toLowerCase().endsWith((value as string).toLowerCase());
       case Equality.Includes:
         return (compareValue: string | undefined) =>
           compareValue !== undefined &&
+          compareValue !== null &&
           compareValue.toLowerCase().includes((value as string).toLowerCase());
       default:
         return () => false;
@@ -307,7 +322,6 @@ const DevicesTable = () => {
       <div id="outer-container">
         <Navbar />
       </div>
-
       <div className="flex-grow-1 d-flex flex-column align-items-center overflow-auto devices-content">
         {/* Filter Dropdown */}
         <div className="pt-2 ps-5 w-100">
@@ -479,7 +493,7 @@ const DevicesTable = () => {
 
         {/* Table */}
         <div className="flex-grow-1 d-flex flex-column overflow-auto container">
-          <div className="flex-grow-1 overflow-auto table-container p-1">
+          <div className="flex-grow-1 overflow-auto table-container mt-5">
             <ViewTable
               tableData={getFilteredDevices()}
               page={page}
@@ -497,7 +511,6 @@ const DevicesTable = () => {
           </div>
         </div>
       </div>
-
       <div className="d-flex justify-content-center devices-footer">
         <div className="pt-1 pb-3 devices-copyright">
           &#169; SOEN490 TTG-HEALTCHECK

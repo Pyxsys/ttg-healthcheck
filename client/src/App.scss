@@ -194,7 +194,7 @@ body {
 // login/signup footer
 .home-copyright {
   color: $secondary-gray;
-  opacity: 80%;
+  opacity: 0.80;
   font-size: 11px;
   font-weight: 600;
 }
@@ -203,7 +203,7 @@ body {
   padding-bottom: 0px;
   text-align: center;
   color: $secondary-gray;
-  opacity: 80%;
+  opacity: 0.80;
   font-weight: 500;
   @media (min-width: $screen-w-xxsm) {
     font-size: 12px;
@@ -329,13 +329,14 @@ body {
   flex: 0;
   width: 100%;
   background-color:#1f262b;
-  height: 65px;
   justify-content: space-between;
   align-items: center;
   @media (min-width: $screen-w-xsm) {
+    height: 60px;
     padding: 10px;
   }
   @media (min-width: $screen-w-md) {
+    height: 63px;
     padding: 15px;
   }
   @media (min-width: $screen-w-lg) {
@@ -343,18 +344,22 @@ body {
   }
 }
 
-// right nav menu
+// right nav menu (currently not there)
 .nav-right-menu {
   align-items: center;
 }
 
 .nav-right-icon {
-  width: 37px;
-  height: 37px;
+  width: 35px;
+  height: 35px;
   overflow: hidden;
   border-radius: 50%;
   position: relative;
   margin-right: 4px;
+}
+
+.nav-right-icon:hover {
+  filter: brightness(1.20);
 }
 
 .nav-right-icon img {
@@ -411,12 +416,12 @@ body {
 .side-nav-screen-background{
   height: 100vh;
   background-color:black;
-  opacity: 45%;
+  opacity: 0.45;
   width: 100%;
   position:fixed;
   top:0;
   left: 0;
-  z-index: 1;
+  z-index: 5;
 }
 
 // nav items 
@@ -602,7 +607,7 @@ body {
 }
 
 .devices-font {
-  font-size: 1.2em;
+  font-size: 1.03em;
 }
 
 .table-container {
@@ -610,7 +615,6 @@ body {
 }
 
 .cerebellum-table {
-
   // Row
   thead tr {
     height: 60px;
@@ -697,7 +701,7 @@ body {
 
 .devices-copyright {
   color: $secondary-gray;
-  opacity: 80%;
+  opacity: 0.80;
   font-size: 11px;
   font-weight: 600;
 }
