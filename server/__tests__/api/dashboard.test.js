@@ -9,8 +9,8 @@ const dashboardPayload = {
   widgets: [
     {
       widgetType: 'CPU',
-      options: {deviceId: 'device-1', deviceName: 'device-name'}
-    }
+      options: { deviceId: 'device-1', deviceName: 'device-name' },
+    },
   ],
 }
 let cookieSession = ''
@@ -34,13 +34,15 @@ describe('Saving a dashboard', () => {
     expect(response.statusCode).toBe(200)
     expect(response.text).toBe('Save Successful')
 
-    const results = await Dashboards.findOne({ userId: dashboardPayload.userId })
+    const results = await Dashboards.findOne({
+      userId: dashboardPayload.userId,
+    })
     expect(results).toBeDefined()
     expect(results.widgets.length).toBe(dashboardPayload.widgets.length)
   })
 
   it('should save a valid dashboard with no widgets', async () => {
-    const noWidgets = {userId: dashboardPayload.userId, widgets: []}
+    const noWidgets = { userId: dashboardPayload.userId, widgets: [] }
     const response = await request(app)
       .post('/api/dashboard')
       .send(noWidgets)
@@ -55,7 +57,7 @@ describe('Saving a dashboard', () => {
   })
 
   it('should not save an invalid dashboard with invalid User Id parameter', async () => {
-    const invalidUserId = {widgets: []}
+    const invalidUserId = { widgets: [] }
     const response = await request(app)
       .post('/api/dashboard')
       .send(invalidUserId)
@@ -66,7 +68,7 @@ describe('Saving a dashboard', () => {
   })
 
   it('should not save an invalid dashboard with invalid Widgets parameter', async () => {
-    const invalidWidgets = {userId: dashboardPayload.userId}
+    const invalidWidgets = { userId: dashboardPayload.userId }
     const response = await request(app)
       .post('/api/dashboard')
       .send(invalidWidgets)
@@ -77,14 +79,19 @@ describe('Saving a dashboard', () => {
   })
 
   it('should not save an invalid dashboard with an invalid Widget object', async () => {
-    const invalidWidget = {userId: dashboardPayload.userId, widgets: [{widgetType: 'CPU'}]}
+    const invalidWidget = {
+      userId: dashboardPayload.userId,
+      widgets: [{ widgetType: 'CPU' }],
+    }
     const response = await request(app)
       .post('/api/dashboard')
       .send(invalidWidget)
       .set('Cookie', cookieSession)
 
     expect(response.statusCode).toBe(400)
-    expect(response.text).toBe('Invalid: Widgets must have parameters: widgetType and options')
+    expect(response.text).toBe(
+      'Invalid: Widgets must have parameters: widgetType and options'
+    )
   })
 })
 
