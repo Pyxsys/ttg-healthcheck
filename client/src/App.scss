@@ -44,7 +44,7 @@ body {
   width: 100%;
 }
 
-@for $i from 1 through 10 {
+@for $i from 0 through 9 {
   .h-#{$i*10} {
     height: $i*10%;
   }
@@ -52,9 +52,21 @@ body {
     width: $i*10%;
   }
 }
+.w-5 {
+  width: 5%;
+}
+
 
 .cursor-pointer {
   cursor: pointer;
+}
+
+.text-muted {
+  color: $gray-600;
+}
+
+.border-dashed {
+  border: 1px dashed;
 }
 
 /*-----------------------Login/Signup--------------------------*/
@@ -579,6 +591,14 @@ body {
     text-overflow: unset;
     white-space: unset;
   }
+}
+
+.filter-container {
+  z-index: 9;
+  background-color: $tertiary-gray;
+  border: 1px black solid;
+  min-width: 550px;
+  max-height: 50vh;
 }
 
 .devices-font {
