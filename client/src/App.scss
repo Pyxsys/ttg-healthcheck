@@ -320,26 +320,26 @@ body {
   justify-content: space-between;
   align-items: center;
   @media (min-width: $screen-w-xsm) {
-    height: 60px;
-    padding: 10px;
+    height: 55px;
+    padding: 8px;
   }
   @media (min-width: $screen-w-md) {
-    height: 63px;
-    padding: 15px;
+    height: 60px;
+    padding: 14px;
   }
   @media (min-width: $screen-w-lg) {
-    padding: 20px;
+    padding: 18px;
   }
 }
 
-// right nav menu (currently not there)
+// Right Nav Menu
 .nav-right-menu {
   align-items: center;
 }
 
 .nav-right-icon {
-  width: 35px;
-  height: 35px;
+  width: 34px;
+  height: 34px;
   overflow: hidden;
   border-radius: 50%;
   position: relative;
@@ -361,6 +361,13 @@ body {
   height: 15px;
 }
 
+.nav-right-font {
+  font-size: 0.85em;
+  white-space: pre-wrap;
+  opacity: 0.8;
+}
+
+// Left Nav Menu
 // nav-hamburger wrapper
 .nav-hamburger {
   position: static;
@@ -391,7 +398,7 @@ body {
   background-color: #1f262b;
   left: -100%;
   transition: 850ms;
-  padding-top: 85px;
+  padding-top: 75px;
 }
 
 // side-nav open
@@ -468,16 +475,16 @@ body {
 // side-nav-item icons
 .side-nav-item-icon > svg {
   @media (min-width: $screen-w-xsm) {
-    width: 2.5em;
-    height: 2.5em;
+    width: 2.50em;
+    height: 2.45em;
   }
   @media (min-width: $screen-w-md) {
-    width: 2.7em;
-    height: 2.7em;
+    width: 2.65em;
+    height: 2.65em;
   }
   @media (min-width: $screen-w-lg) {
-    width: 2.8em;
-    height: 2.8em;
+    width: 2.7em;
+    height: 2.7em;
   }
   color: white;
 }
@@ -587,7 +594,7 @@ body {
 }
 
 .devices-font {
-  font-size: 1.03em;
+  font-size: 1.08em;
 }
 
 .table-container {
@@ -646,6 +653,10 @@ body {
   td:last-of-type {
     padding-right: 24px;
   }
+}
+
+.search-bar-w {
+  min-width: 200px;
 }
 
 .device-icon{

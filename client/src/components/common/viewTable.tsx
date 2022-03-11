@@ -125,8 +125,8 @@ const ViewTable = (props: ViewTableInputs<any>) => {
                   <label className="ps-2 user-select-none">
                     <input
                       type="text"
-                      className="form-control"
-                      placeholder={`Filter by ${column.name}..."`}
+                      className="form-control search-bar-w"
+                      placeholder={`Filter by ${column.name}...`}
                       value={actualFilter}
                       onClick={(e) => e.stopPropagation()}
                       onChange={(e) => setFilter(e.target.value)}
