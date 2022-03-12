@@ -32,9 +32,9 @@ enum Equality {
 
 interface IFilter {
   columnKey: string
-  type: 'string' | 'number'
+  value: string | number
+  type?: 'string' | 'number'
   equality?: Equality
-  value?: string | number
 }
 
 const DevicesTable = () => {
@@ -186,7 +186,7 @@ const DevicesTable = () => {
    */
 
   const addEmptyFilter = (): void => {
-    setFilters((prev) => [...prev, {columnKey: '', type: 'number'}]);
+    setFilters((prev) => [...prev, {columnKey: '', type: undefined, value: ''}]);
   };
 
   const removeFilter = (index: number): void => {
@@ -202,14 +202,19 @@ const DevicesTable = () => {
       value: string,
   ): void => {
     const columAndType = value.split(';');
+    const prevType = filters[index].type;
+    const newType = columAndType[1] as 'string' | 'number';
+
     const newFilter: IFilter = {
       ...filter,
       columnKey: columAndType[0],
-      type: columAndType[1] as 'string' | 'number',
+      type: newType,
     };
-    if (!filter.equality) {
+
+    if (prevType !== newType) {
+      newFilter.value = '';
       newFilter.equality =
-        newFilter.type === 'number' ? Equality.E : Equality.StrictEqual;
+        newType === 'number' ? Equality.E : Equality.StrictEqual;
     }
     setFilters((prev) => {
       prev.splice(index, 1, newFilter);
@@ -248,49 +253,79 @@ const DevicesTable = () => {
         return (compareValue: number | undefined) =>
           compareValue !== undefined &&
           compareValue !== null &&
-          compareValue <= value;
+          compareValue <= Number(value);
       case Equality.LT:
         return (compareValue: number | undefined) =>
           compareValue !== undefined &&
           compareValue !== null &&
-          compareValue < value;
+          compareValue < Number(value);
       case Equality.E:
         return (compareValue: number | undefined) =>
           compareValue !== undefined &&
           compareValue !== null &&
-          compareValue === value;
+          compareValue === Number(value);
       case Equality.GT:
         return (compareValue: number | undefined) =>
           compareValue !== undefined &&
           compareValue !== null &&
-          compareValue > value;
+          compareValue > Number(value);
       case Equality.GTE:
         return (compareValue: number | undefined) =>
           compareValue !== undefined &&
           compareValue !== null &&
-          compareValue >= value;
+          compareValue >= Number(value);
       case Equality.StrictEqual:
-        return (compareValue: number | undefined) =>
+        return (compareValue: string | undefined) =>
           compareValue !== undefined &&
           compareValue !== null &&
-          compareValue === value;
+          compareValue.toLowerCase() === String(value).toLowerCase();
       case Equality.StartsWith:
         return (compareValue: string | undefined) =>
           compareValue !== undefined &&
           compareValue !== null &&
-          compareValue.toLowerCase().startsWith((value as string).toLowerCase());
+          compareValue.toLowerCase().startsWith(String(value).toLowerCase());
       case Equality.EndsWith:
         return (compareValue: string | undefined) =>
           compareValue !== undefined &&
           compareValue !== null &&
-          compareValue.toLowerCase().endsWith((value as string).toLowerCase());
+          compareValue.toLowerCase().endsWith(String(value).toLowerCase());
       case Equality.Includes:
         return (compareValue: string | undefined) =>
           compareValue !== undefined &&
           compareValue !== null &&
-          compareValue.toLowerCase().includes((value as string).toLowerCase());
+          compareValue.toLowerCase().includes(String(value).toLowerCase());
       default:
         return () => false;
+    }
+  };
+
+  const getFilterEqualityOptions = (type?: 'string' | 'number'): JSX.Element => {
+    switch (type) {
+      case 'string':
+        return <>
+          <option value={Equality.StrictEqual}>Equals</option>
+          <option value={Equality.StartsWith}>
+            Starts With
+          </option>
+          <option value={Equality.EndsWith}>Ends With</option>
+          <option value={Equality.Includes}>Includes</option>
+        </>;
+      case 'number':
+        return <>
+          <option value={Equality.LT}>Less Than (&lt;)</option>
+          <option value={Equality.LTE}>
+            Less Than or Equal (&le;)
+          </option>
+          <option value={Equality.E}>Equal (=)</option>
+          <option value={Equality.GTE}>
+            Greater Than or Equal (&ge;)
+          </option>
+          <option value={Equality.GT}>
+            Greater Than (&gt;)
+          </option>
+        </>;
+      default:
+        return <></>;
     }
   };
 
@@ -370,6 +405,7 @@ const DevicesTable = () => {
                       <FaTrashAlt />
                     </i>
                   </div>
+
                   <div className="w-20 px-1">
                     <select
                       className="form-select form-select-sm w-100"
@@ -395,7 +431,8 @@ const DevicesTable = () => {
                       </option>
                     </select>
                   </div>
-                  {filter.columnKey && filter.type === 'string' ? (
+
+                  {filter.columnKey ? (
                     <>
                       <div className="w-40 px-1">
                         <select
@@ -409,62 +446,17 @@ const DevicesTable = () => {
                             )
                           }
                         >
-                          <option value={Equality.E}>Equals</option>
-                          <option value={Equality.StartsWith}>
-                            Starts With
-                          </option>
-                          <option value={Equality.EndsWith}>Ends With</option>
-                          <option value={Equality.Includes}>Includes</option>
+                          {getFilterEqualityOptions(filter.type)}
                         </select>
                       </div>
+
                       <div className="w-35 px-1">
                         <input
                           className="form-control form-control-sm w-100"
-                          type="text"
+                          type={filter.type}
                           value={filter.value}
                           onChange={(e) =>
                             setFilterValue(filter, idx, e.target.value)
-                          }
-                        />
-                      </div>
-                    </>
-                  ) : (
-                    <></>
-                  )}
-                  {filter.columnKey && filter.type === 'number' ? (
-                    <>
-                      <div className="w-40 px-1">
-                        <select
-                          className="form-select form-select-sm w-100"
-                          value={filter.equality}
-                          onChange={(e) =>
-                            setFilterEquality(
-                                filter,
-                                idx,
-                                Number(e.target.value),
-                            )
-                          }
-                        >
-                          <option value={Equality.LT}>Less Than (&lt;)</option>
-                          <option value={Equality.LTE}>
-                            Less Than or Equal (&le;)
-                          </option>
-                          <option value={Equality.E}>Equal (=)</option>
-                          <option value={Equality.GTE}>
-                            Greater Than or Equal (&ge;)
-                          </option>
-                          <option value={Equality.GT}>
-                            Greater Than (&gt;)
-                          </option>
-                        </select>
-                      </div>
-                      <div className="w-35 px-1">
-                        <input
-                          className="form-control form-control-sm w-100"
-                          type="number"
-                          value={filter.value}
-                          onChange={(e) =>
-                            setFilterValue(filter, idx, Number(e.target.value))
                           }
                         />
                       </div>
