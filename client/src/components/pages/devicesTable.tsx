@@ -327,7 +327,7 @@ const DevicesTable = () => {
         <div className="pt-2 ps-5 w-100">
           <div className="pb-2">
             <button
-              className="btn btn-secondary"
+              className="btn btn-primary"
               onClick={() => setshowFilters((show) => !show)}
             >
               <span>Filter Table ({filters.length})</span>

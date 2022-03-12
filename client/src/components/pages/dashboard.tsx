@@ -288,18 +288,18 @@ const Dashboard = () => {
       <Navbar />
       <div id="page-wrap" className="h-100 overflow-auto pe-2 ps-2">
         <div className="d-flex pt-2 justify-content-end">
-          <button className="btn btn-secondary" onClick={() => resetDash()}>
+          <button className="btn btn-primary" onClick={() => resetDash()}>
             Clear Dashboard
           </button>
           <button
-            className="btn btn-secondary ms-2"
+            className="btn btn-primary ms-2"
             disabled={!dashboardModified}
             onClick={() => saveDash()}
           >
             Save Changes
           </button>
           <button
-            className="btn btn-secondary ms-2"
+            className="btn btn-primary ms-2"
             disabled={!dashboardModified}
             onClick={() => viewDash()}
           >
