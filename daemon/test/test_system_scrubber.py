@@ -320,7 +320,7 @@ class TestSystemScrubberWifi(unittest.TestCase):
         with patch('os.popen', new=mock_open(read_data = MOCK_ADAPTER_TERMINAL_OUTPUT)):
             actual_result = SysScrubber.fetch_network_strength()
 
-        expected_result = 'Weak'
+        expected_result = 1 #Weak
 
         self.assertEqual(actual_result, expected_result)
 
