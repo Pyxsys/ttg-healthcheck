@@ -2,6 +2,8 @@
 import React, {useEffect, useState} from 'react';
 import axios from 'axios';
 import {Link} from 'react-router-dom';
+import {FaPlus, FaTrashAlt} from 'react-icons/fa';
+import useOnclickOutside from 'react-cool-onclickoutside';
 
 // Custom
 import {IResponse} from '../../types/queries';
@@ -13,7 +15,6 @@ import {SignalStrength, signalText} from '../common/signalStrength';
 import {IColumnDetail} from '../../types/tables';
 import Pagination from '../common/pagination';
 import ViewTable from '../common/viewTable';
-import {FaPlus, FaTrashAlt} from 'react-icons/fa';
 
 type CellValue = string | number | undefined
 
@@ -48,6 +49,7 @@ const DevicesTable = () => {
 
   const [filters, setFilters] = useState([] as IFilter[]);
   const [showFilters, setshowFilters] = useState(false);
+  const filtersRef = useOnclickOutside(() => setshowFilters(false));
 
   const realTimeDataService = useRealTimeService();
 
@@ -327,8 +329,9 @@ const DevicesTable = () => {
         <div className="pt-2 ps-5 w-100">
           <div className="pb-2">
             <button
+              ref={filtersRef}
               className="btn btn-primary"
-              onClick={() => setshowFilters((show) => !show)}
+              onClick={() => setshowFilters(!showFilters)}
             >
               <span>Filter Table ({filters.length})</span>
               <span className={`ps-2 ${showFilters ? 'dropup' : 'dropdown'}`}>
@@ -338,6 +341,7 @@ const DevicesTable = () => {
           </div>
 
           <div
+            ref={filtersRef}
             className={`d-flex flex-column position-absolute filter-container overflow-auto ${
               showFilters ? '' : 'invisible'
             }`}
