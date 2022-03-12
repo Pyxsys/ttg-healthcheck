@@ -8,7 +8,7 @@
 
 
 ## Project Dependencies
-* [psutil 5.8.0 (or newer)](https://pypi.org/project/psutil/)
+* [psutil 5.9.0 (or newer)](https://pypi.org/project/psutil/)
 * [requests 2.26.0 (or newer)](https://pypi.org/project/requests/)
 
 ## Installation
