@@ -510,19 +510,19 @@ class SysScrubber:
         if SysScrubber.is_windows():
             str_as_float = float(str_as_num[0])
             if str_as_float > 80:
-                net_strength = 'Strong'
+                net_strength = 3 #Strong
             elif str_as_float > 50:
-                net_strength = 'Medium'
+                net_strength = 2 #Medium
             else:
-                net_strength = 'Weak'
+                net_strength = 1 #Weak
         elif SysScrubber.is_linux():
             str_as_float = float(str_as_num[0])
             if str_as_float > -20:
-                net_strength = 'Strong'
+                net_strength = 3 #Strong
             elif str_as_float > -50:
-                net_strength = 'Medium'
+                net_strength = 2 #Medium
             else:
-                net_strength = 'Weak'
+                net_strength = 1 #Weak
 
         return net_strength
 
