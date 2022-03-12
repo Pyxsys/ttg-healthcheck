@@ -372,7 +372,7 @@ const DevicesTable = () => {
                   </div>
                   <div className="w-20 px-1">
                     <select
-                      className="w-100"
+                      className="form-select form-select-sm w-100"
                       value={`${filter.columnKey};${filter.type}`}
                       onChange={(e) =>
                         setFilterColumn(filter, idx, e.target.value)
@@ -399,7 +399,7 @@ const DevicesTable = () => {
                     <>
                       <div className="w-40 px-1">
                         <select
-                          className="w-100"
+                          className="form-select form-select-sm w-100"
                           value={filter.equality}
                           onChange={(e) =>
                             setFilterEquality(
@@ -419,7 +419,7 @@ const DevicesTable = () => {
                       </div>
                       <div className="w-35 px-1">
                         <input
-                          className="w-100"
+                          className="form-control form-control-sm w-100"
                           type="text"
                           value={filter.value}
                           onChange={(e) =>
@@ -435,7 +435,7 @@ const DevicesTable = () => {
                     <>
                       <div className="w-40 px-1">
                         <select
-                          className="w-100"
+                          className="form-select form-select-sm w-100"
                           value={filter.equality}
                           onChange={(e) =>
                             setFilterEquality(
@@ -460,7 +460,7 @@ const DevicesTable = () => {
                       </div>
                       <div className="w-35 px-1">
                         <input
-                          className="w-100"
+                          className="form-control form-control-sm w-100"
                           type="number"
                           value={filter.value}
                           onChange={(e) =>

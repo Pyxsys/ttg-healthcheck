@@ -57,6 +57,19 @@ body {
   width: 5%;
 }
 
+.cursor-pointer {
+  cursor: pointer;
+}
+
+.text-muted {
+  color: $gray-700;
+}
+
+.border-dashed {
+  border: 1px dashed;
+}
+
+// Override Bootstrap
 .btn-primary {
   color: $gray-100 !important;
   font-weight: 500 !important;
@@ -76,20 +89,10 @@ body {
     background-color: lighten($gray-800, 7%);
   }
 }
-
-.cursor-pointer {
-  cursor: pointer;
+.form-control:focus, .form-select:focus {
+  border-color: $gray-800;
+  box-shadow: 0 0 0 0.25rem lighten($gray-800, 10%);
 }
-
-.text-muted {
-  color: $gray-700;
-}
-
-.border-dashed {
-  border: 1px dashed;
-}
-
-/*-----------------------Login/Signup--------------------------*/
 
 // Custom scrollbar only for computers
 @media only screen and (min-width: $screen-w-xsm) {
@@ -122,6 +125,7 @@ body {
   }
 }
 
+/*-----------------------Login/Signup--------------------------*/
 .home-header {
   background-color: lighten($gray-800, 5%);
   // smooth transition when header div changes size
