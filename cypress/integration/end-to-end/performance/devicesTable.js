@@ -29,7 +29,7 @@ describe("2. Check to ensure that the various components on the device page are 
         cy.get("table")
           .should(
             "have.class",
-            "cerebellum-table table-striped text-white overflow-auto w-100 m-1"
+            "cerebellum-table table-striped text-white overflow-auto w-100"
           )
           .should("be.visible")
           .find("tr")

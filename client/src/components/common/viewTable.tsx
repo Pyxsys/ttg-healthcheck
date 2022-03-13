@@ -108,7 +108,7 @@ const ViewTable = (props: ViewTableInputs<any>) => {
   };
 
   return (
-    <table className="cerebellum-table table-striped text-white overflow-auto w-100 m-1">
+    <table className="cerebellum-table table-striped text-white overflow-auto w-100">
       <thead>
         <tr className="sticky-header">
           {props.columns.map((column) => (
