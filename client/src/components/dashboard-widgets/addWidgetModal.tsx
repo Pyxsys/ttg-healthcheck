@@ -2,8 +2,8 @@
 import React, {useState} from 'react';
 
 type Props = {
-  setType: (type: string) => void,
-  setName: (name: string) => void,
+  setType: (type: string) => void
+  setName: (name: string) => void
 }
 
 const AddWidgetModal = ({setType, setName}: Props) => {

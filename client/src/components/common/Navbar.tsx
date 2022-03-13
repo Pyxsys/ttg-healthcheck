@@ -56,7 +56,12 @@ const Navbar = () => {
     <>
       <div className="d-flex nav-wrapper">
         <div ref={ref} className="nav-hamburger">
-          <Hamburger toggled={isOpen} toggle={setOpen} />
+          <Hamburger toggled={isOpen} toggle={setOpen} size={31}/>
+        </div>
+        <div className="nav-right-menu d-flex">
+          <div className="nav-right-icon">
+            <img src="https://cdn-icons-png.flaticon.com/512/149/149071.png"></img>
+          </div>
         </div>
       </div>
       {isOpen ? (
@@ -70,9 +75,7 @@ const Navbar = () => {
               >
                 <Link
                   to={item.path}
-                  onClick={
-                    item.title == 'Logout' ? (e) => logout(e) : (e) => null
-                  }
+                  onClick={(e) => (item.title == 'Logout' ? logout(e) : null)}
                 >
                   <span className="side-nav-item-icon">{item.icon} </span>
                   <span className="side-nav-item-text">{item.title}</span>

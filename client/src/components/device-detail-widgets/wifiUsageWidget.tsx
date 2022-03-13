@@ -6,7 +6,10 @@ import {format} from 'fecha';
 // Custom
 import {IDeviceLog} from '../../types/device';
 
-const wifiUsageWidget = (props: { deviceDynamic: IDeviceLog, overrideHeader?: JSX.Element }) => {
+const wifiUsageWidget = (props: {
+  deviceDynamic: IDeviceLog
+  overrideHeader?: JSX.Element
+}) => {
   const deviceDynamic: IDeviceLog = props.deviceDynamic;
 
   return (
@@ -14,12 +17,13 @@ const wifiUsageWidget = (props: { deviceDynamic: IDeviceLog, overrideHeader?: JS
       <Accordion defaultActiveKey="0" flush>
         <Accordion.Item eventKey="0">
           <Accordion.Header>
-            {props.overrideHeader ?
-              props.overrideHeader :
+            {props.overrideHeader ? (
+              props.overrideHeader
+            ) : (
               <div className="d-flex w-100 justify-content-around">
                 Network Usage Information
               </div>
-            }
+            )}
           </Accordion.Header>
           <Accordion.Body>
             <Table className="device-details-table device-details-table-dark">

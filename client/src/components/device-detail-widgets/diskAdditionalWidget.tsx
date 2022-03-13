@@ -5,7 +5,10 @@ import {Col, Table, Accordion} from 'react-bootstrap';
 // Custom
 import {IDevice} from '../../types/device';
 
-const diskAdditionalWidget = (props: { deviceStatic: IDevice, overrideHeader?: JSX.Element }) => {
+const diskAdditionalWidget = (props: {
+  deviceStatic: IDevice
+  overrideHeader?: JSX.Element
+}) => {
   const deviceStatic: IDevice = props.deviceStatic;
 
   return (
@@ -13,12 +16,13 @@ const diskAdditionalWidget = (props: { deviceStatic: IDevice, overrideHeader?: J
       <Accordion defaultActiveKey="0" flush>
         <Accordion.Item eventKey="0">
           <Accordion.Header>
-            {props.overrideHeader ?
-              props.overrideHeader :
+            {props.overrideHeader ? (
+              props.overrideHeader
+            ) : (
               <div className="d-flex w-100 justify-content-around">
                 Additional Disk Information
               </div>
-            }
+            )}
           </Accordion.Header>
           <Accordion.Body>
             <Table className="device-details-table device-details-table-dark">

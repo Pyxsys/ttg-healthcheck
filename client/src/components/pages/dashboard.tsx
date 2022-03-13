@@ -34,7 +34,6 @@ const Dashboard = () => {
   const [hover, setHover] = useState(false);
   const [dashboardModified, setDashboardModified] = useState(false);
 
-
   const hoverStyleBox = {
     color: hover ? 'white' : 'grey',
   };
@@ -56,13 +55,14 @@ const Dashboard = () => {
     if (!dashboard?.widgets) {
       return;
     }
-    const widgetDeviceIds = dashboard.widgets.map((widget) => widget.options.deviceId);
+    const widgetDeviceIds = dashboard.widgets.map(
+        (widget) => widget.options.deviceId,
+    );
     // Remove duplicate Device Ids
     const deviceIds = Array.from(new Set(widgetDeviceIds)).join(',');
-    const deviceResponse = await axios.get<IResponse<IDevice>>(
-        'api/device',
-        {params: {deviceIds: deviceIds}},
-    );
+    const deviceResponse = await axios.get<IResponse<IDevice>>('api/device', {
+      params: {deviceIds: deviceIds},
+    });
     const latestDevicesResponse = await axios.get<IResponse<IDeviceLog>>(
         'api/device-logs/latest',
         {params: {Ids: deviceIds}},
@@ -121,7 +121,11 @@ const Dashboard = () => {
     setDashboardModified(true);
   };
 
-  const overrideWidgetHeaderHTML = (widgetName: string, widgetTitle: string, index: number): JSX.Element => (
+  const overrideWidgetHeaderHTML = (
+      widgetName: string,
+      widgetTitle: string,
+      index: number,
+  ): JSX.Element => (
     <div className="d-flex w-100">
       <div className="d-flex justify-content-center w-100">
         <div className="d-flex flex-column align-content-center">
@@ -129,14 +133,19 @@ const Dashboard = () => {
           <div className="text-center">{widgetTitle}</div>
         </div>
       </div>
-      <div className="d-flex align-self-center px-2 ms-auto cursor-pointer"
-        onClick={() => removeWidget(index)}>
+      <div
+        className="d-flex align-self-center px-2 ms-auto cursor-pointer"
+        onClick={() => removeWidget(index)}
+      >
         <FaTrashAlt />
       </div>
     </div>
   );
 
-  const getWidgetHMTL = (widget: IDashboardWidget, index: number): JSX.Element => {
+  const getWidgetHMTL = (
+      widget: IDashboardWidget,
+      index: number,
+  ): JSX.Element => {
     const device = deviceData.find(
         (e) => e.static.deviceId === widget.options.deviceId,
     );
@@ -197,14 +206,16 @@ const Dashboard = () => {
     }
     switch (widget.widgetType) {
       case 'CPU-Dynamic':
-        return <CpuUsageWidget
-          deviceDynamic={dynamicDevice}
-          overrideHeader={overrideWidgetHeaderHTML(
-              widget.options.deviceName || widget.options.deviceId,
-              'CPU Usage Information',
-              index,
-          )}
-        ></CpuUsageWidget>;
+        return (
+          <CpuUsageWidget
+            deviceDynamic={dynamicDevice}
+            overrideHeader={overrideWidgetHeaderHTML(
+                widget.options.deviceName || widget.options.deviceId,
+                'CPU Usage Information',
+                index,
+            )}
+          ></CpuUsageWidget>
+        );
       case 'Memory-Dynamic':
         return (
           <MemoryUsageWidget
@@ -275,18 +286,23 @@ const Dashboard = () => {
   return (
     <div id="dashboard-container">
       <Navbar />
-      <div
-        id="page-wrap"
-        className="h-100 overflow-auto pe-2 ps-2"
-      >
+      <div id="page-wrap" className="h-100 overflow-auto pe-2 ps-2">
         <div className="d-flex pt-2 justify-content-end">
-          <button className="btn btn-secondary" onClick={() => resetDash()}>
+          <button className="btn btn-primary" onClick={() => resetDash()}>
             Clear Dashboard
           </button>
-          <button className="btn btn-secondary ms-2" disabled={!dashboardModified} onClick={() => saveDash()}>
+          <button
+            className="btn btn-primary ms-2"
+            disabled={!dashboardModified}
+            onClick={() => saveDash()}
+          >
             Save Changes
           </button>
-          <button className="btn btn-secondary ms-2" disabled={!dashboardModified} onClick={() => viewDash()}>
+          <button
+            className="btn btn-primary ms-2"
+            disabled={!dashboardModified}
+            onClick={() => viewDash()}
+          >
             Cancel Changes
           </button>
         </div>
@@ -294,7 +310,10 @@ const Dashboard = () => {
         <div className="container d-flex flex-wrap py-3">
           {/* Dashboard Widgets */}
           {dashboard?.widgets?.map((widget, index) => (
-            <div className="d-flex flex-column widget-width px-4" key={`${widget.widgetType}_${index}`}>
+            <div
+              className="d-flex flex-column widget-width px-4"
+              key={`${widget.widgetType}_${index}`}
+            >
               {getWidgetHMTL(widget, index)}
             </div>
           ))}

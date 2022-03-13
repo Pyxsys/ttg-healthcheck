@@ -9,7 +9,7 @@ export default {
             return response.data;
           }
         })
-        .catch((error) => {
+        .catch(() => {
           return {isAuthenticated: false, user: {name: '', role: ''}};
         });
   },
