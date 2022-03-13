@@ -1,21 +1,22 @@
 // Set new color palette.
 $primary-gray: #393f49;
 $secondary-gray: #f8f9fa;
+$secondary-grey: #f8f8f8;
 $tertiary-gray: #30353d;
 $quarternary-gray: #3F4651;
 $quinary-gray: #4C535F;
 $secondary: #f8f9fa;
 
 $white: #fff;
-$gray-100: #c2c2c2;
-$gray-200: #9b9b9b;
-$gray-300: #888888;
-$gray-400: #727272;
-$gray-500: #5a5a5a;
-$gray-600: #424242;
-$gray-700: #2c2c2c;
-$gray-800: #1d1d1d;
-$gray-900: #101010;
+$gray-100: #e5eaf2;
+$gray-200: #cbd0d8;
+$gray-300: #b1b6be;
+$gray-400: #979ca4;
+$gray-500: #7d828a;
+$gray-600: #636870;
+$gray-700: #494e56;
+$gray-800: #2f343c;
+$gray-900: #151a22;
 $black: #000;
 
 // Media query sizes
@@ -44,7 +45,7 @@ body {
   width: 100%;
 }
 
-@for $i from 1 through 10 {
+@for $i from 0 through 9 {
   .h-#{$i*10} {
     height: $i*10%;
   }
@@ -52,12 +53,46 @@ body {
     width: $i*10%;
   }
 }
+.w-5 {
+  width: 5%;
+}
 
 .cursor-pointer {
   cursor: pointer;
 }
 
-/*-----------------------Login/Signup--------------------------*/
+.text-muted {
+  color: $gray-700;
+}
+
+.border-dashed {
+  border: 1px dashed;
+}
+
+// Override Bootstrap
+.btn-primary {
+  color: $gray-100 !important;
+  font-weight: 500 !important;
+  border-color: $gray-300 !important;
+  background-color: $gray-800;
+  &:disabled {
+    background-color: darken($gray-800, 5%);
+  }
+  &:hover {
+    background-color: lighten($gray-800, 5%);
+  }
+  &:focus {
+    background-color: lighten($gray-800, 5%);
+    box-shadow: 0 0 0 0.25rem lighten($gray-800, 10%) !important;
+  }
+  &:active {
+    background-color: lighten($gray-800, 7%);
+  }
+}
+.form-control:focus, .form-select:focus {
+  border-color: $gray-800;
+  box-shadow: 0 0 0 0.25rem lighten($gray-800, 10%);
+}
 
 // Custom scrollbar only for computers
 @media only screen and (min-width: $screen-w-xsm) {
@@ -90,8 +125,9 @@ body {
   }
 }
 
+/*-----------------------Login/Signup--------------------------*/
 .home-header {
-  background-color: $primary-gray;
+  background-color: lighten($gray-800, 5%);
   // smooth transition when header div changes size
   -webkit-transition: all 0.5s ease;
   -moz-transition: all 0.5s ease;
@@ -119,7 +155,7 @@ body {
 }
 
 .home-content {
-  background-color: $tertiary-gray;
+  background-color: $gray-800;
   @media (min-width: $screen-w-xxsm) {
     min-height: 500px;
   }
@@ -141,7 +177,7 @@ body {
 }
 
 .home-footer {
-  background-color: $tertiary-gray;
+  background-color: $gray-800;
 }
 
 .home-logo {
@@ -175,7 +211,7 @@ body {
 .bottom-triangle {
   border-right: solid 15px transparent;
   border-left: solid 15px transparent;
-  border-top: solid 15px $primary-gray;
+  border-top: solid 15px lighten($gray-800, 5%);
   transform: translateY(15px);
 }
 
@@ -301,14 +337,6 @@ body {
     padding: 17px;
     font-size: 17px;
   }
-  color: $secondary-gray;
-  font-weight: 500;
-  border: 1px solid #b1b1b1ab !important;
-  background-color: $tertiary-gray;
-}
-
-.home-button:hover {
-  background-color: $primary-gray !important;
 }
 
 /*-----------------------Navigation--------------------------*/
@@ -591,6 +619,14 @@ body {
     text-overflow: unset;
     white-space: unset;
   }
+}
+
+.filter-container {
+  z-index: 9;
+  background-color: $tertiary-gray;
+  border: 1px black solid;
+  min-width: 550px;
+  max-height: 50vh;
 }
 
 .devices-font {
