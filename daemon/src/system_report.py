@@ -495,17 +495,27 @@ class SysScrubber:
     def fetch_network_strength(cls):
         net_strength = 'Unknown'
 
-        if SysScrubber.is_windows():
-            command = "netsh wlan show interfaces"
-            pattern = "^\s+Signal\s+:\s+[0-9]+"
-        elif SysScrubber.is_linux():
-            command = "sudo iw dev wlan0 scan"
-            pattern = "^\s+signal:\s+-*[0-9]+"
+        max_attempts = 5
+        attempts = 0    #try up to 5 time incase resource is busy
+        while attempts < max_attempts:
+            try:
+                if SysScrubber.is_windows():
+                    command = "netsh wlan show interfaces"
+                    pattern = "^\s+Signal\s+:\s+[0-9]+"
+                elif SysScrubber.is_linux():
+                    command = "sudo iw dev wlan0 scan | grep signal"
+                    pattern = "^\s+signal:\s+-*[0-9]+"
 
-        extract=os.popen(command)
-        str_buffer=re.findall(pattern, extract.read(), re.MULTILINE)
-        extract.close()
-        str_as_num = re.findall(r"[-+]?(?:\d*\.\d+|\d+)", str_buffer[0])
+                extract=os.popen(command)
+                str_buffer=re.findall(pattern, extract.read(), re.MULTILINE)
+                extract.close()
+                str_as_num = re.findall(r"[-+]?(?:\d*\.\d+|\d+)", str_buffer[0])
+                break   #number was successfully retrieved
+            except IndexError:
+                attempts += 1
+                if attempts == max_attempts:
+                    str_as_num = ['-100.00'] #Force weak
+                
 
         if SysScrubber.is_windows():
             str_as_float = float(str_as_num[0])
