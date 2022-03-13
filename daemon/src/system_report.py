@@ -511,28 +511,29 @@ class SysScrubber:
                 extract.close()
                 str_as_num = re.findall(r"[-+]?(?:\d*\.\d+|\d+)", str_buffer[0])
                 break   #number was successfully retrieved
+            
             except IndexError:
                 attempts += 1
-                if attempts == max_attempts:
-                    str_as_num = ['-100.00'] #Force weak
+        
+        #force weak signal if unable to fetch signal
+        if attempts == max_attempts:
+            str_as_num = ['-100.00']
                 
+        str_as_float = float(str_as_num[0])
 
         if SysScrubber.is_windows():
-            str_as_float = float(str_as_num[0])
-            if str_as_float > 80:
-                net_strength = 3 #Strong
-            elif str_as_float > 50:
-                net_strength = 2 #Medium
-            else:
-                net_strength = 1 #Weak
+            strong = 80
+            medium = 50
         elif SysScrubber.is_linux():
-            str_as_float = float(str_as_num[0])
-            if str_as_float > -20:
-                net_strength = 3 #Strong
-            elif str_as_float > -50:
-                net_strength = 2 #Medium
-            else:
-                net_strength = 1 #Weak
+            strong = -20
+            medium = -50
+
+        if str_as_float > strong:
+            net_strength = 3
+        elif str_as_float > medium:
+            net_strength = 2
+        else:
+            net_strength = 1 #Weak
 
         return net_strength
 
