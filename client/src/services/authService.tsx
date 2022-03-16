@@ -10,7 +10,7 @@ export default {
           }
         })
         .catch(() => {
-          return {isAuthenticated: false, user: {name: '', role: ''}};
+          return {isAuthenticated: false, user: {_id: '', name: '', role: '', avatar: ''}};
         });
   },
 };

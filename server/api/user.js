@@ -71,7 +71,7 @@ router.post('/login', async (req, res) => {
       .status(200)
       .json({
         message: 'Logged in',
-        user: { _id: user._id, name: user.name, role: user.role },
+        user: { _id: user._id, name: user.name, role: user.role, avatar: user.avatar },
       })
   } catch (err) {
     res.status(500).send('Server Error: ' + err.message)
@@ -84,7 +84,7 @@ router.get('/authenticate', auth, async (req, res) => {
     const user = await User.findOne({ _id: req.userId })
     return res.status(200).json({
       isAuthenticated: true,
-      user: { _id: user._id, name: user.name, role: user.role },
+      user: { _id: user._id, name: user.name, role: user.role, avatar: user.avatar },
     })
   } catch (err) {
     res.status(501).send('Server Error: ' + err.message)
@@ -96,7 +96,15 @@ router.get('/all', auth, async (req, res) => {
   try {
     const user = await User.findOne({ _id: req.userId })
     if (user.role == 'admin') {
-      const results = await User.find({});
+      const results = await User.find(
+        {},
+        {
+          name: 1,
+          email: 1,
+          role: 1,
+          avatar: 1,
+        }
+      );;
       return res.status(200).json({users: results});
     }
     else {

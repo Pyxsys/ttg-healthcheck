@@ -10,4 +10,5 @@ export interface IUserObject {
   _id: string
   name: string
   role: string
+  avatar: string
 }

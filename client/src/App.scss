@@ -395,6 +395,14 @@ body {
   opacity: 0.8;
   color: black;
   text-decoration: none;
+  &:hover {
+    color: black;
+    text-decoration: none;
+  }
+}
+
+.dropdown-item:active {
+  background-color: rgb(230, 230, 230);
 }
 
 // Left Nav Menu

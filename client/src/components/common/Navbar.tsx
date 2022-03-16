@@ -40,7 +40,7 @@ const Navbar = () => {
         .get('api/user/logout')
         .then((response) => {
           if (response.data) {
-            setUser({_id: '', name: '', role: ''});
+            setUser({_id: '', name: '', role: '', avatar: ''});
             setIsAuthenticated(false);
           }
         })
@@ -51,10 +51,9 @@ const Navbar = () => {
 
   // Custom toggle for right navigation
   type Props = any;
-  type Ref = HTMLAnchorElement;
+  type Ref = HTMLDivElement;
   const CustomToggle = useMemo(() => React.forwardRef<Ref, Props>(({onClick}, ref) => (
-    <a
-      href=''
+    <div
       ref={ref}
       onClick={(e) => {
         e.preventDefault();
@@ -63,10 +62,10 @@ const Navbar = () => {
     >
       <div className='nav-right-menu d-flex'>
         <div className='nav-right-icon'>
-          <img src='https://cdn-icons-png.flaticon.com/512/149/149071.png'></img>
+          <img src={user.avatar}></img>
         </div>
       </div>
-    </a>
+    </div>
   )),
   [],
   );
@@ -95,8 +94,12 @@ const Navbar = () => {
                   to={user.role == 'admin' ? '/admin' : ''}
                   className="nav-right-font"
                 >
-                Profile
+                  <div>
+                  Profile
+                  </div>
                 </Link>
+                <div>
+                </div>
               </Dropdown.Item>
               <Dropdown.Divider />
               <Dropdown.Item eventKey="2">
