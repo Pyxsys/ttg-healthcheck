@@ -25,7 +25,7 @@ class TestSystemScrubberGeneral(unittest.TestCase):
     @patch('daemon.src.system_report.SysScrubber.is_linux', return_value=True)
     def testFetchingUuidLUX(self,m1,m2):
 
-        MOCK_ADAPTER_TERMINAL_OUTPUT='01234567-89ab-cdef-fedc-ba9876543210'
+        MOCK_ADAPTER_TERMINAL_OUTPUT='UUID\n\n01AB-23CD\n01234567-89ab-cdef-fedc-ba9876543210'
         with patch('os.popen', new=mock_open(read_data = MOCK_ADAPTER_TERMINAL_OUTPUT)):
 
             actual_result = SysScrubber.fetch_device_uuid()
@@ -100,13 +100,13 @@ class TestSystemScrubberCPU(unittest.TestCase):
         self.assertEqual(int(actual_result), 0)
 
     @patch('daemon.src.system_report.SysScrubber.is_windows', return_value=True)
-    @patch('daemon.src.system_report.SysScrubber.is_linux', return_value=False) 
+    @patch('daemon.src.system_report.SysScrubber.is_linux', return_value=False)
     def testFetchingCPUSocketsWIN(self,m1,m2):
         MOCK_ADAPTER_TERMINAL_OUTPUT='1\n'
         with patch('os.popen', new=mock_open(read_data = MOCK_ADAPTER_TERMINAL_OUTPUT)):
             actual_result=SysScrubber.fetch_cpu_sockets()
             self.assertEquals(actual_result,1)
-    
+
     @patch('daemon.src.system_report.SysScrubber.is_windows', return_value=False)
     @patch('daemon.src.system_report.SysScrubber.is_linux', return_value=True)
     def testFetchingCPUSocketsLUX(self,m1,m2):
@@ -122,7 +122,7 @@ class TestSystemScrubberCPU(unittest.TestCase):
         self.assertEquals(actual_result,0)
 
 class TestSystemScrubberMemory(unittest.TestCase):
-        
+
     def testFetchingTotalMemory(self):
         actual_result=SysScrubber.fetch_total_memory()
         self.assertGreater(actual_result, 0)
@@ -138,7 +138,7 @@ class TestSystemScrubberMemory(unittest.TestCase):
 
     @patch('daemon.src.system_report.SysScrubber.is_windows', return_value=False)
     @patch('daemon.src.system_report.SysScrubber.is_linux', return_value=True)
-    def testFetchingMemoryFormFactorListLUX(self,m1,m2):     
+    def testFetchingMemoryFormFactorListLUX(self,m1,m2):
         MOCK_ADAPTER_TERMINAL_OUTPUT='     Form Factor: DIMM\n     Form Factor: DIMM'
         with patch('os.popen', new=mock_open(read_data = MOCK_ADAPTER_TERMINAL_OUTPUT)):
             actual_result = SysScrubber.fetch_memory_form_factor()
@@ -197,12 +197,12 @@ class TestSystemScrubberDisk(unittest.TestCase):
             for x in actual_list:
                 actual_result=tuple(x)
                 self.assertTupleEqual(actual_result, disk_sub_categories)
-            
+
     @patch('daemon.src.system_report.SysScrubber.is_windows', return_value=False)
     @patch('daemon.src.system_report.SysScrubber.is_linux', return_value=True)
     def testFetchingPhysicalDiskListLUX(self,m1,m2):
         MOCK_ADAPTER_TERMINAL_OUTPUT='Disk /dev/sda: 8 GiB, 8589934592 bytes, 16777216 sectors\nDisk model: TEST HARDDISK\nNAME ROTA\nsda\t1\nsr0\t1'
-        with patch('os.popen', new=mock_open(read_data = MOCK_ADAPTER_TERMINAL_OUTPUT)):    
+        with patch('os.popen', new=mock_open(read_data = MOCK_ADAPTER_TERMINAL_OUTPUT)):
             disk_sub_categories = ('model', 'size', 'media')
             actual_list = SysScrubber.fetch_physical_disks()
 
@@ -234,17 +234,17 @@ class TestSystemScrubberWifi(unittest.TestCase):
         # mocking the same dict to also have those elements popped
         return {
         'wlan0' : [
-            snicaddr(family=psutil.AF_LINK, address='FE-ED-FE-ED-11-11', netmask=None, broadcast=None, ptp=None), 
-            snicaddr(family=AddressFamily.AF_INET, address='9.99.0.999', netmask='255.255.0.0', broadcast=None, ptp=None), 
+            snicaddr(family=psutil.AF_LINK, address='FE-ED-FE-ED-11-11', netmask=None, broadcast=None, ptp=None),
+            snicaddr(family=AddressFamily.AF_INET, address='9.99.0.999', netmask='255.255.0.0', broadcast=None, ptp=None),
             snicaddr(family=AddressFamily.AF_INET6, address='feed::fade:1111:face:1111', netmask=None, broadcast=None, ptp=None)
             ],
         'Wi-Fi' : [
-            snicaddr(family=psutil.AF_LINK, address='FE-ED-FE-ED-00-00', netmask=None, broadcast=None, ptp=None), 
-            snicaddr(family=AddressFamily.AF_INET, address='9.99.999.0', netmask='255.255.0.0', broadcast=None, ptp=None), 
+            snicaddr(family=psutil.AF_LINK, address='FE-ED-FE-ED-00-00', netmask=None, broadcast=None, ptp=None),
+            snicaddr(family=AddressFamily.AF_INET, address='9.99.999.0', netmask='255.255.0.0', broadcast=None, ptp=None),
             snicaddr(family=AddressFamily.AF_INET6, address='feed::fade:1111:1111:1111', netmask=None, broadcast=None, ptp=None)
             ]
         }
-       
+
     def testFetchingAdapterName(self):
         expected_result = 'wlan0'
         with patch('psutil.net_if_addrs', return_value = self.getPSUTIL_NET_IF_ADDRS__MO()):
@@ -260,7 +260,7 @@ class TestSystemScrubberWifi(unittest.TestCase):
         self.assertRegex(actual_result, ipv4_pattern)
 
     def testFetchingIpv6Address(self):
-        ipv6_pattern = '(?:(?:\d|[a-f]){0,4}:){5}(?:\d|[a-f]){0,4}' 
+        ipv6_pattern = '(?:(?:\d|[a-f]){0,4}:){5}(?:\d|[a-f]){0,4}'
         with patch('psutil.net_if_addrs', return_value = self.getPSUTIL_NET_IF_ADDRS__MO()):
             actual_result=SysScrubber.fetch_net_adapter_addrs(None).get('ipv6')
 
@@ -276,18 +276,18 @@ class TestSystemScrubberWifi(unittest.TestCase):
     @patch('daemon.src.system_report.SysScrubber.is_windows', return_value=True)
     @patch('daemon.src.system_report.SysScrubber.is_linux', return_value=False)
     def testFetchingAdapterNetworkInfoWIN(self, m1, m2):
-        
+
         MOCK_ADAPTER_TERMINAL_OUTPUT='There is 1 interface on the system:\n\n    Name                   : Wi-Fly\n    Description            : foobar 999MHz\n    GUID                   : ace11ace-ace1-ace1-ace1-aceaceaceace\n    Physical address       : aa:aa:aa:aa:aa:aa\n    State                  : connected\n    SSID                   : TARGET_WIFI_SSID\n    BSSID                  : bb:bb:bb:b:bb:bb\n    Network type           : Infrastructure\n    Radio type             : 802.11ac\n    Authentication         : WPA2-Personal\n    Cipher                 : CCMP\n    Connection mode        : Auto Connect\n    Channel                : 000\n    Receive rate (Mbps)    : 999\n    Transmit rate (Mbps)   : 999\n    Signal                 : 81%\n    Profile                : TARGET_WIFI_SSID\n\n    Hosted network status  : Not available'
         with patch('os.popen', new=mock_open(read_data = MOCK_ADAPTER_TERMINAL_OUTPUT)):
             actual_result = SysScrubber.fetch_net_wan_adapter_info('Wi-Fly')
 
         expected_result = {
-            "SSID": 'TARGET_WIFI_SSID', 
+            "SSID": 'TARGET_WIFI_SSID',
             "connectionType": '802.11ac'
             }
-        
+
         self.assertDictEqual(actual_result, expected_result)
-  
+
     @patch('daemon.src.system_report.SysScrubber.is_windows', return_value=False)
     @patch('daemon.src.system_report.SysScrubber.is_linux', return_value=True)
     def testFetchingAdapterNetworkInfoLUX(self, m1, m2):
@@ -296,20 +296,20 @@ class TestSystemScrubberWifi(unittest.TestCase):
             actual_result = SysScrubber.fetch_net_wan_adapter_info()
 
         expected_result = {
-            "SSID": 'TARGET_WIFI_SSID', 
+            "SSID": 'TARGET_WIFI_SSID',
             "connectionType": '802.11ac'
             }
-        
+
         self.assertDictEqual(actual_result, expected_result)
-    
+
     @patch('daemon.src.system_report.SysScrubber.is_windows', return_value=True)
     @patch('daemon.src.system_report.SysScrubber.is_linux', return_value=False)
     def testFetchingNetworkStrengthInfoWIN(self, m1, m2):
         MOCK_ADAPTER_TERMINAL_OUTPUT='There is 1 interface on the system:\n    Name                   : Wi-Fi\n    Description            : Intel(R) Dual Band Wireless-AC\n    GUID                   : 5a889epd-460c-436f-a04c-a218b5hhe14dc\n    Physical address       : 98:8e:46:5a:18:e7\n    State                  : connected\n    SSID                   : BELL123\n    BSSID                  : 7u:r4:eb:6y:9i:m5\n    Network type           : Infrastructure\n    Radio type             : 802.11n\n    Authentication         : WPA2-Personal\n    Cipher                 : CCMP\n    Connection mode        : Profile\n    Channel                : 10\n    Receive rate (Mbps)    : 72.2\n    Transmit rate (Mbps)   : 72.2\n    Signal                 : 99%\n    Profile                : BELL443\n\n    Hosted network status  : Not available'
         with patch('os.popen', new=mock_open(read_data = MOCK_ADAPTER_TERMINAL_OUTPUT)):
             actual_result = SysScrubber.fetch_network_strength()
-        
-        expected_result = 'Strong'
+
+        expected_result = 3 #Strong
 
         self.assertEqual(actual_result, expected_result)
 
@@ -320,7 +320,7 @@ class TestSystemScrubberWifi(unittest.TestCase):
         with patch('os.popen', new=mock_open(read_data = MOCK_ADAPTER_TERMINAL_OUTPUT)):
             actual_result = SysScrubber.fetch_network_strength()
 
-        expected_result = 'Weak'
+        expected_result = 1 #Weak
 
         self.assertEqual(actual_result, expected_result)
 

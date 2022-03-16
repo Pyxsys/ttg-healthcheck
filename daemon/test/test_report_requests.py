@@ -56,7 +56,7 @@ class TestRunner(unittest.TestCase):
     @unittest.skipIf("localhost" in json.load(open(sys.path[0] + test_config_path))['destination'],
      'Cannot run test automatically with "localhost" destination.')
     def testConnectionToServer(self):
-        expected_result = 500
+        expected_result = 501
         url = self.test_runner.get_config()['destination'] + Runner.api_endpoint
 
         response=requests.post(url)

@@ -32,7 +32,7 @@ class Runner:
         self.init_report()
         self.report.add_system_process_info()
         self.report.add_memory_usage_info()
-        self.report.add_system_network_usage() 
+        self.report.add_system_network_usage()
         self.report.add_disk_usage_info()
 
     #produces startup device report
@@ -69,7 +69,7 @@ class Runner:
         self.sleep()
 
 class SysReport:
-      
+
     # Initializes instance attributes.
     def __init__(self):
         self.report_message = {}
@@ -187,14 +187,14 @@ class SysScrubber:
     @classmethod
     def is_windows(cls):
         return psutil.WINDOWS
-    
+
     @classmethod
     def is_linux(cls):
         return psutil.LINUX
 
     # ----------------------
     # General Methods
-    # ----------------------    
+    # ----------------------
     @classmethod
     def fetch_device_uuid(cls):
         pattern = '[a-zA-Z0-9]{8}(?:-[a-zA-Z0-9]{4}){3}-[a-zA-Z0-9]{12}'
@@ -203,7 +203,7 @@ class SysScrubber:
         if SysScrubber.is_windows():
             command = "wmic csproduct get uuid"
         elif SysScrubber.is_linux():
-            command = "sudo dmidecode -s system-uuid"
+            command = "lsblk -o UUID"
 
         extract=os.popen(command)
         uuid=re.findall(pattern, extract.read(), flags)[0]
@@ -243,7 +243,7 @@ class SysScrubber:
         elif SysScrubber.is_linux():
             command='getconf -a | grep LEVEL1_ICACHE_SIZE'
             pattern='(?:LEVEL1_ICACHE_SIZE\s+(\d+))'
-        
+
         else:
             return 0
 
@@ -274,7 +274,7 @@ class SysScrubber:
         extract=os.popen(command)
         buffer=re.findall(pattern, extract.read(),  re.MULTILINE)
         extract.close()
-        
+
         return int(buffer[0])
 
     @classmethod
@@ -467,14 +467,14 @@ class SysScrubber:
 
         return disk_dict
 
-    @classmethod 
+    @classmethod
     def fetch_disk_partition_status(cls):
         disk_dict = dict()
 
         for partition_path in psutil.disk_partitions():
             disk_subdict = dict()
             disk_buffer = psutil.disk_usage(partition_path.device)
-            
+
             disk_subdict['total'] = disk_buffer.total
             disk_subdict['used'] = disk_buffer.used
             disk_subdict['free'] = disk_buffer.free
@@ -495,34 +495,45 @@ class SysScrubber:
     def fetch_network_strength(cls):
         net_strength = 'Unknown'
 
-        if SysScrubber.is_windows():
-            command = "netsh wlan show interfaces"
-            pattern = "^\s+Signal\s+:\s+[0-9]+"
-        elif SysScrubber.is_linux():
-            command = "sudo iw dev wlan0 scan"
-            pattern = "^\s+signal:\s+-*[0-9]+"
+        max_attempts = 5
+        attempts = 0    #try up to 5 time incase resource is busy
+        while attempts < max_attempts:
+            try:
+                if SysScrubber.is_windows():
+                    command = "netsh wlan show interfaces"
+                    pattern = "^\s+Signal\s+:\s+[0-9]+"
+                elif SysScrubber.is_linux():
+                    command = "sudo iw dev wlan0 scan | grep signal"
+                    pattern = "^\s+signal:\s+-*[0-9]+"
 
-        extract=os.popen(command)
-        str_buffer=re.findall(pattern, extract.read(), re.MULTILINE)
-        extract.close()
-        str_as_num = re.findall(r"[-+]?(?:\d*\.\d+|\d+)", str_buffer[0])
+                extract=os.popen(command)
+                str_buffer=re.findall(pattern, extract.read(), re.MULTILINE)
+                extract.close()
+                str_as_num = re.findall(r"[-+]?(?:\d*\.\d+|\d+)", str_buffer[0])
+                break   #number was successfully retrieved
+            
+            except IndexError:
+                attempts += 1
+        
+        #force weak signal if unable to fetch signal
+        if attempts == max_attempts:
+            str_as_num = ['-100.00']
+                
+        str_as_float = float(str_as_num[0])
 
         if SysScrubber.is_windows():
-            str_as_float = float(str_as_num[0])
-            if str_as_float > 80:
-                net_strength = 'Strong'
-            elif str_as_float > 50:
-                net_strength = 'Medium'
-            else:
-                net_strength = 'Weak'
+            strong = 80
+            medium = 50
         elif SysScrubber.is_linux():
-            str_as_float = float(str_as_num[0])
-            if str_as_float > -20:
-                net_strength = 'Strong'
-            elif str_as_float > -50:
-                net_strength = 'Medium'
-            else:
-                net_strength = 'Weak'
+            strong = -20
+            medium = -50
+
+        if str_as_float > strong:
+            net_strength = 3
+        elif str_as_float > medium:
+            net_strength = 2
+        else:
+            net_strength = 1 #Weak
 
         return net_strength
 
@@ -531,13 +542,13 @@ class SysScrubber:
         output = dict()
         #assign default values if there is no wifi found
         output['SSID'] = 'NOT AVAILABLE'
-        output['connectionType'] = 'NOT AVAILABLE' 
+        output['connectionType'] = 'NOT AVAILABLE'
 
         if SysScrubber.is_windows():
             adapter = adapter_name if adapter_name is not None else 'Wi-Fi'
             command = 'netsh wlan show interfaces'
             pattern = "(?:Name\s+:\s" + re.escape(adapter) + "(?:\\n.+){5}SSID\s+:\s(.+)(?:\\n.+){3}Radio\stype.+:\s(.+)(?:\\n.+){7}Signal\s+: (\d{,2}))"
-            
+
             extract = os.popen(command)
             buffer = re.findall(pattern, extract.read(), re.MULTILINE)
             extract.close()
@@ -545,7 +556,7 @@ class SysScrubber:
             if len(buffer) > 0:
                 output['SSID'] = buffer[0][0]
                 output['connectionType'] = buffer[0][1]
-        
+
         if SysScrubber.is_linux():
             adapter = adapter_name if adapter_name is not None else 'wlan0'
             command = 'iwconfig ' + adapter
@@ -560,7 +571,7 @@ class SysScrubber:
                 output['connectionType'] = buffer[0][0]
 
         return output
-    
+
     @classmethod
     def fetch_net_adapter_addrs(cls, adapter_name = None):
         addresses = psutil.net_if_addrs()
@@ -571,7 +582,7 @@ class SysScrubber:
             os_net_pattern={'wifi': 'Wi-Fi', 'ethernet': 'Ethernet'}
         elif SysScrubber.is_linux():
             os_net_pattern={'wifi': 'wlan0', 'ethernet': 'eth0'}
-            
+
 
         if adapter_name in addresses:
             found_adapter = adapter_name
@@ -580,7 +591,7 @@ class SysScrubber:
         elif os_net_pattern['wifi'] in addresses:           #prioritize Wi-fi over Ethernet
             found_adapter = os_net_pattern['wifi']
             buffer = addresses.get(os_net_pattern['wifi'])
-                 
+
         elif os_net_pattern['ethernet'] in addresses:
             found_adapter = os_net_pattern['ethernet']
             buffer = addresses.get(os_net_pattern['ethernet'])
@@ -589,7 +600,7 @@ class SysScrubber:
         ips['ipv6'] = buffer.pop().address
         ips['ipv4'] = buffer.pop().address
         ips['mac'] = buffer.pop().address
-        
+
         return ips
 
 def main(config, mode):
