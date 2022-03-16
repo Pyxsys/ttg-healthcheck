@@ -80,11 +80,31 @@ router.post('/login', async (req, res) => {
 
 // verify authentication
 router.get('/authenticate', auth, async (req, res) => {
-  const user = await User.findOne({ _id: req.userId })
-  return res.status(200).json({
-    isAuthenticated: true,
-    user: { _id: user._id, name: user.name, role: user.role },
-  })
+  try {
+    const user = await User.findOne({ _id: req.userId })
+    return res.status(200).json({
+      isAuthenticated: true,
+      user: { _id: user._id, name: user.name, role: user.role },
+    })
+  } catch (err) {
+    res.status(501).send('Server Error: ' + err.message)
+  }
+})
+
+// get users for admin panel
+router.get('/all', auth, async (req, res) => {
+  try {
+    const user = await User.findOne({ _id: req.userId })
+    if (user.role == 'admin') {
+      const results = await User.find({});
+      return res.status(200).json({users: results});
+    }
+    else {
+      return res.status(401).send('No admin privileges');
+    }
+  } catch (err) {
+    res.status(501).send('Server Error: ' + err.message)
+  }
 })
 
 // log out user

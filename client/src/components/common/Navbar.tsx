@@ -91,11 +91,12 @@ const Navbar = () => {
               </Dropdown.ItemText>
               <Dropdown.Divider />
               <Dropdown.Item eventKey="1">
-                <div
+                <Link
+                  to={user.role == 'admin' ? '/admin' : ''}
                   className="nav-right-font"
                 >
                 Profile
-                </div>
+                </Link>
               </Dropdown.Item>
               <Dropdown.Divider />
               <Dropdown.Item eventKey="2">

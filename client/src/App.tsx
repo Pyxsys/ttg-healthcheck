@@ -35,7 +35,7 @@ function App() {
       ></PrivateRoute>
       <PrivateRoute
         exact
-        path="/adminpanel"
+        path="/admin"
         roles={['admin']}
         component={AdminPanel}
       ></PrivateRoute>
