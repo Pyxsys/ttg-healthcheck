@@ -10,12 +10,14 @@ const auth = require('../middleware/auth.js')
 router.post('/register', async (req, res) => {
   try {
     const role = 'user'
+    const avatar = 'https://cdn-icons-png.flaticon.com/512/149/149071.png';
     const { name, password, email } = req.body
     const newUser = new User({
       name,
       password,
       email,
       role,
+      avatar,
     })
     const salt = await bcrypt.genSalt(10)
     // Hash password
@@ -38,7 +40,7 @@ router.post('/register', async (req, res) => {
       .status(200)
       .json({
         message: 'Registered successfully',
-        user: { _id: newUser._id, name: name, role: role },
+        user: { _id: newUser._id, name: name, role: role, avatar: avatar },
       })
   } catch (err) {
     res.status(500).send('Server Error: ' + err.message)
