@@ -216,7 +216,7 @@ const DeviceDetail = (props: any) => {
                           </div>
                           <div>
                             <SignalStrength
-                              level={Number(
+                              strength={Number(
                                   deviceLogsData?.wifi?.signalStrength,
                               )}
                               showText={true}
