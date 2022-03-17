@@ -60,10 +60,8 @@ const Navbar = () => {
         onClick(e);
       }}
     >
-      <div className='nav-right-menu d-flex'>
-        <div className='nav-right-icon'>
-          <img src={user.avatar}></img>
-        </div>
+      <div className='nav-right-icon'>
+        <img src={user.avatar}></img>
       </div>
     </div>
   )),
@@ -76,7 +74,7 @@ const Navbar = () => {
         <div ref={ref} className="nav-hamburger">
           <Hamburger toggled={isOpen} toggle={setOpen} size={28} />
         </div>
-        <div className="box-3">
+        <div>
           <Dropdown>
             <Dropdown.Toggle
               as={CustomToggle}
@@ -91,7 +89,7 @@ const Navbar = () => {
               <Dropdown.Divider />
               <Dropdown.Item eventKey="1">
                 <Link
-                  to={user.role == 'admin' ? '/admin' : ''}
+                  to={user.role == 'admin' ? '/admin' : `/user?Id=${user._id}`}
                   className="nav-right-font"
                 >
                   <div>
