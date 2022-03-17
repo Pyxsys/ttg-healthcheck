@@ -99,13 +99,14 @@ router.get('/all', auth, async (req, res) => {
       const results = await User.find(
         {},
         {
+          _id: 1,
           name: 1,
           email: 1,
           role: 1,
           avatar: 1,
         }
       );;
-      return res.status(200).json({users: results});
+      return res.status(200).json({ Results: results, Total: results.length });
     }
     else {
       return res.status(401).send('No admin privileges');
