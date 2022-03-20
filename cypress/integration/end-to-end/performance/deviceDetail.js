@@ -34,8 +34,6 @@ describe("2 Check to ensure that the various components on the device detail pag
           ":nth-child(1) > :nth-child(1) > .devices-uuid-text > .text-white"
         )
           .click("left")
-          .get(':nth-child(1) > [style="font-style: italic;"]')
-          .should("be.visible")
           .get(":nth-child(1) > svg")
           .should("be.visible")
           .get(":nth-child(2) > svg")
