@@ -9,6 +9,7 @@ import Dashboard from './components/pages/dashboard';
 import AdminPanel from './components/pages/adminPanel';
 import DevicesTable from './components/pages/devicesTable';
 import deviceDetail from './components/pages/deviceDetail';
+import UserProfile from './components/pages/userProfile';
 
 function App() {
   return (
@@ -38,6 +39,12 @@ function App() {
         path="/admin"
         roles={['admin']}
         component={AdminPanel}
+      ></PrivateRoute>
+      <PrivateRoute
+        exact
+        path="/user-profile"
+        roles={['user', 'admin']}
+        component={UserProfile}
       ></PrivateRoute>
     </>
   );

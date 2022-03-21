@@ -22,9 +22,7 @@ const AdminPanel = () => {
   const [totalPages, setTotalPages] = useState(0);
 
   const queryTable = async () => {
-    const results = await axios.get<IResponse<IUserObject>>(
-        'api/user/all',
-    );
+    const results = await axios.get<IResponse<IUserObject>>('api/user/all');
     const users = results.data.Results;
 
     setTotalPages(Math.ceil(results.data.Total / pageSize));
@@ -44,7 +42,7 @@ const AdminPanel = () => {
           <Link
             className="text-white"
             to={{
-              pathname: '/user',
+              pathname: '/user-profile',
               search: `?Id=${user._id}`,
             }}
           >

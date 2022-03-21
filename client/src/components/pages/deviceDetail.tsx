@@ -117,49 +117,35 @@ const DeviceDetail = (props: any) => {
                               >
                                 ID
                               </td>
-                              <td>
-                                {deviceData?.deviceId}
-                              </td>
+                              <td>{deviceData?.deviceId}</td>
                             </tr>
                             <tr>
                               <td style={{fontWeight: '600'}}>Name</td>
-                              <td>
-                                {deviceData?.name}
-                              </td>
+                              <td>{deviceData?.name}</td>
                             </tr>
                             <tr>
                               <td style={{fontWeight: '600'}}>Description</td>
-                              <td>
-                                {deviceData?.description}
-                              </td>
+                              <td>{deviceData?.description}</td>
                             </tr>
                             <tr>
                               <td style={{fontWeight: '600'}}>
                                 Connection Type
                               </td>
-                              <td>
-                                {deviceData?.connectionType}
-                              </td>
+                              <td>{deviceData?.connectionType}</td>
                             </tr>
                             <tr>
                               <td style={{fontWeight: '600'}}>Status</td>
-                              <td>
-                                {deviceData?.status}
-                              </td>
+                              <td>{deviceData?.status}</td>
                             </tr>
                             <tr>
                               <td style={{fontWeight: '600'}}>Provider</td>
-                              <td>
-                                {deviceData?.provider}
-                              </td>
+                              <td>{deviceData?.provider}</td>
                             </tr>
                             <tr>
                               <td style={{fontWeight: '600'}}>
                                 Hardware Name
                               </td>
-                              <td>
-                                {deviceData?.hardware?.harwareName}
-                              </td>
+                              <td>{deviceData?.hardware?.harwareName}</td>
                             </tr>
                           </tbody>
                         </Table>

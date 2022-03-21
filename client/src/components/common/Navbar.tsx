@@ -50,22 +50,24 @@ const Navbar = () => {
   };
 
   // Custom toggle for right navigation
-  type Props = any;
-  type Ref = HTMLDivElement;
-  const CustomToggle = useMemo(() => React.forwardRef<Ref, Props>(({onClick}, ref) => (
-    <div
-      ref={ref}
-      onClick={(e) => {
-        e.preventDefault();
-        onClick(e);
-      }}
-    >
-      <div className='nav-right-icon'>
-        <img src={user.avatar}></img>
-      </div>
-    </div>
-  )),
-  [],
+  type Props = any
+  type Ref = HTMLDivElement
+  const CustomToggle = useMemo(
+      () =>
+        React.forwardRef<Ref, Props>(({onClick}, ref) => (
+          <div
+            ref={ref}
+            onClick={(e) => {
+              e.preventDefault();
+              onClick(e);
+            }}
+          >
+            <div className="nav-right-icon">
+              <img src={user.avatar}></img>
+            </div>
+          </div>
+        )),
+      [],
   );
 
   return (
@@ -76,36 +78,29 @@ const Navbar = () => {
         </div>
         <div>
           <Dropdown>
-            <Dropdown.Toggle
-              as={CustomToggle}
-            ></Dropdown.Toggle>
+            <Dropdown.Toggle as={CustomToggle}></Dropdown.Toggle>
             <Dropdown.Menu>
               <Dropdown.ItemText>
                 <div className="nav-right-font">
-                Signed in as
-                  <div className='fw-bold'>{user.name}</div>
+                  Signed in as
+                  <div className="fw-bold">{user.name}</div>
                 </div>
               </Dropdown.ItemText>
               <Dropdown.Divider />
-              <Dropdown.Item eventKey="1">
-                <Link
-                  to={user.role == 'admin' ? '/admin' : `/user?Id=${user._id}`}
-                  className="nav-right-font"
-                >
-                  <div>
-                  Profile
-                  </div>
-                </Link>
-                <div>
-                </div>
+              <Dropdown.Item
+                eventKey="1"
+                href={
+                  user.role == 'admin' ?
+                    '/admin' :
+                    `/user-profile?Id=${user._id}`
+                }
+              >
+                <div>Profile</div>
               </Dropdown.Item>
               <Dropdown.Divider />
               <Dropdown.Item eventKey="2">
-                <div
-                  className="nav-right-font"
-                  onClick={(e) => logout(e)}
-                >
-                Sign out
+                <div className="nav-right-font" onClick={(e) => logout(e)}>
+                  Sign out
                 </div>
               </Dropdown.Item>
             </Dropdown.Menu>
@@ -121,9 +116,7 @@ const Navbar = () => {
                 className={item.cName}
                 onClick={() => setOpen(false)}
               >
-                <Link
-                  to={item.path}
-                >
+                <Link to={item.path}>
                   <span className="side-nav-item-icon">{item.icon} </span>
                   <span className="side-nav-item-text">{item.title}</span>
                 </Link>

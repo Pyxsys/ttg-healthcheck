@@ -4,7 +4,6 @@ import React, {Dispatch, SetStateAction, useEffect, useState} from 'react';
 // Custom
 import {ViewTableInputs} from '../../types/tables';
 
-
 const useDebounce = (initialValue: string, delay: number) => {
   const [actualValue, setActualValue] = useState(initialValue);
   const [debounceValue, setDebounceValue] = useState(initialValue);
@@ -109,7 +108,9 @@ const ViewTable = (props: ViewTableInputs<any>) => {
               key={column.key}
               tabIndex={0}
               className={column.disableOrderBy ? '' : 'cursor-pointer'}
-              onClick={() => column.disableOrderBy ? null : selectOrderBy(column.key)}
+              onClick={() =>
+                column.disableOrderBy ? null : selectOrderBy(column.key)
+              }
             >
               <div className="d-flex align-items-center">
                 <span>{column.name}</span>
