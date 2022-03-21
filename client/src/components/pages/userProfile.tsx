@@ -1,12 +1,31 @@
-import React from 'react';
+// Third party
+import React, {useEffect, useState} from 'react';
+import axios from 'axios';
 
 // Custom
 import Navbar from '../common/Navbar';
+import {IUserObject} from '../../types/users';
+import {IProfileResponse} from '../../types/queries';
 
-const UserProfile = () => {
+const UserProfile = (props: any) => {
+  const [user, setUser] = useState({} as IUserObject);
+
   const onSubmit = async (e: React.ChangeEvent<any>) => {
     console.log(e);
   };
+
+  // Retrieve user info based on url ID
+  const userInfo = async () => {
+    const userId: string = props.location.search.replace('?Id=', '');
+    const result = await axios.get<IProfileResponse<IUserObject>>('api/user/profile', {
+      params: {userId: userId},
+    });
+    setUser(result.data.Results);
+  };
+
+  useEffect(() => {
+    userInfo();
+  }, []);
 
   return (
     <div className="h-100 d-flex flex-column">
@@ -29,7 +48,7 @@ const UserProfile = () => {
                     />
                   </td>
                   <td className="user-profile-text">
-                    <h1>Admin</h1>
+                    <h1>{user.name}</h1>
                   </td>
                 </tr>
               </tbody>

@@ -95,7 +95,7 @@ const Navbar = () => {
                     `/user-profile?Id=${user._id}`
                 }
               >
-                <div>Profile</div>
+                <div className="nav-right-font">Profile</div>
               </Dropdown.Item>
               <Dropdown.Divider />
               <Dropdown.Item eventKey="2">

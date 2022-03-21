@@ -93,12 +93,12 @@ router.get('/authenticate', auth, async (req, res) => {
   }
 })
 
-// get users for admin panel
+// get all users for admin panel
 router.get('/all', auth, async (req, res) => {
   try {
     const user = await User.findOne({ _id: req.userId })
-    if (user.role == 'admin') {
-      const results = await User.find(
+    let results;
+    (user.role == 'admin' ? (results = await User.find(
         {},
         {
           _id: 1,
@@ -107,12 +107,29 @@ router.get('/all', auth, async (req, res) => {
           role: 1,
           avatar: 1,
         }
-      );;
-      return res.status(200).json({ Results: results, Total: results.length });
-    }
-    else {
-      return res.status(401).send('No admin privileges');
-    }
+      ),
+      res.status(200).json({ Results: results, Total: results.length })) : res.status(401).send('No admin privileges'));
+  } catch (err) {
+    res.status(501).send('Server Error: ' + err.message)
+  }
+})
+
+// get user profile
+router.get('/profile', auth, async (req, res) => {
+  try {
+    const query = Object(req.query);
+    let results;
+    (query.userId?  (results = await User.findOne(
+        { _id: query.userId }, 
+        {
+          _id: 1,
+          name: 1,
+          email: 1,
+          role: 1,
+          avatar: 1,
+        },
+      ),
+      res.status(200).json({ Results: results }) ) : res.status(400).send('Bad request, no userId provided'));
   } catch (err) {
     res.status(501).send('Server Error: ' + err.message)
   }
