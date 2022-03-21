@@ -57,7 +57,7 @@ const UserProfile = (props: any) => {
               </tbody>
             </table>
             <br />
-            <div style={{backgroundColor: '#3F4651', borderRadius: '7px', padding: '15px'}}>
+            <div style={{backgroundColor: '#3F4651', borderRadius: '7px', padding: '20px'}}>
               <div>
                 <table>
                   <tbody>
