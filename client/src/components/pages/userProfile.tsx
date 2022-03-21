@@ -71,7 +71,7 @@ const UserProfile = (props: any) => {
                       </td>
                       <td>
                         &nbsp;
-                        <Button onClick={() => setInputDisabled(!inputDisabled)} className="btn btn-primary" style={{color: 'white'}} disabled>Apply</Button>
+                        <Button className="btn btn-primary" style={{color: 'white'}} disabled>Apply</Button>
                       </td>
                     </tr>
                   </tbody>
@@ -151,7 +151,7 @@ const UserProfile = (props: any) => {
                   <tbody>
                     <tr>
                       <td>
-                        <h4 style={{color: 'white'}}>Password</h4>
+                        <h4 style={{color: 'white'}}>Account Management</h4>
                       </td>
                       <td>
                         &emsp;
@@ -159,7 +159,7 @@ const UserProfile = (props: any) => {
                           Change Password
                         </Button>
                         &nbsp;
-                        <Button onClick={() => setInputDisabled(!inputDisabled)} className="btn btn-primary" style={{color: 'white'}} disabled>Apply</Button>
+                        <Button className="btn btn-primary" style={{color: 'white'}} disabled>Apply</Button>
                       </td>
                     </tr>
                   </tbody>
@@ -169,7 +169,7 @@ const UserProfile = (props: any) => {
                   <table>
                     <tbody>
                       <tr>
-                        <td>
+                        <td style={{display: 'block'}}>
                           <InputGroup>
                             <InputGroup.Text className="user-profile-input-group">
                               OLD PASSWORD
@@ -183,7 +183,7 @@ const UserProfile = (props: any) => {
                         </td>
                       </tr>
                       <tr>
-                        <td>
+                        <td style={{display: 'block'}}>
                           <InputGroup className="mt-2">
                             <InputGroup.Text className="user-profile-input-group">
                               NEW PASSWORD
@@ -197,7 +197,7 @@ const UserProfile = (props: any) => {
                         </td>
                       </tr>
                       <tr>
-                        <td>
+                        <td style={{display: 'block'}}>
                           <InputGroup className="mt-2 mb-2">
                             <InputGroup.Text className="user-profile-input-group">
                               RE-ENTER PASSWORD
@@ -212,7 +212,9 @@ const UserProfile = (props: any) => {
                       </tr>
                       <br/>
                       <tr>
-                        <Button variant="danger">Delete Account</Button>{' '}
+                        <td>
+                          <Button variant="danger">Delete Account</Button>
+                        </td>
                       </tr>
                     </tbody>
                   </table>
