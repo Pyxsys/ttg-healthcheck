@@ -8,7 +8,7 @@ interface IBarInput {
 }
 
 interface ISignalStrengthInput {
-  level: number
+  strength: number
   showText?: boolean
 }
 
@@ -25,23 +25,21 @@ const fillColorDelay = (colour: string, delay: number) => keyframes`
 `;
 
 /**
- * Returns the bar colour depending on the level and index of the bar.
- * @param {number} level level of bar strength
- * @param {number} index index of bar
+ * Returns the bar colour depending on the overall strength and the index of the bar.
+ * @param {number} strength stregnth of the overall signal
+ * @param {number} barIndex index of current vertical bar
  * @return {string} the colour of the bar
  */
-const barColour = (level: number, index: number) => {
-  if (index > level) {
+const barColour = (strength: number, barIndex: number) => {
+  if (barIndex > strength) {
     return '#C4C4C4';
   }
 
-  switch (level) {
-    case 0:
-      return '#CC3300';
+  switch (strength) {
     case 1:
-      return '#DB7B2B';
+      return '#CC3300';
     case 2:
-      return '#99CC33';
+      return '#DB7B2B';
     case 3:
       return '#339900';
     default:
@@ -51,21 +49,19 @@ const barColour = (level: number, index: number) => {
 
 /**
  * Returns the signal text depending on the level.
- * @param {number} level level of strength
+ * @param {number} strength stregnth of the overall signal
  * @return {string} the text of the strength bar
  */
-const signalText = (level: number) => {
-  switch (level) {
-    case 0:
-      return 'Poor';
+const signalText = (strength: number) => {
+  switch (strength) {
     case 1:
-      return 'Fair';
+      return 'Poor';
     case 2:
       return 'Good';
     case 3:
       return 'Excellent';
     default:
-      return null;
+      return '';
   }
 };
 
@@ -114,22 +110,22 @@ const CrossBar = () => {
 
 /**
  * Creates vertical rectangles and changes their colour based on the strength provided.
- * @param {number} level the strength level of the signal
+ * @param {number} strength stregnth of the overall signal
  * @param {boolean} showText true if to display the text below the bars
  * @return {JSX.Element} a JSX Element of Signal Strength bars
  */
-const SignalStrength = ({level, showText}: ISignalStrengthInput) => {
-  const text = signalText(level);
-  const showSignalStrengthText: any = showText ? text : '';
+const SignalStrength = ({strength, showText}: ISignalStrengthInput) => {
+  const text = signalText(strength);
+  const showSignalStrengthText: string = showText ? text : '';
   return (
     <svg width="100%" height="100%" viewBox="-40 0 175 125">
-      {[0, 1, 2, 3].map((index) => (
+      {[1, 2, 3, 3].map((barLevel, index) => (
         <g
-          key={index}
+          key={`bar-${index}`}
           transform={`translate(${index * 25}, ${60 - index * 20})`}
         >
           <Bar
-            colour={barColour(level, index)}
+            colour={barColour(strength, barLevel)}
             size={40 + index * 20}
             delay={index * 25}
           />

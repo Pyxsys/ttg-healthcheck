@@ -173,7 +173,7 @@ const DevicesTable = () => {
               {signalText(Number(cellValue))}
             </div>
             <div className="ps-2 pie-wheel-size">
-              <SignalStrength level={Number(cellValue)} showText={false} />
+              <SignalStrength strength={Number(cellValue)} showText={false} />
             </div>
           </div>
         </div>
