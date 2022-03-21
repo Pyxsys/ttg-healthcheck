@@ -31,10 +31,10 @@ const UserProfile = (props: any) => {
       <div id="outer-container">
         <Navbar />
       </div>
-      <div className="flex-grow-1 d-flex flex-column align-items-center overflow-auto devices-content">
+      <div className="flex-grow-1 d-flex flex-column align-items-center overflow-auto devices-content pt-5 pb-5">
         {/* Table */}
-        <div className="flex-grow-1 d-flex flex-column overflow-auto container">
-          <div className="flex-grow-1 overflow-auto table-container mt-5">
+        <div className="flex-grow-1 d-flex flex-column overflow-auto container" style={{backgroundColor: '#343a43', borderRadius: '0.5%'}}>
+          <div className="flex-grow-1 overflow-auto table-container mt-4 ms-2 me-2">
             <table>
               <tbody>
                 <tr>
@@ -43,7 +43,7 @@ const UserProfile = (props: any) => {
                       className="user-profile-img"
                       height={250}
                       width={250}
-                      src={'https://avatarfiles.alphacoders.com/129/129400.png'}
+                      src={userProfile.avatar}
                     />
                   </td>
                   <td className="user-profile-text">
@@ -54,93 +54,95 @@ const UserProfile = (props: any) => {
             </table>
             <br />
             <br />
-            <div>
-              <table>
-                <tbody>
-                  <tr>
-                    <td>
-                      <h2>Account Information</h2>
-                    </td>
-                    <td>
-                      &emsp;
-                      <button className="btn btn-primary">Edit Profile</button>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-              <br />
-              <form onSubmit={(e: any) => onSubmit(e)}>
+            <div style={{backgroundColor: '#3F4651', borderRadius: '0.5%', padding: '15px'}}>
+              <div>
                 <table>
                   <tbody>
                     <tr>
                       <td>
-                        <label>Account Name</label>
+                        <h3 style={{color: 'white'}}>Account Information</h3>
                       </td>
                       <td>
-                        <input type="text" placeholder={userProfile.name} disabled />
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>
-                        <label>Email Address</label>
-                      </td>
-                      <td>
-                        <input type="text" placeholder={userProfile.email} disabled />
+                        &emsp;
+                        <button className="btn btn-primary" style={{color: 'white'}}>Edit Profile</button>
                       </td>
                     </tr>
                   </tbody>
                 </table>
-              </form>
-            </div>
-            <br />
-            <br />
-            <div>
-              <table>
-                <tbody>
-                  <tr>
-                    <td>
-                      <h2>Password</h2>
-                    </td>
-                    <td>
-                      &emsp;
-                      <button className="btn btn-primary">
-                        Change Password
-                      </button>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
+                <br />
+                <form onSubmit={(e: any) => onSubmit(e)}>
+                  <table>
+                    <tbody>
+                      <tr>
+                        <td>
+                          <label style={{color: 'white'}}>Account Name</label>
+                        </td>
+                        <td>
+                          <input type="text" placeholder={userProfile.name} disabled />
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>
+                          <label style={{color: 'white'}}>Email Address</label>
+                        </td>
+                        <td>
+                          <input type="text" placeholder={userProfile.email} disabled />
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </form>
+              </div>
               <br />
-              <form onSubmit={(e: any) => onSubmit(e)}>
+              <br />
+              <div>
                 <table>
                   <tbody>
                     <tr>
                       <td>
-                        <label>Old Password</label>
+                        <h3 style={{color: 'white'}}>Password</h3>
                       </td>
                       <td>
-                        <input type="text" placeholder="OLD in *" disabled />
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>
-                        <label>New Password</label>
-                      </td>
-                      <td>
-                        <input type="text" disabled />
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>
-                        <label>Re-enter New Password</label>
-                      </td>
-                      <td>
-                        <input type="text" disabled />
+                        &emsp;
+                        <button className="btn btn-primary">
+                          Change Password
+                        </button>
                       </td>
                     </tr>
                   </tbody>
                 </table>
-              </form>
+                <br />
+                <form onSubmit={(e: any) => onSubmit(e)}>
+                  <table>
+                    <tbody>
+                      <tr>
+                        <td>
+                          <label style={{color: 'white'}}>Old Password</label>
+                        </td>
+                        <td>
+                          <input type="text" placeholder="OLD in *" disabled />
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>
+                          <label style={{color: 'white'}}>New Password</label>
+                        </td>
+                        <td>
+                          <input type="text" disabled />
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>
+                          <label style={{color: 'white'}}>Re-enter New Password</label>
+                        </td>
+                        <td>
+                          <input type="text" disabled />
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </form>
+              </div>
             </div>
           </div>
         </div>
