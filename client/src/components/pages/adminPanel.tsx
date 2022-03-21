@@ -64,7 +64,7 @@ const AdminPanel = () => {
       name: 'Icon',
       disableOrderBy: true,
       override: (cellValue) => (
-        <img height={50} width={50} src={String(cellValue)} />
+        <img height={50} width={50} src={String(cellValue)} style={{borderRadius: '50%'}}/>
       ),
     },
   ];

@@ -1096,6 +1096,10 @@ body {
 /*-----------------------User Profile--------------------------*/
 .user-profile-img {
   border-radius: 50%;
+  width: 250px;
+  height: 250px;
+  margin-top:-5%;
+  padding: 5%;
 }
 
 .user-profile-text {
@@ -1104,5 +1108,46 @@ body {
   color: white;
 }
 
+.user-profile-label {
+  color: white;
+}
 
+.user-profile-input {
+  font-size: 13.5px;
+  @media (min-width: $screen-w-xxsm) {
+    padding: 11px;
+  }
+  @media (min-width: $screen-w-md) {
+    padding: 11px;
+  }
+  @media (min-width: $screen-w-lg) {
+    padding: 11px;
+  }
+  @media (min-width: $screen-w-xlg) {
+    padding: 11px;
+  }
+  @media (min-width: $screen-w-xxlg) {
+    padding: 11px;
+  }
+  @media (min-width: $screen-w-xxxlg) {
+    padding: 11px;
+  }
+  width: 400px !important;
+  border: none !important;
+  border-radius: 0 0.25rem 0.25rem 0 !important;
+  box-shadow: none !important;
+  -webkit-box-shadow: none !important;
+}
 
+.user-profile-input:disabled {
+  background-color: #d9dbdd;
+}
+
+.user-profile-input-group {
+  background-color: #515864;
+  border-color: #515864; 
+  color: white;
+  width: 140px;
+  font-size: 12px;
+  font-weight: 500 !important;
+}
