@@ -8,23 +8,22 @@ import {IUserObject} from '../../types/users';
 import {IProfileResponse} from '../../types/queries';
 
 const UserProfile = (props: any) => {
-  const [user, setUser] = useState({} as IUserObject);
-
+  const [userProfile, setUserProfile] = useState({} as IUserObject);
   const onSubmit = async (e: React.ChangeEvent<any>) => {
     console.log(e);
   };
 
   // Retrieve user info based on url ID
-  const userInfo = async () => {
-    const userId: string = props.location.search.replace('?Id=', '');
+  const userInfo = async (userId: string) => {
     const result = await axios.get<IProfileResponse<IUserObject>>('api/user/profile', {
       params: {userId: userId},
     });
-    setUser(result.data.Results);
+    setUserProfile(result.data.Results);
   };
 
   useEffect(() => {
-    userInfo();
+    const userId: string = props.location.search.replace('?Id=', '');
+    userInfo(userId);
   }, []);
 
   return (
@@ -48,7 +47,7 @@ const UserProfile = (props: any) => {
                     />
                   </td>
                   <td className="user-profile-text">
-                    <h1>{user.name}</h1>
+                    <h1>{userProfile.name}</h1>
                   </td>
                 </tr>
               </tbody>
@@ -78,7 +77,7 @@ const UserProfile = (props: any) => {
                         <label>Account Name</label>
                       </td>
                       <td>
-                        <input type="text" placeholder="NAME" disabled />
+                        <input type="text" placeholder={userProfile.name} disabled />
                       </td>
                     </tr>
                     <tr>
@@ -86,7 +85,7 @@ const UserProfile = (props: any) => {
                         <label>Email Address</label>
                       </td>
                       <td>
-                        <input type="text" placeholder="EMAIL" disabled />
+                        <input type="text" placeholder={userProfile.email} disabled />
                       </td>
                     </tr>
                   </tbody>

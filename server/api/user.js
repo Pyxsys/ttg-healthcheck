@@ -117,6 +117,7 @@ router.get('/all', auth, async (req, res) => {
 // get user profile
 router.get('/profile', auth, async (req, res) => {
   try {
+    const user = await User.findOne({ _id: req.userId })
     const query = Object(req.query);
     let results;
     (query.userId?  (results = await User.findOne(
