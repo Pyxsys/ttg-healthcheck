@@ -9,6 +9,7 @@ import Dashboard from './components/pages/dashboard';
 import AdminPanel from './components/pages/adminPanel';
 import DevicesTable from './components/pages/devicesTable';
 import deviceDetail from './components/pages/deviceDetail';
+import AnalyticsPage from './components/pages/analyticsPage';
 
 function App() {
   return (
@@ -32,6 +33,12 @@ function App() {
         path="/device"
         roles={['user', 'admin']}
         component={deviceDetail}
+      ></PrivateRoute>
+      <PrivateRoute
+        exact
+        path="/analytics"
+        roles={['user', 'admin']}
+        component={AnalyticsPage}
       ></PrivateRoute>
       <PrivateRoute
         exact

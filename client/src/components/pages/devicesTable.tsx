@@ -186,7 +186,10 @@ const DevicesTable = () => {
    */
 
   const addEmptyFilter = (): void => {
-    setFilters((prev) => [...prev, {columnKey: '', type: undefined, value: ''}]);
+    setFilters((prev) => [
+      ...prev,
+      {columnKey: '', type: undefined, value: ''},
+    ]);
   };
 
   const removeFilter = (index: number): void => {
@@ -299,31 +302,29 @@ const DevicesTable = () => {
     }
   };
 
-  const getFilterEqualityOptions = (type?: 'string' | 'number'): JSX.Element => {
+  const getFilterEqualityOptions = (
+      type?: 'string' | 'number',
+  ): JSX.Element => {
     switch (type) {
       case 'string':
-        return <>
-          <option value={Equality.StrictEqual}>Equals</option>
-          <option value={Equality.StartsWith}>
-            Starts With
-          </option>
-          <option value={Equality.EndsWith}>Ends With</option>
-          <option value={Equality.Includes}>Includes</option>
-        </>;
+        return (
+          <>
+            <option value={Equality.StrictEqual}>Equals</option>
+            <option value={Equality.StartsWith}>Starts With</option>
+            <option value={Equality.EndsWith}>Ends With</option>
+            <option value={Equality.Includes}>Includes</option>
+          </>
+        );
       case 'number':
-        return <>
-          <option value={Equality.LT}>Less Than (&lt;)</option>
-          <option value={Equality.LTE}>
-            Less Than or Equal (&le;)
-          </option>
-          <option value={Equality.E}>Equal (=)</option>
-          <option value={Equality.GTE}>
-            Greater Than or Equal (&ge;)
-          </option>
-          <option value={Equality.GT}>
-            Greater Than (&gt;)
-          </option>
-        </>;
+        return (
+          <>
+            <option value={Equality.LT}>Less Than (&lt;)</option>
+            <option value={Equality.LTE}>Less Than or Equal (&le;)</option>
+            <option value={Equality.E}>Equal (=)</option>
+            <option value={Equality.GTE}>Greater Than or Equal (&ge;)</option>
+            <option value={Equality.GT}>Greater Than (&gt;)</option>
+          </>
+        );
       default:
         return <></>;
     }

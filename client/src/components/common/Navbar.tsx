@@ -24,6 +24,12 @@ const SideNavData = [
     cName: 'side-nav-item',
   },
   {
+    title: 'Analytics',
+    path: '/analytics',
+    icon: <DiRasberryPi />,
+    cName: 'side-nav-item',
+  },
+  {
     title: 'Logout',
     path: '/logout',
     icon: <MdLogout />,
@@ -56,7 +62,7 @@ const Navbar = () => {
     <>
       <div className="d-flex nav-wrapper">
         <div ref={ref} className="nav-hamburger">
-          <Hamburger toggled={isOpen} toggle={setOpen} size={31}/>
+          <Hamburger toggled={isOpen} toggle={setOpen} size={31} />
         </div>
         <div className="nav-right-menu d-flex">
           <div className="nav-right-icon">
