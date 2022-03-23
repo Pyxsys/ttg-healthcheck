@@ -10,13 +10,27 @@ import {IProfileResponse} from '../../types/queries';
 import {useAuth} from '../../context/authContext';
 
 const UserProfile = (props: any) => {
-  const [userProfile, setUserProfile] = useState({} as IUserObject);
   const [inputDisabled, setInputDisabled] = useState(true);
   const [inputDisabled1, setInputDisabled1] = useState(true);
   const {user} = useAuth();
+  const [formData, setFormData] = useState({
+    _id: '',
+    originalName: '',
+    name: '',
+    email: '',
+    avatar: '',
+    role: '',
+  } as IUserObject);
+  const {name, email, avatar, role, _id, originalName} = formData;
 
   const onSubmit = async (e: React.ChangeEvent<any>) => {
     console.log(e);
+  };
+
+  // Account information onchange
+  const onChange = (e: any) => {
+    setFormData({...formData, [e.target.name]: e.target.value});
+    console.log(formData);
   };
 
   // Retrieve user info based on url ID
@@ -27,7 +41,14 @@ const UserProfile = (props: any) => {
           params: {userId: userId},
         },
     );
-    setUserProfile(result.data.Results);
+    setFormData({
+      ['_id']: result.data.Results._id,
+      ['originalName']: result.data.Results.name,
+      ['name']: result.data.Results.name,
+      ['email']: result.data.Results.email,
+      ['avatar']: result.data.Results.avatar,
+      ['role']: result.data.Results.role,
+    });
   };
 
   // Hide img while loading not to show a white border
@@ -57,7 +78,7 @@ const UserProfile = (props: any) => {
                     >
                       <img
                         className="user-profile-img"
-                        src={userProfile.avatar}
+                        src={avatar}
                         style={imageStyle}
                         onLoad={() => setLoad(true)}
                       />
@@ -65,7 +86,7 @@ const UserProfile = (props: any) => {
                     <div className="user-profile-img-spacing"></div>
                   </td>
                   <td className="user-profile-header">
-                    <h1>{userProfile.name}</h1>
+                    <h1>{originalName}</h1>
                   </td>
                 </tr>
               </tbody>
@@ -115,8 +136,10 @@ const UserProfile = (props: any) => {
                             <Form.Control
                               className="user-profile-input"
                               type="text"
-                              value={userProfile.name}
+                              value={name}
+                              name="name"
                               disabled={inputDisabled}
+                              onChange={(e) => onChange(e)}
                             />
                           </InputGroup>
                         </td>
@@ -130,8 +153,10 @@ const UserProfile = (props: any) => {
                             <Form.Control
                               className="user-profile-input"
                               type="email"
-                              value={userProfile.email}
+                              value={email}
+                              name="email"
                               disabled={inputDisabled}
+                              onChange={(e) => onChange(e)}
                             />
                           </InputGroup>
                         </td>
@@ -145,8 +170,10 @@ const UserProfile = (props: any) => {
                             <Form.Control
                               className="user-profile-input"
                               type="text"
-                              value={userProfile.avatar}
+                              name="avatar"
+                              value={avatar}
                               disabled={inputDisabled}
+                              onChange={(e) => onChange(e)}
                             />
                           </InputGroup>
                         </td>
@@ -159,7 +186,8 @@ const UserProfile = (props: any) => {
                             </InputGroup.Text>
                             <Form.Select
                               className="user-profile-input"
-                              value={userProfile.role}
+                              value={role}
+                              name="role"
                               disabled={user.role !== 'admin' || inputDisabled}
                             >
                               <option value="user">user</option>
@@ -216,7 +244,7 @@ const UserProfile = (props: any) => {
                               placeholder="Enter Old Password"
                               disabled={
                                 (user.role === 'admin' &&
-                                  userProfile._id !== user._id) ||
+                                  _id !== user._id) ||
                                 inputDisabled1
                               }
                             />
