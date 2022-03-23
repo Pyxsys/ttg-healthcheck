@@ -30,6 +30,10 @@ const UserProfile = (props: any) => {
     setUserProfile(result.data.Results);
   };
 
+  // Hide img while loading not to show a white border
+  const [didLoad, setLoad] = useState(false);
+  const imageStyle = didLoad ? {} : {display: 'none'};
+
   useEffect(() => {
     const userId: string = props.location.search.replace('?Id=', '');
     userInfo(userId);
@@ -43,12 +47,7 @@ const UserProfile = (props: any) => {
       <div className="flex-grow-1 d-flex flex-column align-items-center overflow-auto devices-content pt-5">
         {/* Table */}
         <div
-          className="flex-grow-1 d-flex flex-column container w-40"
-          style={{
-            backgroundColor: '#343a43',
-            borderRadius: '7px',
-            position: 'relative',
-          }}
+          className="flex-grow-1 d-flex flex-column container user-profile-container"
         >
           <div className="flex-grow-1 overflow-auto table-container mt-4 ms-2 me-2 mb-4">
             <table>
@@ -56,23 +55,18 @@ const UserProfile = (props: any) => {
                 <tr>
                   <td>
                     <div
-                      style={{
-                        top: '-3%',
-                        zIndex: '10',
-                        position: 'absolute',
-                        paddingTop: '10px',
-                        backgroundColor: '#343a43',
-                        borderRadius: '50%',
-                      }}
+                      className="user-profile-img-container"
                     >
                       <img
                         className="user-profile-img"
                         src={userProfile.avatar}
+                        style={imageStyle}
+                        onLoad={() => setLoad(true)}
                       />
                     </div>
                     <div style={{height: '180px', width: '250px'}}></div>
                   </td>
-                  <td className="user-profile-text">
+                  <td className="user-profile-header">
                     <h1>{userProfile.name}</h1>
                   </td>
                 </tr>
@@ -80,25 +74,20 @@ const UserProfile = (props: any) => {
             </table>
             <br />
             <div
-              style={{
-                backgroundColor: '#3F4651',
-                borderRadius: '7px',
-                padding: '20px',
-              }}
+              className="user-profile-inner-container"
             >
               <div>
                 <table>
                   <tbody>
                     <tr>
                       <td>
-                        <h4 style={{color: 'white'}}>Account Information</h4>
+                        <h4 className="color-white">Account Information</h4>
                       </td>
                       <td>
                         &emsp;
                         <Button
                           onClick={() => setInputDisabled(!inputDisabled)}
-                          className="btn btn-primary"
-                          style={{color: 'white'}}
+                          className="btn btn-primary color-white"
                         >
                           Edit Profile
                         </Button>
@@ -106,8 +95,7 @@ const UserProfile = (props: any) => {
                       <td>
                         &nbsp;
                         <Button
-                          className="btn btn-primary"
-                          style={{color: 'white'}}
+                          className="btn btn-primary color-white"
                           disabled
                         >
                           Apply
@@ -123,7 +111,7 @@ const UserProfile = (props: any) => {
                       <tr>
                         <td>
                           <InputGroup>
-                            <InputGroup.Text className="user-profile-input-group">
+                            <InputGroup.Text className="user-profile-input-label">
                               ACCOUNT NAME
                             </InputGroup.Text>
                             <Form.Control
@@ -138,7 +126,7 @@ const UserProfile = (props: any) => {
                       <tr>
                         <td>
                           <InputGroup className="mt-2">
-                            <InputGroup.Text className="user-profile-input-group">
+                            <InputGroup.Text className="user-profile-input-label">
                               EMAIL ADDRESS
                             </InputGroup.Text>
                             <Form.Control
@@ -153,7 +141,7 @@ const UserProfile = (props: any) => {
                       <tr>
                         <td>
                           <InputGroup className="mt-2">
-                            <InputGroup.Text className="user-profile-input-group">
+                            <InputGroup.Text className="user-profile-input-label">
                               AVATAR
                             </InputGroup.Text>
                             <Form.Control
@@ -168,7 +156,7 @@ const UserProfile = (props: any) => {
                       <tr>
                         <td>
                           <InputGroup className="mt-2">
-                            <InputGroup.Text className="user-profile-input-group">
+                            <InputGroup.Text className="user-profile-input-label">
                               ROLE
                             </InputGroup.Text>
                             <Form.Select
@@ -193,7 +181,7 @@ const UserProfile = (props: any) => {
                   <tbody>
                     <tr>
                       <td>
-                        <h4 style={{color: 'white'}}>Account Management</h4>
+                        <h4 className="color-white">Account Management</h4>
                       </td>
                       <td>
                         &emsp;
@@ -205,8 +193,7 @@ const UserProfile = (props: any) => {
                         </Button>
                         &nbsp;
                         <Button
-                          className="btn btn-primary"
-                          style={{color: 'white'}}
+                          className="btn btn-primary color-white"
                           disabled
                         >
                           Apply
@@ -220,9 +207,9 @@ const UserProfile = (props: any) => {
                   <table>
                     <tbody>
                       <tr>
-                        <td style={{display: 'block'}}>
+                        <td>
                           <InputGroup>
-                            <InputGroup.Text className="user-profile-input-group">
+                            <InputGroup.Text className="user-profile-input-label">
                               OLD PASSWORD
                             </InputGroup.Text>
                             <Form.Control
@@ -239,9 +226,9 @@ const UserProfile = (props: any) => {
                         </td>
                       </tr>
                       <tr>
-                        <td style={{display: 'block'}}>
+                        <td>
                           <InputGroup className="mt-2">
-                            <InputGroup.Text className="user-profile-input-group">
+                            <InputGroup.Text className="user-profile-input-label">
                               NEW PASSWORD
                             </InputGroup.Text>
                             <Form.Control
@@ -254,9 +241,9 @@ const UserProfile = (props: any) => {
                         </td>
                       </tr>
                       <tr>
-                        <td style={{display: 'block'}}>
+                        <td>
                           <InputGroup className="mt-2 mb-2">
-                            <InputGroup.Text className="user-profile-input-group">
+                            <InputGroup.Text className="user-profile-input-label">
                               RE-ENTER PASSWORD
                             </InputGroup.Text>
                             <Form.Control

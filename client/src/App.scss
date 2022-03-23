@@ -1094,21 +1094,67 @@ body {
 }
 
 /*-----------------------User Profile--------------------------*/
-.user-profile-img {
-  border-radius: 50%;
-  width: 250px;
-  height: 250px;
-  margin-top:-5%;
-  padding: 5%;
+.user-profile-container {
+  background-color: #343a43;
+  border-radius: 7px;
+  position: relative;
+  @media (min-width: $screen-w-xxsm) {
+    width: 95%;
+  }
+  @media (min-width: $screen-w-md) {
+    width: 95%;
+  }
+  @media (min-width: $screen-w-lg) {
+    width: 750px;
+  }
+  @media (min-width: $screen-w-xlg) {
+    width: 750px;
+  }
 }
 
-.user-profile-text {
+.user-profile-inner-container {
+  background-color: #3F4651;
+  border-radius: 7px;
+  padding: 20px;
+}
+
+.user-profile-img-container {
+  top: -3%;
+  z-index: 4;
+  position: absolute;
+  padding-top: 10px;
+  background-color: #343a43;
+  border-radius: 50%;
+  min-height: 250px;
+  min-width: 250px;
+}
+
+.user-profile-img {
+  border-radius: 50%;
+  border:none !important;
+  margin-top:-5%;
+  padding: 5%;
+  @media (min-width: $screen-w-xxsm) {
+    width: 210px;
+    height: 210px;
+  }
+  @media (min-width: $screen-w-md) {
+    width: 210px;
+    height: 210px;
+  }
+  @media (min-width: $screen-w-lg) {
+    width: 250px;
+    height: 250px;
+  }
+}
+
+.user-profile-header {
   vertical-align: center;
   padding-left: 20px;
   color: white;
 }
 
-.user-profile-label {
+.color-white {
   color: white;
 }
 
@@ -1143,11 +1189,11 @@ body {
   background-color: #d9dbdd;
 }
 
-.user-profile-input-group {
+.user-profile-input-label {
   background-color: #515864;
   border-color: #515864; 
   color: white;
-  width: 170px;
+  width: 150px;
   font-size: 12px;
   font-weight: 500 !important;
 }
