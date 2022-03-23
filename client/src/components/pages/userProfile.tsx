@@ -12,6 +12,7 @@ import {useAuth} from '../../context/authContext';
 const UserProfile = (props: any) => {
   const [inputDisabled, setInputDisabled] = useState(true);
   const [inputDisabled1, setInputDisabled1] = useState(true);
+  const [applyDisabled, setApplyDisabled] = useState(true);
   const {user} = useAuth();
   const [formData, setFormData] = useState({
     _id: '',
@@ -30,6 +31,7 @@ const UserProfile = (props: any) => {
   // Account information onchange
   const onChange = (e: any) => {
     setFormData({...formData, [e.target.name]: e.target.value});
+    setApplyDisabled(false);
     console.log(formData);
   };
 
@@ -65,17 +67,13 @@ const UserProfile = (props: any) => {
       <Navbar />
       <div className="user-profile-content pt-5">
         {/* Table */}
-        <div
-          className="d-flex flex-column container user-profile-container"
-        >
+        <div className="d-flex flex-column container user-profile-container">
           <div className="flex-grow-1 table-container mt-4 ms-2 me-2 mb-4">
             <table>
               <tbody>
                 <tr>
                   <td>
-                    <div
-                      className="user-profile-img-container"
-                    >
+                    <div className="user-profile-img-container">
                       <img
                         className="user-profile-img"
                         src={avatar}
@@ -92,9 +90,7 @@ const UserProfile = (props: any) => {
               </tbody>
             </table>
             <br />
-            <div
-              className="user-profile-inner-container"
-            >
+            <div className="user-profile-inner-container">
               <div>
                 <table>
                   <tbody>
@@ -115,7 +111,9 @@ const UserProfile = (props: any) => {
                         &nbsp;
                         <Button
                           className="btn btn-primary color-white"
-                          disabled
+                          form="account-info-form"
+                          disabled={applyDisabled}
+                          type="submit"
                         >
                           Apply
                         </Button>
@@ -124,7 +122,7 @@ const UserProfile = (props: any) => {
                   </tbody>
                 </table>
                 <br />
-                <form onSubmit={(e: any) => onSubmit(e)}>
+                <form id="account-info-form" onSubmit={(e: any) => onSubmit(e)}>
                   <table>
                     <tbody>
                       <tr>
@@ -189,6 +187,7 @@ const UserProfile = (props: any) => {
                               value={role}
                               name="role"
                               disabled={user.role !== 'admin' || inputDisabled}
+                              onChange={(e) => onChange(e)}
                             >
                               <option value="user">user</option>
                               <option value="admin">admin</option>
@@ -243,8 +242,7 @@ const UserProfile = (props: any) => {
                               type="password"
                               placeholder="Enter Old Password"
                               disabled={
-                                (user.role === 'admin' &&
-                                  _id !== user._id) ||
+                                (user.role === 'admin' && _id !== user._id) ||
                                 inputDisabled1
                               }
                             />
