@@ -2,6 +2,7 @@
 import React, {useEffect, useState} from 'react';
 import axios from 'axios';
 import {Button, Form, InputGroup} from 'react-bootstrap';
+import {Redirect} from 'react-router-dom';
 
 // Custom
 import Navbar from '../common/Navbar';
@@ -10,7 +11,9 @@ import {IProfileResponse} from '../../types/queries';
 import {useAuth} from '../../context/authContext';
 
 const UserProfile = (props: any) => {
+  const userId: string = props.location.search.replace('?Id=', '');
   const [inputDisabled, setInputDisabled] = useState(true);
+  const [redirect, setRedirect] = useState(false);
   const [inputDisabled1, setInputDisabled1] = useState(true);
   const [applyDisabled, setApplyDisabled] = useState(true);
   const {user} = useAuth();
@@ -37,20 +40,25 @@ const UserProfile = (props: any) => {
 
   // Retrieve user info based on url ID
   const userInfo = async (userId: string) => {
-    const result = await axios.get<IProfileResponse<IUserObject>>(
+    await axios.get<IProfileResponse<IUserObject>>(
         'api/user/profile',
         {
           params: {userId: userId},
         },
-    );
-    setFormData({
-      ['_id']: result.data.Results._id,
-      ['originalName']: result.data.Results.name,
-      ['name']: result.data.Results.name,
-      ['email']: result.data.Results.email,
-      ['avatar']: result.data.Results.avatar,
-      ['role']: result.data.Results.role,
-    });
+    )
+        .then((result) => {
+          setFormData({
+            ['_id']: result.data.Results._id,
+            ['originalName']: result.data.Results.name,
+            ['name']: result.data.Results.name,
+            ['email']: result.data.Results.email,
+            ['avatar']: result.data.Results.avatar,
+            ['role']: result.data.Results.role,
+          });
+        })
+        .catch(() => {
+          setRedirect(true);
+        });
   };
 
   // Hide img while loading not to show a white border
@@ -58,9 +66,14 @@ const UserProfile = (props: any) => {
   const imageStyle = didLoad ? {} : {display: 'none'};
 
   useEffect(() => {
-    const userId: string = props.location.search.replace('?Id=', '');
-    userInfo(userId);
+    // User should be only allowed on his profile page, else redirect
+    (user.role == 'user' && user._id !== userId ? setRedirect(true) : userInfo(userId));
   }, []);
+
+  // User should be only allowed on his profile page, else redirect
+  if (redirect) {
+    return <Redirect to="/dashboard" />;
+  }
 
   return (
     <div className="h-100 d-flex flex-column">

@@ -120,7 +120,7 @@ router.get('/profile', auth, async (req, res) => {
     const user = await User.findOne({ _id: req.userId })
     const query = Object(req.query);
     let results;
-    (query.userId?  (results = await User.findOne(
+    (query.userId? (user.role == 'user' && user._id != query.userId ? res.status(401).send('Unauthorized') : (results = await User.findOne(
         { _id: query.userId }, 
         {
           _id: 1,
@@ -130,7 +130,7 @@ router.get('/profile', auth, async (req, res) => {
           avatar: 1,
         },
       ),
-      res.status(200).json({ Results: results }) ) : res.status(400).send('Bad request, no userId provided'));
+      res.status(200).json({ Results: results }) )) : res.status(400).send('Bad request, no userId provided'));
   } catch (err) {
     res.status(501).send('Server Error: ' + err.message)
   }
