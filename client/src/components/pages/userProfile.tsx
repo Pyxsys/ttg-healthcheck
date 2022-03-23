@@ -41,15 +41,13 @@ const UserProfile = (props: any) => {
 
   return (
     <div className="h-100 d-flex flex-column">
-      <div id="outer-container">
-        <Navbar />
-      </div>
-      <div className="flex-grow-1 d-flex flex-column align-items-center overflow-auto devices-content pt-5">
+      <Navbar />
+      <div className="user-profile-content pt-5">
         {/* Table */}
         <div
-          className="flex-grow-1 d-flex flex-column container user-profile-container"
+          className="d-flex flex-column container user-profile-container"
         >
-          <div className="flex-grow-1 overflow-auto table-container mt-4 ms-2 me-2 mb-4">
+          <div className="flex-grow-1 table-container mt-4 ms-2 me-2 mb-4">
             <table>
               <tbody>
                 <tr>
@@ -64,7 +62,7 @@ const UserProfile = (props: any) => {
                         onLoad={() => setLoad(true)}
                       />
                     </div>
-                    <div style={{height: '180px', width: '250px'}}></div>
+                    <div className="user-profile-img-spacing"></div>
                   </td>
                   <td className="user-profile-header">
                     <h1>{userProfile.name}</h1>

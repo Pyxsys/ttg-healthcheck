@@ -530,7 +530,10 @@ body {
 
 .devices-content {
   background-color: $tertiary-gray;
-  min-height: 230px;
+  flex: 1;
+  overflow: auto;
+  overflow-x: hidden;
+  min-height: 250px;
 }
 
 .pie-wheel-size {
@@ -630,7 +633,6 @@ body {
   z-index: 9;
   background-color: $tertiary-gray;
   border: 1px black solid;
-  min-width: 550px;
   max-height: 50vh;
 }
 
@@ -1094,21 +1096,32 @@ body {
 }
 
 /*-----------------------User Profile--------------------------*/
+.user-profile-content {
+  background-color: $tertiary-gray;
+  flex: 1;
+  overflow: auto;
+  min-height: 0px;
+} 
+
 .user-profile-container {
+  flex: 1;
   background-color: #343a43;
   border-radius: 7px;
   position: relative;
   @media (min-width: $screen-w-xxsm) {
-    width: 95%;
+    min-width: 600px !important;
+  }
+  @media (min-width: $screen-w-xsm) {
+    min-width: 600px !important;
+  }
+  @media (min-width: $screen-w-sm) {
+    min-width: 650px !important;
   }
   @media (min-width: $screen-w-md) {
-    width: 95%;
+    max-width: 750px !important;
   }
   @media (min-width: $screen-w-lg) {
-    width: 750px;
-  }
-  @media (min-width: $screen-w-xlg) {
-    width: 750px;
+    max-width: 750px !important;
   }
 }
 
@@ -1119,14 +1132,32 @@ body {
 }
 
 .user-profile-img-container {
+  overflow: none;
   top: -3%;
   z-index: 4;
   position: absolute;
   padding-top: 10px;
   background-color: #343a43;
   border-radius: 50%;
-  min-height: 250px;
-  min-width: 250px;
+  @media (min-width: $screen-w-xxsm) {
+    width: 225px;
+    height: 225px;
+  }
+  @media (min-width: $screen-w-md) {
+    width: 250px;
+    height: 250px;
+  }
+}
+
+.user-profile-img-spacing {
+  @media (min-width: $screen-w-xxsm) {
+    height: 160px; 
+    width: 220px;
+  }
+  @media (min-width: $screen-w-md) {
+    height: 180px; 
+    width: 240px;
+  }
 }
 
 .user-profile-img {
@@ -1135,14 +1166,10 @@ body {
   margin-top:-5%;
   padding: 5%;
   @media (min-width: $screen-w-xxsm) {
-    width: 210px;
-    height: 210px;
+    width: 225px;
+    height: 225px;
   }
   @media (min-width: $screen-w-md) {
-    width: 210px;
-    height: 210px;
-  }
-  @media (min-width: $screen-w-lg) {
     width: 250px;
     height: 250px;
   }
@@ -1161,12 +1188,18 @@ body {
 .user-profile-input {
   font-size: 13.5px;
   @media (min-width: $screen-w-xxsm) {
+    width: 350px !important;
     padding: 11px;
   }
+  @media (min-width: $screen-w-sm) {
+    width: 380px !important;
+  }
   @media (min-width: $screen-w-md) {
+    width: 480px !important;
     padding: 11px;
   }
   @media (min-width: $screen-w-lg) {
+    width: 480px !important;
     padding: 11px;
   }
   @media (min-width: $screen-w-xlg) {
@@ -1178,7 +1211,6 @@ body {
   @media (min-width: $screen-w-xxxlg) {
     padding: 11px;
   }
-  width: 480px !important;
   border: none !important;
   border-radius: 0 0.25rem 0.25rem 0 !important;
   box-shadow: none !important;

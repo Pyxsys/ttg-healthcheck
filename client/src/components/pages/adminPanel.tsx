@@ -76,9 +76,7 @@ const AdminPanel = () => {
 
   return (
     <div className="h-100 d-flex flex-column">
-      <div id="outer-container">
-        <Navbar />
-      </div>
+      <Navbar />
       <div className="flex-grow-1 d-flex flex-column align-items-center overflow-auto devices-content">
         {/* Table */}
         <div className="flex-grow-1 d-flex flex-column overflow-auto container">
