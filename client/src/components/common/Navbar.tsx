@@ -4,7 +4,11 @@ import {Link} from 'react-router-dom';
 import axios from 'axios';
 import {Squash as Hamburger} from 'hamburger-react';
 import {DiRasberryPi} from 'react-icons/di';
-import {MdOutlineSpaceDashboard, MdLogout} from 'react-icons/md';
+import {
+  MdOutlineSpaceDashboard,
+  MdLogout,
+  MdOutlineAnalytics,
+} from 'react-icons/md';
 import useOnclickOutside from 'react-cool-onclickoutside';
 // Custom
 import {useAuth} from '../../context/authContext';
@@ -26,7 +30,7 @@ const SideNavData = [
   {
     title: 'Analytics',
     path: '/analytics',
-    icon: <DiRasberryPi />,
+    icon: <MdOutlineAnalytics />,
     cName: 'side-nav-item',
   },
   {

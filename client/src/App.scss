@@ -1147,7 +1147,7 @@ body {
 }
 
 // accordion body
-.analytics-accordion .accordion-body {
+.analytics-accordion-body {
   border-bottom-left-radius: 7px;
   border-bottom-right-radius: 7px;
   background-color: $quinary-gray;
@@ -1159,10 +1159,32 @@ body {
     min-height: 0px;
   }
   @media (min-width: $screen-w-lg) {
-    min-height: 370px;
+    min-height: 250px;
   }
   @media (min-width: $screen-w-xlg) {
-    min-height: 365px;
+    min-height: 250px;
+  }
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.analytics-accordion-body-2 {
+  border-bottom-left-radius: 7px;
+  border-bottom-right-radius: 7px;
+  background-color: $quinary-gray;
+  font-size: 0.95em;
+  @media (min-width: $screen-w-sm) {
+    min-height: 0px;
+  }
+  @media (min-width: $screen-w-md) {
+    min-height: 0px;
+  }
+  @media (min-width: $screen-w-lg) {
+    min-height: 0px;
+  }
+  @media (min-width: $screen-w-xlg) {
+    min-height: 0px;
   }
   display: flex;
   justify-content: center;
@@ -1170,7 +1192,7 @@ body {
 }
 
 // accordion item
-.analytics-accordion .accordion-item {
+.analytics-accordion-item {
   border-radius: 12px;
   border-bottom-left-radius: 10px;
   border-bottom-right-radius: 10px;
@@ -1201,3 +1223,61 @@ body {
   }
 }
 
+//----------------- Graph widget
+
+// background div for a tab 
+.graph-accordion-body {
+  border-bottom-left-radius: 7px;
+  border-bottom-right-radius: 7px;
+  background-color: $quinary-gray;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  @media (min-width: $screen-w-xsm) {
+    padding: 15px 5px;
+  }
+  @media (min-width: $screen-w-sm) {
+    padding: 20px 20px;
+  }
+  @media (min-width: $screen-w-md) {
+    padding: 25px 25px;
+  }
+  @media (min-width: $screen-w-lg) {
+    padding: 30px 17px;
+  }
+  @media (min-width: $screen-w-xlg) {
+    padding: 30px 25px;
+  }
+}
+
+// tab widgets padding between them
+.graph-widget-padding {
+  @media (min-width: $screen-w-md) {
+    padding: 0px 0px;
+  }
+  @media (min-width: $screen-w-lg) {
+    padding: 0px 8px;
+  }
+  @media (min-width: $screen-w-xlg) {
+    padding: 0px 18px;
+  }
+}
+
+
+.graph-dark-accordion .accordion-body {
+  background-color: #393F49;
+  @media (min-width: $screen-w-xsm) {
+    min-height: 150px;
+  }
+  @media (min-width: $screen-w-md) {
+    min-height: 250px;
+  }
+  @media (min-width: $screen-w-xlg) {
+    min-height: 250px;
+  }
+}
+
+.graph-dark-accordion .accordion-button {
+  font-size: 0.50em;
+  height: 3.4em;
+}
