@@ -89,6 +89,7 @@ body {
     background-color: lighten($gray-800, 7%);
   }
 }
+
 .form-control:focus, .form-select:focus {
   border-color: $gray-800;
   box-shadow: 0 0 0 0.25rem lighten($gray-800, 10%);
@@ -1277,7 +1278,33 @@ body {
   }
 }
 
+.restrict-accordion-height .accordion-body {
+  @media (min-width: $screen-w-xsm) {
+    max-height: 150px;
+  }
+  @media (min-width: $screen-w-md) {
+    max-height: 250px;
+  }
+  @media (min-width: $screen-w-xlg) {
+    max-height: 250px;
+  }
+}
+
 .graph-dark-accordion .accordion-button {
   font-size: 0.50em;
   height: 3.4em;
 }
+
+//----------------- SETTINGS WIDGET
+
+.settings-body-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.settings-spans{
+  color: white;
+  font-size: 1em;
+}
+

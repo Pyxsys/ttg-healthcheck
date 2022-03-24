@@ -10,7 +10,40 @@ const graphSettings = (_props: any) => {
           <Accordion.Header>
             <div className="d-flex w-100 justify-content-around">Settings</div>
           </Accordion.Header>
-          <Accordion.Body></Accordion.Body>
+          <Accordion.Body>
+            <div className="settings-body-wrapper">
+              <span className="settings-spans">Add Device</span>
+              <select
+                className="form-select form-select-sm w-100 mx-2 my-2"
+                defaultValue={'DEFAULT'}
+                onChange={() => {}}
+              >
+                <option value="">Place Holder</option>
+              </select>
+              <span className="settings-spans">Selected Metric</span>
+              <select
+                className="form-select form-select-sm w-100 mx-2 my-2"
+                defaultValue={'DEFAULT'}
+                onChange={() => {}}
+              >
+                <option value="">CPU Usage</option>
+                <option value="">Memory Usage</option>
+                <option value="">Disk Usage</option>
+                <option value="">Latency</option>
+              </select>
+              <span className="settings-spans">Selected Time Range</span>
+              <select
+                className="form-select form-select-sm w-100 mx-2 my-2"
+                defaultValue={'DEFAULT'}
+                onChange={() => {}}
+              >
+                <option value="">Day</option>
+                <option value="">Week</option>
+                <option value="">Month</option>
+                <option value="">Year</option>
+              </select>
+            </div>
+          </Accordion.Body>
         </Accordion.Item>
       </Accordion>
     </Col>

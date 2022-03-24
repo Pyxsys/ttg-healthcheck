@@ -1,14 +1,66 @@
 // 3rd Party
-import React from 'react';
+import React, {useEffect, useState} from 'react';
+import axios from 'axios';
 import {Col, Row, Accordion} from 'react-bootstrap';
+
+// Custom
 import GraphSettings from '../analytics-widgets/graphSettings';
 import GraphDevices from '../analytics-widgets/graphDevices';
 import GraphDisplay from '../analytics-widgets/graphDisplay';
-
-// Custom
+import {IDevice, IDeviceLog, IDeviceTotal} from '../../types/device';
+import {useRealTimeService} from '../../context/realTimeContext';
 import Navbar from '../common/Navbar';
+import {IResponse} from '../../types/queries';
 
 const AnalyticsPage = () => {
+  const [deviceTableData, setDeviceTableData] = useState([] as IDeviceTotal[]);
+  const realTimeDataService = useRealTimeService();
+
+  const initialRealTimeData = () => {
+    realTimeDataService.getRealTimeData((newDevice) => {
+      setDeviceTableData((prevState) =>
+        prevState.map((device) => ({
+          static: device.static,
+          dynamic:
+            device.static.deviceId === newDevice.deviceId ?
+              newDevice :
+              device.dynamic,
+        })),
+      );
+    });
+  };
+
+  const queryTable = async () => {
+    const deviceQuery = {params: {Total: true}};
+    const deviceResponse = await axios.get<IResponse<IDevice>>(
+        'api/device',
+        deviceQuery,
+    );
+    const devices = deviceResponse.data.Results;
+    const deviceIds = devices.map((device) => device.deviceId);
+
+    const latestDevicesResponse = await axios.get<IResponse<IDeviceLog>>(
+        'api/device-logs/latest',
+        {params: {Ids: deviceIds.join(',')}},
+    );
+    const latestDevices = latestDevicesResponse.data.Results;
+
+    const tableDevices = devices.map((staticDevice) => ({
+      static: staticDevice,
+      dynamic: latestDevices.find(
+          (device) => device.deviceId === staticDevice.deviceId,
+      ),
+    }));
+
+    setDeviceTableData(tableDevices);
+    realTimeDataService.setDeviceIds(deviceIds);
+  };
+
+  useEffect(() => {
+    initialRealTimeData();
+    queryTable();
+  }, []);
+
   return (
     <div className="analytics-container">
       <Navbar />
@@ -106,7 +158,9 @@ const AnalyticsPage = () => {
                             </Col>
                             <Col className="analytics-accordion-padding">
                               <div className="graph-widget-padding w-100">
-                                <GraphDevices></GraphDevices>
+                                <GraphDevices
+                                  deviceDynamic={deviceTableData}
+                                ></GraphDevices>
                               </div>
                             </Col>
                           </Row>
