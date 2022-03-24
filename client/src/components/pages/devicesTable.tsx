@@ -362,7 +362,7 @@ const DevicesTable = () => {
         {/* Table */}
         <div className="flex-grow-1 d-flex flex-column overflow-auto container">
           {/* Filter Dropdown */}
-          <div className="pt-4 ps-0 w-100">
+          <div className="pt-5 ps-0 w-100">
             <div className="pb-0">
               <button
                 ref={filtersRef}

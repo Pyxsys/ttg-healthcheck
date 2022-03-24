@@ -109,11 +109,12 @@ const UserProfile = (props: any) => {
                   <tbody>
                     <tr>
                       <td>
-                        <h4 className="color-white">Account Information</h4>
+                        <h5 className="color-white">Account Information</h5>
                       </td>
                       <td>
                         &emsp;
                         <Button
+                          size='sm'
                           onClick={() => setInputDisabled(!inputDisabled)}
                           className="btn btn-primary color-white"
                         >
@@ -123,6 +124,7 @@ const UserProfile = (props: any) => {
                       <td>
                         &nbsp;
                         <Button
+                          size='sm'
                           className="btn btn-primary color-white"
                           form="account-info-form"
                           disabled={applyDisabled}
@@ -219,11 +221,12 @@ const UserProfile = (props: any) => {
                   <tbody>
                     <tr>
                       <td>
-                        <h4 className="color-white">Account Management</h4>
+                        <h5 className="color-white">Account Management</h5>
                       </td>
                       <td>
                         &emsp;
                         <Button
+                          size='sm'
                           onClick={() => setInputDisabled1(!inputDisabled1)}
                           className="btn btn-primary"
                         >
@@ -231,6 +234,7 @@ const UserProfile = (props: any) => {
                         </Button>
                         &nbsp;
                         <Button
+                          size='sm'
                           className="btn btn-primary color-white"
                           disabled
                         >

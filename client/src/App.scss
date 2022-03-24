@@ -1145,18 +1145,18 @@ body {
     height: 225px;
   }
   @media (min-width: $screen-w-md) {
-    width: 250px;
-    height: 250px;
+    width: 240px;
+    height: 240px;
   }
 }
 
 .user-profile-img-spacing {
   @media (min-width: $screen-w-xxsm) {
-    height: 160px; 
+    height: 155px; 
     width: 220px;
   }
   @media (min-width: $screen-w-md) {
-    height: 180px; 
+    height: 170px; 
     width: 240px;
   }
 }
@@ -1171,8 +1171,8 @@ body {
     height: 225px;
   }
   @media (min-width: $screen-w-md) {
-    width: 250px;
-    height: 250px;
+    width: 240px;
+    height: 240px;
   }
 }
 
@@ -1196,11 +1196,11 @@ body {
     width: 380px !important;
   }
   @media (min-width: $screen-w-md) {
-    width: 480px !important;
+    width: 500px !important;
     padding: 11px;
   }
   @media (min-width: $screen-w-lg) {
-    width: 480px !important;
+    width: 500px !important;
     padding: 11px;
   }
   @media (min-width: $screen-w-xlg) {
@@ -1219,7 +1219,7 @@ body {
 }
 
 .user-profile-input:disabled {
-  background-color: #d9dbdd;
+  background-color: #d2d4d6;
 }
 
 .user-profile-input-label {
@@ -1227,10 +1227,11 @@ body {
   border-color: #515864; 
   color: white;
   width: 150px;
-  font-size: 12px;
+  font-size: 11px;
   font-weight: 500 !important;
 }
 
+/*-----------------------Pending Page--------------------------*/
 .pending-header {
   color: white;
   font-size: 27px;
