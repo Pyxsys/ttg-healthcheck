@@ -359,136 +359,135 @@ const DevicesTable = () => {
     <div className="h-100 d-flex flex-column">
       <Navbar />
       <div className="flex-grow-1 d-flex flex-column align-items-center overflow-auto devices-content">
-        {/* Filter Dropdown */}
-        <div className="pt-2 ps-4 w-100">
-          <div className="pb-0">
-            <button
-              ref={filtersRef}
-              className="btn btn-primary"
-              onClick={() => setshowFilters(!showFilters)}
-            >
-              <span>Filter Table ({filters.length})</span>
-              <span className={`ps-2 ${showFilters ? 'dropup' : 'dropdown'}`}>
-                <i className="caret"></i>
-              </span>
-            </button>
-          </div>
-
-          <div
-            ref={filtersRef}
-            className={`d-flex flex-column position-absolute filter-container overflow-auto ${
-              showFilters ? '' : 'invisible'
-            }`}
-          >
-            <div className="d-flex flex-column overflow-auto">
-              {filters.length > 0 ? (
-                <div className="d-flex align-items-center fw-bold text-muted p-1">
-                  <div className="w-5"></div>
-                  <div className="w-20 px-1">Column</div>
-                  <div className="w-40 px-1">Equality</div>
-                  <div className="w-35 px-1">Value</div>
-                </div>
-              ) : (
-                <></>
-              )}
-              {filters.map((filter, idx) => (
-                <div
-                  className={`d-flex align-items-center p-1`}
-                  key={`filter-${idx}`}
-                >
-                  <div className="w-5">
-                    <i
-                      className="cursor-pointer user-select-none text-muted"
-                      onClick={() => removeFilter(idx)}
-                    >
-                      <FaTrashAlt />
-                    </i>
-                  </div>
-
-                  <div className="w-20 px-1">
-                    <select
-                      className="form-select form-select-sm w-100"
-                      value={`${filter.columnKey};${filter.type}`}
-                      onChange={(e) =>
-                        setFilterColumn(filter, idx, e.target.value)
-                      }
-                    >
-                      <option value=""></option>
-                      <option value="static.deviceId;string">UUID</option>
-                      <option value="static.name;string">Name</option>
-                      <option value="dynamic.cpu.aggregatedPercentage;number">
-                        CPU
-                      </option>
-                      <option value="dynamic.memory.aggregatedPercentage;number">
-                        Memory
-                      </option>
-                      <option value="dynamic.disk.partitions.0.percent;number">
-                        Disk
-                      </option>
-                      <option value="dynamic.wifi.signalStrength;number">
-                        Network
-                      </option>
-                    </select>
-                  </div>
-
-                  {filter.columnKey ? (
-                    <>
-                      <div className="w-40 px-1">
-                        <select
-                          className="form-select form-select-sm w-100"
-                          value={filter.equality}
-                          onChange={(e) =>
-                            setFilterEquality(
-                                filter,
-                                idx,
-                                Number(e.target.value),
-                            )
-                          }
-                        >
-                          {getFilterEqualityOptions(filter.type)}
-                        </select>
-                      </div>
-
-                      <div className="w-35 px-1">
-                        <input
-                          className="form-control form-control-sm w-100"
-                          type={filter.type}
-                          value={filter.value}
-                          onChange={(e) =>
-                            setFilterValue(filter, idx, e.target.value)
-                          }
-                        />
-                      </div>
-                    </>
-                  ) : (
-                    <></>
-                  )}
-                </div>
-              ))}
-            </div>
-
-            <div className="d-flex justify-content-center p-2">
-              <div
-                className="d-flex align-items-center text-muted cursor-pointer user-select-none border-dashed px-2"
-                onClick={() => addEmptyFilter()}
-              >
-                <FaPlus />
-                <span className="ps-2">Add Filter</span>
-              </div>
-              <div
-                className="d-flex align-items-center text-muted cursor-pointer user-select-none border-dashed px-2 ms-3"
-                onClick={() => setFilters([])}
-              >
-                <FaTrashAlt />
-                <span className="ps-2">Clear All</span>
-              </div>
-            </div>
-          </div>
-        </div>
-
         {/* Table */}
         <div className="flex-grow-1 d-flex flex-column overflow-auto container">
-          <div className="flex-grow-1 overflow-auto table-container mt-5">
+          {/* Filter Dropdown */}
+          <div className="pt-4 ps-0 w-100">
+            <div className="pb-0">
+              <button
+                ref={filtersRef}
+                className="btn btn-primary"
+                onClick={() => setshowFilters(!showFilters)}
+              >
+                <span>Filter Table ({filters.length})</span>
+                <span className={`ps-2 ${showFilters ? 'dropup' : 'dropdown'}`}>
+                  <i className="caret"></i>
+                </span>
+              </button>
+            </div>
+
+            <div
+              ref={filtersRef}
+              className={`d-flex flex-column position-absolute filter-container overflow-auto ${
+                showFilters ? '' : 'invisible'
+              }`}
+            >
+              <div className="d-flex flex-column overflow-auto">
+                {filters.length > 0 ? (
+                  <div className="d-flex align-items-center fw-bold text-muted p-1">
+                    <div className="w-5"></div>
+                    <div className="w-20 px-1">Column</div>
+                    <div className="w-40 px-1">Equality</div>
+                    <div className="w-35 px-1">Value</div>
+                  </div>
+                ) : (
+                  <></>
+                )}
+                {filters.map((filter, idx) => (
+                  <div
+                    className={`d-flex align-items-center p-1`}
+                    key={`filter-${idx}`}
+                  >
+                    <div className="w-5">
+                      <i
+                        className="cursor-pointer user-select-none text-muted"
+                        onClick={() => removeFilter(idx)}
+                      >
+                        <FaTrashAlt />
+                      </i>
+                    </div>
+
+                    <div className="w-20 px-1">
+                      <select
+                        className="form-select form-select-sm w-100"
+                        value={`${filter.columnKey};${filter.type}`}
+                        onChange={(e) =>
+                          setFilterColumn(filter, idx, e.target.value)
+                        }
+                      >
+                        <option value=""></option>
+                        <option value="static.deviceId;string">UUID</option>
+                        <option value="static.name;string">Name</option>
+                        <option value="dynamic.cpu.aggregatedPercentage;number">
+                          CPU
+                        </option>
+                        <option value="dynamic.memory.aggregatedPercentage;number">
+                          Memory
+                        </option>
+                        <option value="dynamic.disk.partitions.0.percent;number">
+                          Disk
+                        </option>
+                        <option value="dynamic.wifi.signalStrength;number">
+                          Network
+                        </option>
+                      </select>
+                    </div>
+
+                    {filter.columnKey ? (
+                      <>
+                        <div className="w-40 px-1">
+                          <select
+                            className="form-select form-select-sm w-100"
+                            value={filter.equality}
+                            onChange={(e) =>
+                              setFilterEquality(
+                                  filter,
+                                  idx,
+                                  Number(e.target.value),
+                              )
+                            }
+                          >
+                            {getFilterEqualityOptions(filter.type)}
+                          </select>
+                        </div>
+
+                        <div className="w-35 px-1">
+                          <input
+                            className="form-control form-control-sm w-100"
+                            type={filter.type}
+                            value={filter.value}
+                            onChange={(e) =>
+                              setFilterValue(filter, idx, e.target.value)
+                            }
+                          />
+                        </div>
+                      </>
+                    ) : (
+                      <></>
+                    )}
+                  </div>
+                ))}
+              </div>
+
+              <div className="d-flex justify-content-center p-2">
+                <div
+                  className="d-flex align-items-center text-muted cursor-pointer user-select-none border-dashed px-2"
+                  onClick={() => addEmptyFilter()}
+                >
+                  <FaPlus />
+                  <span className="ps-2">Add Filter</span>
+                </div>
+                <div
+                  className="d-flex align-items-center text-muted cursor-pointer user-select-none border-dashed px-2 ms-3"
+                  onClick={() => setFilters([])}
+                >
+                  <FaTrashAlt />
+                  <span className="ps-2">Clear All</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="flex-grow-1 overflow-auto table-container mt-3">
             <ViewTable
               tableData={getFilteredDevices()}
               page={page}
