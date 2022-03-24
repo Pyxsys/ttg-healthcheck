@@ -41,7 +41,7 @@ const DeviceDetail = (props: any) => {
     });
   };
 
-  const queryLogs = async () => {
+  const queryLogs = () => {
     if (!deviceId) return;
 
     const queryParams = {
@@ -49,20 +49,28 @@ const DeviceDetail = (props: any) => {
       limit: 1,
     };
 
-    const deviceResponse = await axios.get<IResponse<IDevice>>('api/device', {
-      params: queryParams,
-    });
-    const devices = deviceResponse.data.Results;
-    setDeviceData(devices[0] || null);
-
-    const deviceLogResponse = await axios.get<IResponse<IDeviceLog>>(
-        'api/device-logs',
-        {
+    axios
+        .get<IResponse<IDevice>>('api/device', {
           params: queryParams,
-        },
-    );
-    const deviceLogs = deviceLogResponse.data.Results;
-    setDeviceLogsData(deviceLogs[0] || null);
+        })
+        .then((deviceResponse) => {
+          const devices = deviceResponse.data.Results;
+          setDeviceData(devices[0] || null);
+          axios
+              .get<IResponse<IDeviceLog>>('api/device-logs', {
+                params: queryParams,
+              })
+              .then((deviceLogResponse) => {
+                const deviceLogs = deviceLogResponse.data.Results;
+                setDeviceLogsData(deviceLogs[0] || null);
+              })
+              .catch((error) => {
+                console.error(error);
+              });
+        })
+        .catch((error) => {
+          console.log(error);
+        });
   };
 
   useEffect(() => {

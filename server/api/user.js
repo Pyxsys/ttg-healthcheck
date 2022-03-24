@@ -10,7 +10,7 @@ const auth = require('../middleware/auth.js')
 router.post('/register', async (req, res) => {
   try {
     const role = 'user'
-    const avatar = 'https://cdn-icons-png.flaticon.com/512/149/149071.png';
+    const avatar = 'https://cdn-icons-png.flaticon.com/512/149/149071.png'
     const { name, password, email } = req.body
     const newUser = new User({
       name,
@@ -73,7 +73,12 @@ router.post('/login', async (req, res) => {
       .status(200)
       .json({
         message: 'Logged in',
-        user: { _id: user._id, name: user.name, role: user.role, avatar: user.avatar },
+        user: {
+          _id: user._id,
+          name: user.name,
+          role: user.role,
+          avatar: user.avatar,
+        },
       })
   } catch (err) {
     res.status(500).send('Server Error: ' + err.message)
@@ -86,7 +91,12 @@ router.get('/authenticate', auth, async (req, res) => {
     const user = await User.findOne({ _id: req.userId })
     return res.status(200).json({
       isAuthenticated: true,
-      user: { _id: user._id, name: user.name, role: user.role, avatar: user.avatar },
+      user: {
+        _id: user._id,
+        name: user.name,
+        role: user.role,
+        avatar: user.avatar,
+      },
     })
   } catch (err) {
     res.status(501).send('Server Error: ' + err.message)
@@ -97,18 +107,20 @@ router.get('/authenticate', auth, async (req, res) => {
 router.get('/all', auth, async (req, res) => {
   try {
     const user = await User.findOne({ _id: req.userId })
-    let results;
-    (user.role == 'admin' ? (results = await User.find(
-        {},
-        {
-          _id: 1,
-          name: 1,
-          email: 1,
-          role: 1,
-          avatar: 1,
-        }
-      ),
-      res.status(200).json({ Results: results, Total: results.length })) : res.status(401).send('No admin privileges'));
+    let results
+    user.role == 'admin'
+      ? ((results = await User.find(
+          {},
+          {
+            _id: 1,
+            name: 1,
+            email: 1,
+            role: 1,
+            avatar: 1,
+          }
+        )),
+        res.status(200).json({ Results: results, Total: results.length }))
+      : res.status(401).send('No admin privileges')
   } catch (err) {
     res.status(501).send('Server Error: ' + err.message)
   }
@@ -118,19 +130,23 @@ router.get('/all', auth, async (req, res) => {
 router.get('/profile', auth, async (req, res) => {
   try {
     const user = await User.findOne({ _id: req.userId })
-    const query = Object(req.query);
-    let results;
-    (query.userId? (user.role == 'user' && user._id != query.userId ? res.status(401).send('Unauthorized') : (results = await User.findOne(
-        { _id: query.userId }, 
-        {
-          _id: 1,
-          name: 1,
-          email: 1,
-          role: 1,
-          avatar: 1,
-        },
-      ),
-      res.status(200).json({ Results: results }) )) : res.status(400).send('Bad request, no userId provided'));
+    const query = Object(req.query)
+    let results
+    query.userId
+      ? user.role == 'user' && user._id != query.userId
+        ? res.status(401).send('Unauthorized')
+        : ((results = await User.findOne(
+            { _id: query.userId },
+            {
+              _id: 1,
+              name: 1,
+              email: 1,
+              role: 1,
+              avatar: 1,
+            }
+          )),
+          res.status(200).json({ Results: results }))
+      : res.status(400).send('Bad request, no userId provided')
   } catch (err) {
     res.status(501).send('Server Error: ' + err.message)
   }

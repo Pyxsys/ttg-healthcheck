@@ -21,12 +21,18 @@ const AdminPanel = () => {
   const [page, setPage] = useState(initialPage);
   const [totalPages, setTotalPages] = useState(0);
 
-  const queryTable = async () => {
-    const results = await axios.get<IResponse<IUserObject>>('api/user/all');
-    const users = results.data.Results;
+  const queryTable = () => {
+    axios
+        .get<IResponse<IUserObject>>('api/user/all')
+        .then((results) => {
+          const users = results.data.Results;
 
-    setTotalPages(Math.ceil(results.data.Total / pageSize));
-    setUsersTable(users);
+          setTotalPages(Math.ceil(results.data.Total / pageSize));
+          setUsersTable(users);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
   };
 
   useEffect(() => {

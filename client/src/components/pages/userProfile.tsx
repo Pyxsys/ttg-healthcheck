@@ -39,13 +39,11 @@ const UserProfile = (props: any) => {
   };
 
   // Retrieve user info based on url ID
-  const userInfo = async (userId: string) => {
-    await axios.get<IProfileResponse<IUserObject>>(
-        'api/user/profile',
-        {
+  const userInfo = (userId: string) => {
+    axios
+        .get<IProfileResponse<IUserObject>>('api/user/profile', {
           params: {userId: userId},
-        },
-    )
+        })
         .then((result) => {
           setFormData({
             ['_id']: result.data.Results._id,
@@ -67,7 +65,9 @@ const UserProfile = (props: any) => {
 
   useEffect(() => {
     // User should be only allowed on his profile page, else redirect
-    (user.role == 'user' && user._id !== userId ? setRedirect(true) : userInfo(userId));
+    user.role == 'user' && user._id !== userId ?
+      setRedirect(true) :
+      userInfo(userId);
   }, []);
 
   // User should be only allowed on his profile page, else redirect
@@ -204,6 +204,7 @@ const UserProfile = (props: any) => {
                             >
                               <option value="user">user</option>
                               <option value="admin">admin</option>
+                              <option value="disabled">disabled</option>
                             </Form.Select>
                           </InputGroup>
                         </td>

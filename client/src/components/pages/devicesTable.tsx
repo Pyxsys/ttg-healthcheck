@@ -67,31 +67,36 @@ const DevicesTable = () => {
     });
   };
 
-  const queryTable = async () => {
+  const queryTable = () => {
     const deviceQuery = {params: {Total: true}};
-    const deviceResponse = await axios.get<IResponse<IDevice>>(
-        'api/device',
-        deviceQuery,
-    );
-    const devices = deviceResponse.data.Results;
-    const deviceIds = devices.map((device) => device.deviceId);
-
-    const latestDevicesResponse = await axios.get<IResponse<IDeviceLog>>(
-        'api/device-logs/latest',
-        {params: {Ids: deviceIds.join(',')}},
-    );
-    const latestDevices = latestDevicesResponse.data.Results;
-
-    const tableDevices = devices.map((staticDevice) => ({
-      static: staticDevice,
-      dynamic: latestDevices.find(
-          (device) => device.deviceId === staticDevice.deviceId,
-      ),
-    }));
-
-    setTotalPages(Math.ceil(deviceResponse.data.Total / pageSize));
-    setDeviceTableData(tableDevices);
-    realTimeDataService.setDeviceIds(deviceIds);
+    axios
+        .get<IResponse<IDevice>>('api/device', deviceQuery)
+        .then((deviceResponse) => {
+          const devices = deviceResponse.data.Results;
+          const deviceIds = devices.map((device) => device.deviceId);
+          axios
+              .get<IResponse<IDeviceLog>>('api/device-logs/latest', {
+                params: {Ids: deviceIds.join(',')},
+              })
+              .then((latestDevicesResponse) => {
+                const latestDevices = latestDevicesResponse.data.Results;
+                const tableDevices = devices.map((staticDevice) => ({
+                  static: staticDevice,
+                  dynamic: latestDevices.find(
+                      (device) => device.deviceId === staticDevice.deviceId,
+                  ),
+                }));
+                setTotalPages(Math.ceil(deviceResponse.data.Total / pageSize));
+                setDeviceTableData(tableDevices);
+                realTimeDataService.setDeviceIds(deviceIds);
+              })
+              .catch((error) => {
+                console.log(error);
+              });
+        })
+        .catch((error) => {
+          console.log(error);
+        });
   };
 
   useEffect(() => {
