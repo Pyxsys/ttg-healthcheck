@@ -36,7 +36,7 @@ const graphDevices = (props: AnalyticsDevicesTableInputs) => {
           <Accordion.Header>
             <div className="d-flex w-100 justify-content-around">Devices</div>
           </Accordion.Header>
-          <Accordion.Body className="flex-grow-1 overflow-auto">
+          <Accordion.Body className="flex-grow-1 overflow-auto p-0">
             <div className="overflow-auto">
               <ViewTable
                 tableData={devices}
