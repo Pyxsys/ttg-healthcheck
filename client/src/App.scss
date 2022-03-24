@@ -1308,3 +1308,17 @@ body {
   font-size: 1em;
 }
 
+//----------------- Devices WIDGET
+
+.devices-settings-content-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+}
+
+.devices-all-select-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: left;
+}
+

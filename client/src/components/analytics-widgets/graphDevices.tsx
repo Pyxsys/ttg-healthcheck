@@ -1,8 +1,9 @@
 import React from 'react';
-import {Col, Accordion} from 'react-bootstrap';
+import {Col, Accordion, FormCheck} from 'react-bootstrap';
 import {IDeviceTotal} from '../../types/device';
 import {IColumnDetail} from '../../types/tables';
 import ViewTable from '../common/viewTable';
+import {MdClose} from 'react-icons/md';
 
 interface AnalyticsDevicesTableInputs {
   deviceDynamic: IDeviceTotal[]
@@ -19,6 +20,12 @@ const graphDevices = (props: AnalyticsDevicesTableInputs) => {
     {
       key: '',
       name: 'Settings',
+      override: () => (
+        <div className="devices-settings-content-wrapper">
+          <MdClose color="red" />
+          <FormCheck></FormCheck>
+        </div>
+      ),
     },
   ];
 
@@ -29,7 +36,7 @@ const graphDevices = (props: AnalyticsDevicesTableInputs) => {
           <Accordion.Header>
             <div className="d-flex w-100 justify-content-around">Devices</div>
           </Accordion.Header>
-          <Accordion.Body className="flex-grow-1 overflow-auto p-2">
+          <Accordion.Body className="flex-grow-1 overflow-auto">
             <div className="overflow-auto">
               <ViewTable
                 tableData={devices}
