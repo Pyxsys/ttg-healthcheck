@@ -1229,3 +1229,28 @@ body {
   font-size: 12px;
   font-weight: 500 !important;
 }
+
+.pending-header {
+  color: white;
+  font-size: 27px;
+}
+
+.pending-logout {
+  margin-top: 5px;
+  color: rgb(243, 106, 106);
+  font-weight: 600;
+  text-decoration: none;
+  font-size: 15px;
+}
+
+.pending-logout:hover {
+  color: rgb(201, 75, 75);
+}
+
+
+.pending-logout > svg{
+  color: rgb(255, 255, 255);
+  font-weight: 600;
+  width: 30px;
+  height: 30px;
+}

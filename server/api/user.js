@@ -9,7 +9,7 @@ const auth = require('../middleware/auth.js')
 // signup
 router.post('/register', async (req, res) => {
   try {
-    const role = 'user'
+    const role = 'disabled'
     const avatar = 'https://cdn-icons-png.flaticon.com/512/149/149071.png';
     const { name, password, email } = req.body
     const newUser = new User({
