@@ -4,6 +4,9 @@ import {Col, Row, Accordion} from 'react-bootstrap';
 import GraphSettings from '../analytics-widgets/graphSettings';
 import GraphDevices from '../analytics-widgets/graphDevices';
 import GraphDisplay from '../analytics-widgets/graphDisplay';
+import TableDevices from '../analytics-widgets/tableDevices';
+import TableDisplay from '../analytics-widgets/tableDisplay';
+import TableLatency from '../analytics-widgets/tableLatency';
 
 // Custom
 import Navbar from '../common/Navbar';
@@ -17,72 +20,9 @@ const AnalyticsPage = () => {
           <Row>
             <Col>
               <Row className="gx-4">
-                <Col
-                  xs={12}
-                  sm={12}
-                  md={12}
-                  lg={4}
-                  xl={4}
-                  className="analytics-accordion"
-                >
-                  <Accordion defaultActiveKey="0" flush>
-                    <Accordion.Item
-                      eventKey="0"
-                      className="analytics-accordion-item"
-                    >
-                      <Accordion.Header>
-                        <div className="d-flex w-100 justify-content-around">
-                          Overworked CPU Devices
-                        </div>
-                      </Accordion.Header>
-                      <Accordion.Body className="analytics-accordion-body"></Accordion.Body>
-                    </Accordion.Item>
-                  </Accordion>
-                </Col>
-                <Col
-                  xs={12}
-                  sm={12}
-                  md={12}
-                  lg={4}
-                  xl={4}
-                  className="analytics-accordion"
-                >
-                  <Accordion defaultActiveKey="0" flush>
-                    <Accordion.Item
-                      eventKey="0"
-                      className="analytics-accordion-item"
-                    >
-                      <Accordion.Header>
-                        <div className="d-flex w-100 justify-content-around">
-                          Overworked Memory Devices
-                        </div>
-                      </Accordion.Header>
-                      <Accordion.Body className="analytics-accordion-body"></Accordion.Body>
-                    </Accordion.Item>
-                  </Accordion>
-                </Col>
-                <Col
-                  xs={12}
-                  sm={12}
-                  md={12}
-                  lg={4}
-                  xl={4}
-                  className="analytics-accordion"
-                >
-                  <Accordion defaultActiveKey="0" flush>
-                    <Accordion.Item
-                      eventKey="0"
-                      className="analytics-accordion-item"
-                    >
-                      <Accordion.Header>
-                        <div className="d-flex w-100 justify-content-around">
-                          Latency Monitoring
-                        </div>
-                      </Accordion.Header>
-                      <Accordion.Body className="analytics-accordion-body"></Accordion.Body>
-                    </Accordion.Item>
-                  </Accordion>
-                </Col>
+                <TableDevices title="Overworked CPU Devices"></TableDevices>
+                <TableDisplay title="Overworked Memory Devices"></TableDisplay>
+                <TableLatency title="Latency Monitoring"></TableLatency>
               </Row>
               <Row>
                 <Col className="analytics-accordion analytics-accordion-padding">
