@@ -129,8 +129,15 @@ const Dashboard = () => {
     <div className="d-flex w-100">
       <div className="d-flex justify-content-center w-100">
         <div className="d-flex flex-column align-content-center">
-          <h6 className="text-truncate text-center">{widgetName}</h6>
-          <div className="text-center">{widgetTitle}</div>
+          <div className="text-center" style={{fontSize: '19px'}}>
+            {widgetTitle}
+          </div>
+          <div
+            className="text-truncate text-center"
+            style={{fontSize: '11px', opacity: '0.4', paddingTop: '1px'}}
+          >
+            {widgetName}
+          </div>
         </div>
       </div>
       <div
@@ -287,8 +294,8 @@ const Dashboard = () => {
     <div id="dashboard-container">
       <Navbar />
       <div id="page-wrap" className="h-100 overflow-auto pe-2 ps-2">
-        <div className="d-flex pt-2 justify-content-end">
-          <button className="btn btn-primary" onClick={() => resetDash()}>
+        <div className="d-flex pt-5 container">
+          <button className="btn btn-primary ms-3" onClick={() => resetDash()}>
             Clear Dashboard
           </button>
           <button
@@ -306,12 +313,11 @@ const Dashboard = () => {
             Cancel Changes
           </button>
         </div>
-
         <div className="container d-flex flex-wrap py-3">
           {/* Dashboard Widgets */}
           {dashboard?.widgets?.map((widget, index) => (
             <div
-              className="d-flex flex-column widget-width px-4"
+              className="d-flex flex-column widget-width px-3"
               key={`${widget.widgetType}_${index}`}
             >
               {getWidgetHMTL(widget, index)}
@@ -319,7 +325,7 @@ const Dashboard = () => {
           ))}
 
           {/* Add New Widget */}
-          <div className="widget-width px-4">
+          <div className="widget-width px-3">
             <div
               role="button"
               className="d-flex justify-content-center dashboard-dashed-box"

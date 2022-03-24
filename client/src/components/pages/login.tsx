@@ -11,7 +11,7 @@ import {handleIncorrectInput, sendRequest} from '../common/inputValidation';
 import FrontPageWrapper from '../common/frontPageWrapper';
 
 const Login = () => {
-  const {setUser, setIsAuthenticated} = useAuth();
+  const {user, setUser, setIsAuthenticated} = useAuth();
   const [loggedIn, setLoggedIn] = useState(false);
 
   const [formData1, setFormData1] = useState({
@@ -48,7 +48,12 @@ const Login = () => {
 
   if (loggedIn) {
     notificationService.success('Logged in succesfully!');
-    return <Redirect to="/dashboard" />;
+    console.log(user.role);
+    if (user.role == 'disabled') {
+      return <Redirect to="/pending" />;
+    } else {
+      return <Redirect to="/dashboard" />;
+    }
   }
   return (
     <FrontPageWrapper>
