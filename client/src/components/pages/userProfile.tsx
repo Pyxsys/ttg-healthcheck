@@ -10,6 +10,9 @@ import {IUserObject, IUserPassword} from '../../types/users';
 import {IProfileResponse} from '../../types/queries';
 import {useAuth} from '../../context/authContext';
 import {notificationService} from '../../services/notification.service';
+import {useModalService} from '../../context/modal.context';
+import ConfirmDeleteModal from '../common/confirmDelete';
+
 
 const UserProfile = (props: any) => {
   const history = useHistory();
@@ -20,6 +23,7 @@ const UserProfile = (props: any) => {
   const [applyDisabled, setApplyDisabled] = useState(true);
   const [applyDisabled1, setApplyDisabled1] = useState(true);
   const {user} = useAuth();
+  const modalService = useModalService();
   const [formData, setFormData] = useState({
     _id: '',
     originalName: '',
@@ -115,9 +119,7 @@ const UserProfile = (props: any) => {
         });
   };
 
-  // Submit account deletion
-  const onSubmit2 = async (e: React.ChangeEvent<any>) => {
-    e.preventDefault();
+  modalService.onPrimaryClicked = async (): Promise<void> => {
     await axios
         .delete(`api/user/delete/${userId}`, {
         })
@@ -232,7 +234,7 @@ const UserProfile = (props: any) => {
                           disabled={applyDisabled}
                           type="submit"
                         >
-                          Apply
+                          Save Change
                         </Button>
                       </td>
                     </tr>
@@ -343,7 +345,7 @@ const UserProfile = (props: any) => {
                           type='submit'
                           disabled={applyDisabled1}
                         >
-                          Apply
+                          Save Change
                         </Button>
                       </td>
                     </tr>
@@ -413,7 +415,13 @@ const UserProfile = (props: any) => {
                       <br />
                       <tr>
                         <td>
-                          <Button variant="danger" onClick={(e: any) => onSubmit2(e)}>Delete Account</Button>
+                          <Button variant="danger" onClick={() =>
+                            modalService.open(
+                                <ConfirmDeleteModal/>,
+                                'lg',
+                                {width: 60},
+                            )}
+                          >Delete Account</Button>
                         </td>
                       </tr>
                     </tbody>

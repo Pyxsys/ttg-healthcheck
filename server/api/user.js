@@ -165,28 +165,21 @@ router.delete('/delete/:id', auth, async (req, res) => {
   try {
     const user = await User.findOne({ _id: req.userId })
     // user or disabled can only delete if their id matches url id
-    if(((user.role == 'user' && user._id != req.params.id ) || user.role == 'disabled')) {
+    if((user.role == 'user' && user._id != req.params.id ) || user.role == 'disabled') {
       return res.status(401).send('Unauthorized')
     } 
-    
+
     const adminCount = await User.count({ role: 'admin'})
 
-    let deletingUser ;
-    if(req.params.id === user._id) {
-      deletingUser = user;
-    } else {
-      deletingUser = await User.findOne({ _id: req.params.id})
-    }
-
-    if(deletingUser.role == 'admin' && adminCount >= 2) {
-      await User.deleteOne({ email: deletingUser.email })
-    } else if (deletingUser.role == 'user' || deletingUser.role == 'disabled') {
-      await User.deleteOne({ email: deletingUser.email })
-    } else {
+    let deletingUser = await User.findOne({ _id: req.params.id})
+    
+    if (deletingUser.role == 'admin' && adminCount == 1){
       return res.status(404).json({
         message: 'Unauthorized. Require a minimum of 1 admin',
       })
     }
+    
+    await User.deleteOne({ email: deletingUser.email })
 
     // if deleting yourself, remove cookie
     if(req.params.id === user._id){
@@ -304,8 +297,15 @@ router.post('/editUserProfilePassword', auth , async (req, res) => {
     if (!user) {
       return res.status(404).json({ message: 'User not found' })
     }
-    if(oldPassword.length == 0 || newPassword.length == 0 || newPassword1.length == 0) {
-      return res.status(400).json({ message: 'Name cannot be empty'})
+
+    if(user.role == 'admin') {
+      if(newPassword.length == 0 || newPassword1.length == 0) {
+        return res.status(400).json({ message: 'passwords cannot be empty'})
+      }
+    } else {
+      if(oldPassword.length == 0 || newPassword.length == 0 || newPassword1.length == 0) {
+        return res.status(400).json({ message: 'passwords cannot be empty'})
+      }
     }
     // users can only update their password
     if(user.role == 'user' && user._id != _id) {
