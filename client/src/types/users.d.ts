@@ -13,7 +13,6 @@ export interface IUserObject {
   avatar: string
   email?: string
   originalName?: string
-  defaultAvatar?: boolean
 }
 
 export interface IUserPassword {

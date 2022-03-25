@@ -20,6 +20,7 @@ const UserProfile = (props: any) => {
   const [inputDisabled1, setInputDisabled1] = useState(true);
   const [applyDisabled, setApplyDisabled] = useState(true);
   const [applyDisabled1, setApplyDisabled1] = useState(true);
+  const [brokenLink, setBrokenLink] = useState(true);
   const {user} = useAuth();
   const modalService = useModalService();
   const [formData, setFormData] = useState({
@@ -29,7 +30,6 @@ const UserProfile = (props: any) => {
     email: '',
     avatar: '',
     role: '',
-    defaultAvatar: false,
   } as IUserObject);
   const [formData1, setFormData1] = useState({
     _id: userId,
@@ -76,9 +76,14 @@ const UserProfile = (props: any) => {
   // Submit account information edit
   const onSubmit = async (e: React.ChangeEvent<any>) => {
     e.preventDefault();
+    if (brokenLink && formData.avatar) {
+      return notificationService.error(
+          'Cannot save invalid link',
+      );
+    };
     await axios
         .post<IProfileResponse<IUserObject>>('api/user/editUserProfileInfo', {
-          formData,
+          formData: {...formData, avatar: formData.avatar || 'https://cdn-icons-png.flaticon.com/512/149/149071.png'},
         })
         .then((result: any) => {
           notificationService.success(
@@ -100,7 +105,7 @@ const UserProfile = (props: any) => {
     e.preventDefault();
     await axios
         .post<IProfileResponse<IUserPassword>>('api/user/editUserProfilePassword', {
-          formData1,
+          formData: formData1,
         })
         .then((result: any) => {
           notificationService.success(
@@ -191,9 +196,9 @@ const UserProfile = (props: any) => {
                         onError={({currentTarget}) => {
                           currentTarget.onerror = null; // prevents looping
                           // If image link is broken, use default avatar
-                          setFormData({...formData, ['defaultAvatar']: true});
+                          setBrokenLink(true);
                         }}
-                        onLoad={() => setFormData({...formData, ['defaultAvatar']: false})}
+                        onLoad={() => setBrokenLink(false)}
                       />
                     </div>
                     <div className="user-profile-img-spacing"></div>

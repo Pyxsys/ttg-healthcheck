@@ -200,13 +200,7 @@ router.delete('/delete/:id', auth, async (req, res) => {
 // edit user profile information
 router.post('/editUserProfileInfo', auth , async (req, res) => {
   try {
-    const { email, name, role, _id, defaultAvatar} = Object(req.body.formData);
-    let {avatar} = Object(req.body.formData);
-
-    // if link is broken, use default avatar
-    if (defaultAvatar) {
-      avatar = 'https://cdn-icons-png.flaticon.com/512/149/149071.png';
-    }
+    const { email, name, role, _id, avatar} = Object(req.body.formData);
 
     // requester user
     const user = await User.findOne({ _id: req.userId });
@@ -291,7 +285,7 @@ router.post('/editUserProfileInfo', auth , async (req, res) => {
 // edit user profile information
 router.post('/editUserProfilePassword', auth , async (req, res) => {
   try {
-    const { oldPassword, newPassword , newPassword1, _id } = Object(req.body.formData1);
+    const { oldPassword, newPassword , newPassword1, _id } = Object(req.body.formData);
     // Verify email
     const user = await User.findOne({ _id: req.userId });
     if (!user) {
