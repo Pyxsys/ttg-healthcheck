@@ -11,8 +11,6 @@ import {IProfileResponse} from '../../types/queries';
 import {useAuth} from '../../context/authContext';
 import {notificationService} from '../../services/notification.service';
 import {useModalService} from '../../context/modal.context';
-import ConfirmDeleteModal from '../common/confirmDelete';
-
 
 const UserProfile = (props: any) => {
   const history = useHistory();
@@ -417,7 +415,7 @@ const UserProfile = (props: any) => {
                         <td>
                           <Button variant="danger" onClick={() =>
                             modalService.open(
-                                <ConfirmDeleteModal/>,
+                                <div></div>,
                                 'lg',
                                 {width: 60},
                             )}
