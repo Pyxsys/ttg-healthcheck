@@ -12,7 +12,6 @@ export interface IUserObject {
   role: string
   avatar: string
   email?: string
-  originalName?: string
 }
 
 export interface IUserPassword {

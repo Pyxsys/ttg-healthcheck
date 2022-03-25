@@ -70,7 +70,7 @@ const Navbar = () => {
             </div>
           </div>
         )),
-      [],
+      [user],
   );
 
   return (

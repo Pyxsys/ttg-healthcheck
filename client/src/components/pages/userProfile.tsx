@@ -21,11 +21,10 @@ const UserProfile = (props: any) => {
   const [applyDisabled, setApplyDisabled] = useState(true);
   const [applyDisabled1, setApplyDisabled1] = useState(true);
   const [brokenLink, setBrokenLink] = useState(true);
-  const {user} = useAuth();
+  const {user, setUser} = useAuth();
   const modalService = useModalService();
   const [formData, setFormData] = useState({
     _id: '',
-    originalName: '',
     name: '',
     email: '',
     avatar: '',
@@ -37,7 +36,7 @@ const UserProfile = (props: any) => {
     newPassword: '',
     newPassword1: '',
   } as IUserPassword);
-  const {name, email, avatar, role, _id, originalName} = formData;
+  const {name, email, avatar, role, _id} = formData;
   const {oldPassword, newPassword, newPassword1} = formData1;
 
   // Account information onchange
@@ -61,7 +60,6 @@ const UserProfile = (props: any) => {
         .then((result) => {
           setFormData({
             ['_id']: result.data.Results._id,
-            ['originalName']: result.data.Results.name,
             ['name']: result.data.Results.name,
             ['email']: result.data.Results.email,
             ['avatar']: result.data.Results.avatar,
@@ -81,17 +79,19 @@ const UserProfile = (props: any) => {
           'Cannot save invalid link',
       );
     };
+    const updatedForm = {...formData, avatar: formData.avatar || 'https://cdn-icons-png.flaticon.com/512/149/149071.png'};
     await axios
         .post<IProfileResponse<IUserObject>>('api/user/editUserProfileInfo', {
-          formData: {...formData, avatar: formData.avatar || 'https://cdn-icons-png.flaticon.com/512/149/149071.png'},
+          formData: updatedForm,
         })
         .then((result: any) => {
           notificationService.success(
               result.data.message,
           );
-          setTimeout(() => {
-            window.location.reload();
-          }, 3000);
+          setFormData(updatedForm);
+          if (user.name === formData.name) {
+            setUser(updatedForm);
+          }
         })
         .catch((e) => {
           notificationService.error(
@@ -111,9 +111,6 @@ const UserProfile = (props: any) => {
           notificationService.success(
               result.data.message,
           );
-          setTimeout(() => {
-            window.location.reload();
-          }, 3000);
         })
         .catch((e) => {
           notificationService.error(
@@ -204,7 +201,7 @@ const UserProfile = (props: any) => {
                     <div className="user-profile-img-spacing"></div>
                   </td>
                   <td className="user-profile-header">
-                    <h1>{originalName}</h1>
+                    <h1>{user.name}</h1>
                   </td>
                 </tr>
               </tbody>
