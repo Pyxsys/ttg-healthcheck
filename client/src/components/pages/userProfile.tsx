@@ -2,7 +2,7 @@
 import React, {useEffect, useState} from 'react';
 import axios from 'axios';
 import {Button, Form, InputGroup} from 'react-bootstrap';
-import {Redirect} from 'react-router-dom';
+import {Redirect, useHistory} from 'react-router-dom';
 
 // Custom
 import Navbar from '../common/Navbar';
@@ -12,6 +12,7 @@ import {useAuth} from '../../context/authContext';
 import {notificationService} from '../../services/notification.service';
 
 const UserProfile = (props: any) => {
+  const history = useHistory();
   const userId: string = props.location.search.replace('?Id=', '');
   const [inputDisabled, setInputDisabled] = useState(true);
   const [redirect, setRedirect] = useState(false);
@@ -117,7 +118,6 @@ const UserProfile = (props: any) => {
   // Submit account deletion
   const onSubmit2 = async (e: React.ChangeEvent<any>) => {
     e.preventDefault();
-    console.log('hello');
     await axios
         .delete(`api/user/delete/${userId}`, {
         })
@@ -126,7 +126,11 @@ const UserProfile = (props: any) => {
               result.data.message,
           );
           setTimeout(() => {
-            window.location.reload();
+            if (user.role == 'admin') {
+              history.push('/admin');
+            } else {
+              window.location.reload();
+            }
           }, 3000);
         })
         .catch((e) => {
@@ -405,7 +409,7 @@ const UserProfile = (props: any) => {
                       <br />
                       <tr>
                         <td>
-                          <Button variant="danger" onSubmit={(e: any) => onSubmit2(e)}>Delete Account</Button>
+                          <Button variant="danger" onClick={(e: any) => onSubmit2(e)}>Delete Account</Button>
                         </td>
                       </tr>
                     </tbody>

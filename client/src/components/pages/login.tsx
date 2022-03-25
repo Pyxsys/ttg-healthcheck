@@ -48,7 +48,6 @@ const Login = () => {
 
   if (loggedIn) {
     notificationService.success('Logged in succesfully!');
-    console.log(user.role);
     if (user.role == 'disabled') {
       return <Redirect to="/pending" />;
     } else {

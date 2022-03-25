@@ -165,8 +165,8 @@ router.delete('/delete/:id', auth, async (req, res) => {
   try {
     const user = await User.findOne({ _id: req.userId })
     // user or disabled can only delete if their id matches url id
-    if(user.role == 'user' || user.role == 'disabled' && user._id != req.params.id) {
-      res.status(401).send('Unauthorized')
+    if(((user.role == 'user' && user._id != req.params.id ) || user.role == 'disabled')) {
+      return res.status(401).send('Unauthorized')
     } 
     
     const adminCount = await User.count({ role: 'admin'})
