@@ -41,7 +41,7 @@ const DeviceDetail = (props: any) => {
     });
   };
 
-  const queryLogs = () => {
+  const queryLogs = async () => {
     if (!deviceId) return;
 
     const queryParams = {
@@ -49,7 +49,7 @@ const DeviceDetail = (props: any) => {
       limit: 1,
     };
 
-    axios
+    await axios
         .get<IResponse<IDevice>>('api/device', {
           params: queryParams,
         })

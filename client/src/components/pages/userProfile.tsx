@@ -24,12 +24,9 @@ const UserProfile = (props: any) => {
     email: '',
     avatar: '',
     role: '',
+    defaultAvatar: false,
   } as IUserObject);
   const {name, email, avatar, role, _id, originalName} = formData;
-
-  const onSubmit = async (e: React.ChangeEvent<any>) => {
-    console.log(e);
-  };
 
   // Account information onchange
   const onChange = (e: any) => {
@@ -39,8 +36,8 @@ const UserProfile = (props: any) => {
   };
 
   // Retrieve user info based on url ID
-  const userInfo = (userId: string) => {
-    axios
+  const userInfo = async (userId: string) => {
+    await axios
         .get<IProfileResponse<IUserObject>>('api/user/profile', {
           params: {userId: userId},
         })
@@ -56,6 +53,21 @@ const UserProfile = (props: any) => {
         })
         .catch(() => {
           setRedirect(true);
+        });
+  };
+
+  // Submit account information edit
+  const onSubmit = async (e: React.ChangeEvent<any>) => {
+    e.preventDefault();
+    await axios
+        .post<IProfileResponse<IUserObject>>('api/user/editUserProfileInfo', {
+          formData,
+        })
+        .then((result) => {
+          console.log(result);
+        })
+        .catch((e) => {
+          console.log(e);
         });
   };
 
@@ -87,11 +99,28 @@ const UserProfile = (props: any) => {
                 <tr>
                   <td>
                     <div className="user-profile-img-container">
+                      {/* What user sees */}
                       <img
                         className="user-profile-img"
                         src={avatar}
                         style={imageStyle}
+                        onError={({currentTarget}) => {
+                          currentTarget.onerror = null; // prevents looping
+                          // display default image while link is broken
+                          currentTarget.src='https://cdn-icons-png.flaticon.com/512/149/149071.png';
+                        }}
                         onLoad={() => setLoad(true)}
+                      />
+                      {/* Check to evaluate if user sending broken link to backend*/}
+                      <img
+                        style={{display: 'none'}}
+                        src={avatar}
+                        onError={({currentTarget}) => {
+                          currentTarget.onerror = null; // prevents looping
+                          // If image link is broken, use default avatar
+                          setFormData({...formData, ['defaultAvatar']: true});
+                        }}
+                        onLoad={() => setFormData({...formData, ['defaultAvatar']: false})}
                       />
                     </div>
                     <div className="user-profile-img-spacing"></div>

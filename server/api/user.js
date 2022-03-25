@@ -205,18 +205,28 @@ router.delete('/delete/:id', auth, async (req, res) => {
 // edit user profile information
 router.post('/editUserProfileInfo', auth , async (req, res) => {
   try {
-    const { email, name, role, avatar, _id } = req.body
-  
+    const { email, name, role, _id, defaultAvatar} = Object(req.body.formData);
+    let {avatar} = Object(req.body.formData);
+    // if link is broken, use default avatar
+    if (defaultAvatar) {
+      avatar = 'https://cdn-icons-png.flaticon.com/512/149/149071.png';
+    }
+
     // requester user
     const user = await User.findOne({ _id: req.userId });
     if (!user) {
       return res.status(404).json({ message: 'User not found' })
     }
+
+    if(user.role == 'disabled') {
+      res.status(401).send('Unauthorized')
+    } 
+
     let countEmail = await User.count({ email: email })
     if (countEmail == 1 && user._id != _id) {
       return res.status(400).json({ message: 'Email already in use' })
     }
-    
+
     if(user.role == 'user' && user._id != _id) {
       res.status(401).send('Unauthorized')
     } else if (user.role == 'user') {
@@ -265,7 +275,7 @@ router.post('/editUserProfileInfo', auth , async (req, res) => {
 // edit user profile information
 router.post('/editUserProfilePassword', auth , async (req, res) => {
   try {
-    const { oldPassword, newPassword , newPassword2, _id } = req.body
+    const { oldPassword, newPassword , newPassword2, _id } = Object(req.body);
     // Verify email
     const user = await User.findOne({ _id: req.userId });
     if (!user) {

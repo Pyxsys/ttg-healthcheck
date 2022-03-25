@@ -21,8 +21,8 @@ const AdminPanel = () => {
   const [page, setPage] = useState(initialPage);
   const [totalPages, setTotalPages] = useState(0);
 
-  const queryTable = () => {
-    axios
+  const queryTable = async () => {
+    await axios
         .get<IResponse<IUserObject>>('api/user/all')
         .then((results) => {
           const users = results.data.Results;

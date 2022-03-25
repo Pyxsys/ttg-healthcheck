@@ -67,9 +67,9 @@ const DevicesTable = () => {
     });
   };
 
-  const queryTable = () => {
+  const queryTable = async () => {
     const deviceQuery = {params: {Total: true}};
-    axios
+    await axios
         .get<IResponse<IDevice>>('api/device', deviceQuery)
         .then((deviceResponse) => {
           const devices = deviceResponse.data.Results;
