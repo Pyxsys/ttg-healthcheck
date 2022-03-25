@@ -223,6 +223,14 @@ router.post('/editUserProfileInfo', auth , async (req, res) => {
       res.status(401).send('Unauthorized')
     } 
 
+    if (email.length == 0){
+      return res.status(400).json({ message: 'Email cannot be empty'})
+    }
+
+    if (name.length == 0){
+      return res.status(400).json({ message: 'Name cannot be empty'})
+    }
+
     if(user.role == 'user' && user._id != _id) {
       res.status(401).send('Unauthorized')
     } else if (user.role == 'user') {
@@ -250,6 +258,13 @@ router.post('/editUserProfileInfo', auth , async (req, res) => {
         updatingUser = user;
       } else {
         updatingUser = await User.findOne({ _id: _id})
+      }
+
+      if(updatingUser.email != email) { 
+        const emailInUse = await User.findOne({ email: email })
+        if (emailInUse) {
+          return res.status(400).json({ message: 'Email already exists' })
+        }
       }
 
       updatingUser.name = name;
@@ -285,9 +300,14 @@ router.post('/editUserProfilePassword', auth , async (req, res) => {
     if (!user) {
       return res.status(404).json({ message: 'User not found' })
     }
+    if(oldPassword.length == 0 || newPassword.length == 0 || newPassword2.length == 0) {
+      return res.status(400).json({ message: 'Name cannot be empty'})
+    }
+    // users can only update their password
     if(user.role == 'user' && user._id != _id) {
       res.status(401).send('Unauthorized')
-    } 
+    }
+
     let updatingUser;
     if (_id === req.userId){
       updatingUser = user
@@ -295,13 +315,20 @@ router.post('/editUserProfilePassword', auth , async (req, res) => {
       updatingUser = await User.findOne({ _id:_id})
     }
 
-    const isMatch = await bcrypt.compare(oldPassword, updatingUser.password)
-    if (!isMatch) {
-      return res.status(400).json({ message: 'Invalid Password' })
-    } 
-    if (newPassword === oldPassword) {
-      return res.status(400).json({ message: 'New password cannot be the same as the old password' })
+    //if an admin or user is trying to edit their password
+    if(updatingUser._id == _id && (req.role == 'admin' || req.role == 'user')) {
+      // check if old password matches the one saved in db
+      const isMatch = await bcrypt.compare(oldPassword, updatingUser.password)
+      if (!isMatch) {
+        return res.status(400).json({ message: 'Old password mismatch' })
+      } 
+      // check if new password is different from old password
+      if (newPassword === oldPassword) {
+        return res.status(400).json({ message: 'New password cannot be the same as the old password' })
+      }
     }
+
+    // check if both new password matches
     if (newPassword !== newPassword2){
       return res.status(400).json({ message: 'New passwords do not match'})
     }
