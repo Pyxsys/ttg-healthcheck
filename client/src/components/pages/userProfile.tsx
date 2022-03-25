@@ -9,6 +9,7 @@ import Navbar from '../common/Navbar';
 import {IUserObject} from '../../types/users';
 import {IProfileResponse} from '../../types/queries';
 import {useAuth} from '../../context/authContext';
+import {notificationService} from '../../services/notification.service';
 
 const UserProfile = (props: any) => {
   const userId: string = props.location.search.replace('?Id=', '');
@@ -63,11 +64,18 @@ const UserProfile = (props: any) => {
         .post<IProfileResponse<IUserObject>>('api/user/editUserProfileInfo', {
           formData,
         })
-        .then((result) => {
-          console.log(result);
+        .then((result: any) => {
+          notificationService.success(
+              result.data.message,
+          );
+          setTimeout(() => {
+            window.location.reload();
+          }, 3000);
         })
         .catch((e) => {
-          console.log(e);
+          notificationService.error(
+              e.response.data.message,
+          );
         });
   };
 

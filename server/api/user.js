@@ -207,6 +207,7 @@ router.post('/editUserProfileInfo', auth , async (req, res) => {
   try {
     const { email, name, role, _id, defaultAvatar} = Object(req.body.formData);
     let {avatar} = Object(req.body.formData);
+    console.log(req.body.formData);
     // if link is broken, use default avatar
     if (defaultAvatar) {
       avatar = 'https://cdn-icons-png.flaticon.com/512/149/149071.png';
@@ -222,14 +223,17 @@ router.post('/editUserProfileInfo', auth , async (req, res) => {
       res.status(401).send('Unauthorized')
     } 
 
-    let countEmail = await User.count({ email: email })
-    if (countEmail == 1 && user._id != _id) {
-      return res.status(400).json({ message: 'Email already in use' })
-    }
-
     if(user.role == 'user' && user._id != _id) {
       res.status(401).send('Unauthorized')
     } else if (user.role == 'user') {
+      // if email is not the same, check if email already in use
+      if (user.email != email) {
+        // check if email already in use
+        const emailExist = await User.findOne({ email: email })
+        if (emailExist) {
+          return res.status(400).json({ message: 'Email already exists' })
+        }
+      }
       user.name = name;
       user.avatar = avatar;
       user.email = email;
