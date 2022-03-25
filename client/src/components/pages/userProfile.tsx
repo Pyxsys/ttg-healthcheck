@@ -153,7 +153,11 @@ const UserProfile = (props: any) => {
 
   // User should be only allowed on his profile page, else redirect
   if (redirect) {
-    return <Redirect to="/dashboard" />;
+    if (user.role == 'admin') {
+      return <Redirect to="/admin" />;
+    } else {
+      return <Redirect to="/dashboard" />;
+    }
   }
 
   return (
