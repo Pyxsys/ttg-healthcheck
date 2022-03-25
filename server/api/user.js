@@ -164,18 +164,145 @@ router.get('/logout', auth, (req, res) => {
 router.delete('/delete/:id', auth, async (req, res) => {
   try {
     const user = await User.findOne({ _id: req.userId })
-    const email = String(req.params.id)
-    // check admin role
-    if (user.role == 'admin') {
-      // verify email
-      await User.deleteOne({ email: email })
-      // delete user
+    if(user.role == 'user' && user._id != req.params.id) {
+      res.status(401).send('Unauthorized')
+    } 
+    
+    const adminCount = await User.count({ role: 'admin'})
+
+    let deletingUser ;
+    if(req.params.id === user._id) {
+      deletingUser = user;
+    } else {
+      deletingUser = await User.findOne({ _id: req.params.id})
+    }
+
+    if(deletingUser.role == 'admin' && adminCount >= 2) {
+      await User.deleteOne({ email: deletingUser.email })
+    } else if (deletingUser.role == 'user' || deletingUser.role == 'disabled') {
+      await User.deleteOne({ email: deletingUser.email })
+    } else {
+      return res.status(404).json({
+        message: 'Unauthorized. Require a minimum of 1 admin',
+      })
+    }
+
+    if(req.params.id === user._id){
+      return res
+        .clearCookie('access_token')
+        .status(200)
+        .json({message: 'User deleted successfully',})
+    } else {
       return res.status(200).json({
         message: 'User deleted successfully',
       })
     }
   } catch (err) {
     res.status(500).send('Server error')
+  }
+})
+
+// edit user profile information
+router.post('/editUserProfileInfo', auth , async (req, res) => {
+  try {
+    const { email, name, role, avatar, _id } = req.body
+  
+    // requester user
+    const user = await User.findOne({ _id: req.userId });
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' })
+    }
+    let countEmail = await User.count({ email: email })
+    if (countEmail == 1 && user._id != _id) {
+      return res.status(400).json({ message: 'Email already in use' })
+    }
+    
+    if(user.role == 'user' && user._id != _id) {
+      res.status(401).send('Unauthorized')
+    } else if (user.role == 'user') {
+      user.name = name;
+      user.avatar = avatar;
+      user.email = email;
+      await User.findOneAndUpdate({_id: user._id},user)
+      return res.status(200).json({
+        message: 'Update successful',
+        user: {_id: user._id, name: user.name, role: user.role, avatar: user.avatar}
+      });
+    } else if (user.role == 'admin') {
+      const adminCount = await User.count({ role: 'admin'}) 
+
+      let updatingUser ;
+      if(user._id == _id) {
+        updatingUser = user;
+      } else {
+        updatingUser = await User.findOne({ _id: _id})
+      }
+
+      updatingUser.name = name;
+      updatingUser.avatar = avatar;
+      updatingUser.email = email;
+
+      if(updatingUser.role == 'admin' && role != 'admin' && adminCount < 2) {
+        return res.status(404).json({
+          message: 'Unauthorized. Require a minimum of 1 admin role',
+        })
+      } else {
+        updatingUser.role = role; 
+      }
+
+      await User.findOneAndUpdate({_id: updatingUser._id},updatingUser)
+
+      return res.status(200).json({
+        message: 'Update successful',
+        user: {_id: updatingUser._id, name: updatingUser.name, role: updatingUser.role, avatar: updatingUser.avatar}
+      });
+    }
+    } catch (err) {
+    res.status(500).send('Server Error: ' + err.message)
+  }
+})
+
+// edit user profile information
+router.post('/editUserProfilePassword', auth , async (req, res) => {
+  try {
+    const { oldPassword, newPassword , newPassword2, _id } = req.body
+    // Verify email
+    const user = await User.findOne({ _id: req.userId });
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' })
+    }
+    if(user.role == 'user' && user._id != _id) {
+      res.status(401).send('Unauthorized')
+    } 
+    let updatingUser;
+    if (_id === req.userId){
+      updatingUser = user
+    } else {
+      updatingUser = await User.findOne({ _id:_id})
+    }
+
+    const isMatch = await bcrypt.compare(oldPassword, updatingUser.password)
+    if (!isMatch) {
+      return res.status(400).json({ message: 'Invalid Password' })
+    } 
+    if (newPassword === oldPassword) {
+      return res.status(400).json({ message: 'New password cannot be the same as the old password' })
+    }
+    if (newPassword !== newPassword2){
+      return res.status(400).json({ message: 'New passwords do not match'})
+    }
+    const salt = await bcrypt.genSalt(10)
+    // Hash password
+    updatingUser.password = await bcrypt.hash(newPassword, salt)
+
+    updateRes = await User.findOneAndUpdate({_id: updatingUser._id}, {password: updatingUser.password})
+    return res.status(200).json({
+      message: 'Update successful',
+      user: {_id: user._id, name: user.name, role: user.role, avatar: user.avatar}
+    });
+
+  } catch (err) {
+    res.status(500).send('Server Error: ' + err.message)
   }
 })
 
