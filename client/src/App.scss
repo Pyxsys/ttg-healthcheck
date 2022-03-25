@@ -796,6 +796,17 @@ body {
   border: 4px dashed;
 }
 
+.dashboard-widget-title {
+  @media (min-width: $screen-w-xxsm) {
+    font-size: 15.5px;
+  }
+  @media (min-width: $screen-w-md) {
+    font-size: 18px;
+  }
+  @media (min-width: $screen-w-lg) {
+    font-size: 18px;
+  }
+}
 /* Modal Styling */
 
 .modal-background {

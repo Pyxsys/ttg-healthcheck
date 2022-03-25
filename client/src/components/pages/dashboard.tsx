@@ -129,7 +129,7 @@ const Dashboard = () => {
     <div className="d-flex w-100">
       <div className="d-flex justify-content-center w-100">
         <div className="d-flex flex-column align-content-center">
-          <div className="text-center" style={{fontSize: '19px'}}>
+          <div className="text-center dashboard-widget-title">
             {widgetTitle}
           </div>
           <div

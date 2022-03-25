@@ -15,3 +15,10 @@ export interface IUserObject {
   originalName?: string
   defaultAvatar?: boolean
 }
+
+export interface IUserPassword {
+  _id: string
+  oldPassword?: string
+  newPassword: string
+  newPassword1: string
+}

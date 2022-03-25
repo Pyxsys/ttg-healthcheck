@@ -164,7 +164,8 @@ router.get('/logout', auth, (req, res) => {
 router.delete('/delete/:id', auth, async (req, res) => {
   try {
     const user = await User.findOne({ _id: req.userId })
-    if(user.role == 'user' && user._id != req.params.id) {
+    // user or disabled can only delete if their id matches url id
+    if(user.role == 'user' || user.role == 'disabled' && user._id != req.params.id) {
       res.status(401).send('Unauthorized')
     } 
     
@@ -187,6 +188,7 @@ router.delete('/delete/:id', auth, async (req, res) => {
       })
     }
 
+    // if deleting yourself, remove cookie
     if(req.params.id === user._id){
       return res
         .clearCookie('access_token')
@@ -207,7 +209,7 @@ router.post('/editUserProfileInfo', auth , async (req, res) => {
   try {
     const { email, name, role, _id, defaultAvatar} = Object(req.body.formData);
     let {avatar} = Object(req.body.formData);
-    console.log(req.body.formData);
+
     // if link is broken, use default avatar
     if (defaultAvatar) {
       avatar = 'https://cdn-icons-png.flaticon.com/512/149/149071.png';
@@ -219,6 +221,7 @@ router.post('/editUserProfileInfo', auth , async (req, res) => {
       return res.status(404).json({ message: 'User not found' })
     }
 
+    // disabled users are not allowed to edit
     if(user.role == 'disabled') {
       res.status(401).send('Unauthorized')
     } 
@@ -231,6 +234,7 @@ router.post('/editUserProfileInfo', auth , async (req, res) => {
       return res.status(400).json({ message: 'Name cannot be empty'})
     }
 
+    // users can only edit their own information
     if(user.role == 'user' && user._id != _id) {
       res.status(401).send('Unauthorized')
     } else if (user.role == 'user') {
@@ -294,19 +298,24 @@ router.post('/editUserProfileInfo', auth , async (req, res) => {
 // edit user profile information
 router.post('/editUserProfilePassword', auth , async (req, res) => {
   try {
-    const { oldPassword, newPassword , newPassword2, _id } = Object(req.body);
+    const { oldPassword, newPassword , newPassword1, _id } = Object(req.body.formData1);
     // Verify email
     const user = await User.findOne({ _id: req.userId });
     if (!user) {
       return res.status(404).json({ message: 'User not found' })
     }
-    if(oldPassword.length == 0 || newPassword.length == 0 || newPassword2.length == 0) {
+    if(oldPassword.length == 0 || newPassword.length == 0 || newPassword1.length == 0) {
       return res.status(400).json({ message: 'Name cannot be empty'})
     }
     // users can only update their password
     if(user.role == 'user' && user._id != _id) {
       res.status(401).send('Unauthorized')
     }
+
+    // disabled users are not allowed to edit
+    if(user.role == 'disabled') {
+      res.status(401).send('Unauthorized')
+    } 
 
     let updatingUser;
     if (_id === req.userId){
@@ -329,7 +338,7 @@ router.post('/editUserProfilePassword', auth , async (req, res) => {
     }
 
     // check if both new password matches
-    if (newPassword !== newPassword2){
+    if (newPassword !== newPassword1){
       return res.status(400).json({ message: 'New passwords do not match'})
     }
     const salt = await bcrypt.genSalt(10)

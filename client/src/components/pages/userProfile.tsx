@@ -6,7 +6,7 @@ import {Redirect} from 'react-router-dom';
 
 // Custom
 import Navbar from '../common/Navbar';
-import {IUserObject} from '../../types/users';
+import {IUserObject, IUserPassword} from '../../types/users';
 import {IProfileResponse} from '../../types/queries';
 import {useAuth} from '../../context/authContext';
 import {notificationService} from '../../services/notification.service';
@@ -17,6 +17,7 @@ const UserProfile = (props: any) => {
   const [redirect, setRedirect] = useState(false);
   const [inputDisabled1, setInputDisabled1] = useState(true);
   const [applyDisabled, setApplyDisabled] = useState(true);
+  const [applyDisabled1, setApplyDisabled1] = useState(true);
   const {user} = useAuth();
   const [formData, setFormData] = useState({
     _id: '',
@@ -27,13 +28,25 @@ const UserProfile = (props: any) => {
     role: '',
     defaultAvatar: false,
   } as IUserObject);
+  const [formData1, setFormData1] = useState({
+    _id: userId,
+    oldPassword: '',
+    newPassword: '',
+    newPassword1: '',
+  } as IUserPassword);
   const {name, email, avatar, role, _id, originalName} = formData;
+  const {oldPassword, newPassword, newPassword1} = formData1;
 
   // Account information onchange
   const onChange = (e: any) => {
     setFormData({...formData, [e.target.name]: e.target.value});
     setApplyDisabled(false);
-    console.log(formData);
+  };
+
+  // Account password onchange
+  const onChange1 = (e: any) => {
+    setFormData1({...formData1, [e.target.name]: e.target.value});
+    setApplyDisabled1(false);
   };
 
   // Retrieve user info based on url ID
@@ -63,6 +76,50 @@ const UserProfile = (props: any) => {
     await axios
         .post<IProfileResponse<IUserObject>>('api/user/editUserProfileInfo', {
           formData,
+        })
+        .then((result: any) => {
+          notificationService.success(
+              result.data.message,
+          );
+          setTimeout(() => {
+            window.location.reload();
+          }, 3000);
+        })
+        .catch((e) => {
+          notificationService.error(
+              e.response.data.message,
+          );
+        });
+  };
+
+  // Submit account password edit
+  const onSubmit1 = async (e: React.ChangeEvent<any>) => {
+    e.preventDefault();
+    await axios
+        .post<IProfileResponse<IUserPassword>>('api/user/editUserProfilePassword', {
+          formData1,
+        })
+        .then((result: any) => {
+          notificationService.success(
+              result.data.message,
+          );
+          setTimeout(() => {
+            window.location.reload();
+          }, 3000);
+        })
+        .catch((e) => {
+          notificationService.error(
+              e.response.data.message,
+          );
+        });
+  };
+
+  // Submit account deletion
+  const onSubmit2 = async (e: React.ChangeEvent<any>) => {
+    e.preventDefault();
+    console.log('hello');
+    await axios
+        .delete(`api/user/delete/${userId}`, {
         })
         .then((result: any) => {
           notificationService.success(
@@ -273,8 +330,10 @@ const UserProfile = (props: any) => {
                         &nbsp;
                         <Button
                           size="sm"
+                          form="account-password-form"
                           className="btn btn-primary color-white"
-                          disabled
+                          type='submit'
+                          disabled={applyDisabled1}
                         >
                           Apply
                         </Button>
@@ -283,7 +342,7 @@ const UserProfile = (props: any) => {
                   </tbody>
                 </table>
                 <br />
-                <form onSubmit={(e: any) => onSubmit(e)}>
+                <form id="account-password-form" onSubmit={(e: any) => onSubmit1(e)}>
                   <table>
                     <tbody>
                       <tr>
@@ -296,6 +355,9 @@ const UserProfile = (props: any) => {
                               className="user-profile-input"
                               type="password"
                               placeholder="Enter Old Password"
+                              name="oldPassword"
+                              value={oldPassword}
+                              onChange={(e) => onChange1(e)}
                               disabled={
                                 (user.role === 'admin' && _id !== user._id) ||
                                 inputDisabled1
@@ -314,6 +376,9 @@ const UserProfile = (props: any) => {
                               className="user-profile-input"
                               type="password"
                               placeholder="Enter New Password"
+                              name="newPassword"
+                              value={newPassword}
+                              onChange={(e) => onChange1(e)}
                               disabled={inputDisabled1}
                             />
                           </InputGroup>
@@ -329,6 +394,9 @@ const UserProfile = (props: any) => {
                               className="user-profile-input"
                               type="password"
                               placeholder="Re-enter New Password"
+                              name="newPassword1"
+                              value={newPassword1}
+                              onChange={(e) => onChange1(e)}
                               disabled={inputDisabled1}
                             />
                           </InputGroup>
@@ -337,7 +405,7 @@ const UserProfile = (props: any) => {
                       <br />
                       <tr>
                         <td>
-                          <Button variant="danger">Delete Account</Button>
+                          <Button variant="danger" onSubmit={(e: any) => onSubmit2(e)}>Delete Account</Button>
                         </td>
                       </tr>
                     </tbody>
