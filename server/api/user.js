@@ -6,6 +6,12 @@ const jwt = require('jsonwebtoken')
 const bcrypt = require('bcrypt')
 const auth = require('../middleware/auth.js')
 
+const encryptPassword = async (password) => {
+  const salt = await bcrypt.genSalt(10)
+  // Hash password
+  return bcrypt.hash(password, salt)
+}
+
 // signup
 router.post('/register', async (req, res) => {
   try {
@@ -19,9 +25,7 @@ router.post('/register', async (req, res) => {
       role,
       avatar,
     })
-    const salt = await bcrypt.genSalt(10)
-    // Hash password
-    newUser.password = await bcrypt.hash(password, salt)
+    newUser.password = await encryptPassword(password)
     // check if email already in use
     let user = await User.findOne({ email: email })
     if (user) {
@@ -200,84 +204,41 @@ router.delete('/delete/:id', auth, async (req, res) => {
 // edit user profile information
 router.post('/editUserProfileInfo', auth , async (req, res) => {
   try {
-    const { email, name, role, _id, avatar} = Object(req.body.formData);
-
-    // requester user
-    const user = await User.findOne({ _id: req.userId });
-    if (!user) {
-      return res.status(404).json({ message: 'User not found' })
+    const { email, name, role, _id, avatar} = Object(req.body.formData)
+    const loggedUser = await User.findOne({ _id: req.userId });
+    if (!loggedUser) {
+      return res.status(404).send('User not found')
     }
 
-    // disabled users are not allowed to edit
-    if(user.role == 'disabled') {
-      res.status(401).send('Unauthorized')
-    } 
-
-    if (email.length == 0){
-      return res.status(400).json({ message: 'Email cannot be empty'})
+    // Disabled and Users cannot edit other profiles
+    if(loggedUser.role === 'disabled' || (loggedUser.role === 'user' && loggedUser._id.toString() !== _id)) {
+      return res.status(401).send('Unauthorized access')
     }
 
-    if (name.length == 0){
-      return res.status(400).json({ message: 'Name cannot be empty'})
+    // If email or name is empty
+    if (!email || !name){
+      return res.status(400).send(`${!email ? 'Email' : 'Name'} cannot be empty`)
     }
 
-    // users can only edit their own information
-    if(user.role == 'user' && user._id != _id) {
-      res.status(401).send('Unauthorized')
-    } else if (user.role == 'user') {
-      // if email is not the same, check if email already in use
-      if (user.email != email) {
-        // check if email already in use
-        const emailExist = await User.findOne({ email: email })
-        if (emailExist) {
-          return res.status(400).json({ message: 'Email already exists' })
-        }
-      }
-      user.name = name;
-      user.avatar = avatar;
-      user.email = email;
-      await User.findOneAndUpdate({_id: user._id},user)
-      return res.status(200).json({
-        message: 'Update successful',
-        user: {_id: user._id, name: user.name, role: user.role, avatar: user.avatar}
-      });
-    } else if (user.role == 'admin') {
-      const adminCount = await User.count({ role: 'admin'}) 
-
-      let updatingUser ;
-      if(user._id == _id) {
-        updatingUser = user;
-      } else {
-        updatingUser = await User.findOne({ _id: _id})
-      }
-
-      if(updatingUser.email != email) { 
-        const emailInUse = await User.findOne({ email: email })
-        if (emailInUse) {
-          return res.status(400).json({ message: 'Email already exists' })
-        }
-      }
-
-      updatingUser.name = name;
-      updatingUser.avatar = avatar;
-      updatingUser.email = email;
-
-      if(updatingUser.role == 'admin' && role != 'admin' && adminCount < 2) {
-        return res.status(404).json({
-          message: 'Unauthorized. Require a minimum of 1 admin role',
-        })
-      } else {
-        updatingUser.role = role; 
-      }
-
-      await User.findOneAndUpdate({_id: updatingUser._id},updatingUser)
-
-      return res.status(200).json({
-        message: 'Update successful',
-        user: {_id: updatingUser._id, name: updatingUser.name, role: updatingUser.role, avatar: updatingUser.avatar}
-      });
+    // Email exists for another user
+    const emailExist = await User.count({email: email, _id: {$not: {$eq: _id}}})
+    if (emailExist > 0) {
+      return res.status(400).send('Email already exists')
     }
-    } catch (err) {
+
+    // If changing to non-admin and there are no other admins
+    const numOfOtherAdmins = await User.count({role: 'admin', _id: {$not: {$eq: _id}}})
+    if (role !== 'admin' && numOfOtherAdmins === 0) {
+      return res.status(400).send('Cannot change role, a minimum of 1 admin role is required')
+    }
+
+    // Update desired user
+    await User.findOneAndUpdate({_id: _id}, {email: email, name: name, avatar: avatar, role: role})
+    return res.status(200).json({
+      message: 'Update successful',
+      user: {_id: loggedUser._id.toString(), name: loggedUser.name, role: loggedUser.role, avatar: loggedUser.avatar}
+    });
+  } catch (err) {
     res.status(500).send('Server Error: ' + err.message)
   }
 })
@@ -286,67 +247,42 @@ router.post('/editUserProfileInfo', auth , async (req, res) => {
 router.post('/editUserProfilePassword', auth , async (req, res) => {
   try {
     const { oldPassword, newPassword , newPassword1, _id } = Object(req.body.formData);
-    // Verify email
-    const user = await User.findOne({ _id: req.userId });
-    if (!user) {
-      return res.status(404).json({ message: 'User not found' })
+    // Verify found user
+    const loggedUser = await User.findOne({ _id: req.userId });
+    if (!loggedUser) {
+      return res.status(404).send('User not found')
     }
 
-    if(user.role == 'admin') {
-      if(newPassword.length == 0 || newPassword1.length == 0) {
-        return res.status(400).json({ message: 'passwords cannot be empty'})
-      }
-    } else {
-      if(oldPassword.length == 0 || newPassword.length == 0 || newPassword1.length == 0) {
-        return res.status(400).json({ message: 'passwords cannot be empty'})
-      }
-    }
     // users can only update their password
-    if(user.role == 'user' && user._id != _id) {
-      res.status(401).send('Unauthorized')
-    }
-
-    // disabled users are not allowed to edit
-    if(user.role == 'disabled') {
-      res.status(401).send('Unauthorized')
-    } 
-
-    let updatingUser;
-    if (_id === req.userId){
-      updatingUser = user
-    } else {
-      updatingUser = await User.findOne({ _id:_id})
-    }
-
-    //if an admin or user is trying to edit their password
-    if(updatingUser._id == _id && (req.role == 'admin' || req.role == 'user')) {
-      // check if old password matches the one saved in db
-      const isMatch = await bcrypt.compare(oldPassword, updatingUser.password)
-      if (!isMatch) {
-        return res.status(400).json({ message: 'Old password mismatch' })
-      } 
-      // check if new password is different from old password
-      if (newPassword === oldPassword) {
-        return res.status(400).json({ message: 'New password cannot be the same as the old password' })
-      }
+    if(loggedUser.role === 'disabled' || (loggedUser.role === 'user' && loggedUser._id.toString() !== _id)) {
+      return res.status(401).send('Unauthorized Access')
     }
 
     // check if both new password matches
     if (newPassword !== newPassword1){
-      return res.status(400).json({ message: 'New passwords do not match'})
+      return res.status(400).send('New password and confirm password do not match')
     }
-    const salt = await bcrypt.genSalt(10)
-    // Hash password
-    updatingUser.password = await bcrypt.hash(newPassword, salt)
 
-    updateRes = await User.findOneAndUpdate({_id: updatingUser._id}, {password: updatingUser.password})
+    // If password is incorrect
+    if(!newPassword) {
+      return res.status(400).send('password cannot be empty')
+    }
+
+    // Check if old password matches the one saved in db
+    const isMatch = await bcrypt.compare(oldPassword, loggedUser.password)
+    if (loggedUser.role === 'user' && !isMatch) {
+      return res.status(400).send('Old password is incorrect')
+    }
+
+    const encryptedPassword = await encryptPassword(newPassword)
+    await User.findOneAndUpdate({_id: _id}, {password: encryptedPassword})
     return res.status(200).json({
       message: 'Update successful',
-      user: {_id: user._id, name: user.name, role: user.role, avatar: user.avatar}
+      user: {_id: loggedUser._id.toString(), name: loggedUser.name, role: loggedUser.role, avatar: loggedUser.avatar}
     });
 
   } catch (err) {
-    res.status(500).send('Server Error: ' + err.message)
+    return res.status(500).send('Server Error: ' + err.message)
   }
 })
 

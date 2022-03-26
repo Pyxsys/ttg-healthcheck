@@ -14,6 +14,16 @@ import {useModalService} from '../../context/modal.context';
 
 const UserProfile = (props: any) => {
   const history = useHistory();
+  const modalService = useModalService();
+
+  const {user: loggedUser, setUser: setLoggedUser} = useAuth();
+  const [editUser, setEditUser] = useState({
+    _id: '',
+    name: '',
+    email: '',
+    avatar: '',
+    role: '',
+  } as IUserObject);
   const userId: string = props.location.search.replace('?Id=', '');
   const [inputDisabled, setInputDisabled] = useState(true);
   const [redirect, setRedirect] = useState(false);
@@ -21,35 +31,22 @@ const UserProfile = (props: any) => {
   const [applyDisabled, setApplyDisabled] = useState(true);
   const [applyDisabled1, setApplyDisabled1] = useState(true);
   const [brokenLink, setBrokenLink] = useState(true);
-  const {user, setUser} = useAuth();
-  const modalService = useModalService();
-  const [formData, setFormData] = useState({
+
+  const [userInfoForm, setUserInfoForm] = useState({
     _id: '',
     name: '',
     email: '',
     avatar: '',
     role: '',
   } as IUserObject);
-  const [formData1, setFormData1] = useState({
+  const [userPasswordForm, userUserPasswordForm] = useState({
     _id: userId,
     oldPassword: '',
     newPassword: '',
     newPassword1: '',
   } as IUserPassword);
-  const {name, email, avatar, role, _id} = formData;
-  const {oldPassword, newPassword, newPassword1} = formData1;
-
-  // Account information onchange
-  const onChange = (e: any) => {
-    setFormData({...formData, [e.target.name]: e.target.value});
-    setApplyDisabled(false);
-  };
-
-  // Account password onchange
-  const onChange1 = (e: any) => {
-    setFormData1({...formData1, [e.target.name]: e.target.value});
-    setApplyDisabled1(false);
-  };
+  const {name, email, avatar, role} = userInfoForm;
+  const {oldPassword, newPassword, newPassword1} = userPasswordForm;
 
   // Retrieve user info based on url ID
   const userInfo = async (userId: string) => {
@@ -58,7 +55,7 @@ const UserProfile = (props: any) => {
           params: {userId: userId},
         })
         .then((result) => {
-          setFormData({
+          setEditUser({
             ['_id']: result.data.Results._id,
             ['name']: result.data.Results.name,
             ['email']: result.data.Results.email,
@@ -71,15 +68,40 @@ const UserProfile = (props: any) => {
         });
   };
 
+  // Initialize page
+  useEffect(() => {
+    if (loggedUser.role == 'user' && loggedUser._id !== userId) {
+      setRedirect(true);
+    }
+    userInfo(userId);
+  }, []);
+
+  // If the editted user change, update the forms
+  useEffect(() => {
+    setUserInfoForm(editUser);
+  }, [editUser]);
+
+  // Account information onchange
+  const userInfoChange = (e: any) => {
+    setUserInfoForm({...userInfoForm, [e.target.name]: e.target.value});
+    setApplyDisabled(false);
+  };
+
+  // Account password onchange
+  const userPasswordChange = (e: any) => {
+    userUserPasswordForm({...userPasswordForm, [e.target.name]: e.target.value});
+    setApplyDisabled1(false);
+  };
+
   // Submit account information edit
-  const onSubmit = async (e: React.ChangeEvent<any>) => {
+  const saveUserInfoForm = async (e: React.ChangeEvent<any>) => {
     e.preventDefault();
-    if (brokenLink && formData.avatar) {
+    if (brokenLink && userInfoForm.avatar) {
       return notificationService.error(
           'Cannot save invalid link',
       );
     };
-    const updatedForm = {...formData, avatar: formData.avatar || 'https://cdn-icons-png.flaticon.com/512/149/149071.png'};
+    const updatedForm = {...userInfoForm, avatar: userInfoForm.avatar || 'https://cdn-icons-png.flaticon.com/512/149/149071.png'};
     await axios
         .post<IProfileResponse<IUserObject>>('api/user/editUserProfileInfo', {
           formData: updatedForm,
@@ -88,33 +110,39 @@ const UserProfile = (props: any) => {
           notificationService.success(
               result.data.message,
           );
-          setFormData(updatedForm);
-          if (user.name === formData.name) {
-            setUser(updatedForm);
+          setEditUser(updatedForm);
+          if (loggedUser.name === userInfoForm.name) {
+            setLoggedUser(updatedForm);
           }
         })
         .catch((e) => {
           notificationService.error(
-              e.response.data.message,
+              e.response.data,
           );
         });
   };
 
   // Submit account password edit
-  const onSubmit1 = async (e: React.ChangeEvent<any>) => {
+  const saveUserPasswordForm = async (e: React.ChangeEvent<any>) => {
     e.preventDefault();
     await axios
         .post<IProfileResponse<IUserPassword>>('api/user/editUserProfilePassword', {
-          formData: formData1,
+          formData: userPasswordForm,
         })
         .then((result: any) => {
           notificationService.success(
               result.data.message,
           );
+          userUserPasswordForm({
+            _id: userId,
+            oldPassword: '',
+            newPassword: '',
+            newPassword1: '',
+          });
         })
         .catch((e) => {
           notificationService.error(
-              e.response.data.message,
+              e.response.data,
           );
         });
   };
@@ -128,7 +156,7 @@ const UserProfile = (props: any) => {
               result.data.message,
           );
           setTimeout(() => {
-            if (user.role == 'admin') {
+            if (loggedUser.role == 'admin') {
               history.push('/admin');
             } else {
               window.location.reload();
@@ -146,16 +174,10 @@ const UserProfile = (props: any) => {
   const [didLoad, setLoad] = useState(false);
   const imageStyle = didLoad ? {} : {display: 'none'};
 
-  useEffect(() => {
-    // User should be only allowed on his profile page, else redirect
-    user.role == 'user' && user._id !== userId ?
-      setRedirect(true) :
-      userInfo(userId);
-  }, []);
 
   // User should be only allowed on his profile page, else redirect
   if (redirect) {
-    if (user.role == 'admin') {
+    if (loggedUser.role == 'admin') {
       return <Redirect to="/admin" />;
     } else {
       return <Redirect to="/dashboard" />;
@@ -201,7 +223,7 @@ const UserProfile = (props: any) => {
                     <div className="user-profile-img-spacing"></div>
                   </td>
                   <td className="user-profile-header">
-                    <h1>{user.name}</h1>
+                    <h1>{editUser.name}</h1>
                   </td>
                 </tr>
               </tbody>
@@ -241,7 +263,7 @@ const UserProfile = (props: any) => {
                   </tbody>
                 </table>
                 <br />
-                <form id="account-info-form" onSubmit={(e: any) => onSubmit(e)}>
+                <form id="account-info-form" onSubmit={(e: any) => saveUserInfoForm(e)}>
                   <table>
                     <tbody>
                       <tr>
@@ -256,7 +278,7 @@ const UserProfile = (props: any) => {
                               value={name}
                               name="name"
                               disabled={inputDisabled}
-                              onChange={(e) => onChange(e)}
+                              onChange={(e) => userInfoChange(e)}
                             />
                           </InputGroup>
                         </td>
@@ -273,7 +295,7 @@ const UserProfile = (props: any) => {
                               value={email}
                               name="email"
                               disabled={inputDisabled}
-                              onChange={(e) => onChange(e)}
+                              onChange={(e) => userInfoChange(e)}
                             />
                           </InputGroup>
                         </td>
@@ -290,7 +312,7 @@ const UserProfile = (props: any) => {
                               name="avatar"
                               value={avatar}
                               disabled={inputDisabled}
-                              onChange={(e) => onChange(e)}
+                              onChange={(e) => userInfoChange(e)}
                             />
                           </InputGroup>
                         </td>
@@ -305,8 +327,8 @@ const UserProfile = (props: any) => {
                               className="user-profile-input"
                               value={role}
                               name="role"
-                              disabled={user.role !== 'admin' || inputDisabled}
-                              onChange={(e) => onChange(e)}
+                              disabled={loggedUser.role !== 'admin' || inputDisabled}
+                              onChange={(e) => userInfoChange(e)}
                             >
                               <option value="user">user</option>
                               <option value="admin">admin</option>
@@ -352,7 +374,7 @@ const UserProfile = (props: any) => {
                   </tbody>
                 </table>
                 <br />
-                <form id="account-password-form" onSubmit={(e: any) => onSubmit1(e)}>
+                <form id="account-password-form" onSubmit={(e: any) => saveUserPasswordForm(e)}>
                   <table>
                     <tbody>
                       <tr>
@@ -367,9 +389,9 @@ const UserProfile = (props: any) => {
                               placeholder="Enter Old Password"
                               name="oldPassword"
                               value={oldPassword}
-                              onChange={(e) => onChange1(e)}
+                              onChange={(e) => userPasswordChange(e)}
                               disabled={
-                                (user.role === 'admin' && _id !== user._id) ||
+                                loggedUser.role === 'admin' ||
                                 inputDisabled1
                               }
                             />
@@ -388,7 +410,7 @@ const UserProfile = (props: any) => {
                               placeholder="Enter New Password"
                               name="newPassword"
                               value={newPassword}
-                              onChange={(e) => onChange1(e)}
+                              onChange={(e) => userPasswordChange(e)}
                               disabled={inputDisabled1}
                             />
                           </InputGroup>
@@ -406,22 +428,23 @@ const UserProfile = (props: any) => {
                               placeholder="Re-enter New Password"
                               name="newPassword1"
                               value={newPassword1}
-                              onChange={(e) => onChange1(e)}
+                              onChange={(e) => userPasswordChange(e)}
                               disabled={inputDisabled1}
                             />
                           </InputGroup>
                         </td>
                       </tr>
-                      <br />
                       <tr>
                         <td>
-                          <Button variant="danger" onClick={() =>
-                            modalService.open(
-                                <div></div>,
-                                'lg',
-                                {width: 60},
-                            )}
-                          >Delete Account</Button>
+                          <div className="pt-2">
+                            <Button variant="danger" onClick={() =>
+                              modalService.open(
+                                  <div></div>,
+                                  'lg',
+                                  {width: 60},
+                              )}
+                            >Delete Account</Button>
+                          </div>
                         </td>
                       </tr>
                     </tbody>
