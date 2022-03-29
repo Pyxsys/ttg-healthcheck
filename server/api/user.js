@@ -89,6 +89,14 @@ router.post('/login', async (req, res) => {
   }
 })
 
+// log out user
+router.get('/logout', auth, (req, res) => {
+  return res
+    .clearCookie('access_token')
+    .status(200)
+    .json({ message: 'Successfully logged out' })
+})
+
 // verify authentication
 router.get('/authenticate', auth, async (req, res) => {
   try {
@@ -109,95 +117,73 @@ router.get('/authenticate', auth, async (req, res) => {
 
 // get all users for admin panel
 router.get('/all', auth, async (req, res) => {
-  try {
-    const user = await User.findOne({ _id: req.userId })
-    let results
-    user.role == 'admin'
-      ? ((results = await User.find(
-          {},
-          {
-            _id: 1,
-            name: 1,
-            email: 1,
-            role: 1,
-            avatar: 1,
-          }
-        )),
-        res.status(200).json({ Results: results, Total: results.length }))
-      : res.status(401).send('No admin privileges')
-  } catch (err) {
-    res.status(501).send('Server Error: ' + err.message)
+  const user = await User.findOne({ _id: req.userId })
+  if (user.role === 'admin') {
+    const results = await User.find(
+      {},
+      {
+        _id: 1,
+        name: 1,
+        email: 1,
+        role: 1,
+        avatar: 1,
+      }
+    )
+    return res.status(200).json({ Results: results, Total: results.length })
   }
+  return res.status(401).send('Unauthorized access')
 })
 
 // get user profile
 router.get('/profile', auth, async (req, res) => {
-  try {
-    const user = await User.findOne({ _id: req.userId })
-    const query = Object(req.query)
-    let results
-    query.userId
-      ? user.role == 'user' && user._id != query.userId
-        ? res.status(401).send('Unauthorized')
-        : ((results = await User.findOne(
-            { _id: query.userId },
-            {
-              _id: 1,
-              name: 1,
-              email: 1,
-              role: 1,
-              avatar: 1,
-            }
-          )),
-          res.status(200).json({ Results: results }))
-      : res.status(400).send('Bad request, no userId provided')
-  } catch (err) {
-    res.status(501).send('Server Error: ' + err.message)
+  const user = await User.findOne({ _id: req.userId })
+  const query = Object(req.query)
+  if (!query.userId) {
+    return res.status(400).send('Bad request, no userId provided')
   }
-})
 
-// log out user
-router.get('/logout', auth, (req, res) => {
-  return res
-    .clearCookie('access_token')
-    .status(200)
-    .json({ message: 'Successfully logged out' })
+  if (user.role === 'disabled' || (user.role === 'user' && String(user._id) !== query.userId)) {
+    return res.status(401).send('Unauthorized access')
+  }
+  const results = await User.findOne(
+    { _id: query.userId },
+    {
+      _id: 1,
+      name: 1,
+      email: 1,
+      role: 1,
+      avatar: 1,
+    }
+  )
+  return res.status(200).json({ Results: results, Total: results.length })
 })
 
 // delete user
 router.delete('/delete/:id', auth, async (req, res) => {
-  try {
-    const user = await User.findOne({ _id: req.userId })
-    // user or disabled can only delete if their id matches url id
-    if((user.role == 'user' && user._id != req.params.id ) || user.role == 'disabled') {
-      return res.status(401).send('Unauthorized')
-    } 
+  const loggedUser = await User.findOne({ _id: req.userId })
+  // user or disabled can only delete if their id matches url id
+  if(loggedUser.role === 'disabled' || (loggedUser.role === 'user' && String(loggedUser._id) !== req.params.id)) {
+    return res.status(401).send('Unauthorized access')
+  } 
 
-    const adminCount = await User.count({ role: 'admin'})
+  // If deleting admin and there are no other admins
+  const numOfOtherAdmins = await User.count({role: 'admin', _id: {$not: {$eq: req.params.id}}})
+  if (numOfOtherAdmins === 0) {
+    return res.status(400).send('Cannot delete, a minimum of 1 admin role is required')
+  }
 
-    let deletingUser = await User.findOne({ _id: req.params.id})
-    
-    if (deletingUser.role == 'admin' && adminCount == 1){
-      return res.status(404).json({
-        message: 'Unauthorized. Require a minimum of 1 admin',
-      })
-    }
-    
-    await User.deleteOne({ email: deletingUser.email })
+  await User.deleteOne({ _id: req.params.id })
 
-    // if deleting yourself, remove cookie
-    if(req.params.id === user._id){
-      return res
-        .clearCookie('access_token')
-        .status(200)
-        .json({message: 'User deleted successfully',})
-    } else {
-      return res.status(200).json({
-        message: 'User deleted successfully',
-      })
-    }
-  } catch (err) {
-    res.status(500).send('Server error')
+  // if deleting yourself, remove cookie
+  if(req.params.id === String(loggedUser._id)){
+    return res
+      .clearCookie('access_token')
+      .status(200)
+      .json({message: 'User deleted successfully',})
+  } else {
+    return res.status(200).json({
+      message: 'User deleted successfully',
+    })
   }
 })
 
@@ -211,7 +197,7 @@ router.post('/editUserProfileInfo', auth , async (req, res) => {
     }
 
     // Disabled and Users cannot edit other profiles
-    if(loggedUser.role === 'disabled' || (loggedUser.role === 'user' && loggedUser._id.toString() !== _id)) {
+    if(loggedUser.role === 'disabled' || (loggedUser.role === 'user' && String(loggedUser._id) !== _id)) {
       return res.status(401).send('Unauthorized access')
     }
 
@@ -236,7 +222,7 @@ router.post('/editUserProfileInfo', auth , async (req, res) => {
     await User.findOneAndUpdate({_id: _id}, {email: email, name: name, avatar: avatar, role: role})
     return res.status(200).json({
       message: 'Update successful',
-      user: {_id: loggedUser._id.toString(), name: loggedUser.name, role: loggedUser.role, avatar: loggedUser.avatar}
+      user: {_id: String(loggedUser._id), name: loggedUser.name, role: loggedUser.role, avatar: loggedUser.avatar}
     });
   } catch (err) {
     res.status(500).send('Server Error: ' + err.message)
@@ -254,7 +240,7 @@ router.post('/editUserProfilePassword', auth , async (req, res) => {
     }
 
     // users can only update their password
-    if(loggedUser.role === 'disabled' || (loggedUser.role === 'user' && loggedUser._id.toString() !== _id)) {
+    if(loggedUser.role === 'disabled' || (loggedUser.role === 'user' && String(loggedUser._id) !== _id)) {
       return res.status(401).send('Unauthorized Access')
     }
 
@@ -278,7 +264,7 @@ router.post('/editUserProfilePassword', auth , async (req, res) => {
     await User.findOneAndUpdate({_id: _id}, {password: encryptedPassword})
     return res.status(200).json({
       message: 'Update successful',
-      user: {_id: loggedUser._id.toString(), name: loggedUser.name, role: loggedUser.role, avatar: loggedUser.avatar}
+      user: {_id: String(loggedUser._id), name: loggedUser.name, role: loggedUser.role, avatar: loggedUser.avatar}
     });
 
   } catch (err) {
