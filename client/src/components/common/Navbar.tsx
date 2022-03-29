@@ -63,10 +63,7 @@ const Navbar = () => {
             }}
           >
             <div className="nav-right-icon">
-              <img
-                src={user.avatar}
-              >
-              </img>
+              <img src={user.avatar}></img>
             </div>
           </div>
         )),

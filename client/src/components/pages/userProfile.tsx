@@ -65,17 +65,13 @@ const UserProfile = (props: any) => {
           formData,
         })
         .then((result: any) => {
-          notificationService.success(
-              result.data.message,
-          );
+          notificationService.success(result.data.message);
           setTimeout(() => {
             window.location.reload();
           }, 3000);
         })
         .catch((e) => {
-          notificationService.error(
-              e.response.data.message,
-          );
+          notificationService.error(e.response.data.message);
         });
   };
 
@@ -115,7 +111,8 @@ const UserProfile = (props: any) => {
                         onError={({currentTarget}) => {
                           currentTarget.onerror = null; // prevents looping
                           // display default image while link is broken
-                          currentTarget.src='https://cdn-icons-png.flaticon.com/512/149/149071.png';
+                          currentTarget.src =
+                            'https://cdn-icons-png.flaticon.com/512/149/149071.png';
                         }}
                         onLoad={() => setLoad(true)}
                       />
@@ -128,7 +125,9 @@ const UserProfile = (props: any) => {
                           // If image link is broken, use default avatar
                           setFormData({...formData, ['defaultAvatar']: true});
                         }}
-                        onLoad={() => setFormData({...formData, ['defaultAvatar']: false})}
+                        onLoad={() =>
+                          setFormData({...formData, ['defaultAvatar']: false})
+                        }
                       />
                     </div>
                     <div className="user-profile-img-spacing"></div>
