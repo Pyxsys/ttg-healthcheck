@@ -25,11 +25,12 @@ const UserProfile = (props: any) => {
     role: '',
   } as IUserObject);
   const userId: string = props.location.search.replace('?Id=', '');
-  const [inputDisabled, setInputDisabled] = useState(true);
   const [redirect, setRedirect] = useState(false);
-  const [inputDisabled1, setInputDisabled1] = useState(true);
-  const [applyDisabled, setApplyDisabled] = useState(true);
-  const [applyDisabled1, setApplyDisabled1] = useState(true);
+
+  const [inputDisabled, setInputDisabled] = useState(true);
+  const [passwordDisabled, setPasswordDisabled] = useState(true);
+  const [userInfoSaveDisabled, setUserInfoSaveDisabled] = useState(true);
+  const [passwordSaveDisabled, setPasswordSaveDisabled] = useState(true);
   const [brokenLink, setBrokenLink] = useState(true);
 
   const [userInfoForm, setUserInfoForm] = useState({
@@ -84,13 +85,13 @@ const UserProfile = (props: any) => {
   // Account information onchange
   const userInfoChange = (e: any) => {
     setUserInfoForm({...userInfoForm, [e.target.name]: e.target.value});
-    setApplyDisabled(false);
+    setUserInfoSaveDisabled(false);
   };
 
   // Account password onchange
   const userPasswordChange = (e: any) => {
     userUserPasswordForm({...userPasswordForm, [e.target.name]: e.target.value});
-    setApplyDisabled1(false);
+    setPasswordSaveDisabled(false);
   };
 
   // Submit account information edit
@@ -111,6 +112,8 @@ const UserProfile = (props: any) => {
               result.data.message,
           );
           setEditUser(updatedForm);
+          setInputDisabled(true);
+          setUserInfoSaveDisabled(true);
           if (loggedUser.name === userInfoForm.name) {
             setLoggedUser(updatedForm);
           }
@@ -133,6 +136,8 @@ const UserProfile = (props: any) => {
           notificationService.success(
               result.data.message,
           );
+          setPasswordDisabled(true);
+          setPasswordSaveDisabled(true);
           userUserPasswordForm({
             _id: userId,
             oldPassword: '',
@@ -156,16 +161,16 @@ const UserProfile = (props: any) => {
               result.data.message,
           );
           setTimeout(() => {
-            if (loggedUser.role == 'admin') {
+            if (loggedUser.role === 'admin') {
               history.push('/admin');
             } else {
               window.location.reload();
             }
-          }, 3000);
+          }, 2000);
         })
         .catch((e) => {
           notificationService.error(
-              e.response.data.message,
+              e.response.data,
           );
         });
   };
@@ -238,25 +243,37 @@ const UserProfile = (props: any) => {
                         <h5 className="color-white">Account Information</h5>
                       </td>
                       <td>
-                        &emsp;
                         <Button
                           size="sm"
                           onClick={() => setInputDisabled(!inputDisabled)}
-                          className="btn btn-primary color-white"
+                          className="ms-2"
                         >
                           Edit Profile
                         </Button>
                       </td>
                       <td>
-                        &nbsp;
                         <Button
                           size="sm"
-                          className="btn btn-primary color-white"
+                          className="ms-2"
                           form="account-info-form"
-                          disabled={applyDisabled}
+                          disabled={userInfoSaveDisabled}
                           type="submit"
                         >
-                          Save Change
+                          Save
+                        </Button>
+                      </td>
+                      <td>
+                        <Button
+                          size="sm"
+                          className="ms-2"
+                          onClick={() => {
+                            setInputDisabled(true);
+                            setUserInfoSaveDisabled(true);
+                            setUserInfoForm(editUser);
+                          }}
+                          disabled={userInfoSaveDisabled}
+                        >
+                          Cancel
                         </Button>
                       </td>
                     </tr>
@@ -351,23 +368,38 @@ const UserProfile = (props: any) => {
                         <h5 className="color-white">Account Management</h5>
                       </td>
                       <td>
-                        &emsp;
                         <Button
                           size="sm"
-                          onClick={() => setInputDisabled1(!inputDisabled1)}
-                          className="btn btn-primary"
+                          onClick={() => setPasswordDisabled(!passwordDisabled)}
+                          className="ms-2"
                         >
                           Change Password
                         </Button>
-                        &nbsp;
                         <Button
                           size="sm"
                           form="account-password-form"
-                          className="btn btn-primary color-white"
+                          className="ms-2"
                           type='submit'
-                          disabled={applyDisabled1}
+                          disabled={passwordSaveDisabled}
                         >
-                          Save Change
+                          Save
+                        </Button>
+                        <Button
+                          size="sm"
+                          className="ms-2"
+                          onClick={() => {
+                            setPasswordDisabled(true);
+                            setPasswordSaveDisabled(true);
+                            userUserPasswordForm({
+                              _id: userId,
+                              oldPassword: '',
+                              newPassword: '',
+                              newPassword1: '',
+                            });
+                          }}
+                          disabled={passwordSaveDisabled}
+                        >
+                          Cancel
                         </Button>
                       </td>
                     </tr>
@@ -392,7 +424,7 @@ const UserProfile = (props: any) => {
                               onChange={(e) => userPasswordChange(e)}
                               disabled={
                                 loggedUser.role === 'admin' ||
-                                inputDisabled1
+                                passwordDisabled
                               }
                             />
                           </InputGroup>
@@ -411,7 +443,7 @@ const UserProfile = (props: any) => {
                               name="newPassword"
                               value={newPassword}
                               onChange={(e) => userPasswordChange(e)}
-                              disabled={inputDisabled1}
+                              disabled={passwordDisabled}
                             />
                           </InputGroup>
                         </td>
@@ -429,7 +461,7 @@ const UserProfile = (props: any) => {
                               name="newPassword1"
                               value={newPassword1}
                               onChange={(e) => userPasswordChange(e)}
-                              disabled={inputDisabled1}
+                              disabled={passwordDisabled}
                             />
                           </InputGroup>
                         </td>
@@ -439,9 +471,16 @@ const UserProfile = (props: any) => {
                           <div className="pt-2">
                             <Button variant="danger" onClick={() =>
                               modalService.open(
-                                  <div></div>,
+                                  <div className="d-flex flex-column">
+                                    <h2>Confirm Deletion</h2>
+                                    <span>Are you sure you wish to delete {loggedUser.name}?</span>
+                                  </div>,
                                   'lg',
-                                  {width: 60},
+                                  {
+                                    width: 60,
+                                    primaryButtonText: 'Yes',
+                                    secondaryButtonText: 'No',
+                                  },
                               )}
                             >Delete Account</Button>
                           </div>
