@@ -2,6 +2,7 @@
 const express = require('express')
 const router = express.Router()
 const User = require('../models/user.js')
+const userLog = require('../models/user_logs.js')
 const jwt = require('jsonwebtoken')
 const bcrypt = require('bcrypt')
 const auth = require('../middleware/auth.js')
@@ -10,6 +11,16 @@ const encryptPassword = async (password) => {
   const salt = await bcrypt.genSalt(10)
   // Hash password
   return bcrypt.hash(password, salt)
+}
+
+const userEventLog = (id, event, message) => {
+  const eventLogObj = new userLog({
+    id: id,
+    timestamp: new Date(),
+    event: event,
+    message: message,
+  })
+  return eventLogObj;
 }
 
 // signup
@@ -33,6 +44,8 @@ router.post('/register', async (req, res) => {
     }
     // save new user, create JWT, store in cookie and send to front-end
     await newUser.save()
+    // save user event log
+    await userEventLog(newUser.id, 'register','Account successfully created.').save()
     const token = jwt.sign({ id: newUser.id }, process.env.ACCESS_TOKEN_KEY, {
       expiresIn: '1h',
     })
