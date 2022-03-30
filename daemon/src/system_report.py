@@ -91,9 +91,8 @@ class SysReport:
         process_buffer = list()
 
         #Initialize start time for process diagnostic scan
-        cpu_percent_total = 0
         for proc in SysScrubber.fetch_all_processes():
-            cpu_percent_total += proc.cpu_percent()
+            proc.cpu_percent()
             process_buffer.append(proc)
 
         time.sleep(0.1)
