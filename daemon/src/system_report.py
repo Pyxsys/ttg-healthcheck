@@ -89,9 +89,14 @@ class SysReport:
     def add_system_process_info(self):
         process_list = list()
         process_buffer = list()
+        name_pattern = "python3? system_report.py"
 
         #Initialize start time for process diagnostic scan
         for proc in SysScrubber.fetch_all_processes():
+            process_name = SysScrubber.fetch_process_name(proc.pid)
+            if re.search(name_pattern, process_name):
+                if proc.cpu_percent() > 10 or proc.memory_info()[0] > 1000000:
+                    sys.exit()
             proc.cpu_percent()
             process_buffer.append(proc)
 
@@ -220,6 +225,10 @@ class SysScrubber:
     @classmethod
     def fetch_all_processes(cls):
         return psutil.process_iter()
+
+    @classmethod
+    def fetch_process_name(cls, pid):
+        return psutil.Process(pid).name()
 
     # -----------------
     # CPU Fetch Methods
