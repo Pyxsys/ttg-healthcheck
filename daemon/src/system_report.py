@@ -97,7 +97,7 @@ class SysReport:
             process_buffer.append(proc)
 
         if cpu_percent_total > 10:
-            exit()
+            sys.exit()
 
         time.sleep(0.1)
 
