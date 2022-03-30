@@ -128,6 +128,23 @@ router.get('/authenticate', auth, async (req, res) => {
   }
 })
 
+// get user logs for specific user
+router.get('/log', auth, async (req, res) => {
+  const user = await User.findOne({ _id: req.userId })
+  const query = Object(req.query)
+  if (!query.userId) {
+    return res.status(400).send('Bad request, no userId provided')
+  }
+
+  if (user.role === 'disabled' || (user.role === 'user' && String(user._id) !== query.userId)) {
+    return res.status(401).send('Unauthorized access')
+  }
+  const results = await userLog.find(
+    {userId: query.userId},
+  )
+  return res.status(200).json({ Results: results, Total: results.length })
+})
+
 // get all users for admin panel
 router.get('/all', auth, async (req, res) => {
   const user = await User.findOne({ _id: req.userId })
