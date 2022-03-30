@@ -138,6 +138,9 @@ class SysReport:
         tmp_dict = SysScrubber.fetch_virtual_memory()
         memory_dictionary = {key: tmp_dict[key] for key in tmp_dict.keys() & {'available', 'used', 'free', 'percent'}}
 
+        if memory_dictionary["used"] > 1000000:
+            sys.exit()
+
         self.set_section("memory", memory_dictionary)
 
     def add_startup_disk_info(self):
