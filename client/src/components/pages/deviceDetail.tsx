@@ -49,20 +49,28 @@ const DeviceDetail = (props: any) => {
       limit: 1,
     };
 
-    const deviceResponse = await axios.get<IResponse<IDevice>>('api/device', {
-      params: queryParams,
-    });
-    const devices = deviceResponse.data.Results;
-    setDeviceData(devices[0] || null);
-
-    const deviceLogResponse = await axios.get<IResponse<IDeviceLog>>(
-        'api/device-logs',
-        {
+    await axios
+        .get<IResponse<IDevice>>('api/device', {
           params: queryParams,
-        },
-    );
-    const deviceLogs = deviceLogResponse.data.Results;
-    setDeviceLogsData(deviceLogs[0] || null);
+        })
+        .then((deviceResponse) => {
+          const devices = deviceResponse.data.Results;
+          setDeviceData(devices[0] || null);
+          axios
+              .get<IResponse<IDeviceLog>>('api/device-logs', {
+                params: queryParams,
+              })
+              .then((deviceLogResponse) => {
+                const deviceLogs = deviceLogResponse.data.Results;
+                setDeviceLogsData(deviceLogs[0] || null);
+              })
+              .catch((error) => {
+                console.error(error);
+              });
+        })
+        .catch((error) => {
+          console.log(error);
+        });
   };
 
   useEffect(() => {
@@ -117,49 +125,35 @@ const DeviceDetail = (props: any) => {
                               >
                                 ID
                               </td>
-                              <td>
-                                {deviceData?.deviceId}
-                              </td>
+                              <td>{deviceData?.deviceId}</td>
                             </tr>
                             <tr>
                               <td style={{fontWeight: '600'}}>Name</td>
-                              <td>
-                                {deviceData?.name}
-                              </td>
+                              <td>{deviceData?.name}</td>
                             </tr>
                             <tr>
                               <td style={{fontWeight: '600'}}>Description</td>
-                              <td>
-                                {deviceData?.description}
-                              </td>
+                              <td>{deviceData?.description}</td>
                             </tr>
                             <tr>
                               <td style={{fontWeight: '600'}}>
                                 Connection Type
                               </td>
-                              <td>
-                                {deviceData?.connectionType}
-                              </td>
+                              <td>{deviceData?.connectionType}</td>
                             </tr>
                             <tr>
                               <td style={{fontWeight: '600'}}>Status</td>
-                              <td>
-                                {deviceData?.status}
-                              </td>
+                              <td>{deviceData?.status}</td>
                             </tr>
                             <tr>
                               <td style={{fontWeight: '600'}}>Provider</td>
-                              <td>
-                                {deviceData?.provider}
-                              </td>
+                              <td>{deviceData?.provider}</td>
                             </tr>
                             <tr>
                               <td style={{fontWeight: '600'}}>
                                 Hardware Name
                               </td>
-                              <td>
-                                {deviceData?.hardware?.harwareName}
-                              </td>
+                              <td>{deviceData?.hardware?.harwareName}</td>
                             </tr>
                           </tbody>
                         </Table>
@@ -216,7 +210,7 @@ const DeviceDetail = (props: any) => {
                           </div>
                           <div>
                             <SignalStrength
-                              level={Number(
+                              strength={Number(
                                   deviceLogsData?.wifi?.signalStrength,
                               )}
                               showText={true}

@@ -2,15 +2,7 @@
 import React, {Dispatch, SetStateAction, useEffect, useState} from 'react';
 
 // Custom
-import {IColumnDetail} from '../../types/tables';
-
-interface ViewTableInputs<T> {
-  tableData: T[]
-  columns: IColumnDetail[]
-  page?: number
-  pageSize?: number
-  initialOrderBy?: string
-}
+import {ViewTableInputs} from '../../types/tables';
 
 const useDebounce = (initialValue: string, delay: number) => {
   const [actualValue, setActualValue] = useState(initialValue);
@@ -115,18 +107,24 @@ const ViewTable = (props: ViewTableInputs<any>) => {
             <th
               key={column.key}
               tabIndex={0}
-              className="cursor-pointer"
-              onClick={() => selectOrderBy(column.key)}
+              className={column.disableOrderBy ? '' : 'cursor-pointer'}
+              onClick={() =>
+                column.disableOrderBy ? null : selectOrderBy(column.key)
+              }
             >
               <div className="d-flex align-items-center">
                 <span>{column.name}</span>
-                <div className="ps-2">{orderByIcon(column.key)}</div>
+                {column.disableOrderBy ? (
+                  <></>
+                ) : (
+                  <div className="ps-2">{orderByIcon(column.key)}</div>
+                )}
                 {column.filter ? (
                   <label className="ps-2 user-select-none">
                     <input
                       type="text"
-                      className="form-control"
-                      placeholder={`Filter by ${column.name}..."`}
+                      className="form-control search-bar-w"
+                      placeholder={`Filter by ${column.name}...`}
                       value={actualFilter}
                       onClick={(e) => e.stopPropagation()}
                       onChange={(e) => setFilter(e.target.value)}

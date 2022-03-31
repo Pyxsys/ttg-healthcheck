@@ -73,7 +73,7 @@ body {
 .btn-primary {
   color: $gray-100 !important;
   font-weight: 500 !important;
-  border-color: $gray-300 !important;
+  border-color: $gray-400 !important;
   background-color: $gray-800;
   &:disabled {
     background-color: darken($gray-800, 5%);
@@ -348,29 +348,24 @@ body {
   justify-content: space-between;
   align-items: center;
   @media (min-width: $screen-w-xsm) {
-    height: 60px;
-    padding: 10px;
+    height: 55px;
+    padding: 8px;
   }
   @media (min-width: $screen-w-md) {
-    height: 63px;
-    padding: 15px;
+    height: 60px;
+    padding: 14px;
   }
   @media (min-width: $screen-w-lg) {
-    padding: 20px;
+    padding: 18px;
   }
 }
 
-// right nav menu (currently not there)
-.nav-right-menu {
-  align-items: center;
-}
-
+// Right Nav Menu
 .nav-right-icon {
   width: 35px;
   height: 35px;
   overflow: hidden;
   border-radius: 50%;
-  position: relative;
   margin-right: 4px;
 }
 
@@ -389,6 +384,23 @@ body {
   height: 15px;
 }
 
+.nav-right-font {
+  font-size: 0.85em;
+  white-space: pre-wrap;
+  opacity: 0.8;
+  color: black;
+  text-decoration: none;
+  &:hover {
+    color: black;
+    text-decoration: none;
+  }
+}
+
+.dropdown-item:active {
+  background-color: rgb(230, 230, 230);
+}
+
+// Left Nav Menu
 // nav-hamburger wrapper
 .nav-hamburger {
   position: static;
@@ -419,7 +431,7 @@ body {
   background-color: #1f262b;
   left: -100%;
   transition: 850ms;
-  padding-top: 85px;
+  padding-top: 75px;
 }
 
 // side-nav open
@@ -496,16 +508,16 @@ body {
 // side-nav-item icons
 .side-nav-item-icon > svg {
   @media (min-width: $screen-w-xsm) {
-    width: 2.5em;
-    height: 2.5em;
+    width: 2.50em;
+    height: 2.45em;
   }
   @media (min-width: $screen-w-md) {
-    width: 2.7em;
-    height: 2.7em;
+    width: 2.65em;
+    height: 2.65em;
   }
   @media (min-width: $screen-w-lg) {
-    width: 2.8em;
-    height: 2.8em;
+    width: 2.7em;
+    height: 2.7em;
   }
   color: white;
 }
@@ -518,7 +530,10 @@ body {
 
 .devices-content {
   background-color: $tertiary-gray;
-  min-height: 230px;
+  flex: 1;
+  overflow: auto;
+  overflow-x: hidden;
+  min-height: 270px;
 }
 
 .pie-wheel-size {
@@ -618,12 +633,11 @@ body {
   z-index: 9;
   background-color: $tertiary-gray;
   border: 1px black solid;
-  min-width: 550px;
   max-height: 50vh;
 }
 
 .devices-font {
-  font-size: 1.03em;
+  font-size: 1.08em;
 }
 
 .table-container {
@@ -682,6 +696,10 @@ body {
   td:last-of-type {
     padding-right: 24px;
   }
+}
+
+.search-bar-w {
+  min-width: 200px;
 }
 
 .device-icon{
@@ -772,11 +790,23 @@ body {
 }
 
 .dashboard-dashed-box{
-  height: 360px;
+  margin-top: 19px;
+  height: 300px;
   width: 100%;
   border: 4px dashed;
 }
 
+.dashboard-widget-title {
+  @media (min-width: $screen-w-xxsm) {
+    font-size: 15.5px;
+  }
+  @media (min-width: $screen-w-md) {
+    font-size: 18px;
+  }
+  @media (min-width: $screen-w-lg) {
+    font-size: 18px;
+  }
+}
 /* Modal Styling */
 
 .modal-background {
@@ -814,7 +844,7 @@ body {
 
 /*-----------------------Device Details--------------------------*/
 
-#device-details-container{
+#device-details-container {
   background-color: $tertiary-gray;
   max-width: 100%;
   height: 100vh;
@@ -824,7 +854,7 @@ body {
 }
 
 
-.device-details-wrapper{
+.device-details-wrapper {
   @media (min-width: $screen-w-xsm) {
     padding-top: 12px;
   }
@@ -847,7 +877,7 @@ body {
 }
 
 // first device table
-.device-details-table > tbody > tr > td{
+.device-details-table > tbody > tr > td {
   color: white;
   border-bottom: 0;
   border-top: 0;
@@ -865,7 +895,7 @@ body {
   }
 }
 
-.device-details-table-dark{
+.device-details-table-dark {
   width: 85%;
 }
 
@@ -1077,5 +1107,167 @@ body {
   }
 }
 
+/*-----------------------User Profile--------------------------*/
+.user-profile-content {
+  background-color: $tertiary-gray;
+  flex: 1;
+  overflow: auto;
+  min-height: 0px;
+} 
+
+.user-profile-container {
+  flex: 1;
+  background-color: #343a43;
+  border-radius: 7px;
+  position: relative;
+  @media (min-width: $screen-w-xxsm) {
+    min-width: 600px !important;
+  }
+  @media (min-width: $screen-w-xsm) {
+    min-width: 600px !important;
+  }
+  @media (min-width: $screen-w-sm) {
+    min-width: 650px !important;
+  }
+  @media (min-width: $screen-w-md) {
+    max-width: 750px !important;
+  }
+  @media (min-width: $screen-w-lg) {
+    max-width: 750px !important;
+  }
+}
+
+.user-profile-inner-container {
+  background-color: #3F4651;
+  border-radius: 7px;
+  padding: 20px;
+}
+
+.user-profile-img-container {
+  overflow: none;
+  top: -3%;
+  z-index: 4;
+  position: absolute;
+  padding-top: 10px;
+  background-color: #343a43;
+  border-radius: 50%;
+  @media (min-width: $screen-w-xxsm) {
+    width: 225px;
+    height: 225px;
+  }
+  @media (min-width: $screen-w-md) {
+    width: 245px;
+    height: 245px;
+  }
+}
+
+.user-profile-img-spacing {
+  @media (min-width: $screen-w-xxsm) {
+    height: 155px; 
+    width: 220px;
+  }
+  @media (min-width: $screen-w-md) {
+    height: 170px; 
+    width: 240px;
+  }
+}
+
+.user-profile-img {
+  border-radius: 50%;
+  border:none !important;
+  margin-top:-5%;
+  padding: 5%;
+  @media (min-width: $screen-w-xxsm) {
+    width: 225px;
+    height: 225px;
+  }
+  @media (min-width: $screen-w-md) {
+    width: 245px;
+    height: 245px;
+  }
+}
+
+.user-profile-delete-button{
+  background-color: rgb(235, 84, 84);
+}
+
+.user-profile-header {
+  vertical-align: center;
+  padding-left: 20px;
+  color: white;
+}
+
+.color-white {
+  color: white;
+}
+
+.user-profile-input {
+  font-size: 13.5px;
+  @media (min-width: $screen-w-xxsm) {
+    width: 350px !important;
+    padding: 11px;
+  }
+  @media (min-width: $screen-w-sm) {
+    width: 380px !important;
+  }
+  @media (min-width: $screen-w-md) {
+    width: 500px !important;
+    padding: 11px;
+  }
+  @media (min-width: $screen-w-lg) {
+    width: 500px !important;
+    padding: 11px;
+  }
+  @media (min-width: $screen-w-xlg) {
+    padding: 11px;
+  }
+  @media (min-width: $screen-w-xxlg) {
+    padding: 11px;
+  }
+  @media (min-width: $screen-w-xxxlg) {
+    padding: 11px;
+  }
+  border: none !important;
+  border-radius: 0 0.25rem 0.25rem 0 !important;
+  box-shadow: none !important;
+  -webkit-box-shadow: none !important;
+}
+
+.user-profile-input:disabled {
+  background-color: #d2d4d6;
+}
+
+.user-profile-input-label {
+  background-color: #515864;
+  border-color: #515864; 
+  color: white;
+  width: 150px;
+  font-size: 11px;
+  font-weight: 500 !important;
+}
+
+/*-----------------------Pending Page--------------------------*/
+.pending-header {
+  color: white;
+  font-size: 27px;
+}
+
+.pending-logout {
+  margin-top: 5px;
+  color: rgb(243, 106, 106);
+  font-weight: 600;
+  text-decoration: none;
+  font-size: 15px;
+}
+
+.pending-logout:hover {
+  color: rgb(201, 75, 75);
+}
 
 
+.pending-logout > svg{
+  color: rgb(255, 255, 255);
+  font-weight: 600;
+  width: 30px;
+  height: 30px;
+}

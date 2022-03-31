@@ -14,17 +14,21 @@ const CpuProjection = {
 
 // get CPU Logs with any attribute of the CpuLogs Model
 router.get('/', auth, async (req, res) => {
-  const [query, options] = parseQuery(Object(req.query), DeviceLogsSchema)
-  const results = await DeviceLogs.find(
-    { $and: [query] },
-    CpuProjection,
-    options
-  )
-  const cpuResponse = { Results: results }
-  if (req.query.Total) {
-    cpuResponse.Total = await DeviceLogs.countDocuments(query)
+  try {
+    const [query, options] = parseQuery(Object(req.query), DeviceLogsSchema)
+    const results = await DeviceLogs.find(
+      { $and: [query] },
+      CpuProjection,
+      options
+    )
+    const cpuResponse = { Results: results }
+    if (req.query.Total) {
+      cpuResponse.Total = await DeviceLogs.countDocuments(query)
+    }
+    return res.status(200).json(cpuResponse)
+  } catch (err) {
+    res.status(501).send('Server Error: ' + err.message)
   }
-  return res.status(200).json(cpuResponse)
 })
 
 module.exports = router

@@ -39,7 +39,7 @@ const Signup = () => {
   if (loggedIn) {
     notificationService.success('New account succesfully created!');
     notificationService.success('Logged in succesfully!');
-    return <Redirect to="/dashboard" />;
+    return <Redirect to="/pending" />;
   }
   return (
     <FrontPageWrapper>
@@ -51,6 +51,7 @@ const Signup = () => {
                 <FaUserAlt />
               </InputGroup.Text>
               <Form.Control
+                maxLength={20}
                 size="sm"
                 className="home-input"
                 type="name"

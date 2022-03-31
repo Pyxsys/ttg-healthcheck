@@ -28,7 +28,7 @@ export const useAuth = (): AuthObject =>
  */
 function AuthProvider({children}: any) {
   const location = useLocation();
-  const [user, setUser] = useState({_id: '', name: '', role: ''});
+  const [user, setUser] = useState({_id: '', name: '', role: '', avatar: ''});
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [loading, setLoading] = useState(true);
   // check authentication of user on router dom changes(for links and redirects) and initial page loads
