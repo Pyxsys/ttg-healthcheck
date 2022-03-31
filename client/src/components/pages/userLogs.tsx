@@ -2,6 +2,7 @@
 import React, {useEffect, useState} from 'react';
 import axios from 'axios';
 import {Redirect} from 'react-router-dom';
+import {format} from 'fecha';
 
 // Custom
 import Navbar from '../common/Navbar';
@@ -31,7 +32,6 @@ const UserLogs = (props: any) => {
           params: {userId: userId},
         })
         .then((results) => {
-          console.log(results.data.Results);
           const users = results.data.Results;
 
           setTotalPages(Math.ceil(results.data.Total / pageSize));
@@ -59,6 +59,17 @@ const UserLogs = (props: any) => {
     {
       key: 'timestamp',
       name: 'timestamp',
+      disableOrderBy: true,
+      override: (cellValue) => (
+        <div>
+          {cellValue?
+            format(
+                new Date(cellValue),
+                'MMM DD, YYYY, h:mm:ss A',
+            ) :
+        'N/A'}
+        </div>
+      ),
     },
     {
       key: 'userPerformingAction',

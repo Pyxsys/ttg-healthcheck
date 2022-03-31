@@ -120,9 +120,7 @@ const UserProfile = (props: any) => {
           setEditUser(updatedForm);
           setInputDisabled(true);
           setUserInfoSaveDisabled(true);
-          if (loggedUser.name === userInfoForm.name) {
-            setLoggedUser(updatedForm);
-          }
+          setLoggedUser(updatedForm);
         })
         .catch((err) => {
           notificationService.error(err.response.data);
@@ -288,6 +286,7 @@ const UserProfile = (props: any) => {
                               ACCOUNT NAME
                             </InputGroup.Text>
                             <Form.Control
+                              maxLength={20}
                               className="user-profile-input"
                               type="text"
                               value={name}

@@ -51,6 +51,7 @@ const Signup = () => {
                 <FaUserAlt />
               </InputGroup.Text>
               <Form.Control
+                maxLength={20}
                 size="sm"
                 className="home-input"
                 type="name"
