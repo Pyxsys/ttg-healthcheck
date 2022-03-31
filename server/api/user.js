@@ -141,10 +141,18 @@ router.get('/log', auth, async (req, res) => {
   if (user.role === 'disabled' || (user.role === 'user' && String(user._id) !== query.userId)) {
     return res.status(401).send('Unauthorized access')
   }
-  const results = await userLog.find(
-    {userId: query.userId},
-  )
-  return res.status(200).json({ Results: results, Total: results.length })
+
+  try {
+    const validUser = await User.findOne({ _id: query.userId })
+    if (validUser) {
+      const results = await userLog.find(
+        {affectedUser: query.userId},
+      )
+      return res.status(200).json({ Results: results, Total: results.length })
+    }
+  } catch (err) {
+    return res.status(400).send('Bad request, userId is invalid')
+  }
 })
 
 // get all users for admin panel
@@ -182,19 +190,21 @@ router.get('/profile', auth, async (req, res) => {
   }
 
   try {
-    const results = await User.findOne(
-      { _id: query.userId },
-      {
-        _id: 1,
-        name: 1,
-        email: 1,
-        role: 1,
-        avatar: 1,
-      }
-    )
-    return res.status(200).json({ Results: [results], Total: 1 })
+    const validUser = await User.findOne({ _id: query.userId })
+    if (validUser) {
+      const results = await User.findOne(
+        { _id: query.userId },
+        {
+          _id: 1,
+          name: 1,
+          email: 1,
+          role: 1,
+          avatar: 1,
+        })
+      return res.status(200).json({ Results: results, Total: results.length })
+    }
   } catch (err) {
-    return res.status(200).json({ Results: [], Total: 0 })
+    return res.status(400).send('Bad request, userId is invalid')
   }
 })
 

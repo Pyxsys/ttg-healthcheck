@@ -1,37 +1,44 @@
 // 3rd Party
 import React, {useEffect, useState} from 'react';
 import axios from 'axios';
-import {Link} from 'react-router-dom';
+import {Redirect} from 'react-router-dom';
 
 // Custom
-import {IResponse} from '../../types/queries';
 import Navbar from '../common/Navbar';
 import {IColumnDetail} from '../../types/tables';
 import Pagination from '../common/pagination';
 import ViewTable from '../common/viewTable';
-import {IUserObject} from '../../types/users';
+import {IUserLogs} from '../../types/users';
+import {IResponse} from '../../types/queries';
+import {useAuth} from '../../context/authContext';
 
-const AdminPanel = () => {
+const UserLogs = (props: any) => {
   // Readonly Values
   const initialPage: number = 1;
   const pageSize: number = 10;
-  const initialOrderBy: string = 'static.name';
-
-  const [usersTable, setUsersTable] = useState([] as IUserObject[]);
+  const initialOrderBy: string = 'static.timestamp';
+  const userId: string = props.location.search.replace('?Id=', '');
+  const {user: loggedUser} = useAuth();
+  const [redirect, setRedirect] = useState(false);
+  const [logsTable, setLogsTable] = useState([] as IUserLogs[]);
   const [page, setPage] = useState(initialPage);
   const [totalPages, setTotalPages] = useState(0);
 
+  // Retrieve user logs based on url ID
   const queryTable = async () => {
     await axios
-        .get<IResponse<IUserObject>>('api/user/all')
+        .get<IResponse<IUserLogs>>('api/user/log', {
+          params: {userId: userId},
+        })
         .then((results) => {
+          console.log(results.data.Results);
           const users = results.data.Results;
 
           setTotalPages(Math.ceil(results.data.Total / pageSize));
-          setUsersTable(users);
+          setLogsTable(users);
         })
-        .catch((error) => {
-          console.log(error);
+        .catch(() => {
+          setRedirect(true);
         });
   };
 
@@ -39,44 +46,31 @@ const AdminPanel = () => {
     queryTable();
   }, []);
 
+  // User should be only allowed on his profile page, else redirect
+  if (redirect) {
+    if (loggedUser.role == 'admin') {
+      return <Redirect to="/admin" />;
+    } else {
+      return <Redirect to="/dashboard" />;
+    }
+  }
+
   const column: IColumnDetail[] = [
     {
-      key: 'name',
-      name: 'Name',
-      override: (cellValue, user: IUserObject) => (
-        <div className="mx-auto h-100 py-3">
-          <Link
-            className="text-white"
-            to={{
-              pathname: '/user-profile',
-              search: `?Id=${user._id}`,
-            }}
-          >
-            {cellValue}
-          </Link>
-        </div>
-      ),
+      key: 'timestamp',
+      name: 'timestamp',
     },
     {
-      key: 'email',
-      name: 'Email',
+      key: 'userPerformingAction',
+      name: 'userPerformingAction',
     },
     {
-      key: 'role',
-      name: 'role',
+      key: 'event',
+      name: 'event',
     },
     {
-      key: 'avatar',
-      name: 'Icon',
-      disableOrderBy: true,
-      override: (cellValue) => (
-        <img
-          height={50}
-          width={50}
-          src={String(cellValue)}
-          style={{borderRadius: '50%'}}
-        />
-      ),
+      key: 'description',
+      name: 'description',
     },
   ];
 
@@ -88,7 +82,7 @@ const AdminPanel = () => {
         <div className="flex-grow-1 d-flex flex-column overflow-auto container">
           <div className="flex-grow-1 overflow-auto table-container mt-5">
             <ViewTable
-              tableData={usersTable}
+              tableData={logsTable}
               page={page}
               pageSize={pageSize}
               columns={column}
@@ -113,4 +107,4 @@ const AdminPanel = () => {
   );
 };
 
-export default AdminPanel;
+export default UserLogs;

@@ -1156,8 +1156,8 @@ body {
     height: 225px;
   }
   @media (min-width: $screen-w-md) {
-    width: 240px;
-    height: 240px;
+    width: 245px;
+    height: 245px;
   }
 }
 
@@ -1182,9 +1182,13 @@ body {
     height: 225px;
   }
   @media (min-width: $screen-w-md) {
-    width: 240px;
-    height: 240px;
+    width: 245px;
+    height: 245px;
   }
+}
+
+.user-profile-delete-button{
+  background-color: rgb(235, 84, 84);
 }
 
 .user-profile-header {
