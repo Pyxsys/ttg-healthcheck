@@ -7,7 +7,7 @@ import {Redirect, useHistory} from 'react-router-dom';
 // Custom
 import Navbar from '../common/Navbar';
 import {IUserObject, IUserPassword} from '../../types/users';
-import {IProfileResponse} from '../../types/queries';
+import {IResponse} from '../../types/queries';
 import {useAuth} from '../../context/authContext';
 import {notificationService} from '../../services/notification.service';
 import {useModalService} from '../../context/modal.context';
@@ -52,16 +52,17 @@ const UserProfile = (props: any) => {
   // Retrieve user info based on url ID
   const userInfo = async (userId: string) => {
     await axios
-        .get<IProfileResponse<IUserObject>>('api/user/profile', {
+        .get<IResponse<IUserObject>>('api/user/profile', {
           params: {userId: userId},
         })
         .then((result) => {
+          const userProfile = result.data.Results[0];
           setEditUser({
-            ['_id']: result.data.Results._id,
-            ['name']: result.data.Results.name,
-            ['email']: result.data.Results.email,
-            ['avatar']: result.data.Results.avatar,
-            ['role']: result.data.Results.role,
+            ['_id']: userProfile._id,
+            ['name']: userProfile.name,
+            ['email']: userProfile.email,
+            ['avatar']: userProfile.avatar,
+            ['role']: userProfile.role,
           });
         })
         .catch(() => {
@@ -104,12 +105,12 @@ const UserProfile = (props: any) => {
     };
     const updatedForm = {...userInfoForm, avatar: userInfoForm.avatar || 'https://cdn-icons-png.flaticon.com/512/149/149071.png'};
     await axios
-        .post<IProfileResponse<IUserObject>>('api/user/editUserProfileInfo', {
+        .post<IResponse<IUserObject>>('api/user/editUserProfileInfo', {
           formData: updatedForm,
         })
-        .then((result: any) => {
+        .then(() => {
           notificationService.success(
-              result.data.message,
+              'Update successful',
           );
           setEditUser(updatedForm);
           setInputDisabled(true);
@@ -129,12 +130,12 @@ const UserProfile = (props: any) => {
   const saveUserPasswordForm = async (e: React.ChangeEvent<any>) => {
     e.preventDefault();
     await axios
-        .post<IProfileResponse<IUserPassword>>('api/user/editUserProfilePassword', {
+        .post<IResponse<IUserPassword>>('api/user/editUserProfilePassword', {
           formData: userPasswordForm,
         })
-        .then((result: any) => {
+        .then(() => {
           notificationService.success(
-              result.data.message,
+              'Update successful',
           );
           setPasswordDisabled(true);
           setPasswordSaveDisabled(true);
