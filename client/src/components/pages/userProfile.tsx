@@ -8,7 +8,7 @@ import {Link} from 'react-router-dom';
 // Custom
 import Navbar from '../common/Navbar';
 import {IUserObject, IUserPassword} from '../../types/users';
-import {IResponse} from '../../types/queries';
+import {IResponse1} from '../../types/queries';
 import {useAuth} from '../../context/authContext';
 import {notificationService} from '../../services/notification.service';
 import {useModalService} from '../../context/modal.context';
@@ -53,11 +53,11 @@ const UserProfile = (props: any) => {
   // Retrieve user info based on url ID
   const userInfo = async (userId1: string) => {
     await axios
-        .get<IResponse<IUserObject>>('api/user/profile', {
+        .get<IResponse1<IUserObject>>('api/user/profile', {
           params: {userId: userId1},
         })
         .then((result) => {
-          const userProfile = result.data.Results[0];
+          const userProfile = result.data.Results;
           setEditUser({
             ['_id']: userProfile._id,
             ['name']: userProfile.name,
@@ -112,7 +112,7 @@ const UserProfile = (props: any) => {
         'https://cdn-icons-png.flaticon.com/512/149/149071.png',
     };
     await axios
-        .post<IResponse<IUserObject>>('api/user/editUserProfileInfo', {
+        .post<IResponse1<IUserObject>>('api/user/editUserProfileInfo', {
           formData: updatedForm,
         })
         .then(() => {
@@ -133,7 +133,7 @@ const UserProfile = (props: any) => {
   const saveUserPasswordForm = async (e: React.ChangeEvent<any>) => {
     e.preventDefault();
     await axios
-        .post<IResponse<IUserPassword>>('api/user/editUserProfilePassword', {
+        .post<IResponse1<IUserPassword>>('api/user/editUserProfilePassword', {
           formData: userPasswordForm,
         })
         .then(() => {
