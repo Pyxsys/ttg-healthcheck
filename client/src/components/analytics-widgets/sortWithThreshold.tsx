@@ -19,9 +19,9 @@ const PieWheelCell = (cellValue: CellValue) => (
     </div>
   </div>
 );
-const overworkedMem = (_props: any) => {
+const sortWithThreshold = (_props: any) => {
   const devices: IDeviceTotal[] = _props.deviceDynamic;
-  const devicesSorted: IDeviceTotal[] = devices.sort((a, b) => b?.dynamic?.memory?.aggregatedPercentage as number - (a?.dynamic?.memory?.aggregatedPercentage as number)).reverse();
+  const devicesSorted: IDeviceTotal[] = devices.sort(_props.f).reverse();
 
 
   const column: IColumnDetail[] = [
@@ -30,9 +30,9 @@ const overworkedMem = (_props: any) => {
       name: 'Name',
     },
     {
-      key: 'dynamic.memory.aggregatedPercentage',
-      name: 'Memory',
-      override: PieWheelCell,
+      key: _props.columnKey,
+      name: (_props.columnKey as string).split('.')[(_props.columnKey as string).split('.').length -1],
+      override: _props.columnKey == 'dynamic.wifi.sendSpeed' ? undefined : PieWheelCell,
     },
   ];
 
@@ -41,7 +41,7 @@ const overworkedMem = (_props: any) => {
       <Accordion defaultActiveKey="0">
         <Accordion.Item eventKey="0" className="analytics-accordion-item">
           <Accordion.Header>
-            <div className="d-flex w-100 justify-content-around">Display</div>
+            <div className="d-flex w-100 justify-content-around">{_props.title}</div>
           </Accordion.Header>
           <Accordion.Body>
             <div className="overflow-auto">
@@ -58,4 +58,4 @@ const overworkedMem = (_props: any) => {
   );
 };
 
-export default overworkedMem;
+export default sortWithThreshold;

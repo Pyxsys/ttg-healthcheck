@@ -9,9 +9,7 @@ import GraphDevices from '../analytics-widgets/graphDevices';
 import GraphDisplay from '../analytics-widgets/graphDisplay';
 import {IDevice, IDeviceLog, IDeviceTotal} from '../../types/device';
 import {useRealTimeService} from '../../context/realTimeContext';
-import TableDevices from '../analytics-widgets/tableDevices';
-import TableDisplay from '../analytics-widgets/overworkedMem';
-import TableLatency from '../analytics-widgets/tableLatency';
+import SortWithThreshold from '../analytics-widgets/sortWithThreshold';
 
 // Custom
 import Navbar from '../common/Navbar';
@@ -76,9 +74,9 @@ const AnalyticsPage = () => {
           <Row>
             <Col>
               <Row className="gx-4">
-                <TableDevices title="Overworked CPU Devices"></TableDevices>
-                <TableDisplay deviceDynamic = {deviceTableData} title="Overworked Memory Devices"></TableDisplay>
-                <TableLatency title="Latency Monitoring"></TableLatency>
+                <SortWithThreshold title="Overworked CPU Devices" deviceDynamic = {deviceTableData} f = {(a:IDeviceTotal, b:IDeviceTotal) => b?.dynamic?.cpu?.aggregatedPercentage as number - (a?.dynamic?.cpu?.aggregatedPercentage as number)} columnKey= {'dynamic.memory.aggregatedPercentage'} ></SortWithThreshold>
+                <SortWithThreshold deviceDynamic = {deviceTableData} title="Overworked Memory Devices" f = {(a:IDeviceTotal, b:IDeviceTotal) => b?.dynamic?.memory?.aggregatedPercentage as number - (a?.dynamic?.memory?.aggregatedPercentage as number) } columnKey= {'dynamic.cpu.aggregatedPercentage'} ></SortWithThreshold>
+                <SortWithThreshold deviceDynamic = {deviceTableData} title="Network Speed Monitoring" f = {(a:IDeviceTotal, b:IDeviceTotal) => b?.dynamic?.wifi?.sendSpeed as number - (a?.dynamic?.wifi?.sendSpeed as number) } columnKey= {'dynamic.wifi.sendSpeed'}></SortWithThreshold>
               </Row>
               <Row>
                 <Col className="analytics-accordion analytics-accordion-padding">
