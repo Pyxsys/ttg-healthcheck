@@ -1,5 +1,6 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {Modal} from 'react-bootstrap';
+import {useLocation} from 'react-router-dom';
 import Contextualizer, {AppServices} from '../services/context.service';
 
 interface ModalOptions {
@@ -35,6 +36,7 @@ export const useModalService = () =>
   Contextualizer.use<IModalService>(AppServices.ModalService);
 
 const ModalService = ({children}: any) => {
+  const location = useLocation();
   const [primaryText, setPrimaryText] = useState('Save');
   const [secondaryText, setSecondaryText] = useState('Cancel');
 
@@ -44,6 +46,10 @@ const ModalService = ({children}: any) => {
   const [fullscreen, setFullscreen] = useState(false);
 
   const [stylingClass, setStylingClass] = useState('');
+
+  useEffect(() => {
+    modalService.close();
+  }, [location]);
 
   const modalService: IModalService = {
     open: (component, modalSize = 'lg', options = undefined) => {

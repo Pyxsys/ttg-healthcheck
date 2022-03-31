@@ -21,12 +21,12 @@ describe("All Register test", () => {
     }).then(() => {
       cy.request(
         "DELETE",
-        `http://localhost:5000/api/user/delete/${testUser.email}`
+        `http://localhost:5000/api/user/deleteWithEmail/${testUser.email}`
       );
       cy.request("GET", `http://localhost:5000/api/user/logout`);
     });
   });
-  it("1. Register a user with proper credentials and redirect to /dashboard", () => {
+  it("1. Register a user with proper credentials and redirect to /pending", () => {
     // open the signup page
     cy.visit("/signup");
 
@@ -39,8 +39,8 @@ describe("All Register test", () => {
     // click on Signup
     cy.get("button[type=submit]").click();
 
-    // assert we are in /dashboard
-    cy.url().should("include", "dashboard");
+    // assert we are in /pending
+    cy.url().should("include", "pending");
   });
 
   it("2.1 Register a user with non matching password should give 'password do not match!' error ", () => {
@@ -91,8 +91,8 @@ describe("All Register test", () => {
     cy.contains("Passwords do not match!").should("be.visible");
   });
 
-  it("2.4 Register a user with password1 of length > 45 should give 'password do not match!' error ", () => {
-    const longPassword = "1".repeat(45);
+  it("2.4 Register a user with password1 of length > 20 should give 'password do not match!' error ", () => {
+    const longPassword = "1".repeat(20);
     // open the signup page
     cy.visit("/signup");
 
@@ -177,7 +177,7 @@ describe("All Register test", () => {
     cy.get("button[type=submit]").click();
     // Error Message should pop up
     cy.contains(
-      "Invalid Name! Name must not include symbols and the length must be less than 45 characters!"
+      "Invalid Name! Name must not include symbols and the length must be less than 20 characters!"
     ).should("be.visible");
   });
 
@@ -194,12 +194,12 @@ describe("All Register test", () => {
     cy.get("button[type=submit]").click();
     // Error Message should pop up
     cy.contains(
-      "Invalid Name! Name must not include symbols and the length must be less than 45 characters!"
+      "Invalid Name! Name must not include symbols and the length must be less than 20 characters!"
     ).should("be.visible");
   });
 
-  it("4.3 Register a user with a name of lenght > 45 should give 'Invalid Name!' error", () => {
-    const longName = "s".repeat(45);
+  it("4.3 Register a user with a name of lenght > 20 should give 'Invalid Name!' error", () => {
+    const longName = "s".repeat(20);
 
     // open the signup page
     cy.visit("/signup");
@@ -214,7 +214,7 @@ describe("All Register test", () => {
     cy.get("button[type=submit]").click();
     // Error Message should pop up
     cy.contains(
-      "Invalid Name! Name must not include symbols and the length must be less than 45 characters!"
+      "Invalid Name! Name must not include symbols and the length must be less than 20 characters!"
     ).should("be.visible");
   });
 });
