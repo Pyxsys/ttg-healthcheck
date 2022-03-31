@@ -629,7 +629,7 @@ class DaemonChecker:
     def check_daemon(self):
         name_pattern = "python(\d?)\W+(.*)system_report\.py"
         
-        if self.configs["max_cpu"] <= 1 or self.configs["max_memory"] <= 1:
+        if self.configs["max_cpu"] <= 0 or self.configs["max_memory"] <= 0:
             return
 
         for proc in SysScrubber.fetch_all_processes():
