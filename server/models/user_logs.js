@@ -1,10 +1,11 @@
 const mongoose = require('mongoose')
 
 const userLogschema = new mongoose.Schema({
-  userId: String,
-  timestamp: { type: Date, expires: 240, default: Date.now },
+  timestamp: { type: Date, expires: 540, default: Date.now },
+  userPerformingAction: String,
+  affectedUser: String,
   event: String,
-  message: String,
+  description: String,
 })
 
 const userLog = mongoose.model('user_logs', userLogschema)
