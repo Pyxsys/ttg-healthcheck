@@ -102,10 +102,7 @@ class SysReport:
 
         #Initialize start time for process diagnostic scan
         for proc in SysScrubber.fetch_all_processes():
-            # process_name = SysScrubber.fetch_process_name(proc.pid)
-            # if re.search(name_pattern, process_name):
-            #     if proc.cpu_percent() > 10 or proc.memory_info()[0] > 1000000:
-            #         sys.exit()
+            
             proc.cpu_percent()
             process_buffer.append(proc)
 
@@ -621,17 +618,22 @@ class SysScrubber:
         return ips
 
 class DaemonChecker:
-    name_pattern = "python3? system_report.py"
 
     def check_daemon(self):
+        name_pattern = "python3? system_report.py"
+        
+        for proc in SysScrubber.fetch_all_processes():
+            process_name = SysScrubber.fetch_process_name(proc.pid)
+            if re.search(name_pattern, process_name):
+                if DaemonChecker.too_much_cpu(proc) or DaemonChecker.too_much_memory(proc):
+                    sys.exit()
+
+    @classmethod
+    def too_much_memory(cls, proc):
         pass
 
     @classmethod
-    def tooMuchMemory(cls):
-        pass
-
-    @classmethod
-    def tooMuchCPU(cls):
+    def too_much_cpu(cls, proc):
         pass
 
 def main(config, mode):
