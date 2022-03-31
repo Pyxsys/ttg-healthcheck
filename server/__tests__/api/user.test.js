@@ -300,7 +300,7 @@ describe('Edit user info', () => {
       .set('Cookie', adminMissingNameCookie)
       .send({
         formData: {
-          _id: {_id: 'invalidId'},
+          _id: { _id: 'invalidId' },
           name: 'admin',
           email: 'someEmail@email.com',
         },
@@ -471,7 +471,7 @@ describe('Change user password', () => {
       .set('Cookie', adminEmptyPasswordCookie)
       .send({
         formData: {
-          _id: {_id: 'invalidId'},
+          _id: { _id: 'invalidId' },
           newPassword: 'test',
           newPassword1: 'test',
         },
@@ -591,7 +591,6 @@ describe('Deleting user', () => {
       .set('Cookie', adminDeleteLastCookie)
     expect(response.statusCode).toBe(500)
   })
-
 })
 
 afterAll(async () => {

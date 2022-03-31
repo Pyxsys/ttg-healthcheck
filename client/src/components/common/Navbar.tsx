@@ -87,22 +87,19 @@ const Navbar = () => {
                 </div>
               </Dropdown.ItemText>
               <Dropdown.Divider />
-              <Dropdown.Item
-                eventKey="1"
-                href={
-                  `/user-profile?Id=${user._id}`
-                }
-              >
+              <Dropdown.Item eventKey="1" href={`/user-profile?Id=${user._id}`}>
                 <div id="profile" className="nav-right-font">
                   Profile
                 </div>
               </Dropdown.Item>
               <Dropdown.Item
                 eventKey="1"
-                style={user.role == 'admin' ? {display: 'block'} : {display: 'none'}}
-                href={
-                  '/admin'
+                style={
+                  user.role == 'admin' ?
+                    {display: 'block'} :
+                    {display: 'none'}
                 }
+                href={'/admin'}
               >
                 <div className="nav-right-font">Admin panel</div>
               </Dropdown.Item>

@@ -471,20 +471,30 @@ const UserProfile = (props: any) => {
                       <tr>
                         <td>
                           <div className="pt-2">
-                            <Button variant="danger" className="user-profile-delete-button mt-2" size="sm" onClick={() =>
-                              modalService.open(
-                                  <div className="d-flex flex-column">
-                                    <h2>Confirm Deletion</h2>
-                                    <span>Are you sure you wish to delete {loggedUser.name}?</span>
-                                  </div>,
-                                  'lg',
-                                  {
-                                    width: 60,
-                                    primaryButtonText: 'Yes',
-                                    secondaryButtonText: 'No',
-                                  },
-                              )}
-                            >Delete Account</Button>
+                            <Button
+                              variant="danger"
+                              className="user-profile-delete-button mt-2"
+                              size="sm"
+                              onClick={() =>
+                                modalService.open(
+                                    <div className="d-flex flex-column">
+                                      <h2>Confirm Deletion</h2>
+                                      <span>
+                                      Are you sure you wish to delete{' '}
+                                        {loggedUser.name}?
+                                      </span>
+                                    </div>,
+                                    'lg',
+                                    {
+                                      width: 60,
+                                      primaryButtonText: 'Yes',
+                                      secondaryButtonText: 'No',
+                                    },
+                                )
+                              }
+                            >
+                              Delete Account
+                            </Button>
                             <Link
                               to={{
                                 pathname: '/user-logs',

@@ -62,12 +62,9 @@ const UserLogs = (props: any) => {
       disableOrderBy: true,
       override: (cellValue) => (
         <div>
-          {cellValue?
-            format(
-                new Date(cellValue),
-                'MMM DD, YYYY, h:mm:ss A',
-            ) :
-        'N/A'}
+          {cellValue ?
+            format(new Date(cellValue), 'MMM DD, YYYY, h:mm:ss A') :
+            'N/A'}
         </div>
       ),
     },

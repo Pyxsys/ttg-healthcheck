@@ -13,14 +13,18 @@ const encryptPassword = async (password) => {
   return bcrypt.hash(password, salt)
 }
 
-const userEventLog = (userPerformingAction, affectedUser, event, description) => {
+const userEventLog = (
+  userPerformingAction,
+  affectedUser,
+  event,
+  description
+) => {
   return new userLog({
     userPerformingAction: userPerformingAction,
     affectedUser: affectedUser,
     event: event,
     description: description,
   })
-
 }
 
 // signup
@@ -45,7 +49,12 @@ router.post('/register', async (req, res) => {
     // save new user, create JWT, store in cookie and send to front-end
     await newUser.save()
     // save user event log
-    await userEventLog(newUser.name, newUser.id, 'register','Account created.').save()
+    await userEventLog(
+      newUser.name,
+      newUser.id,
+      'register',
+      'Account created.'
+    ).save()
     const token = jwt.sign({ id: newUser.id }, process.env.ACCESS_TOKEN_KEY, {
       expiresIn: '1h',
     })
@@ -79,7 +88,7 @@ router.post('/login', async (req, res) => {
       return res.status(400).json({ message: 'Invalid Password' })
     }
     // save user event log
-    await userEventLog(user.name, user.id, 'login','Account logged in.').save()
+    await userEventLog(user.name, user.id, 'login', 'Account logged in.').save()
     // Create JWT, store in cookie and send to front-end
     const token = jwt.sign({ id: user.id }, process.env.ACCESS_TOKEN_KEY, {
       expiresIn: '1h',
@@ -108,7 +117,7 @@ router.post('/login', async (req, res) => {
 router.get('/logout', auth, async (req, res) => {
   const user = await User.findOne({ _id: req.userId })
   // save user event log
-  await userEventLog(user.name, user.id, 'logout','Account logged out.').save()
+  await userEventLog(user.name, user.id, 'logout', 'Account logged out.').save()
   return res
     .clearCookie('access_token')
     .status(200)
@@ -137,16 +146,17 @@ router.get('/log', auth, async (req, res) => {
     return res.status(400).send('Bad request, no userId provided')
   }
 
-  if (user.role === 'disabled' || (user.role === 'user' && String(user._id) !== query.userId)) {
+  if (
+    user.role === 'disabled' ||
+    (user.role === 'user' && String(user._id) !== query.userId)
+  ) {
     return res.status(401).send('Unauthorized access')
   }
 
   try {
     const validUser = await User.findOne({ _id: query.userId })
     if (validUser) {
-      const results = await userLog.find(
-        {affectedUser: query.userId},
-      )
+      const results = await userLog.find({ affectedUser: query.userId })
       return res.status(200).json({ Results: results, Total: results.length })
     }
   } catch (err) {
@@ -188,13 +198,16 @@ router.get('/profile', auth, async (req, res) => {
     return res.status(401).send('Unauthorized access')
   }
   try {
-    const validUser = await User.findOne({ _id: query.userId },{
-      _id: 1,
-      name: 1,
-      email: 1,
-      role: 1,
-      avatar: 1,
-    })
+    const validUser = await User.findOne(
+      { _id: query.userId },
+      {
+        _id: 1,
+        name: 1,
+        email: 1,
+        role: 1,
+        avatar: 1,
+      }
+    )
     if (validUser) {
       return res.status(200).json({ Results: validUser, Total: 1 })
     }
@@ -224,7 +237,7 @@ router.delete('/deleteWithEmail/:email', auth, async (req, res) => {
 
 // delete user with id
 router.delete('/delete/:id', auth, async (req, res) => {
-  try{
+  try {
     const loggedUser = await User.findOne({ _id: req.userId })
     // user or disabled can only delete if their id matches url id
     if (
@@ -279,7 +292,9 @@ router.post('/editUserProfileInfo', auth, async (req, res) => {
 
     // If email or name is empty
     if (!email || !name) {
-      return res.status(400).send(`${!email ? 'Email' : 'Name'} cannot be empty`)
+      return res
+        .status(400)
+        .send(`${!email ? 'Email' : 'Name'} cannot be empty`)
     }
 
     // Email exists for another user
@@ -303,13 +318,26 @@ router.post('/editUserProfileInfo', auth, async (req, res) => {
     }
 
     // Update desired user
-    await User.findOneAndUpdate({_id: _id}, {email: email, name: name, avatar: avatar, role: role})
+    await User.findOneAndUpdate(
+      { _id: _id },
+      { email: email, name: name, avatar: avatar, role: role }
+    )
     // save user event log
-    await userEventLog(loggedUser.name, _id, 'edit profile','Account information was changed.').save()
+    await userEventLog(
+      loggedUser.name,
+      _id,
+      'edit profile',
+      'Account information was changed.'
+    ).save()
     return res.status(200).json({
       message: 'Update successful',
-      user: {_id: String(loggedUser._id), name: loggedUser.name, role: loggedUser.role, avatar: loggedUser.avatar}
-    });
+      user: {
+        _id: String(loggedUser._id),
+        name: loggedUser.name,
+        role: loggedUser.role,
+        avatar: loggedUser.avatar,
+      },
+    })
   } catch (err) {
     res.status(500).send('Server Error: ' + err.message)
   }
@@ -317,7 +345,7 @@ router.post('/editUserProfileInfo', auth, async (req, res) => {
 
 // edit user profile information
 router.post('/editUserProfilePassword', auth, async (req, res) => {
-  try{
+  try {
     const { oldPassword, newPassword, newPassword1, _id } = Object(
       req.body.formData
     )
@@ -350,13 +378,23 @@ router.post('/editUserProfilePassword', auth, async (req, res) => {
     }
 
     const encryptedPassword = await encryptPassword(newPassword)
-    await User.findOneAndUpdate({_id: _id}, {password: encryptedPassword})
+    await User.findOneAndUpdate({ _id: _id }, { password: encryptedPassword })
     // save user event log
-    await userEventLog(loggedUser.name, _id, 'edit profile','Account password was changed.').save()
+    await userEventLog(
+      loggedUser.name,
+      _id,
+      'edit profile',
+      'Account password was changed.'
+    ).save()
     return res.status(200).json({
       message: 'Update successful',
-      user: {_id: String(loggedUser._id), name: loggedUser.name, role: loggedUser.role, avatar: loggedUser.avatar}
-    });
+      user: {
+        _id: String(loggedUser._id),
+        name: loggedUser.name,
+        role: loggedUser.role,
+        avatar: loggedUser.avatar,
+      },
+    })
   } catch (err) {
     res.status(500).send('Server error')
   }
