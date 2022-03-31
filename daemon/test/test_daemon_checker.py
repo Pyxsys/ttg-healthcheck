@@ -23,7 +23,9 @@ class TestDaemonCheckerClass(unittest.TestCase):
     #--- unit tests -------------------------------
 
     def testDaemonCheckerInitialization(self):
-        self.assertIsInstance(self.test_checker)
+        self.assertIsInstance(self.test_checker, DaemonChecker, msg=None)
+
+    
 
 if __name__ == '__main__':
     unittest.main()
