@@ -331,6 +331,7 @@ const Dashboard = () => {
                     <AddWidgetModal
                       setType={addWidgetType}
                       setName={setDeviceName}
+                      deviceIds = {deviceData.map((e) => e.static.deviceId)}
                     />,
                     'lg',
                     {width: 60},

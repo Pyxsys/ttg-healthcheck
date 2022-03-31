@@ -4,9 +4,18 @@ import React, {useState} from 'react';
 type Props = {
   setType: (type: string) => void
   setName: (name: string) => void
+  deviceIds: String[]
 }
-
-const AddWidgetModal = ({setType, setName}: Props) => {
+const generateOptions = (listOfOptions: String[]) => {
+  const returnString = [];
+  console.log(listOfOptions.length);
+  for (let i = 0; i < listOfOptions.length; i++) {
+    console.log(i);
+    returnString.push(<option key= {i}> + {listOfOptions[i]} + </option>);
+  }
+  return returnString;
+};
+const AddWidgetModal = ({setType, setName, deviceIds}: Props) => {
   const [types, setTypes] = useState('');
   return (
     <>
@@ -36,7 +45,9 @@ const AddWidgetModal = ({setType, setName}: Props) => {
             <div className="modal-options my-2">Options</div>
             <div className="d-flex justify-content-around pt-2">
               <span>Device UUID/Name</span>
-              <input type="text" onChange={(e) => setName(e.target.value)} />
+              <select onChange={(e) => setName(e.target.value)} >
+                {generateOptions(deviceIds)}
+              </select>
             </div>
           </>
         ) : (
