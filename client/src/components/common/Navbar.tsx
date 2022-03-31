@@ -54,9 +54,9 @@ const Navbar = () => {
   type Ref = HTMLDivElement
   const CustomToggle = useMemo(
       () =>
-        React.forwardRef<Ref, Props>(({onClick}, ref) => (
+        React.forwardRef<Ref, Props>(({onClick}, ref1) => (
           <div
-            ref={ref}
+            ref={ref1}
             onClick={(e) => {
               e.preventDefault();
               onClick(e);

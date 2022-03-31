@@ -90,7 +90,7 @@ router.post('/login', async (req, res) => {
 })
 
 // log out user
-router.get('/logout', auth, (req, res) => {
+router.get('/logout', auth, (_req, res) => {
   return res
     .clearCookie('access_token')
     .status(200)

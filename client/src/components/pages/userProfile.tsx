@@ -50,10 +50,10 @@ const UserProfile = (props: any) => {
   const {oldPassword, newPassword, newPassword1} = userPasswordForm;
 
   // Retrieve user info based on url ID
-  const userInfo = async (userId: string) => {
+  const userInfo = async (userId1: string) => {
     await axios
         .get<IResponse<IUserObject>>('api/user/profile', {
-          params: {userId: userId},
+          params: {userId: userId1},
         })
         .then((result) => {
           const userProfile = result.data.Results[0];
@@ -123,8 +123,8 @@ const UserProfile = (props: any) => {
             setLoggedUser(updatedForm);
           }
         })
-        .catch((e) => {
-          notificationService.error(e.response.data);
+        .catch((err) => {
+          notificationService.error(err.response.data);
         });
   };
 
@@ -146,8 +146,8 @@ const UserProfile = (props: any) => {
             newPassword1: '',
           });
         })
-        .catch((e) => {
-          notificationService.error(e.response.data);
+        .catch((err) => {
+          notificationService.error(err.response.data);
         });
   };
 
