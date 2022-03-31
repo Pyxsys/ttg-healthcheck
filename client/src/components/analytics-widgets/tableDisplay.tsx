@@ -20,7 +20,7 @@ const PieWheelCell = (cellValue: CellValue) => (
     </div>
   </div>
 );
-const graphDisplay = (_props: any) => {
+const tableDisplay = (_props: any) => {
   const devices: IDeviceTotal[] = _props.deviceDynamic || [];
 
   const column: IColumnDetail[] = [
@@ -57,4 +57,4 @@ const graphDisplay = (_props: any) => {
   );
 };
 
-export default graphDisplay;
+export default tableDisplay;
