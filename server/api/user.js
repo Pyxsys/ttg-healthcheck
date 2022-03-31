@@ -13,12 +13,13 @@ const encryptPassword = async (password) => {
   return bcrypt.hash(password, salt)
 }
 
-const userEventLog = (id, event, message) => {
+const userEventLog = (userPerformingAction, affectedUser, event, description) => {
   const eventLogObj = new userLog({
-    id: id,
     timestamp: new Date(),
+    userPerformingAction: userPerformingAction,
+    affectedUser: affectedUser,
     event: event,
-    message: message,
+    description: description,
   })
   return eventLogObj;
 }
@@ -45,7 +46,7 @@ router.post('/register', async (req, res) => {
     // save new user, create JWT, store in cookie and send to front-end
     await newUser.save()
     // save user event log
-    await userEventLog(newUser.id, 'register','Account successfully created.').save()
+    await userEventLog(newUser.name, newUser.id, 'register','Account created.').save()
     const token = jwt.sign({ id: newUser.id }, process.env.ACCESS_TOKEN_KEY, {
       expiresIn: '1h',
     })
@@ -78,6 +79,8 @@ router.post('/login', async (req, res) => {
     if (!isMatch) {
       return res.status(400).json({ message: 'Invalid Password' })
     }
+    // save user event log
+    await userEventLog(user.name, user.id, 'login','Account logged in.').save()
     // Create JWT, store in cookie and send to front-end
     const token = jwt.sign({ id: user.id }, process.env.ACCESS_TOKEN_KEY, {
       expiresIn: '1h',
@@ -103,7 +106,10 @@ router.post('/login', async (req, res) => {
 })
 
 // log out user
-router.get('/logout', auth, (req, res) => {
+router.get('/logout', auth, async (req, res) => {
+  const user = await User.findOne({ _id: req.userId })
+  // save user event log
+  await userEventLog(user.name, user.id, 'logout','Account logged out.').save()
   return res
     .clearCookie('access_token')
     .status(200)
@@ -250,6 +256,8 @@ router.post('/editUserProfileInfo', auth , async (req, res) => {
 
     // Update desired user
     await User.findOneAndUpdate({_id: _id}, {email: email, name: name, avatar: avatar, role: role})
+    // save user event log
+    await userEventLog(loggedUser.name, _id, 'edit profile','Account information was changed.').save()
     return res.status(200).json({
       message: 'Update successful',
       user: {_id: String(loggedUser._id), name: loggedUser.name, role: loggedUser.role, avatar: loggedUser.avatar}
@@ -292,6 +300,8 @@ router.post('/editUserProfilePassword', auth , async (req, res) => {
 
     const encryptedPassword = await encryptPassword(newPassword)
     await User.findOneAndUpdate({_id: _id}, {password: encryptedPassword})
+    // save user event log
+    await userEventLog(loggedUser.name, _id, 'edit profile','Account password was changed.').save()
     return res.status(200).json({
       message: 'Update successful',
       user: {_id: String(loggedUser._id), name: loggedUser.name, role: loggedUser.role, avatar: loggedUser.avatar}
