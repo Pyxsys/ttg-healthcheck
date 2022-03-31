@@ -2,14 +2,16 @@ import React from 'react';
 import {Col, Accordion} from 'react-bootstrap';
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-const generateOptions = (listOfOptions : Array<String>) => {
-  let returnString = '';
+const generateOptions = (listOfOptions: String[]) => {
+  const returnString = [];
+  console.log(listOfOptions.length);
   for (let i = 0; i < listOfOptions.length; i++) {
-    returnString += '<option>' + listOfOptions[i] + '</option>';
+    console.log(i);
+    returnString.push(<option key= {i}> + {listOfOptions[i]} + </option>);
   }
   return returnString;
 };
-const graphSettings = (_props: any) => {
+const graphSettings = (Props:any) => {
   return (
     <Col className="graph-dark-accordion analytics-accordion">
       <Accordion defaultActiveKey="0">
@@ -25,8 +27,8 @@ const graphSettings = (_props: any) => {
                 defaultValue={'DEFAULT'}
                 onChange={() => {}}
               >
+                {generateOptions(Props.listOfOptions)}
                 <option value="">Place Holder</option>
-                {generateOptions(_props[0])}
               </select>
               <span className="settings-spans">Selected Metric</span>
               <select

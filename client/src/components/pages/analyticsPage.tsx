@@ -19,6 +19,7 @@ import {IResponse} from '../../types/queries';
 
 const AnalyticsPage = () => {
   const [deviceTableData, setDeviceTableData] = useState([] as IDeviceTotal[]);
+  const [dIds, setDIds] = useState([] as String[]);
   const realTimeDataService = useRealTimeService();
 
   const initialRealTimeData = () => {
@@ -43,7 +44,8 @@ const AnalyticsPage = () => {
     );
     const devices = deviceResponse.data.Results;
     const deviceIds = devices.map((device) => device.deviceId);
-
+    setDIds(deviceIds);
+    console.log(deviceIds);
     const latestDevicesResponse = await axios.get<IResponse<IDeviceLog>>(
         'api/device-logs/latest',
         {params: {Ids: deviceIds.join(',')}},
@@ -95,7 +97,7 @@ const AnalyticsPage = () => {
                           <Row className="w-100">
                             <Col className="analytics-accordion-padding">
                               <div className="graph-widget-padding w-100">
-                                <GraphSettings></GraphSettings>
+                                <GraphSettings listOfOptions={dIds}></GraphSettings>
                               </div>
                             </Col>
                             <Col className="analytics-accordion-padding">
