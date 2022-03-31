@@ -77,7 +77,7 @@ const AnalyticsPage = () => {
             <Col>
               <Row className="gx-4">
                 <TableDevices title="Overworked CPU Devices"></TableDevices>
-                <TableDisplay title="Overworked Memory Devices"></TableDisplay>
+                <TableDisplay deviceDynamic = {deviceTableData} title="Overworked Memory Devices"></TableDisplay>
                 <TableLatency title="Latency Monitoring"></TableLatency>
               </Row>
               <Row>
