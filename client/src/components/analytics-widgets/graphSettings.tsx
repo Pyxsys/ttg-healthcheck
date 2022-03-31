@@ -2,6 +2,13 @@ import React from 'react';
 import {Col, Accordion} from 'react-bootstrap';
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
+const generateOptions = (listOfOptions : Array<String>) => {
+  let returnString = '';
+  for (let i = 0; i < listOfOptions.length; i++) {
+    returnString += '<option>' + listOfOptions[i] + '</option>';
+  }
+  return returnString;
+};
 const graphSettings = (_props: any) => {
   return (
     <Col className="graph-dark-accordion analytics-accordion">
@@ -19,6 +26,7 @@ const graphSettings = (_props: any) => {
                 onChange={() => {}}
               >
                 <option value="">Place Holder</option>
+                {generateOptions(_props[0])}
               </select>
               <span className="settings-spans">Selected Metric</span>
               <select
