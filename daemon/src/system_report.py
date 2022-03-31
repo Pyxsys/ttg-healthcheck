@@ -623,26 +623,27 @@ class SysScrubber:
 
 class DaemonChecker:
 
-    @classmethod
-    def check_daemon(cls):
+    def __init__(self, path):
+        with open(path, "r") as config_file:
+            self.configs = json.load(config_file)
+
+    def check_daemon(self):
         name_pattern = "python(\d?)\W+(.*)system_report\.py"
         
         for proc in SysScrubber.fetch_all_processes():
             process_name = SysScrubber.fetch_process_name(proc.pid)
             if re.search(name_pattern, process_name):
                 if DaemonChecker.too_much_cpu() or DaemonChecker.too_much_memory():
-                    exit_msg = "Exited daemon because CPU or Memory usage was too high.\nAllowed: CPU=10.0%, Memory=10 MB\nUsed:    CPU=" + proc.cpu_percent() +"%, Memory=" +proc.memory_info()[0]/1000000+"MB\n"
+                    exit_msg = "Exited daemon because CPU or Memory usage was too high.\nAllowed: CPU="+ str(self.configs["max_cpu"]) +"%, Memory="+ str(self.configs["max_memory"]/1000000) +" MB\nUsed:    CPU=" + str(proc.cpu_percent()) + "%, Memory=" + str(proc.memory_info()[0]/1000000) + "MB\n"
                     sys.exit(exit_msg)
 
-    @classmethod
-    def too_much_memory(cls, proc=psutil.Process):
-        if proc.memory_info()[0] > 10000000:
+    def too_much_memory(self, proc=psutil.Process):
+        if proc.memory_info()[0] > self.configs["max_memory"]:
             return True
         return False
 
-    @classmethod
-    def too_much_cpu(cls, proc=psutil.Process):
-        if proc.cpu_percent() > 10:
+    def too_much_cpu(self, proc=psutil.Process):
+        if proc.cpu_percent() > self.configs["max_cpu"]:
             return True
         return False
 
@@ -652,9 +653,14 @@ def main(config, mode):
     runner=Runner(config, mode)
     runner.setDaemon(True)
     runner.start()
+
+    daemonChecker=DaemonChecker(config)
     while _RUNNER_RUNNING:
-        DaemonChecker.check_daemon()
+        daemonChecker.check_daemon()
+    del daemonChecker
+    
     runner.join()
+    del runner
 
 if __name__ == "__main__":
     main(sys.argv[1], sys.argv[2])
