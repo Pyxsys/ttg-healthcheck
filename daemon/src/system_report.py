@@ -7,7 +7,7 @@ from datetime import datetime
 _RUNNER_RUNNING = True
 
 class Runner(threading.Thread):
-
+    global _RUNNER_RUNNING
     api_endpoint='api/daemon'
 
     # Initializes instance attributes.
@@ -646,6 +646,8 @@ class DaemonChecker:
         return False
 
 def main(config, mode):
+    global _RUNNER_RUNNING
+
     runner=Runner(config, mode)
     runner.setDaemon(True)
     runner.start()
