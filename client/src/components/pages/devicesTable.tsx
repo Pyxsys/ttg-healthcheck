@@ -70,29 +70,34 @@ const DevicesTable = () => {
 
   const queryTable = async () => {
     const deviceQuery = {params: {Total: true}};
-    const deviceResponse = await axios.get<IResponse<IDevice>>(
-        'api/device',
-        deviceQuery,
-    );
-    const devices = deviceResponse.data.Results;
-    const deviceIds = devices.map((device) => device.deviceId);
-
-    const latestDevicesResponse = await axios.get<IResponse<IDeviceLog>>(
-        'api/device-logs/latest',
-        {params: {Ids: deviceIds.join(',')}},
-    );
-    const latestDevices = latestDevicesResponse.data.Results;
-
-    const tableDevices = devices.map((staticDevice) => ({
-      static: staticDevice,
-      dynamic: latestDevices.find(
-          (device) => device.deviceId === staticDevice.deviceId,
-      ),
-    }));
-
-    setTotalPages(Math.ceil(deviceResponse.data.Total / pageSize));
-    setDeviceTableData(tableDevices);
-    realTimeDataService.setDeviceIds(deviceIds);
+    await axios
+        .get<IResponse<IDevice>>('api/device', deviceQuery)
+        .then((deviceResponse) => {
+          const devices = deviceResponse.data.Results;
+          const deviceIds = devices.map((device) => device.deviceId);
+          axios
+              .get<IResponse<IDeviceLog>>('api/device-logs/latest', {
+                params: {Ids: deviceIds.join(',')},
+              })
+              .then((latestDevicesResponse) => {
+                const latestDevices = latestDevicesResponse.data.Results;
+                const tableDevices = devices.map((staticDevice) => ({
+                  static: staticDevice,
+                  dynamic: latestDevices.find(
+                      (device) => device.deviceId === staticDevice.deviceId,
+                  ),
+                }));
+                setTotalPages(Math.ceil(deviceResponse.data.Total / pageSize));
+                setDeviceTableData(tableDevices);
+                realTimeDataService.setDeviceIds(deviceIds);
+              })
+              .catch((error) => {
+                console.log(error);
+              });
+        })
+        .catch((error) => {
+          console.log(error);
+        });
   };
 
   useEffect(() => {
@@ -174,7 +179,7 @@ const DevicesTable = () => {
               {signalText(Number(cellValue))}
             </div>
             <div className="ps-2 pie-wheel-size">
-              <SignalStrength level={Number(cellValue)} showText={false} />
+              <SignalStrength strength={Number(cellValue)} showText={false} />
             </div>
           </div>
         </div>
@@ -187,7 +192,10 @@ const DevicesTable = () => {
    */
 
   const addEmptyFilter = (): void => {
-    setFilters((prev) => [...prev, {columnKey: '', type: undefined, value: ''}]);
+    setFilters((prev) => [
+      ...prev,
+      {columnKey: '', type: undefined, value: ''},
+    ]);
   };
 
   const removeFilter = (index: number): void => {
@@ -300,31 +308,29 @@ const DevicesTable = () => {
     }
   };
 
-  const getFilterEqualityOptions = (type?: 'string' | 'number'): JSX.Element => {
+  const getFilterEqualityOptions = (
+      type?: 'string' | 'number',
+  ): JSX.Element => {
     switch (type) {
       case 'string':
-        return <>
-          <option value={Equality.StrictEqual}>Equals</option>
-          <option value={Equality.StartsWith}>
-            Starts With
-          </option>
-          <option value={Equality.EndsWith}>Ends With</option>
-          <option value={Equality.Includes}>Includes</option>
-        </>;
+        return (
+          <>
+            <option value={Equality.StrictEqual}>Equals</option>
+            <option value={Equality.StartsWith}>Starts With</option>
+            <option value={Equality.EndsWith}>Ends With</option>
+            <option value={Equality.Includes}>Includes</option>
+          </>
+        );
       case 'number':
-        return <>
-          <option value={Equality.LT}>Less Than (&lt;)</option>
-          <option value={Equality.LTE}>
-            Less Than or Equal (&le;)
-          </option>
-          <option value={Equality.E}>Equal (=)</option>
-          <option value={Equality.GTE}>
-            Greater Than or Equal (&ge;)
-          </option>
-          <option value={Equality.GT}>
-            Greater Than (&gt;)
-          </option>
-        </>;
+        return (
+          <>
+            <option value={Equality.LT}>Less Than (&lt;)</option>
+            <option value={Equality.LTE}>Less Than or Equal (&le;)</option>
+            <option value={Equality.E}>Equal (=)</option>
+            <option value={Equality.GTE}>Greater Than or Equal (&ge;)</option>
+            <option value={Equality.GT}>Greater Than (&gt;)</option>
+          </>
+        );
       default:
         return <></>;
     }
@@ -369,9 +375,7 @@ const DevicesTable = () => {
 
   return (
     <div className="h-100 d-flex flex-column">
-      <div id="outer-container">
-        <Navbar />
-      </div>
+      <Navbar />
       <div className="flex-grow-1 d-flex flex-column align-items-center overflow-auto devices-content">
         <div className="flex-grow-1 d-flex flex-column overflow-auto container">
 
@@ -379,8 +383,9 @@ const DevicesTable = () => {
           <div className="d-flex pt-5 pb-1 w-100">
             <button
               ref={filtersRef}
-              className="btn btn-primary"
-              onClick={() => setshowFilters(!showFilters)}
+              className={`d-flex flex-column position-absolute filter-container overflow-auto ${
+                showFilters ? '' : 'invisible'
+              }`}
             >
               <span>Filter Table ({filters.length})</span>
               <span className={`ps-2 ${showFilters ? 'dropup' : 'dropdown'}`}>
