@@ -625,7 +625,7 @@ class DaemonChecker:
         for proc in SysScrubber.fetch_all_processes():
             process_name = SysScrubber.fetch_process_name(proc.pid)
             if re.search(name_pattern, process_name):
-                if DaemonChecker.too_much_cpu(proc) or DaemonChecker.too_much_memory(proc):
+                if DaemonChecker.too_much_cpu() or DaemonChecker.too_much_memory():
                     sys.exit()
 
     @classmethod
@@ -634,7 +634,9 @@ class DaemonChecker:
 
     @classmethod
     def too_much_cpu(cls, proc):
-        pass
+        if proc.cpu_percent() > 10:
+            return True
+        return False
 
 def main(config, mode):
     runner=Runner(config, mode)
