@@ -29,8 +29,9 @@ class TestRunner(unittest.TestCase):
         self.assertIsInstance(self.test_runner, Runner, msg=None)
 
     @patch('daemon.src.system_report.SysScrubber.fetch_network_strength', return_value='Medium')
-    def testRunnerGeneratingReport(self, m1):
-        expected_sections={'deviceId', 'processes', 'memory', 'network', 'disk', 'timestamp'}
+    @patch('daemon.src.system_report.SysScrubber.fetch_connected_usb_devices', return_value=[{'hid':'/dev/bus/usb/001/005', 'connection':'USB', 'name':'DUMMY UDisk flash drive'}])
+    def testRunnerGeneratingReport(self, m1, m2):
+        expected_sections={'deviceId', 'processes', 'memory', 'network', 'disk', 'peripherals', 'timestamp'}
         missing_sections=[]
 
         self.test_runner.gen_report()
