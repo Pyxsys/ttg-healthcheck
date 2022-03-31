@@ -10,6 +10,15 @@ export interface IDevicesColumns {
 export interface IColumnDetail {
   key: string
   name: string
+  disableOrderBy?: boolean
   filter?: boolean
   override?: (value: number | string | undefined, object: any) => JSX.Element
+}
+
+export interface ViewTableInputs<T> {
+  tableData: T[]
+  columns: IColumnDetail[]
+  page?: number
+  pageSize?: number
+  initialOrderBy?: string
 }

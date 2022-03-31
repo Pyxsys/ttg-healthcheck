@@ -46,8 +46,8 @@ describe("Login Page", () => {
     ).should("be.visible");
   });
 
-  it("2.3 Given a password of lenght > 45, should throw a 'Invalid Password!' error", () => {
-    const longPassword = "r".repeat(45);
+  it("2.3 Given a password of lenght > 20, should throw a 'Invalid Password!' error", () => {
+    const longPassword = "r".repeat(20);
     // open the landing page
     cy.visit("/");
 

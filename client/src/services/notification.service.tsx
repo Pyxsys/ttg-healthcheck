@@ -1,4 +1,4 @@
-import {toast, ToastOptions, Bounce} from 'react-toastify';
+import { toast, ToastOptions, Bounce } from 'react-toastify'
 
 const toastifyOptions: ToastOptions<{}> = {
   position: 'bottom-right',
@@ -11,19 +11,19 @@ const toastifyOptions: ToastOptions<{}> = {
   pauseOnFocusLoss: false,
   draggable: false,
   progress: undefined,
-};
+}
 
 export const notificationService = {
   info: (message: string) => {
-    toast.info(message, toastifyOptions);
+    toast.info(message, toastifyOptions)
   },
   success: (message: string) => {
-    toast.success(message, toastifyOptions);
+    toast.success(message, toastifyOptions)
   },
   warning: (message: string) => {
-    toast.warning(message, toastifyOptions);
+    toast.warning(message, toastifyOptions)
   },
   error: (message: string) => {
-    toast.error(message, toastifyOptions);
+    toast.error(message, toastifyOptions)
   },
-};
+}

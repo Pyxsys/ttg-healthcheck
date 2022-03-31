@@ -1,15 +1,15 @@
 // 3rd Party
-import React from 'react';
-import {Col, Table, Accordion} from 'react-bootstrap';
+import React from 'react'
+import { Col, Table, Accordion } from 'react-bootstrap'
 
 // Custom
-import {IDevice} from '../../types/device';
+import { IDevice } from '../../types/device'
 
 const cpuAdditionalWidget = (props: {
   deviceStatic: IDevice
   overrideHeader?: JSX.Element
 }) => {
-  const deviceStatic: IDevice = props.deviceStatic;
+  const deviceStatic: IDevice = props.deviceStatic
 
   return (
     <Col className="device-details-accordion dark-accordion pt-3 pb-3">
@@ -54,7 +54,9 @@ const cpuAdditionalWidget = (props: {
                 {deviceStatic?.cpu?.cacheSizeL1 ? (
                   <tr className="border-bottom">
                     <td>Cache Size 1</td>
-                    <td className="float-right">{deviceStatic?.cpu?.cacheSizeL1}</td>
+                    <td className="float-right">
+                      {deviceStatic?.cpu?.cacheSizeL1}
+                    </td>
                   </tr>
                 ) : (
                   <></>
@@ -62,7 +64,9 @@ const cpuAdditionalWidget = (props: {
                 {deviceStatic?.cpu?.cacheSizeL2 ? (
                   <tr className="border-bottom">
                     <td>Cache Size 2</td>
-                    <td className="float-right">{deviceStatic?.cpu?.cacheSizeL2}</td>
+                    <td className="float-right">
+                      {deviceStatic?.cpu?.cacheSizeL2}
+                    </td>
                   </tr>
                 ) : (
                   <></>
@@ -70,7 +74,9 @@ const cpuAdditionalWidget = (props: {
                 {deviceStatic?.cpu?.cacheSizeL3 ? (
                   <tr className="border-bottom">
                     <td>Cache Size 3</td>
-                    <td className="float-right">{deviceStatic?.cpu?.cacheSizeL3}</td>
+                    <td className="float-right">
+                      {deviceStatic?.cpu?.cacheSizeL3}
+                    </td>
                   </tr>
                 ) : (
                   <></>
@@ -81,7 +87,7 @@ const cpuAdditionalWidget = (props: {
         </Accordion.Item>
       </Accordion>
     </Col>
-  );
-};
+  )
+}
 
-export default cpuAdditionalWidget;
+export default cpuAdditionalWidget

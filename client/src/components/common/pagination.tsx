@@ -1,6 +1,6 @@
 // 3rd Party
-import React from 'react';
-import {FaChevronLeft, FaChevronRight} from 'react-icons/fa';
+import React from 'react'
+import { FaChevronLeft, FaChevronRight } from 'react-icons/fa'
 
 const Pagination = ({
   page,
@@ -11,16 +11,16 @@ const Pagination = ({
   totalPages: number
   onPageChanged: (page: number) => void
 }) => {
-  const range = [-1, 0, 1];
+  const range = [-1, 0, 1]
   const textColor = (index: number): string =>
-    index === 0 ? 'text-muted' : 'text-white';
+    index === 0 ? 'text-muted' : 'text-white'
 
   return (
     <div className="d-flex justify-content-center">
       <button
         className="btn previous"
         disabled={page === 1}
-        style={{borderRadius: 0}}
+        style={{ borderRadius: 0 }}
         onClick={() => onPageChanged(page - 1)}
       >
         <FaChevronLeft color={page > 1 ? 'white' : 'gray'} />
@@ -29,7 +29,7 @@ const Pagination = ({
       {page + range[0] > 1 ? (
         <button
           className="btn"
-          style={{borderRadius: 0}}
+          style={{ borderRadius: 0 }}
           onClick={() => onPageChanged(1)}
         >
           <span className="lead text-white">{1}</span>
@@ -53,14 +53,14 @@ const Pagination = ({
             key={`pagination_${page + index}`}
             className="btn"
             disabled={index === 0}
-            style={{borderRadius: 0}}
+            style={{ borderRadius: 0 }}
             onClick={() => onPageChanged(page + index)}
           >
             <span className={`lead ${textColor(index)}`}>{page + index}</span>
           </button>
         ) : (
           <div key={`pagination_${page + index}`}></div>
-        ),
+        )
       )}
 
       {page + range[range.length - 1] + 1 < totalPages ? (
@@ -73,7 +73,7 @@ const Pagination = ({
       {page + range[range.length - 1] < totalPages ? (
         <button
           className="btn"
-          style={{borderRadius: 0}}
+          style={{ borderRadius: 0 }}
           onClick={() => onPageChanged(totalPages)}
         >
           <span className="lead text-white">{totalPages}</span>
@@ -90,7 +90,7 @@ const Pagination = ({
         <FaChevronRight color={page < totalPages ? 'white' : 'gray'} />
       </button>
     </div>
-  );
-};
+  )
+}
 
-export default Pagination;
+export default Pagination

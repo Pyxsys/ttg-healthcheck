@@ -1,15 +1,15 @@
 // 3rd Party
-import React from 'react';
-import {Col, Table, Accordion} from 'react-bootstrap';
+import React from 'react'
+import { Col, Table, Accordion } from 'react-bootstrap'
 
 // Custom
-import {IDevice} from '../../types/device';
+import { IDevice } from '../../types/device'
 
 const wifiAdditionalWidget = (props: {
   deviceStatic: IDevice
   overrideHeader?: JSX.Element
 }) => {
-  const deviceStatic: IDevice = props.deviceStatic;
+  const deviceStatic: IDevice = props.deviceStatic
 
   return (
     <Col className="device-details-accordion dark-accordion pt-3 pb-3">
@@ -63,7 +63,7 @@ const wifiAdditionalWidget = (props: {
         </Accordion.Item>
       </Accordion>
     </Col>
-  );
-};
+  )
+}
 
-export default wifiAdditionalWidget;
+export default wifiAdditionalWidget

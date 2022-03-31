@@ -1,45 +1,45 @@
 // 3rd Party
-import React, {useState} from 'react';
-import {Link, Redirect} from 'react-router-dom';
-import {Button, InputGroup, Form} from 'react-bootstrap';
-import {FaUserAlt, FaKey, FaLock, FaRegEnvelope} from 'react-icons/fa';
+import React, { useState } from 'react'
+import { Link, Redirect } from 'react-router-dom'
+import { Button, InputGroup, Form } from 'react-bootstrap'
+import { FaUserAlt, FaKey, FaLock, FaRegEnvelope } from 'react-icons/fa'
 
 // Custom
-import {useAuth} from '../../context/authContext';
-import {notificationService} from '../../services/notification.service';
-import {handleIncorrectInput, sendRequest} from '../common/inputValidation';
-import FrontPageWrapper from '../common/frontPageWrapper';
+import { useAuth } from '../../context/authContext'
+import { notificationService } from '../../services/notification.service'
+import { handleIncorrectInput, sendRequest } from '../common/inputValidation'
+import FrontPageWrapper from '../common/frontPageWrapper'
 
 const Signup = () => {
-  const {setUser, setIsAuthenticated} = useAuth();
-  const [loggedIn, setLoggedIn] = useState(false);
+  const { setUser, setIsAuthenticated } = useAuth()
+  const [loggedIn, setLoggedIn] = useState(false)
   const [formData, setFormData] = useState({
     name: '',
     email: '',
     password: '',
     password2: '',
-  });
+  })
 
-  const {name, email, password, password2} = formData;
+  const { name, email, password, password2 } = formData
 
   const onChange = (e: React.ChangeEvent<any>) =>
-    setFormData({...formData, [e.target.name]: e.target.value});
+    setFormData({ ...formData, [e.target.name]: e.target.value })
 
   const register = async (e: React.ChangeEvent<any>) => {
-    e.preventDefault();
+    e.preventDefault()
     if (handleIncorrectInput(email, password, name, password2)) {
-      const res = (await sendRequest(email, password, name, password2)) as any;
+      const res = (await sendRequest(email, password, name, password2)) as any
       if (res.data) {
-        setUser(res.data.user);
-        setIsAuthenticated(true);
-        setLoggedIn(true);
+        setUser(res.data.user)
+        setIsAuthenticated(true)
+        setLoggedIn(true)
       }
     }
-  };
+  }
   if (loggedIn) {
-    notificationService.success('New account succesfully created!');
-    notificationService.success('Logged in succesfully!');
-    return <Redirect to="/dashboard" />;
+    notificationService.success('New account succesfully created!')
+    notificationService.success('Logged in succesfully!')
+    return <Redirect to="/pending" />
   }
   return (
     <FrontPageWrapper>
@@ -51,6 +51,7 @@ const Signup = () => {
                 <FaUserAlt />
               </InputGroup.Text>
               <Form.Control
+                maxLength={20}
                 size="sm"
                 className="home-input"
                 type="name"
@@ -118,7 +119,7 @@ const Signup = () => {
         </Form>
       </div>
     </FrontPageWrapper>
-  );
-};
+  )
+}
 
-export default Signup;
+export default Signup

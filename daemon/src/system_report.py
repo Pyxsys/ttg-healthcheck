@@ -1,16 +1,30 @@
 import requests, psutil
 import sys, os, json, re
 import time
+import threading
 from datetime import datetime
 
-class Runner:
+_RUNNER_RUNNING = True
 
+class Runner(threading.Thread):
     api_endpoint='api/daemon'
 
     # Initializes instance attributes.
-    def __init__(self, path):
+    def __init__(self, path, mode):
         with open(path, "r") as config_file:
             self.configs = json.load(config_file)
+        self.mode=mode
+
+    def run(self):
+        global _RUNNER_RUNNING
+        _RUNNER_RUNNING = True
+        if self.mode == "0":
+            self.send_initial_device_report()
+        elif self.mode == "1":
+            self.send_recurring_device_report()
+        else:
+            print("Invalid run mode \"", self.mode, "\".")
+        _RUNNER_RUNNING = False
 
     def get_config(self):
         return self.configs
@@ -93,6 +107,7 @@ class SysReport:
 
         #Initialize start time for process diagnostic scan
         for proc in SysScrubber.fetch_all_processes():
+            
             proc.cpu_percent()
             process_buffer.append(proc)
 
@@ -134,7 +149,6 @@ class SysReport:
     def add_memory_usage_info(self):
         tmp_dict = SysScrubber.fetch_virtual_memory()
         memory_dictionary = {key: tmp_dict[key] for key in tmp_dict.keys() & {'available', 'used', 'free', 'percent'}}
-
         self.set_section("memory", memory_dictionary)
 
     def add_startup_disk_info(self):
@@ -224,6 +238,10 @@ class SysScrubber:
     @classmethod
     def fetch_all_processes(cls):
         return psutil.process_iter()
+
+    @classmethod
+    def fetch_process_name(cls, pid):
+        return psutil.Process(pid).name()
 
     # -----------------
     # CPU Fetch Methods
@@ -643,17 +661,50 @@ class SysScrubber:
 
         return devices
 
+class DaemonChecker:
+    def __init__(self, path):
+        with open(path, "r") as config_file:
+            self.configs = json.load(config_file)
+
+    def check_daemon(self):
+        name_pattern = "python(\d?)\W+(.*)system_report\.py"
+        
+        if self.configs["max_cpu"] <= 0 or self.configs["max_memory"] <= 0:
+            return
+
+        for proc in SysScrubber.fetch_all_processes():
+            process_name = SysScrubber.fetch_process_name(proc.pid)
+            if re.search(name_pattern, process_name):
+                if self.too_much_cpu(proc) or self.too_much_memory(proc):
+                    exit_msg = "Exited daemon because CPU or Memory usage was too high.\nAllowed: CPU=" + str(self.configs["max_cpu"]) + "%, Memory=" + str(self.configs["max_memory"]/1000000) + " MB\nUsed:    CPU=" + str(proc.cpu_percent()) + "%, Memory=" + str(proc.memory_info()[0]/1000000) + "MB\n"
+                    sys.exit(exit_msg)
+
+    def too_much_memory(self, proc=psutil.Process):
+        if proc.memory_info()[0] > self.configs["max_memory"]:
+            return True
+        return False
+
+    def too_much_cpu(self, proc=psutil.Process):
+        if proc.cpu_percent() > self.configs["max_cpu"]:
+            return True
+        return False
+
+    def get_config(self):
+        return self.configs
 
 def main(config, mode):
-    runner=Runner(config)
+    global _RUNNER_RUNNING
 
-    if mode == "0":
-        runner.send_initial_device_report()
-    elif mode == "1":
-        runner.send_recurring_device_report()
-    else:
-        print("Invalid run mode \"", mode, "\".")
+    runner=Runner(config, mode)
+    runner.setDaemon(True)
+    runner.start()
 
+    daemon_checker=DaemonChecker(config)
+    while _RUNNER_RUNNING:
+        daemon_checker.check_daemon()
+    del daemon_checker
+    
+    runner.join()
     del runner
 
 if __name__ == "__main__":
