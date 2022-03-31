@@ -646,6 +646,9 @@ class DaemonChecker:
             return True
         return False
 
+    def get_config(self):
+        return self.configs
+
 def main(config, mode):
     global _RUNNER_RUNNING
 
