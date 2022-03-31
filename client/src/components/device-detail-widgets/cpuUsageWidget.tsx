@@ -29,6 +29,12 @@ const cpuUsageWidget = (props: {
             <Table className="device-details-table device-details-table-dark">
               <tbody>
                 <tr className="border-bottom">
+                  <td className="w-50">Total Percentage</td>
+                  <td className="float-right">
+                    {deviceDynamic?.cpu?.aggregatedPercentage.toFixed(2) || 'N/A'}%
+                  </td>
+                </tr>
+                <tr className="border-bottom">
                   <td className="w-50">Usage</td>
                   <td className="float-right">
                     {deviceDynamic?.cpu?.usageSpeed || 'N/A'}%

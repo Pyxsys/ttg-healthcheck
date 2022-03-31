@@ -29,7 +29,13 @@ const memoryUsageWidget = (props: {
             <Table className="device-details-table device-details-table-dark">
               <tbody>
                 <tr className="border-bottom">
-                  <td className="w-50">inUse</td>
+                  <td className="w-50">Total Percentage</td>
+                  <td className="float-right">
+                    {deviceDynamic?.memory?.aggregatedPercentage.toFixed(2) || 'N/A'}%
+                  </td>
+                </tr>
+                <tr className="border-bottom">
+                  <td className="w-50">In Use</td>
                   <td className="float-right">
                     {deviceDynamic?.memory?.inUse || 'N/A'}
                   </td>
