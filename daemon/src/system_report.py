@@ -1,16 +1,26 @@
 import requests, psutil
 import sys, os, json, re
 import time
+import threading
 from datetime import datetime
 
-class Runner:
+class Runner(threading.Thread):
 
     api_endpoint='api/daemon'
 
     # Initializes instance attributes.
-    def __init__(self, path):
+    def __init__(self, path, mode):
         with open(path, "r") as config_file:
             self.configs = json.load(config_file)
+        self.mode=mode
+
+    def run(self):
+        if self.mode == "0":
+            self.send_initial_device_report()
+        elif self.mode == "1":
+            self.send_recurring_device_report()
+        else:
+            print("Invalid run mode \"", self.mode, "\".")
 
     def get_config(self):
         return self.configs
@@ -612,16 +622,10 @@ class SysScrubber:
         return ips
 
 def main(config, mode):
-    runner=Runner(config)
-
-    if mode == "0":
-        runner.send_initial_device_report()
-    elif mode == "1":
-        runner.send_recurring_device_report()
-    else:
-        print("Invalid run mode \"", mode, "\".")
-
-    del runner
+    runner=Runner(config, mode)
+    runner.setDaemon(True)
+    runner.start()
+    runner.join()
 
 if __name__ == "__main__":
     main(sys.argv[1], sys.argv[2])
