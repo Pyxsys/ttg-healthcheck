@@ -37,9 +37,9 @@ class TestDaemonCheckerClass(unittest.TestCase):
             self.assertTrue(self.test_checker.too_much_cpu(self.test_proc))
 
     @patch('daemon.src.system_report.SysScrubber.fetch_process_name', return_value='python3 -v system_report.py')
-    def testDaemonCheck(self, m):
+    @patch('daemon.src.system_report.DaemonChecker.too_much_cpu', return_value=True)
+    def testDaemonCheck(self, m1, m2):
         with self.assertRaises(SystemExit) as c:
-            with patch('daemon.src.system_report.DaemonChecker.too_much_cpu', return_value=True):
                 self.test_checker.check_daemon()
 
         exception = c.exception
