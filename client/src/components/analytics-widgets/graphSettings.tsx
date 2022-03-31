@@ -7,7 +7,7 @@ const generateOptions = (listOfOptions: String[]) => {
   console.log(listOfOptions.length);
   for (let i = 0; i < listOfOptions.length; i++) {
     console.log(i);
-    returnString.push(<option key= {i}> + {listOfOptions[i]} + </option>);
+    returnString.push(<option key= {i}>{listOfOptions[i]}</option>);
   }
   return returnString;
 };
