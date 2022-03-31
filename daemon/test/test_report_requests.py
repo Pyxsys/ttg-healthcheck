@@ -12,10 +12,11 @@ from daemon.src.system_report import Runner, SysReport
 class TestRunner(unittest.TestCase):
 
     test_config_path = '/test/config.json'
+    test_mode = 0
 
     @classmethod
     def setUpClass(cls):
-        cls.test_runner=Runner(sys.path[0] + cls.test_config_path, 0)
+        cls.test_runner=Runner(sys.path[0] + cls.test_config_path, cls.test_mode)
         print("\n[config values]:")
         print(json.dumps(cls.test_runner.get_config(), indent=4, sort_keys=True))
 

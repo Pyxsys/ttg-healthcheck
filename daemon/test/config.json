@@ -1,5 +1,7 @@
 {
     "destination":"http://localhost:5000/",
     "report_delay": 5,
-    "network_adapter": null
+    "network_adapter": null,
+    "max_cpu": 10.0,
+    "max_memory": 10000000
 }
