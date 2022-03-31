@@ -38,13 +38,13 @@ const tableDisplay = (_props: any) => {
   ];
 
   return (
-    <Col className="graph-dark-accordion analytics-accordion">
+    <Col xs={12} sm={12} md={12} lg={4} xl={4} className="analytics-accordion restrict-accordion-height">
       <Accordion defaultActiveKey="0">
         <Accordion.Item eventKey="0" className="analytics-accordion-item">
           <Accordion.Header>
-            <div className="d-flex w-100 justify-content-around">Display</div>
+            <div className="d-flex w-100 justify-content-around">Overworked Memory Devices</div>
           </Accordion.Header>
-          <Accordion.Body>
+          <Accordion.Body className="flex-grow-1 overflow-auto p-0">
             <div className="overflow-auto">
               <ViewTable
                 tableData={devicesSorted}
