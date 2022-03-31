@@ -4,6 +4,7 @@ const mongoose = require('mongoose')
 const app = require('../../app')
 const connectDB = require('../../db/db_connection')
 const { parseQuery, getAttributes } = require('../../api/common/filter')
+const User = require('../../models/user')
 
 const SimpleMongoSchema = new mongoose.Schema({
   stringAttribute: String,
@@ -247,7 +248,6 @@ const testUser = {
   name: 'api_common_test',
   password: process.env.PASSWORD,
   email: 'api_common_test@gmail.com',
-  role: 'user',
 }
 
 const setupLogTests = async () => {
@@ -255,12 +255,8 @@ const setupLogTests = async () => {
   await connectDB()
 
   // register user
-  await request(app).post('/api/user/register').send({
-    name: testUser.name,
-    password: testUser.password,
-    email: testUser.email,
-    role: testUser.role,
-  })
+  await request(app).post('/api/user/register').send(testUser)
+  await User.updateOne({email: testUser.email}, {role: 'user'})
 
   // login user and store cookie
   return request(app)
