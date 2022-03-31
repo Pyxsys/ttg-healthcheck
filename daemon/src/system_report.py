@@ -629,11 +629,13 @@ class DaemonChecker:
                     sys.exit()
 
     @classmethod
-    def too_much_memory(cls, proc):
-        pass
+    def too_much_memory(cls, proc=psutil.Process):
+        if proc.memory_info()[0] > 1000000:
+            return True
+        return False
 
     @classmethod
-    def too_much_cpu(cls, proc):
+    def too_much_cpu(cls, proc=psutil.Process):
         if proc.cpu_percent() > 10:
             return True
         return False
