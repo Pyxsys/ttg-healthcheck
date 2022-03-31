@@ -14,7 +14,7 @@ class TestDaemonCheckerClass(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        cls.test_proc=psutil.Process()
+        cls.test_proc=psutil.Process
         cls.test_checker=DaemonChecker(sys.path[0] + cls.test_config_path)
         print("\n[config values]:")
         print(json.dumps(cls.test_checker.get_config(), indent=4, sort_keys=True))
@@ -29,8 +29,16 @@ class TestDaemonCheckerClass(unittest.TestCase):
         self.assertIsInstance(self.test_checker, DaemonChecker, msg=None)
 
     def testMemoryCheck(self):
-        with patch('psutil.Process().memory_info()', return_value=[11000000,0]):
+        with patch('psutil.Process.memory_info', return_value=[11000000,0]):
             self.assertTrue(self.test_checker.too_much_memory(self.test_proc))
+
+    def testCPUCheck(self):
+        with patch('psutil.Process.cpu_percent', return_value=11.0):
+            self.assertTrue(self.test_checker.too_much_cpu(self.test_proc))
+
+    def testDaemonCheck(self):
+        with patch('daemon.src.system_report.DaemonChecker.too_much_cpu', return_value=True):
+            self.assertRaises(SystemExit, self.test_checker.check_daemon())
 
 if __name__ == '__main__':
     unittest.main()
