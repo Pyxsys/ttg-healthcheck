@@ -224,38 +224,42 @@ router.delete('/deleteWithEmail/:email', auth, async (req, res) => {
 
 // delete user with id
 router.delete('/delete/:id', auth, async (req, res) => {
-  const loggedUser = await User.findOne({ _id: req.userId })
-  // user or disabled can only delete if their id matches url id
-  if (
-    loggedUser.role === 'disabled' ||
-    (loggedUser.role === 'user' && String(loggedUser._id) !== req.params.id)
-  ) {
-    return res.status(401).send('Unauthorized access')
-  }
+  try{
+    const loggedUser = await User.findOne({ _id: req.userId })
+    // user or disabled can only delete if their id matches url id
+    if (
+      loggedUser.role === 'disabled' ||
+      (loggedUser.role === 'user' && String(loggedUser._id) !== req.params.id)
+    ) {
+      return res.status(401).send('Unauthorized access')
+    }
 
-  // If deleting admin and there are no other admins
-  const numOfOtherAdmins = await User.count({
-    role: 'admin',
-    _id: { $not: { $eq: req.params.id } },
-  })
-  if (numOfOtherAdmins === 0) {
-    return res
-      .status(400)
-      .send('Cannot delete, a minimum of 1 admin role is required')
-  }
-
-  await User.deleteOne({ _id: req.params.id })
-
-  // if deleting yourself, remove cookie
-  if (req.params.id === String(loggedUser._id)) {
-    return res
-      .clearCookie('access_token')
-      .status(200)
-      .json({ message: 'User deleted successfully' })
-  } else {
-    return res.status(200).json({
-      message: 'User deleted successfully',
+    // If deleting admin and there are no other admins
+    const numOfOtherAdmins = await User.count({
+      role: 'admin',
+      _id: { $not: { $eq: req.params.id } },
     })
+    if (numOfOtherAdmins === 0) {
+      return res
+        .status(400)
+        .send('Cannot delete, a minimum of 1 admin role is required')
+    }
+
+    await User.deleteOne({ _id: req.params.id })
+
+    // if deleting yourself, remove cookie
+    if (req.params.id === String(loggedUser._id)) {
+      return res
+        .clearCookie('access_token')
+        .status(200)
+        .json({ message: 'User deleted successfully' })
+    } else {
+      return res.status(200).json({
+        message: 'User deleted successfully',
+      })
+    }
+  } catch (err) {
+    res.status(500).send('Server error')
   }
 })
 
@@ -313,45 +317,49 @@ router.post('/editUserProfileInfo', auth, async (req, res) => {
 
 // edit user profile information
 router.post('/editUserProfilePassword', auth, async (req, res) => {
-  const { oldPassword, newPassword, newPassword1, _id } = Object(
-    req.body.formData
-  )
-  const loggedUser = await User.findOne({ _id: req.userId })
+  try{
+    const { oldPassword, newPassword, newPassword1, _id } = Object(
+      req.body.formData
+    )
+    const loggedUser = await User.findOne({ _id: req.userId })
 
-  // users can only update their password
-  if (
-    loggedUser.role === 'disabled' ||
-    (loggedUser.role === 'user' && String(loggedUser._id) !== _id)
-  ) {
-    return res.status(401).send('Unauthorized access')
+    // users can only update their password
+    if (
+      loggedUser.role === 'disabled' ||
+      (loggedUser.role === 'user' && String(loggedUser._id) !== _id)
+    ) {
+      return res.status(401).send('Unauthorized access')
+    }
+
+    // check if both new password matches
+    if (newPassword !== newPassword1) {
+      return res
+        .status(400)
+        .send('New password and confirm password do not match')
+    }
+
+    // If password is empty
+    if (!newPassword) {
+      return res.status(400).send('Password cannot be empty')
+    }
+
+    // Check if old password matches the one saved in db
+    const isMatch = await bcrypt.compare(oldPassword, loggedUser.password)
+    if (loggedUser.role === 'user' && !isMatch) {
+      return res.status(400).send('Old password is incorrect')
+    }
+
+    const encryptedPassword = await encryptPassword(newPassword)
+    await User.findOneAndUpdate({_id: _id}, {password: encryptedPassword})
+    // save user event log
+    await userEventLog(loggedUser.name, _id, 'edit profile','Account password was changed.').save()
+    return res.status(200).json({
+      message: 'Update successful',
+      user: {_id: String(loggedUser._id), name: loggedUser.name, role: loggedUser.role, avatar: loggedUser.avatar}
+    });
+  } catch (err) {
+    res.status(500).send('Server error')
   }
-
-  // check if both new password matches
-  if (newPassword !== newPassword1) {
-    return res
-      .status(400)
-      .send('New password and confirm password do not match')
-  }
-
-  // If password is empty
-  if (!newPassword) {
-    return res.status(400).send('Password cannot be empty')
-  }
-
-  // Check if old password matches the one saved in db
-  const isMatch = await bcrypt.compare(oldPassword, loggedUser.password)
-  if (loggedUser.role === 'user' && !isMatch) {
-    return res.status(400).send('Old password is incorrect')
-  }
-
-  const encryptedPassword = await encryptPassword(newPassword)
-  await User.findOneAndUpdate({_id: _id}, {password: encryptedPassword})
-  // save user event log
-  await userEventLog(loggedUser.name, _id, 'edit profile','Account password was changed.').save()
-  return res.status(200).json({
-    message: 'Update successful',
-    user: {_id: String(loggedUser._id), name: loggedUser.name, role: loggedUser.role, avatar: loggedUser.avatar}
-  });
 })
 
 module.exports = router

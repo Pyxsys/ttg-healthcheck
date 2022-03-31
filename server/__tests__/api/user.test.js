@@ -239,7 +239,7 @@ describe('Get user profile', () => {
     expect(response.text).toBe('Unauthorized access')
   })
 
-  it("should not get a user's profile if a user access their own profile", async () => {
+  it("should get a user's profile if a user access their own profile", async () => {
     const userAccessSameCookie = await login('user')
     const usersame = await User.findOne({ email: userOne.email })
     const response = await request(app)
@@ -247,6 +247,7 @@ describe('Get user profile', () => {
       .set('Cookie', userAccessSameCookie)
       .query({ userId: String(usersame._id) })
     expect(response.statusCode).toBe(200)
+    console.log(response)
     expect(response.body.Total).toBe(1)
   })
 
