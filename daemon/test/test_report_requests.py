@@ -15,7 +15,7 @@ class TestRunner(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        cls.test_runner=Runner(sys.path[0] + cls.test_config_path)
+        cls.test_runner=Runner(sys.path[0] + cls.test_config_path, 0)
         print("\n[config values]:")
         print(json.dumps(cls.test_runner.get_config(), indent=4, sort_keys=True))
 
