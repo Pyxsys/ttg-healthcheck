@@ -226,9 +226,9 @@ const processPeripheralLogInfo = (payload) => {
   return peripheralArray
 }
 
-const processSinglePeripheral = (peripheral) => {
+const processSinglePeripheral = (peripheral_element) => {
   //load values
-  const { hid, connection, name } = peripheral
+  const { hid, connection, name } = peripheral_element
 
   return {
     name,

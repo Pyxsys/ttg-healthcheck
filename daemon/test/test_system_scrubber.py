@@ -341,7 +341,6 @@ class TestSystemScrubberPeripherals(unittest.TestCase):
         expected_result = {'hid':'/dev/bus/usb/001/005', 'connection':'USB', 'name':'DUMMY UDisk flash drive'}
         
         self.assertDictEqual(expected_result, actual_result)
-        pass
 
 
 if __name__ == '__main__':
