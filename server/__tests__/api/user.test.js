@@ -593,6 +593,70 @@ describe('Deleting user', () => {
   })
 })
 
+describe ('user logout', () => {
+  it("should not get a user's log if no user id is provided", async () => {
+    const noUserCookie = await login('admin')
+    const response = await request(app)
+      .get('/api/user/log')
+      .set('Cookie', noUserCookie)
+    expect(response.statusCode).toBe(400)
+    expect(response.text).toBe('Bad request, no userId provided')
+  })
+
+  it("should not get a user's log if a disabled user is accessing it", async () => {
+    const disabledCookieProfile = await login('disabled')
+    const response = await request(app)
+      .get('/api/user/log')
+      .set('Cookie', disabledCookieProfile)
+      .query({ userId: 'some_id' })
+    expect(response.statusCode).toBe(401)
+    expect(response.text).toBe('Unauthorized access')
+  })
+
+  it("should not get a user's log if a user accesses another log", async () => {
+    const userAccessInvalidCookie = await login('user')
+    const userOther = await User.findOne({ email: userTwo.email })
+    const response = await request(app)
+      .get('/api/user/log')
+      .set('Cookie', userAccessInvalidCookie)
+      .query({ userId: String(userOther._id) })
+    expect(response.statusCode).toBe(401)
+    expect(response.text).toBe('Unauthorized access')
+  })
+
+  it("should get a user's log if a user access their own log", async () => {
+    const userAccessSameCookie = await login('user')
+    const usersame = await User.findOne({ email: userOne.email })
+    const response = await request(app)
+      .get('/api/user/log')
+      .set('Cookie', userAccessSameCookie)
+      .query({ userId: String(usersame._id) })
+    expect(response.statusCode).toBe(200)
+  })
+
+  it("should get a valid user's log if an admin is accessing it", async () => {
+    const adminCookieProfile = await login('admin')
+    const user = await User.findOne({ email: userOne.email })
+    const response = await request(app)
+      .get('/api/user/log')
+      .set('Cookie', adminCookieProfile)
+      .query({ userId: String(user._id) })
+    expect(response.statusCode).toBe(200)
+    expect(response.body.Results).toBeTruthy()
+  })
+
+  it("should not get a invalid user's log if an admin is accessing it", async () => {
+    const adminCookieProfileBad = await login('admin')
+    const response = await request(app)
+      .get('/api/user/log')
+      .set('Cookie', adminCookieProfileBad)
+      .query({ userId: 'some_invalid_id' })
+    expect(response.statusCode).toBe(400)
+    expect(response.body.Results).toEqual(expect.arrayContaining([]))
+  })
+
+})
+
 afterAll(async () => {
   await teardownLogTests()
 })
