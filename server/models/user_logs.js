@@ -1,7 +1,7 @@
 const mongoose = require('mongoose')
 
 const userLogschema = new mongoose.Schema({
-  timestamp: { type: Date, expires: 86400, default: Date.now },
+  timestamp: { type: Date, expires: 1296000, default: Date.now },
   userPerformingAction: String,
   affectedUser: String,
   event: String,

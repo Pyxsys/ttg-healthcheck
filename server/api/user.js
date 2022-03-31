@@ -15,7 +15,6 @@ const encryptPassword = async (password) => {
 
 const userEventLog = (userPerformingAction, affectedUser, event, description) => {
   const eventLogObj = new userLog({
-    timestamp: new Date(),
     userPerformingAction: userPerformingAction,
     affectedUser: affectedUser,
     event: event,
