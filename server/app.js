@@ -15,5 +15,6 @@ app.use('/api/daemon', require('./api/daemon').router)
 app.use('/api/device', require('./api/device'))
 app.use('/api/device-logs', require('./api/deviceLogs'))
 app.use('/api/dashboard', require('./api/dashboard'))
+app.use('api/analytics', require('./api/analytics'))
 
 module.exports = app
