@@ -19,7 +19,7 @@ router.get('/devicesByMem', auth, async(req, res) => {
   const results = await DeviceLogs.find(
     {},
     {memory:{ aggregatedPercentage: 1} },
-    {limit: 20, sort: { memory:{ aggregatedPercentage:1}}}
+    {limit: 20, sort: { memory:{ aggregatedPercentage: -1 }}}
     )
 
   
