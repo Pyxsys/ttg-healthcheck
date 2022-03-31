@@ -21,7 +21,9 @@ const PieWheelCell = (cellValue: CellValue) => (
   </div>
 );
 const tableDisplay = (_props: any) => {
-  const devices: IDeviceTotal[] = _props.deviceDynamic || [];
+  const devices: IDeviceTotal[] = _props.deviceDynamic;
+  const devicesSorted: IDeviceTotal[] = devices.sort((a, b) => b?.dynamic?.memory?.aggregatedPercentage as number - (a?.dynamic?.memory?.aggregatedPercentage as number)).reverse();
+
 
   const column: IColumnDetail[] = [
     {
@@ -45,7 +47,7 @@ const tableDisplay = (_props: any) => {
           <Accordion.Body>
             <div className="overflow-auto">
               <ViewTable
-                tableData={devices}
+                tableData={devicesSorted}
                 columns={column}
                 initialOrderBy="pid"
               />
