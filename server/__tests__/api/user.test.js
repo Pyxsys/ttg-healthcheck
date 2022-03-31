@@ -292,6 +292,22 @@ describe('Edit user info', () => {
     expect(response.text).toBe('Unauthorized access')
   })
 
+  it('should throw error if invalid userId', async () => {
+    const adminMissingNameCookie = await login('admin')
+    const adminMissingName = await User.findOne({ email: adminOne.email })
+    const response = await request(app)
+      .post('/api/user/editUserProfileInfo')
+      .set('Cookie', adminMissingNameCookie)
+      .send({
+        formData: {
+          _id: {_id: 'invalidId'},
+          name: 'admin',
+          email: 'someEmail@email.com',
+        },
+      })
+    expect(response.statusCode).toBe(500)
+  })
+
   it('should not edit a user if missing name', async () => {
     const adminMissingNameCookie = await login('admin')
     const adminMissingName = await User.findOne({ email: adminOne.email })
@@ -448,6 +464,21 @@ describe('Change user password', () => {
     expect(response.text).toBe('Password cannot be empty')
   })
 
+  it('should throw error if invalid userId', async () => {
+    const adminEmptyPasswordCookie = await login('admin')
+    const response = await request(app)
+      .post('/api/user/editUserProfilePassword')
+      .set('Cookie', adminEmptyPasswordCookie)
+      .send({
+        formData: {
+          _id: {_id: 'invalidId'},
+          newPassword: 'test',
+          newPassword1: 'test',
+        },
+      })
+    expect(response.statusCode).toBe(500)
+  })
+
   it('should not change password if user enters wrong old password', async () => {
     const userWrongPasswordCookie = await login('user')
     const userWrongPassword = await User.findOne({ email: userOne.email })
@@ -551,6 +582,16 @@ describe('Deleting user', () => {
       'Cannot delete, a minimum of 1 admin role is required'
     )
   })
+
+  it('should throw error if id passed is invalid', async () => {
+    const adminDeleteLastCookie = await login('admin')
+    const adminLast = await User.findOne({ email: adminOne.email })
+    const response = await request(app)
+      .delete('/api/user/delete/invalidId')
+      .set('Cookie', adminDeleteLastCookie)
+    expect(response.statusCode).toBe(500)
+  })
+
 })
 
 afterAll(async () => {
