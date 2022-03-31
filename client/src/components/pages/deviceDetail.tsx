@@ -8,6 +8,7 @@ import Navbar from '../common/Navbar';
 import {IResponse} from '../../types/queries';
 import {IDevice, IDeviceLog} from '../../types/device';
 import {useRealTimeService} from '../../context/realTimeContext';
+import {exportCSV} from '../../services/export.service';
 import PieWheel from '../common/pieWheel';
 import CpuUsageWidget from '../device-detail-widgets/cpuUsageWidget';
 import CpuAdditionalWidget from '../device-detail-widgets/cpuAdditionalWidget';
@@ -17,7 +18,7 @@ import MemoryUsageWidget from '../device-detail-widgets/memoryUsageWidget';
 import MemoryAdditionalWidget from '../device-detail-widgets/memoryAdditionalWidget';
 import WifiUsageWidget from '../device-detail-widgets/wifiUsageWidget';
 import WifiAdditionalWidget from '../device-detail-widgets/wifiAdditionalWidget';
-import {SignalStrength} from '../common/signalStrength';
+import {SignalStrength, signalText} from '../common/signalStrength';
 import ProcessTable from '../device-detail-widgets/processTable';
 
 const DeviceDetail = (props: any) => {
@@ -92,6 +93,64 @@ const DeviceDetail = (props: any) => {
     };
   }, []);
 
+  const getDeviceCSV = (): void => {
+    const deviceValue = [{
+      UUID: deviceData.deviceId,
+      Name: deviceData.name,
+      Description: deviceData.description,
+      Connection_Type: deviceData.connectionType,
+      Status: deviceData.status,
+      Provider: deviceData.provider,
+      Hardware: deviceData.hardware?.harwareName,
+      CPU_Base_Speed: deviceData.cpu?.baseSpeed,
+      CPU_Num_Cores: deviceData.cpu?.cores,
+      CPU_Num_Processors: deviceData.cpu?.processors,
+      CPU_Num_Sockets: deviceData.cpu?.sockets,
+      CPU_Total_Perentage: deviceLogsData?.cpu?.aggregatedPercentage,
+      CPU_Usage: deviceLogsData?.cpu?.usageSpeed,
+      CPU_Num_Processes: deviceLogsData?.cpu?.numProcesses,
+      CPU_Threads_Sleeping: deviceLogsData?.cpu?.threadsSleeping,
+      Memory_Max_Size: deviceData.memory?.maxSize,
+      Memory_Form_Factor: deviceData.memory?.formFactor,
+      Memory_Total_Percentage: deviceLogsData?.memory?.aggregatedPercentage,
+      Memory_In_Use: deviceLogsData?.memory?.inUse,
+      Memory_Available: deviceLogsData?.memory?.available,
+      Memory_Cached: deviceLogsData?.memory?.cached,
+      Disk_Capacity: deviceData.disk?.capacity,
+      Disk_Type: deviceData.disk?.disks[0]?.type,
+      Disk_Model: deviceData.disk?.disks[0]?.model,
+      Disk_Size: deviceData.disk?.disks[0]?.size,
+      Disk_Partition_Path: deviceLogsData?.disk?.partitions[0]?.path,
+      Disk_Partition_Percentage: deviceLogsData?.disk?.partitions[0]?.percent,
+      Disk_Response_Time: deviceLogsData?.disk?.disks[0]?.responseTime,
+      Disk_Read_Time: deviceLogsData?.disk?.disks[0]?.readSpeed,
+      Disk_Write_Time: deviceLogsData?.disk?.disks[0]?.writeSpeed,
+      Network_Adapter_Name: deviceData.wifi?.adapterName,
+      Network_SSID: deviceData.wifi?.SSID,
+      Network_Coonection_Type: deviceData.wifi?.connectionType,
+      Network_IPV4_Address: deviceData.wifi?.ipv4Address,
+      Network_IPV6_Address: deviceData.wifi?.ipv6Address,
+      Network_Send_Speed: deviceLogsData?.wifi?.sendSpeed,
+      Network_Receive_Speed: deviceLogsData?.wifi?.receiveSpeed,
+      Network_Signal_Strength: signalText(deviceLogsData?.wifi?.signalStrength || -1) || undefined,
+      Timestamp: deviceLogsData?.timestamp,
+    }];
+    exportCSV(deviceValue, `device-${deviceData.deviceId}`);
+  };
+
+  const getProcessesCSV = (): void => {
+    if (deviceLogsData?.processes?.length > 0) {
+      const processValues = deviceLogsData?.processes?.map((process) => ({
+        ID: process.pid,
+        Name: process.name,
+        CPU: process.cpu?.usagePercentage,
+        Memory: process.memory?.usagePercentage,
+        Status: process.status,
+      }));
+      exportCSV(processValues, `processes-${deviceData.deviceId}`);
+    }
+  };
+
   return (
     <div id="device-details-container">
       <Navbar />
@@ -99,6 +158,12 @@ const DeviceDetail = (props: any) => {
         <div className="h-100 container pe-2 ps-2">
           <Row>
             <Col>
+              <div className="d-flex">
+                <div className="p-1 ms-auto">
+                  <button className="btn btn-primary" onClick={() => getDeviceCSV()}>Export as CSV</button>
+                </div>
+              </div>
+
               <Row className="gx-4">
                 <Col
                   xs={12}
@@ -307,9 +372,20 @@ const DeviceDetail = (props: any) => {
                     </Tab>
                     <Tab eventKey="processes" title="Processes">
                       <div className="tab-body">
-                        <ProcessTable
-                          deviceDynamic={deviceLogsData}
-                        ></ProcessTable>
+                        <div className="d-flex flex-column">
+                          <div className="p-1 ms-auto">
+                            <button
+                              className="btn btn-primary"
+                              disabled={!deviceLogsData?.processes?.length}
+                              onClick={() => getProcessesCSV()}>
+                                Export Processes as CSV
+                            </button>
+                          </div>
+
+                          <ProcessTable
+                            deviceDynamic={deviceLogsData}
+                          ></ProcessTable>
+                        </div>
                       </div>
                     </Tab>
                   </Tabs>
