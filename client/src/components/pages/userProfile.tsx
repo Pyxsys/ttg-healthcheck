@@ -3,6 +3,7 @@ import React, {useEffect, useState} from 'react';
 import axios from 'axios';
 import {Button, Form, InputGroup} from 'react-bootstrap';
 import {Redirect, useHistory} from 'react-router-dom';
+import {Link} from 'react-router-dom';
 
 // Custom
 import Navbar from '../common/Navbar';
@@ -469,7 +470,7 @@ const UserProfile = (props: any) => {
                       <tr>
                         <td>
                           <div className="pt-2">
-                            <Button variant="danger" onClick={() =>
+                            <Button variant="danger" className="user-profile-delete-button mt-2" size="sm" onClick={() =>
                               modalService.open(
                                   <div className="d-flex flex-column">
                                     <h2>Confirm Deletion</h2>
@@ -483,6 +484,16 @@ const UserProfile = (props: any) => {
                                   },
                               )}
                             >Delete Account</Button>
+                            <Link
+                              to={{
+                                pathname: '/user-logs',
+                                search: `?Id=${userId}`,
+                              }}
+                            >
+                              <Button className="ms-2 mt-2" size="sm">
+                                Log history
+                              </Button>
+                            </Link>
                           </div>
                         </td>
                       </tr>

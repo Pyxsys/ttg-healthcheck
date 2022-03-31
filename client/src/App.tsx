@@ -11,6 +11,7 @@ import DevicesTable from './components/pages/devicesTable';
 import deviceDetail from './components/pages/deviceDetail';
 import UserProfile from './components/pages/userProfile';
 import Pending from './components/pages/pending';
+import UserLogs from './components/pages/userLogs';
 
 function App() {
   return (
@@ -52,6 +53,12 @@ function App() {
         path="/user-profile"
         roles={['user', 'admin']}
         component={UserProfile}
+      ></PrivateRoute>
+      <PrivateRoute
+        exact
+        path="/user-logs"
+        roles={['user', 'admin']}
+        component={UserLogs}
       ></PrivateRoute>
     </>
   );
