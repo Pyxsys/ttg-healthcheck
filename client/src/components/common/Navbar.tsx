@@ -54,19 +54,16 @@ const Navbar = () => {
   type Ref = HTMLDivElement
   const CustomToggle = useMemo(
       () =>
-        React.forwardRef<Ref, Props>(({onClick}, ref) => (
+        React.forwardRef<Ref, Props>(({onClick}, ref1) => (
           <div
-            ref={ref}
+            ref={ref1}
             onClick={(e) => {
               e.preventDefault();
               onClick(e);
             }}
           >
             <div className="nav-right-icon">
-              <img
-                src={user.avatar}
-              >
-              </img>
+              <img src={user.avatar}></img>
             </div>
           </div>
         )),
@@ -96,7 +93,18 @@ const Navbar = () => {
                   `/user-profile?Id=${user._id}`
                 }
               >
-                <div className="nav-right-font">Profile</div>
+                <div id="profile" className="nav-right-font">
+                  Profile
+                </div>
+              </Dropdown.Item>
+              <Dropdown.Item
+                eventKey="1"
+                style={user.role == 'admin' ? {display: 'block'} : {display: 'none'}}
+                href={
+                  '/admin'
+                }
+              >
+                <div className="nav-right-font">Admin panel</div>
               </Dropdown.Item>
               <Dropdown.Item
                 eventKey="1"
@@ -109,7 +117,11 @@ const Navbar = () => {
               </Dropdown.Item>
               <Dropdown.Divider />
               <Dropdown.Item eventKey="2">
-                <div className="nav-right-font" onClick={(e) => logout(e)}>
+                <div
+                  id="logout"
+                  className="nav-right-font"
+                  onClick={(e) => logout(e)}
+                >
                   Sign out
                 </div>
               </Dropdown.Item>

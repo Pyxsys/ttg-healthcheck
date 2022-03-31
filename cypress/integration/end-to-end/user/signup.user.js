@@ -21,12 +21,12 @@ describe("All Register test", () => {
     }).then(() => {
       cy.request(
         "DELETE",
-        `http://localhost:5000/api/user/delete/${testUser.email}`
+        `http://localhost:5000/api/user/deleteWithEmail/${testUser.email}`
       );
       cy.request("GET", `http://localhost:5000/api/user/logout`);
     });
   });
-  it("1. Register a user with proper credentials and redirect to /dashboard", () => {
+  it("1. Register a user with proper credentials and redirect to /pending", () => {
     // open the signup page
     cy.visit("/signup");
 
@@ -39,8 +39,8 @@ describe("All Register test", () => {
     // click on Signup
     cy.get("button[type=submit]").click();
 
-    // assert we are in /dashboard
-    cy.url().should("include", "dashboard");
+    // assert we are in /pending
+    cy.url().should("include", "pending");
   });
 
   it("2.1 Register a user with non matching password should give 'password do not match!' error ", () => {
