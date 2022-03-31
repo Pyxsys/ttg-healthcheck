@@ -369,8 +369,9 @@ const DevicesTable = () => {
       Memory: device.dynamic?.memory?.aggregatedPercentage,
       Disk: device.dynamic?.disk?.partitions[0]?.percent,
       Network: signalText(device.dynamic?.wifi?.signalStrength || -1) || undefined,
+      Timestamp: device.dynamic?.timestamp,
     }));
-    exportCSV(tableValues);
+    exportCSV(tableValues, 'devices');
   };
 
   return (
@@ -383,9 +384,8 @@ const DevicesTable = () => {
           <div className="d-flex pt-5 pb-1 w-100">
             <button
               ref={filtersRef}
-              className={`d-flex flex-column position-absolute filter-container overflow-auto ${
-                showFilters ? '' : 'invisible'
-              }`}
+              className="btn btn-primary"
+              onClick={() => setshowFilters(!showFilters)}
             >
               <span>Filter Table ({filters.length})</span>
               <span className={`ps-2 ${showFilters ? 'dropup' : 'dropdown'}`}>
