@@ -115,7 +115,9 @@ const UserProfile = (props: any) => {
           setEditUser(updatedForm);
           setInputDisabled(true);
           setUserInfoSaveDisabled(true);
-          setLoggedUser(updatedForm);
+          if (loggedUser._id === userInfoForm._id) {
+            setLoggedUser(updatedForm);
+          }
         })
         .catch((e) => {
           notificationService.error(
