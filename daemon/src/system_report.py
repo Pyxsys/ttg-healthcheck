@@ -7,7 +7,6 @@ from datetime import datetime
 _RUNNER_RUNNING = True
 
 class Runner(threading.Thread):
-    global _RUNNER_RUNNING
     api_endpoint='api/daemon'
 
     # Initializes instance attributes.
@@ -17,6 +16,7 @@ class Runner(threading.Thread):
         self.mode=mode
 
     def run(self):
+        global _RUNNER_RUNNING
         _RUNNER_RUNNING = True
         if self.mode == "0":
             self.send_initial_device_report()
