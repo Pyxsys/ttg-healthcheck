@@ -654,10 +654,10 @@ def main(config, mode):
     runner.setDaemon(True)
     runner.start()
 
-    daemonChecker=DaemonChecker(config)
+    daemon_checker=DaemonChecker(config)
     while _RUNNER_RUNNING:
-        daemonChecker.check_daemon()
-    del daemonChecker
+        daemon_checker.check_daemon()
+    del daemon_checker
     
     runner.join()
     del runner
