@@ -2,8 +2,7 @@
 import React, {useEffect, useState} from 'react';
 import axios from 'axios';
 import {Button, Form, InputGroup} from 'react-bootstrap';
-import {Redirect, useHistory} from 'react-router-dom';
-import {Link} from 'react-router-dom';
+import {Redirect, useHistory, Link} from 'react-router-dom';
 
 // Custom
 import Navbar from '../common/Navbar';

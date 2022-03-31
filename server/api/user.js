@@ -14,13 +14,13 @@ const encryptPassword = async (password) => {
 }
 
 const userEventLog = (userPerformingAction, affectedUser, event, description) => {
-  const eventLogObj = new userLog({
+  return new userLog({
     userPerformingAction: userPerformingAction,
     affectedUser: affectedUser,
     event: event,
     description: description,
   })
-  return eventLogObj;
+
 }
 
 // signup
@@ -188,18 +188,15 @@ router.get('/profile', auth, async (req, res) => {
     return res.status(401).send('Unauthorized access')
   }
   try {
-    const validUser = await User.findOne({ _id: query.userId })
+    const validUser = await User.findOne({ _id: query.userId },{
+      _id: 1,
+      name: 1,
+      email: 1,
+      role: 1,
+      avatar: 1,
+    })
     if (validUser) {
-      const results = await User.findOne(
-        { _id: query.userId },
-        {
-          _id: 1,
-          name: 1,
-          email: 1,
-          role: 1,
-          avatar: 1,
-        })
-      return res.status(200).json({ Results: results, Total: results.length })
+      return res.status(200).json({ Results: validUser, Total: 1 })
     }
   } catch (err) {
     return res.status(400).send('Bad request, userId is invalid')
