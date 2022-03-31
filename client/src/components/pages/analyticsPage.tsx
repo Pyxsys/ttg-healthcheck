@@ -10,7 +10,7 @@ import GraphDisplay from '../analytics-widgets/graphDisplay';
 import {IDevice, IDeviceLog, IDeviceTotal} from '../../types/device';
 import {useRealTimeService} from '../../context/realTimeContext';
 import TableDevices from '../analytics-widgets/tableDevices';
-import TableDisplay from '../analytics-widgets/tableDisplay';
+import TableDisplay from '../analytics-widgets/overworkedMem';
 import TableLatency from '../analytics-widgets/tableLatency';
 
 // Custom

@@ -8,7 +8,6 @@ import PieWheel from '../common/pieWheel';
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 type CellValue = string | number | undefined;
-
 const PieWheelCell = (cellValue: CellValue) => (
   <div className="d-flex justify-content-end align-items-center">
     <div className="text-truncate devices-font">
@@ -20,7 +19,7 @@ const PieWheelCell = (cellValue: CellValue) => (
     </div>
   </div>
 );
-const tableDisplay = (_props: any) => {
+const overworkedMem = (_props: any) => {
   const devices: IDeviceTotal[] = _props.deviceDynamic;
   const devicesSorted: IDeviceTotal[] = devices.sort((a, b) => b?.dynamic?.memory?.aggregatedPercentage as number - (a?.dynamic?.memory?.aggregatedPercentage as number)).reverse();
 
@@ -59,4 +58,4 @@ const tableDisplay = (_props: any) => {
   );
 };
 
-export default tableDisplay;
+export default overworkedMem;
