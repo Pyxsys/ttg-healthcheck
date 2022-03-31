@@ -631,8 +631,8 @@ class SysScrubber:
     # ---------------------
     # Peripheral Fetch Methods
     # ---------------------
-
-    def fetch_connected_usb_devices():
+    @classmethod
+    def fetch_connected_usb_devices(cls):
         devices = []
 
         if SysScrubber.is_windows():
