@@ -91,7 +91,10 @@ const UserProfile = (props: any) => {
 
   // Account password onchange
   const userPasswordChange = (e: any) => {
-    userUserPasswordForm({...userPasswordForm, [e.target.name]: e.target.value});
+    userUserPasswordForm({
+      ...userPasswordForm,
+      [e.target.name]: e.target.value,
+    });
     setPasswordSaveDisabled(false);
   };
 
@@ -99,19 +102,20 @@ const UserProfile = (props: any) => {
   const saveUserInfoForm = async (e: React.ChangeEvent<any>) => {
     e.preventDefault();
     if (brokenLink && userInfoForm.avatar) {
-      return notificationService.error(
-          'Cannot save invalid link',
-      );
+      return notificationService.error('Cannot save invalid link');
+    }
+    const updatedForm = {
+      ...userInfoForm,
+      avatar:
+        userInfoForm.avatar ||
+        'https://cdn-icons-png.flaticon.com/512/149/149071.png',
     };
-    const updatedForm = {...userInfoForm, avatar: userInfoForm.avatar || 'https://cdn-icons-png.flaticon.com/512/149/149071.png'};
     await axios
         .post<IResponse<IUserObject>>('api/user/editUserProfileInfo', {
           formData: updatedForm,
         })
         .then(() => {
-          notificationService.success(
-              'Update successful',
-          );
+          notificationService.success('Update successful');
           setEditUser(updatedForm);
           setInputDisabled(true);
           setUserInfoSaveDisabled(true);
@@ -120,9 +124,7 @@ const UserProfile = (props: any) => {
           }
         })
         .catch((e) => {
-          notificationService.error(
-              e.response.data,
-          );
+          notificationService.error(e.response.data);
         });
   };
 
@@ -134,9 +136,7 @@ const UserProfile = (props: any) => {
           formData: userPasswordForm,
         })
         .then(() => {
-          notificationService.success(
-              'Update successful',
-          );
+          notificationService.success('Update successful');
           setPasswordDisabled(true);
           setPasswordSaveDisabled(true);
           userUserPasswordForm({
@@ -147,20 +147,15 @@ const UserProfile = (props: any) => {
           });
         })
         .catch((e) => {
-          notificationService.error(
-              e.response.data,
-          );
+          notificationService.error(e.response.data);
         });
   };
 
   modalService.onPrimaryClicked = async (): Promise<void> => {
     await axios
-        .delete(`api/user/delete/${userId}`, {
-        })
+        .delete(`api/user/delete/${userId}`, {})
         .then((result: any) => {
-          notificationService.success(
-              result.data.message,
-          );
+          notificationService.success(result.data.message);
           setTimeout(() => {
             if (loggedUser.role === 'admin') {
               history.push('/admin');
@@ -170,16 +165,13 @@ const UserProfile = (props: any) => {
           }, 2000);
         })
         .catch((e) => {
-          notificationService.error(
-              e.response.data,
-          );
+          notificationService.error(e.response.data);
         });
   };
 
   // Hide img while loading not to show a white border
   const [didLoad, setLoad] = useState(false);
   const imageStyle = didLoad ? {} : {display: 'none'};
-
 
   // User should be only allowed on his profile page, else redirect
   if (redirect) {
@@ -210,7 +202,8 @@ const UserProfile = (props: any) => {
                         onError={({currentTarget}) => {
                           currentTarget.onerror = null; // prevents looping
                           // display default image while link is broken
-                          currentTarget.src='https://cdn-icons-png.flaticon.com/512/149/149071.png';
+                          currentTarget.src =
+                            'https://cdn-icons-png.flaticon.com/512/149/149071.png';
                         }}
                         onLoad={() => setLoad(true)}
                       />
@@ -281,7 +274,10 @@ const UserProfile = (props: any) => {
                   </tbody>
                 </table>
                 <br />
-                <form id="account-info-form" onSubmit={(e: any) => saveUserInfoForm(e)}>
+                <form
+                  id="account-info-form"
+                  onSubmit={(e: any) => saveUserInfoForm(e)}
+                >
                   <table>
                     <tbody>
                       <tr>
@@ -345,7 +341,9 @@ const UserProfile = (props: any) => {
                               className="user-profile-input"
                               value={role}
                               name="role"
-                              disabled={loggedUser.role !== 'admin' || inputDisabled}
+                              disabled={
+                                loggedUser.role !== 'admin' || inputDisabled
+                              }
                               onChange={(e) => userInfoChange(e)}
                             >
                               <option value="user">user</option>
@@ -380,7 +378,7 @@ const UserProfile = (props: any) => {
                           size="sm"
                           form="account-password-form"
                           className="ms-2"
-                          type='submit'
+                          type="submit"
                           disabled={passwordSaveDisabled}
                         >
                           Save
@@ -407,7 +405,10 @@ const UserProfile = (props: any) => {
                   </tbody>
                 </table>
                 <br />
-                <form id="account-password-form" onSubmit={(e: any) => saveUserPasswordForm(e)}>
+                <form
+                  id="account-password-form"
+                  onSubmit={(e: any) => saveUserPasswordForm(e)}
+                >
                   <table>
                     <tbody>
                       <tr>
@@ -424,8 +425,7 @@ const UserProfile = (props: any) => {
                               value={oldPassword}
                               onChange={(e) => userPasswordChange(e)}
                               disabled={
-                                loggedUser.role === 'admin' ||
-                                passwordDisabled
+                                loggedUser.role === 'admin' || passwordDisabled
                               }
                             />
                           </InputGroup>
@@ -470,20 +470,28 @@ const UserProfile = (props: any) => {
                       <tr>
                         <td>
                           <div className="pt-2">
-                            <Button variant="danger" onClick={() =>
-                              modalService.open(
-                                  <div className="d-flex flex-column">
-                                    <h2>Confirm Deletion</h2>
-                                    <span>Are you sure you wish to delete {loggedUser.name}?</span>
-                                  </div>,
-                                  'lg',
-                                  {
-                                    width: 60,
-                                    primaryButtonText: 'Yes',
-                                    secondaryButtonText: 'No',
-                                  },
-                              )}
-                            >Delete Account</Button>
+                            <Button
+                              variant="danger"
+                              onClick={() =>
+                                modalService.open(
+                                    <div className="d-flex flex-column">
+                                      <h2>Confirm Deletion</h2>
+                                      <span>
+                                      Are you sure you wish to delete{' '}
+                                        {loggedUser.name}?
+                                      </span>
+                                    </div>,
+                                    'lg',
+                                    {
+                                      width: 60,
+                                      primaryButtonText: 'Yes',
+                                      secondaryButtonText: 'No',
+                                    },
+                                )
+                              }
+                            >
+                              Delete Account
+                            </Button>
                           </div>
                         </td>
                       </tr>

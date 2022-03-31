@@ -138,7 +138,10 @@ router.get('/profile', auth, async (req, res) => {
     return res.status(400).send('Bad request, no userId provided')
   }
 
-  if (user.role === 'disabled' || (user.role === 'user' && String(user._id) !== query.userId)) {
+  if (
+    user.role === 'disabled' ||
+    (user.role === 'user' && String(user._id) !== query.userId)
+  ) {
     return res.status(401).send('Unauthorized access')
   }
 
@@ -159,28 +162,55 @@ router.get('/profile', auth, async (req, res) => {
   }
 })
 
-// delete user
+// delete user with email
+router.delete('/deleteWithEmail/:email', auth, async (req, res) => {
+  try {
+    const user = await User.findOne({ _id: req.userId })
+    const email = String(req.params.email)
+    // check admin role
+    if (user.role == 'admin') {
+      // verify email
+      await User.deleteOne({ email: email })
+      // delete user
+      return res.status(200).json({
+        message: 'User deleted successfully',
+      })
+    }
+  } catch (err) {
+    res.status(500).send('Server error')
+  }
+})
+
+// delete user with id
 router.delete('/delete/:id', auth, async (req, res) => {
   const loggedUser = await User.findOne({ _id: req.userId })
   // user or disabled can only delete if their id matches url id
-  if (loggedUser.role === 'disabled' || (loggedUser.role === 'user' && String(loggedUser._id) !== req.params.id)) {
+  if (
+    loggedUser.role === 'disabled' ||
+    (loggedUser.role === 'user' && String(loggedUser._id) !== req.params.id)
+  ) {
     return res.status(401).send('Unauthorized access')
-  } 
+  }
 
   // If deleting admin and there are no other admins
-  const numOfOtherAdmins = await User.count({role: 'admin', _id: {$not: {$eq: req.params.id}}})
+  const numOfOtherAdmins = await User.count({
+    role: 'admin',
+    _id: { $not: { $eq: req.params.id } },
+  })
   if (numOfOtherAdmins === 0) {
-    return res.status(400).send('Cannot delete, a minimum of 1 admin role is required')
+    return res
+      .status(400)
+      .send('Cannot delete, a minimum of 1 admin role is required')
   }
 
   await User.deleteOne({ _id: req.params.id })
 
   // if deleting yourself, remove cookie
-  if(req.params.id === String(loggedUser._id)){
+  if (req.params.id === String(loggedUser._id)) {
     return res
       .clearCookie('access_token')
       .status(200)
-      .json({message: 'User deleted successfully'})
+      .json({ message: 'User deleted successfully' })
   } else {
     return res.status(200).json({
       message: 'User deleted successfully',
@@ -189,62 +219,85 @@ router.delete('/delete/:id', auth, async (req, res) => {
 })
 
 // edit user profile information
-router.post('/editUserProfileInfo', auth , async (req, res) => {
-  const { email, name, role, _id, avatar} = Object(req.body.formData)
-  const loggedUser = await User.findOne({ _id: req.userId });
+router.post('/editUserProfileInfo', auth, async (req, res) => {
+  const { email, name, role, _id, avatar } = Object(req.body.formData)
+  const loggedUser = await User.findOne({ _id: req.userId })
 
   // Disabled and Users cannot edit other profiles
-  if(loggedUser.role === 'disabled' || (loggedUser.role === 'user' && String(loggedUser._id) !== _id)) {
+  if (
+    loggedUser.role === 'disabled' ||
+    (loggedUser.role === 'user' && String(loggedUser._id) !== _id)
+  ) {
     return res.status(401).send('Unauthorized access')
   }
 
   // If email or name is empty
-  if (!email || !name){
+  if (!email || !name) {
     return res.status(400).send(`${!email ? 'Email' : 'Name'} cannot be empty`)
   }
 
   // Email exists for another user
-  const emailExist = await User.count({email: email, _id: {$not: {$eq: _id}}})
+  const emailExist = await User.count({
+    email: email,
+    _id: { $not: { $eq: _id } },
+  })
   if (emailExist > 0) {
     return res.status(400).send('Email already exists')
   }
 
   // If changing to non-admin and there are no other admins
-  const numOfOtherAdmins = await User.count({role: 'admin', _id: {$not: {$eq: _id}}})
+  const numOfOtherAdmins = await User.count({
+    role: 'admin',
+    _id: { $not: { $eq: _id } },
+  })
   if (role !== 'admin' && numOfOtherAdmins === 0) {
-    return res.status(400).send('Cannot change role, a minimum of 1 admin role is required')
+    return res
+      .status(400)
+      .send('Cannot change role, a minimum of 1 admin role is required')
   }
 
   // Update desired user
-  await User.findOneAndUpdate({_id: _id}, {email: email, name: name, avatar: avatar, role: role})
+  await User.findOneAndUpdate(
+    { _id: _id },
+    { email: email, name: name, avatar: avatar, role: role }
+  )
   return res.status(200).json({
-    Results: [{
-      _id: String(loggedUser._id),
-      name: loggedUser.name,
-      role: loggedUser.role,
-      avatar: loggedUser.avatar,
-      email: loggedUser.email,
-    }],
-  });
+    Results: [
+      {
+        _id: String(loggedUser._id),
+        name: loggedUser.name,
+        role: loggedUser.role,
+        avatar: loggedUser.avatar,
+        email: loggedUser.email,
+      },
+    ],
+  })
 })
 
 // edit user profile information
-router.post('/editUserProfilePassword', auth , async (req, res) => {
-  const { oldPassword, newPassword , newPassword1, _id } = Object(req.body.formData);
-  const loggedUser = await User.findOne({ _id: req.userId });
+router.post('/editUserProfilePassword', auth, async (req, res) => {
+  const { oldPassword, newPassword, newPassword1, _id } = Object(
+    req.body.formData
+  )
+  const loggedUser = await User.findOne({ _id: req.userId })
 
   // users can only update their password
-  if(loggedUser.role === 'disabled' || (loggedUser.role === 'user' && String(loggedUser._id) !== _id)) {
+  if (
+    loggedUser.role === 'disabled' ||
+    (loggedUser.role === 'user' && String(loggedUser._id) !== _id)
+  ) {
     return res.status(401).send('Unauthorized access')
   }
 
   // check if both new password matches
-  if (newPassword !== newPassword1){
-    return res.status(400).send('New password and confirm password do not match')
+  if (newPassword !== newPassword1) {
+    return res
+      .status(400)
+      .send('New password and confirm password do not match')
   }
 
   // If password is empty
-  if(!newPassword) {
+  if (!newPassword) {
     return res.status(400).send('Password cannot be empty')
   }
 
@@ -255,16 +308,18 @@ router.post('/editUserProfilePassword', auth , async (req, res) => {
   }
 
   const encryptedPassword = await encryptPassword(newPassword)
-  await User.findOneAndUpdate({_id: _id}, {password: encryptedPassword})
+  await User.findOneAndUpdate({ _id: _id }, { password: encryptedPassword })
   return res.status(200).json({
-    Results: [{
-      _id: String(loggedUser._id),
-      name: loggedUser.name,
-      role: loggedUser.role,
-      avatar: loggedUser.avatar,
-      email: loggedUser.email,
-    }],
-  });
+    Results: [
+      {
+        _id: String(loggedUser._id),
+        name: loggedUser.name,
+        role: loggedUser.role,
+        avatar: loggedUser.avatar,
+        email: loggedUser.email,
+      },
+    ],
+  })
 })
 
 module.exports = router

@@ -256,7 +256,7 @@ const setupLogTests = async () => {
 
   // register user
   await request(app).post('/api/user/register').send(testUser)
-  await User.updateOne({email: testUser.email}, {role: 'user'})
+  await User.updateOne({ email: testUser.email }, { role: 'user' })
 
   // login user and store cookie
   return request(app)

@@ -63,10 +63,7 @@ const Navbar = () => {
             }}
           >
             <div className="nav-right-icon">
-              <img
-                src={user.avatar}
-              >
-              </img>
+              <img src={user.avatar}></img>
             </div>
           </div>
         )),
@@ -98,11 +95,17 @@ const Navbar = () => {
                     `/user-profile?Id=${user._id}`
                 }
               >
-                <div className="nav-right-font">Profile</div>
+                <div id="profile" className="nav-right-font">
+                  Profile
+                </div>
               </Dropdown.Item>
               <Dropdown.Divider />
               <Dropdown.Item eventKey="2">
-                <div className="nav-right-font" onClick={(e) => logout(e)}>
+                <div
+                  id="logout"
+                  className="nav-right-font"
+                  onClick={(e) => logout(e)}
+                >
                   Sign out
                 </div>
               </Dropdown.Item>

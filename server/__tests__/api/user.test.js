@@ -36,21 +36,21 @@ const adminTwo = {
 
 /**
  * Login into with a specific user.
- * @param {'admin' | 'user' | 'disabled'} type 
+ * @param {'admin' | 'user' | 'disabled'} type
  * @returns cookie access token
  */
 const login = async (type) => {
-  let user;
+  let user
   switch (type) {
     case 'admin':
-      user = adminOne;
-      break;
+      user = adminOne
+      break
     case 'user':
-      user = userOne;
-      break;
+      user = userOne
+      break
     case 'disabled':
-      user = newUser;
-      break;
+      user = newUser
+      break
   }
   return request(app)
     .post('/api/user/login')
@@ -74,15 +74,21 @@ beforeAll(async () => {
   await request(app).post('/api/user/register').send(userTwo)
   await request(app).post('/api/user/register').send(adminOne)
   await request(app).post('/api/user/register').send(adminTwo)
-  await User.updateMany({$or: [{email: userOne.email}, {email: userTwo.email}]}, {role: 'user'})
-  await User.updateMany({$or: [{email: adminOne.email}, {email: adminTwo.email}]}, {role: 'admin'})
+  await User.updateMany(
+    { $or: [{ email: userOne.email }, { email: userTwo.email }] },
+    { role: 'user' }
+  )
+  await User.updateMany(
+    { $or: [{ email: adminOne.email }, { email: adminTwo.email }] },
+    { role: 'admin' }
+  )
 })
 
 describe('Sign up given a username and password', () => {
   it('should respond with a 200 status code, Should specify json in the content type header & Should log in the user based on credentials ', async () => {
     const response = await request(app).post('/api/user/register').send(newUser)
     expect(response.statusCode).toBe(200)
-    const registered_user = await User.find({email: newUser.email})
+    const registered_user = await User.find({ email: newUser.email })
     expect(registered_user.length).toBe(1)
   })
 })
@@ -91,7 +97,7 @@ describe('Test signup cases', () => {
   it('should respond with a 400 status code when user already exists', async () => {
     const response = await request(app).post('/api/user/register').send(newUser)
     expect(response.statusCode).toBe(400)
-    const already_registered = await User.find({email: newUser.email})
+    const already_registered = await User.find({ email: newUser.email })
     expect(already_registered.length).toBe(1)
   })
 
@@ -203,7 +209,7 @@ describe('Get all users', () => {
 })
 
 describe('Get user profile', () => {
-  it('should not get a user\'s profile if no user id is provided', async () => {
+  it("should not get a user's profile if no user id is provided", async () => {
     const noUserCookie = await login('admin')
     const response = await request(app)
       .get('/api/user/profile')
@@ -212,7 +218,7 @@ describe('Get user profile', () => {
     expect(response.text).toBe('Bad request, no userId provided')
   })
 
-  it('should not get a user\'s profile if a disabled user is accessing it', async () => {
+  it("should not get a user's profile if a disabled user is accessing it", async () => {
     const disabledCookieProfile = await login('disabled')
     const response = await request(app)
       .get('/api/user/profile')
@@ -222,7 +228,7 @@ describe('Get user profile', () => {
     expect(response.text).toBe('Unauthorized access')
   })
 
-  it('should not get a user\'s profile if a user accesses another profile', async () => {
+  it("should not get a user's profile if a user accesses another profile", async () => {
     const userAccessInvalidCookie = await login('user')
     const userOther = await User.findOne({ email: userTwo.email })
     const response = await request(app)
@@ -233,7 +239,7 @@ describe('Get user profile', () => {
     expect(response.text).toBe('Unauthorized access')
   })
 
-  it('should not get a user\'s profile if a user access their own profile', async () => {
+  it("should not get a user's profile if a user access their own profile", async () => {
     const userAccessSameCookie = await login('user')
     const usersame = await User.findOne({ email: userOne.email })
     const response = await request(app)
@@ -244,7 +250,7 @@ describe('Get user profile', () => {
     expect(response.body.Total).toBe(1)
   })
 
-  it('should get a valid user\'s profile if an admin is accessing it', async () => {
+  it("should get a valid user's profile if an admin is accessing it", async () => {
     const adminCookieProfile = await login('admin')
     const user = await User.findOne({ email: userOne.email })
     const response = await request(app)
@@ -256,7 +262,7 @@ describe('Get user profile', () => {
     expect(response.body.Total).toBe(1)
   })
 
-  it('should not get a invalid user\'s profile if an admin is accessing it', async () => {
+  it("should not get a invalid user's profile if an admin is accessing it", async () => {
     const adminCookieProfileBad = await login('admin')
     const response = await request(app)
       .get('/api/user/profile')
@@ -297,7 +303,7 @@ describe('Edit user info', () => {
         formData: {
           _id: String(adminMissingName._id),
           email: 'someEmail@email.com',
-        }
+        },
       })
     expect(response.statusCode).toBe(400)
     expect(response.text).toBe('Name cannot be empty')
@@ -313,7 +319,7 @@ describe('Edit user info', () => {
         formData: {
           _id: String(adminMissingEmail._id),
           name: 'some name',
-        }
+        },
       })
     expect(response.statusCode).toBe(400)
     expect(response.text).toBe('Email cannot be empty')
@@ -329,8 +335,8 @@ describe('Edit user info', () => {
         formData: {
           _id: String(adminEmailExists._id),
           email: adminTwo.email,
-          name: adminEmailExists.name
-        }
+          name: adminEmailExists.name,
+        },
       })
     expect(response.statusCode).toBe(400)
     expect(response.text).toBe('Email already exists')
@@ -338,11 +344,14 @@ describe('Edit user info', () => {
 
   it('should not edit a user if admin is the last one', async () => {
     const adminLastOneCookie = await login('admin')
-    await User.updateOne({
-      email: adminTwo.email,
-    }, {
-      role: 'user',
-    })
+    await User.updateOne(
+      {
+        email: adminTwo.email,
+      },
+      {
+        role: 'user',
+      }
+    )
     const lastAdmin = await User.findOne({ email: adminOne.email })
     const response = await request(app)
       .post('/api/user/editUserProfileInfo')
@@ -352,17 +361,22 @@ describe('Edit user info', () => {
           _id: String(lastAdmin._id),
           email: lastAdmin.email,
           name: lastAdmin.name,
-          role: 'user'
-        }
+          role: 'user',
+        },
       })
     expect(response.statusCode).toBe(400)
-    expect(response.text).toBe('Cannot change role, a minimum of 1 admin role is required')
-    
-    await User.updateOne({
-      email: adminTwo.email,
-    }, {
-      role: 'admin',
-    })
+    expect(response.text).toBe(
+      'Cannot change role, a minimum of 1 admin role is required'
+    )
+
+    await User.updateOne(
+      {
+        email: adminTwo.email,
+      },
+      {
+        role: 'admin',
+      }
+    )
   })
 
   it('should edit a user if an admin is editing', async () => {
@@ -416,7 +430,7 @@ describe('Change user password', () => {
         formData: {
           newPassword: 'passOne',
           newPassword1: 'passTwo',
-        }
+        },
       })
     expect(response.statusCode).toBe(400)
     expect(response.text).toBe('New password and confirm password do not match')
@@ -431,7 +445,7 @@ describe('Change user password', () => {
         formData: {
           newPassword: '',
           newPassword1: '',
-        }
+        },
       })
     expect(response.statusCode).toBe(400)
     expect(response.text).toBe('Password cannot be empty')
@@ -449,7 +463,7 @@ describe('Change user password', () => {
           oldPassword: 'invalidPass',
           newPassword: userOne.password,
           newPassword1: userOne.password,
-        }
+        },
       })
     expect(response.statusCode).toBe(400)
     expect(response.text).toBe('Old password is incorrect')
@@ -467,7 +481,7 @@ describe('Change user password', () => {
           oldPassword: userOne.password,
           newPassword: userOne.password,
           newPassword1: userOne.password,
-        }
+        },
       })
     expect(response.statusCode).toBe(200)
     expect(response.body.Results.length).toBe(1)
@@ -485,7 +499,7 @@ describe('Change user password', () => {
           oldPassword: userOne.password,
           newPassword: userOne.password,
           newPassword1: userOne.password,
-        }
+        },
       })
     expect(response.statusCode).toBe(200)
     expect(response.body.Results.length).toBe(1)
@@ -538,7 +552,9 @@ describe('Deleting user', () => {
       .delete(`/api/user/delete/${String(adminLast._id)}`)
       .set('Cookie', adminDeleteLastCookie)
     expect(response.statusCode).toBe(400)
-    expect(response.text).toBe('Cannot delete, a minimum of 1 admin role is required')
+    expect(response.text).toBe(
+      'Cannot delete, a minimum of 1 admin role is required'
+    )
   })
 })
 
