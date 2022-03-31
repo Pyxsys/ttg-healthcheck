@@ -294,7 +294,6 @@ describe('Edit user info', () => {
 
   it('should throw error if invalid userId', async () => {
     const adminMissingNameCookie = await login('admin')
-    const adminMissingName = await User.findOne({ email: adminOne.email })
     const response = await request(app)
       .post('/api/user/editUserProfileInfo')
       .set('Cookie', adminMissingNameCookie)
@@ -585,7 +584,6 @@ describe('Deleting user', () => {
 
   it('should throw error if id passed is invalid', async () => {
     const adminDeleteLastCookie = await login('admin')
-    const adminLast = await User.findOne({ email: adminOne.email })
     const response = await request(app)
       .delete('/api/user/delete/invalidId')
       .set('Cookie', adminDeleteLastCookie)
@@ -594,15 +592,6 @@ describe('Deleting user', () => {
 })
 
 describe ('user logout', () => {
-  it("should not get a user's log if no user id is provided", async () => {
-    const noUserCookie = await login('admin')
-    const response = await request(app)
-      .get('/api/user/log')
-      .set('Cookie', noUserCookie)
-    expect(response.statusCode).toBe(400)
-    expect(response.text).toBe('Bad request, no userId provided')
-  })
-
   it("should not get a user's log if a disabled user is accessing it", async () => {
     const disabledCookieProfile = await login('disabled')
     const response = await request(app)
@@ -611,27 +600,6 @@ describe ('user logout', () => {
       .query({ userId: 'some_id' })
     expect(response.statusCode).toBe(401)
     expect(response.text).toBe('Unauthorized access')
-  })
-
-  it("should not get a user's log if a user accesses another log", async () => {
-    const userAccessInvalidCookie = await login('user')
-    const userOther = await User.findOne({ email: userTwo.email })
-    const response = await request(app)
-      .get('/api/user/log')
-      .set('Cookie', userAccessInvalidCookie)
-      .query({ userId: String(userOther._id) })
-    expect(response.statusCode).toBe(401)
-    expect(response.text).toBe('Unauthorized access')
-  })
-
-  it("should get a user's log if a user access their own log", async () => {
-    const userAccessSameCookie = await login('user')
-    const usersame = await User.findOne({ email: userOne.email })
-    const response = await request(app)
-      .get('/api/user/log')
-      .set('Cookie', userAccessSameCookie)
-      .query({ userId: String(usersame._id) })
-    expect(response.statusCode).toBe(200)
   })
 
   it("should get a valid user's log if an admin is accessing it", async () => {
@@ -645,6 +613,17 @@ describe ('user logout', () => {
     expect(response.body.Results).toBeTruthy()
   })
 
+  it("should not get a user's log if a user accesses another log", async () => {
+    const userAccessInvalidCookie = await login('user')
+    const userOther = await User.findOne({ email: userTwo.email })
+    const response = await request(app)
+      .get('/api/user/log')
+      .set('Cookie', userAccessInvalidCookie)
+      .query({ userId: String(userOther._id) })
+    expect(response.statusCode).toBe(401)
+    expect(response.text).toBe('Unauthorized access')
+  })
+
   it("should not get a invalid user's log if an admin is accessing it", async () => {
     const adminCookieProfileBad = await login('admin')
     const response = await request(app)
@@ -653,6 +632,27 @@ describe ('user logout', () => {
       .query({ userId: 'some_invalid_id' })
     expect(response.statusCode).toBe(400)
     expect(response.body.Results).toEqual(expect.arrayContaining([]))
+  })
+
+  
+
+  it("should get a user's log if a user access their own log", async () => {
+    const userAccessSameCookie = await login('user')
+    const usersame = await User.findOne({ email: userOne.email })
+    const response = await request(app)
+      .get('/api/user/log')
+      .set('Cookie', userAccessSameCookie)
+      .query({ userId: String(usersame._id) })
+    expect(response.statusCode).toBe(200)
+  })
+
+  it("should not get a user's log if no user id is provided", async () => {
+    const noUserCookie = await login('admin')
+    const response = await request(app)
+      .get('/api/user/log')
+      .set('Cookie', noUserCookie)
+    expect(response.statusCode).toBe(400)
+    expect(response.text).toBe('Bad request, no userId provided')
   })
 
 })
