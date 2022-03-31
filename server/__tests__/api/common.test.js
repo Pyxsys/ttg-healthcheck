@@ -190,6 +190,13 @@ const mockLogPayload1 = {
       },
     },
   },
+  peripherals: [
+    {
+      hid: '/dev/bus/usb/001/005',
+      connection: 'USB',
+      name: 'DUMMY UDisk flash drive',
+    },
+  ],
 }
 
 const mockLogPayload2 = {
@@ -242,6 +249,13 @@ const mockLogPayload2 = {
       },
     },
   },
+  peripherals: [
+    {
+      hid: '/dev/bus/usb/001/005',
+      connection: 'USB',
+      name: 'DUMMY UDisk flash drive',
+    },
+  ],
 }
 
 const testUser = {

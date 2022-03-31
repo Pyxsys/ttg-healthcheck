@@ -2,6 +2,7 @@ const express = require('express')
 const router = express.Router()
 const { Devices } = require('../models/device.js')
 const { DeviceLogs } = require('../models/device_logs.js')
+const peripheral = require('../models/peripheral.js')
 
 // receive device report from daemon
 router.post('/device', async (req, res) => {
@@ -81,6 +82,7 @@ const processDeviceLogInfo = (payload) => {
   const newDiskLog = processDiskLogInfo(payload)
   const newWifiLog = processWifiLogInfo(payload)
   const newProcessLogArray = processProcessLogInfo(payload)
+  const newPeripheralArray = processPeripheralLogInfo(payload)
 
   return new DeviceLogs({
     deviceId,
@@ -90,6 +92,7 @@ const processDeviceLogInfo = (payload) => {
     disk: newDiskLog,
     wifi: newWifiLog,
     processes: newProcessLogArray,
+    peripherals: newPeripheralArray,
   })
 }
 
@@ -206,6 +209,31 @@ const processSingleProcess = (process) => {
     memory: {
       usagePercentage: memory_percent,
     },
+  }
+}
+
+const processPeripheralLogInfo = (payload) => {
+  //load values
+  const { peripherals } = payload
+
+  //compute values
+  const peripheralArray = new Array()
+
+  peripherals.forEach((element) => {
+    peripheralArray.push(processSinglePeripheral(element))
+  })
+
+  return peripheralArray
+}
+
+const processSinglePeripheral = (peripheral) => {
+  //load values
+  const { hid, connection, name } = peripheral
+
+  return {
+    name,
+    connection,
+    hardware_id: hid,
   }
 }
 
@@ -328,5 +356,6 @@ module.exports = {
   processProcessLogInfo,
   processDiskLogInfo,
   processSingleProcess,
+  processPeripheralLogInfo,
   computeLiveSleepingProcesses,
 }
