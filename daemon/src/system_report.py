@@ -625,7 +625,7 @@ class DaemonChecker:
 
     @classmethod
     def check_daemon(cls):
-        name_pattern = "python3? system_report.py"
+        name_pattern = "python(\d?)\W+(.*)system_report\.py"
         
         for proc in SysScrubber.fetch_all_processes():
             process_name = SysScrubber.fetch_process_name(proc.pid)
