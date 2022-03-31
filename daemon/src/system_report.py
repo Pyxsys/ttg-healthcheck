@@ -4,6 +4,8 @@ import time
 import threading
 from datetime import datetime
 
+_RUNNER_RUNNING = True
+
 class Runner(threading.Thread):
 
     api_endpoint='api/daemon'
@@ -15,12 +17,14 @@ class Runner(threading.Thread):
         self.mode=mode
 
     def run(self):
+        _RUNNER_RUNNING = True
         if self.mode == "0":
             self.send_initial_device_report()
         elif self.mode == "1":
             self.send_recurring_device_report()
         else:
             print("Invalid run mode \"", self.mode, "\".")
+        _RUNNER_RUNNING = False
 
     def get_config(self):
         return self.configs
@@ -619,7 +623,8 @@ class SysScrubber:
 
 class DaemonChecker:
 
-    def check_daemon(self):
+    @classmethod
+    def check_daemon(cls):
         name_pattern = "python3? system_report.py"
         
         for proc in SysScrubber.fetch_all_processes():
@@ -644,6 +649,8 @@ def main(config, mode):
     runner=Runner(config, mode)
     runner.setDaemon(True)
     runner.start()
+    while _RUNNER_RUNNING:
+        DaemonChecker.check_daemon()
     runner.join()
 
 if __name__ == "__main__":
