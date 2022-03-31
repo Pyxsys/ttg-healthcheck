@@ -632,7 +632,7 @@ class DaemonChecker:
         for proc in SysScrubber.fetch_all_processes():
             process_name = SysScrubber.fetch_process_name(proc.pid)
             if re.search(name_pattern, process_name):
-                if DaemonChecker.too_much_cpu() or DaemonChecker.too_much_memory():
+                if self.too_much_cpu(proc) or self.too_much_memory(proc):
                     exit_msg = "Exited daemon because CPU or Memory usage was too high.\nAllowed: CPU=" + str(self.configs["max_cpu"]) + "%, Memory=" + str(self.configs["max_memory"]/1000000) + " MB\nUsed:    CPU=" + str(proc.cpu_percent()) + "%, Memory=" + str(proc.memory_info()[0]/1000000) + "MB\n"
                     sys.exit(exit_msg)
 
