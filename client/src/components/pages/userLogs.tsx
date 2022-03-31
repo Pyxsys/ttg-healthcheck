@@ -9,19 +9,21 @@ import Navbar from '../common/Navbar';
 import {IColumnDetail} from '../../types/tables';
 import Pagination from '../common/pagination';
 import ViewTable from '../common/viewTable';
-import {IUserLogs} from '../../types/users';
-import {IResponse} from '../../types/queries';
+import {IUserLogs, IUserObject} from '../../types/users';
+import {IResponse, IResponse1} from '../../types/queries';
 import {useAuth} from '../../context/authContext';
+import {exportCSV} from '../../services/export.service';
 
 const UserLogs = (props: any) => {
   // Readonly Values
   const initialPage: number = 1;
   const pageSize: number = 10;
-  const initialOrderBy: string = 'static.timestamp';
+  const initialOrderBy: string = '-timestamp';
   const userId: string = props.location.search.replace('?Id=', '');
   const {user: loggedUser} = useAuth();
   const [redirect, setRedirect] = useState(false);
   const [logsTable, setLogsTable] = useState([] as IUserLogs[]);
+  const [user, setUser] = useState({} as IUserObject);
   const [page, setPage] = useState(initialPage);
   const [totalPages, setTotalPages] = useState(0);
 
@@ -42,8 +44,22 @@ const UserLogs = (props: any) => {
         });
   };
 
+  const queryUser = async () => {
+    await axios
+        .get<IResponse1<IUserObject>>('api/user/profile', {
+          params: {userId: userId},
+        })
+        .then((result) => {
+          setUser(result.data.Results);
+        })
+        .catch(() => {
+          setRedirect(true);
+        });
+  };
+
   useEffect(() => {
     queryTable();
+    queryUser();
   }, []);
 
   // User should be only allowed on his profile page, else redirect
@@ -57,9 +73,20 @@ const UserLogs = (props: any) => {
 
   const column: IColumnDetail[] = [
     {
+      key: 'userPerformingAction',
+      name: 'Action User\'s Name',
+    },
+    {
+      key: 'event',
+      name: 'Event Type',
+    },
+    {
+      key: 'description',
+      name: 'Description',
+    },
+    {
       key: 'timestamp',
-      name: 'timestamp',
-      disableOrderBy: true,
+      name: 'Timestamp',
       override: (cellValue) => (
         <div>
           {cellValue ?
@@ -68,27 +95,38 @@ const UserLogs = (props: any) => {
         </div>
       ),
     },
-    {
-      key: 'userPerformingAction',
-      name: 'userPerformingAction',
-    },
-    {
-      key: 'event',
-      name: 'event',
-    },
-    {
-      key: 'description',
-      name: 'description',
-    },
   ];
+
+  const getLogsCSV = (): void => {
+    const logValues = logsTable.map((log) => ({
+      Action_Users_Name: log.userPerformingAction,
+      Event_Type: log.event,
+      Affected_Users_Name: log.affectedUser,
+      Description: log.description,
+      Timestamp: log.timestamp,
+    }));
+    const today = new Date();
+    exportCSV(logValues, `${user.name}-${today.getFullYear()}-${today.getMonth()}-${today.getDate()}`);
+  };
 
   return (
     <div className="h-100 d-flex flex-column">
       <Navbar />
       <div className="flex-grow-1 d-flex flex-column align-items-center overflow-auto devices-content">
-        {/* Table */}
         <div className="flex-grow-1 d-flex flex-column overflow-auto container">
-          <div className="flex-grow-1 overflow-auto table-container mt-5">
+          {/* Row of Export Button */}
+          <div className="d-flex pt-5">
+            <div className="p-1 ms-auto">
+              <button className="btn btn-primary"
+                onClick={() => getLogsCSV()}
+              >
+                Export as CSV
+              </button>
+            </div>
+          </div>
+
+          {/* Table */}
+          <div className="flex-grow-1 overflow-auto table-container">
             <ViewTable
               tableData={logsTable}
               page={page}
