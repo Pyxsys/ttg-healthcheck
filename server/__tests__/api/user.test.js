@@ -247,7 +247,6 @@ describe('Get user profile', () => {
       .set('Cookie', userAccessSameCookie)
       .query({ userId: String(usersame._id) })
     expect(response.statusCode).toBe(200)
-    console.log(response)
     expect(response.body.Total).toBe(1)
   })
 
@@ -269,9 +268,8 @@ describe('Get user profile', () => {
       .get('/api/user/profile')
       .set('Cookie', adminCookieProfileBad)
       .query({ userId: 'some_invalid_id' })
-    expect(response.statusCode).toBe(200)
+    expect(response.statusCode).toBe(400)
     expect(response.body.Results).toEqual(expect.arrayContaining([]))
-    expect(response.body.Total).toBe(0)
   })
 })
 
@@ -388,10 +386,9 @@ describe('Edit user info', () => {
       .set('Cookie', adminChangeCookie)
       .send({ formData: adminChange })
     expect(response.statusCode).toBe(200)
-    expect(response.body.Results.length).toBe(1)
   })
 
-  it('should edit a user if a user is editing', async () => {
+  it('should allow the user to edit themselves', async () => {
     const userChangeCookie = await login('user')
     const userChange = await User.findOne({ email: userOne.email })
     const response = await request(app)
@@ -399,7 +396,6 @@ describe('Edit user info', () => {
       .set('Cookie', userChangeCookie)
       .send({ formData: userChange })
     expect(response.statusCode).toBe(200)
-    expect(response.body.Results.length).toBe(1)
   })
 })
 
@@ -485,7 +481,6 @@ describe('Change user password', () => {
         },
       })
     expect(response.statusCode).toBe(200)
-    expect(response.body.Results.length).toBe(1)
   })
 
   it('should change password if admin accesses user', async () => {
@@ -503,7 +498,6 @@ describe('Change user password', () => {
         },
       })
     expect(response.statusCode).toBe(200)
-    expect(response.body.Results.length).toBe(1)
   })
 })
 
