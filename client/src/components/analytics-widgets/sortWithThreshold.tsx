@@ -1,5 +1,5 @@
 // 3rd Party
-import React from 'react';
+import React, {useState} from 'react';
 import {Col, Accordion, Row} from 'react-bootstrap';
 import {IDeviceTotal} from '../../types/device';
 import {IColumnDetail} from '../../types/tables';
@@ -19,6 +19,7 @@ const PieWheelCell = (cellValue: CellValue) => (
     </div>
   </div>
 );
+
 const getAttribute = (
     object: any | undefined,
     attribute: string,
@@ -34,18 +35,23 @@ const getAttribute = (
 const sortWithThreshold = (_props: any) => {
   const devices: IDeviceTotal[] = _props.deviceDynamic;
   const devicesSorted: IDeviceTotal[] = devices.sort(_props.f).reverse();
-  let counter = 0;
-  let t = 0;
-  console.log(_props.threshold);
-  _props.threshold? t = _props.threshold as number : {};
-  devices.forEach((e) => {
-    const s = _props.columnKey;
-    console.log(getAttribute(e, s));
-    if (getAttribute(e, s) as number > t) {
-      console.log(getAttribute(e, s) + ' '+ s);
-      counter += 1;
-    }
-  });
+  const [threshold, setThreshold] = useState(_props.threshold);
+
+  const updateCounter = () => {
+    let updatedCounter = 0;
+    let t = 0;
+    threshold? t = threshold as number : {};
+    devices.forEach((e) => {
+      const s = _props.columnKey;
+      if (getAttribute(e, s) as number > t) {
+        updatedCounter += 1;
+      }
+    });
+    return updatedCounter;
+  };
+
+  const counter = updateCounter();
+
   const column: IColumnDetail[] = [
     {
       key: 'static.deviceId',
@@ -72,13 +78,22 @@ const sortWithThreshold = (_props: any) => {
                   <div className=''>
                     Change Threshold
                   </div>
-                  <input className="form-control form-control-sm w-100" type="string" value=""></input>
+                  <input
+                    className="form-control form-control-sm w-100"
+                    type="string"
+                    value={threshold}
+                    onChange={(e) =>{
+                      setThreshold(e.target.value);
+                      updateCounter();
+                    }}
+                  >
+                  </input>
                 </div>
               </Col>
               <Col className='p-0 mb-2'>
                 <div className='border-bottom custom-font-size p-2'>
                   <div className=''>
-                    Devices Above 80%
+                    Devices Above 80
                   </div>
                   {counter}
                 </div>
