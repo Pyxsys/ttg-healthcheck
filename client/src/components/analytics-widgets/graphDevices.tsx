@@ -6,13 +6,17 @@ import ViewTable from '../common/viewTable';
 import {MdClose} from 'react-icons/md';
 
 interface AnalyticsDevicesTableInputs {
-  sids: deviceId[]
+  sids: string[]
 }
-type deviceId ={
-  id: String
+type dd = {
+  id: string
 }
 const graphDevices = (props: AnalyticsDevicesTableInputs) => {
-  const devices: deviceId[] = props.sids|| [];
+  console.log(props.sids + 'ikdsjofiajdofjsdofjsfj');
+  const dds:dd[] = [];
+  const sss:string[] = props.sids;
+  sss.forEach((e) => dds.push({id: e} as dd));
+  const devices: dd[] = dds;
 
   const column: IColumnDetail[] = [
     {

@@ -2,12 +2,12 @@ import React from 'react';
 import {Col, Accordion} from 'react-bootstrap';
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-const generateOptions = (listOfOptions: String[]) => {
+const generateOptions = (listOfOptions: string[]) => {
   const returnString = [];
   console.log(listOfOptions.length);
   for (let i = 0; i < listOfOptions.length; i++) {
     console.log(i);
-    returnString.push(<option key= {i}>{listOfOptions[i]}</option>);
+    returnString.push(<option key= {i} value = {listOfOptions[i].toString()}>{listOfOptions[i]}</option>);
   }
   return returnString;
 };
@@ -25,7 +25,10 @@ const graphSettings = (Props:any) => {
               <select
                 className="form-select form-select-sm w-100 mx-2 my-2"
                 defaultValue={'DEFAULT'}
-                onChange={() => {}}
+                onChange={(e) => {
+                  Props.setSids([...Props.sids, e.target.value]);
+                  console.log('diadjnkdjfndsjnfksjdnfkjs' + [...Props.sids, e.target.value]);
+                }}
               >
                 {generateOptions(Props.listOfOptions)}
                 <option value="">Place Holder</option>

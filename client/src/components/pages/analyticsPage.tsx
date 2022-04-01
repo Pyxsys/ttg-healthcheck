@@ -18,8 +18,8 @@ import {IResponse} from '../../types/queries';
 const AnalyticsPage = () => {
   const [deviceTableData, setDeviceTableData] = useState([] as IDeviceTotal[]);
   const [metric, setMetric] = useState('');
-  const [dIds, setDIds] = useState([] as String[]);
-  const [sids, setSids] = useState([] as String[]);
+  const [dIds, setDIds] = useState([] as string[]);
+  const [sids, setSids] = useState([] as string[]);
   const [deviceHistories, setDeviceHistories] = useState([[]] as number[][]);
   const [days, setDays] = useState(0);
   const realTimeDataService = useRealTimeService();
@@ -122,15 +122,13 @@ const AnalyticsPage = () => {
                           <Row className="w-100">
                             <Col className="analytics-accordion-padding">
                               <div className="graph-widget-padding w-100">
-                                <GraphSettings listOfOptions={dIds} setMetric = {setMetric} setDays = {setDays} setSids = {setSids}></GraphSettings>
+                                <GraphSettings listOfOptions={dIds} setMetric = {setMetric} setDays = {setDays} setSids = {setSids} sids ={sids}></GraphSettings>
                               </div>
                             </Col>
                             <Col className="analytics-accordion-padding">
                               <div className="graph-widget-padding w-100">
                                 <GraphDevices
-                                  sids = {sids.map((e) => {
-                                    return {id: e};
-                                  })}
+                                  sids = {sids}
                                 ></GraphDevices>
                               </div>
                             </Col>
