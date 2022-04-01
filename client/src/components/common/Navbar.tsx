@@ -28,7 +28,7 @@ const SideNavData = [
   },
 ];
 
-const Navbar = () => {
+const Navbar = (props: any) => {
   const [isOpen, setOpen] = useState(false);
   const ref = useOnclickOutside(() => {
     setOpen(false);
@@ -76,6 +76,7 @@ const Navbar = () => {
         <div ref={ref} className="nav-hamburger">
           <Hamburger toggled={isOpen} toggle={setOpen} size={28} />
         </div>
+        <div className="nav-page-title">{props.name}</div>
         <div>
           <Dropdown>
             <Dropdown.Toggle as={CustomToggle}></Dropdown.Toggle>

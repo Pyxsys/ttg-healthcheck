@@ -345,7 +345,6 @@ body {
   flex: 0;
   width: 100%;
   background-color:#1f262b;
-  justify-content: space-between;
   align-items: center;
   @media (min-width: $screen-w-xsm) {
     height: 55px;
@@ -360,6 +359,18 @@ body {
   }
 }
 
+.nav-page-title {
+  margin-left: 6px;
+  color: white;
+  font-weight: 600;
+  flex-grow: 1;
+  @media (min-width: $screen-w-md) {
+    font-size: 16px;
+  }
+  @media (min-width: $screen-w-lg) {
+    font-size: 19px;
+  }
+}
 // Right Nav Menu
 .nav-right-icon {
   width: 35px;
