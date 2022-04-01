@@ -1,37 +1,37 @@
 // Third party
-import React, { useEffect, useState } from 'react'
-import axios from 'axios'
-import { Button, Form, InputGroup } from 'react-bootstrap'
-import { Redirect, useHistory, Link } from 'react-router-dom'
+import React, {useEffect, useState} from 'react';
+import axios from 'axios';
+import {Button, Form, InputGroup} from 'react-bootstrap';
+import {Redirect, useHistory, Link} from 'react-router-dom';
 
 // Custom
-import Navbar from '../common/Navbar'
-import { IUserObject, IUserPassword } from '../../types/users'
-import { IResponse1 } from '../../types/queries'
-import { useAuth } from '../../context/authContext'
-import { notificationService } from '../../services/notification.service'
-import { useModalService } from '../../context/modal.context'
+import Navbar from '../common/Navbar';
+import {IUserObject, IUserPassword} from '../../types/users';
+import {IResponse1} from '../../types/queries';
+import {useAuth} from '../../context/authContext';
+import {notificationService} from '../../services/notification.service';
+import {useModalService} from '../../context/modal.context';
 
 const UserProfile = (props: any) => {
-  const history = useHistory()
-  const modalService = useModalService()
+  const history = useHistory();
+  const modalService = useModalService();
 
-  const { user: loggedUser, setUser: setLoggedUser } = useAuth()
+  const {user: loggedUser, setUser: setLoggedUser} = useAuth();
   const [editUser, setEditUser] = useState({
     _id: '',
     name: '',
     email: '',
     avatar: '',
     role: '',
-  } as IUserObject)
-  const userId: string = props.location.search.replace('?Id=', '')
-  const [redirect, setRedirect] = useState(false)
+  } as IUserObject);
+  const userId: string = props.location.search.replace('?Id=', '');
+  const [redirect, setRedirect] = useState(false);
 
-  const [inputDisabled, setInputDisabled] = useState(true)
-  const [passwordDisabled, setPasswordDisabled] = useState(true)
-  const [userInfoSaveDisabled, setUserInfoSaveDisabled] = useState(true)
-  const [passwordSaveDisabled, setPasswordSaveDisabled] = useState(true)
-  const [brokenLink, setBrokenLink] = useState(true)
+  const [inputDisabled, setInputDisabled] = useState(true);
+  const [passwordDisabled, setPasswordDisabled] = useState(true);
+  const [userInfoSaveDisabled, setUserInfoSaveDisabled] = useState(true);
+  const [passwordSaveDisabled, setPasswordSaveDisabled] = useState(true);
+  const [brokenLink, setBrokenLink] = useState(true);
 
   const [userInfoForm, setUserInfoForm] = useState({
     _id: '',
@@ -39,146 +39,146 @@ const UserProfile = (props: any) => {
     email: '',
     avatar: '',
     role: '',
-  } as IUserObject)
+  } as IUserObject);
   const [userPasswordForm, userUserPasswordForm] = useState({
     _id: userId,
     oldPassword: '',
     newPassword: '',
     newPassword1: '',
-  } as IUserPassword)
-  const { name, email, avatar, role } = userInfoForm
-  const { oldPassword, newPassword, newPassword1 } = userPasswordForm
+  } as IUserPassword);
+  const {name, email, avatar, role} = userInfoForm;
+  const {oldPassword, newPassword, newPassword1} = userPasswordForm;
 
   // Retrieve user info based on url ID
   const userInfo = async (userId1: string) => {
     await axios
-      .get<IResponse1<IUserObject>>('api/user/profile', {
-        params: { userId: userId1 },
-      })
-      .then((result) => {
-        const userProfile = result.data.Results
-        setEditUser({
-          ['_id']: userProfile._id,
-          ['name']: userProfile.name,
-          ['email']: userProfile.email,
-          ['avatar']: userProfile.avatar,
-          ['role']: userProfile.role,
+        .get<IResponse1<IUserObject>>('api/user/profile', {
+          params: {userId: userId1},
         })
-      })
-      .catch(() => {
-        setRedirect(true)
-      })
-  }
+        .then((result) => {
+          const userProfile = result.data.Results;
+          setEditUser({
+            ['_id']: userProfile._id,
+            ['name']: userProfile.name,
+            ['email']: userProfile.email,
+            ['avatar']: userProfile.avatar,
+            ['role']: userProfile.role,
+          });
+        })
+        .catch(() => {
+          setRedirect(true);
+        });
+  };
 
   // Initialize page
   useEffect(() => {
     if (loggedUser.role == 'user' && loggedUser._id !== userId) {
-      setRedirect(true)
+      setRedirect(true);
     }
-    userInfo(userId)
-  }, [])
+    userInfo(userId);
+  }, []);
 
   // If the editted user change, update the forms
   useEffect(() => {
-    setUserInfoForm(editUser)
-  }, [editUser])
+    setUserInfoForm(editUser);
+  }, [editUser]);
 
   // Account information onchange
   const userInfoChange = (e: any) => {
-    setUserInfoForm({ ...userInfoForm, [e.target.name]: e.target.value })
-    setUserInfoSaveDisabled(false)
-  }
+    setUserInfoForm({...userInfoForm, [e.target.name]: e.target.value});
+    setUserInfoSaveDisabled(false);
+  };
 
   // Account password onchange
   const userPasswordChange = (e: any) => {
     userUserPasswordForm({
       ...userPasswordForm,
       [e.target.name]: e.target.value,
-    })
-    setPasswordSaveDisabled(false)
-  }
+    });
+    setPasswordSaveDisabled(false);
+  };
 
   // Submit account information edit
   const saveUserInfoForm = async (e: React.ChangeEvent<any>) => {
-    e.preventDefault()
+    e.preventDefault();
     if (brokenLink && userInfoForm.avatar) {
-      return notificationService.error('Cannot save invalid link')
+      return notificationService.error('Cannot save invalid link');
     }
     const updatedForm = {
       ...userInfoForm,
       avatar:
         userInfoForm.avatar ||
         'https://cdn-icons-png.flaticon.com/512/149/149071.png',
-    }
+    };
     await axios
-      .post<IResponse1<IUserObject>>('api/user/editUserProfileInfo', {
-        formData: updatedForm,
-      })
-      .then(() => {
-        notificationService.success('Update successful')
-        setEditUser(updatedForm)
-        setInputDisabled(true)
-        setUserInfoSaveDisabled(true)
-        if (loggedUser._id === userInfoForm._id) {
-          setLoggedUser(updatedForm)
-        }
-      })
-      .catch((err) => {
-        notificationService.error(err.response.data)
-      })
-  }
+        .post<IResponse1<IUserObject>>('api/user/editUserProfileInfo', {
+          formData: updatedForm,
+        })
+        .then(() => {
+          notificationService.success('Update successful');
+          setEditUser(updatedForm);
+          setInputDisabled(true);
+          setUserInfoSaveDisabled(true);
+          if (loggedUser._id === userInfoForm._id) {
+            setLoggedUser(updatedForm);
+          }
+        })
+        .catch((err) => {
+          notificationService.error(err.response.data);
+        });
+  };
 
   // Submit account password edit
   const saveUserPasswordForm = async (e: React.ChangeEvent<any>) => {
-    e.preventDefault()
+    e.preventDefault();
     await axios
-      .post<IResponse1<IUserPassword>>('api/user/editUserProfilePassword', {
-        formData: userPasswordForm,
-      })
-      .then(() => {
-        notificationService.success('Update successful')
-        setPasswordDisabled(true)
-        setPasswordSaveDisabled(true)
-        userUserPasswordForm({
-          _id: userId,
-          oldPassword: '',
-          newPassword: '',
-          newPassword1: '',
+        .post<IResponse1<IUserPassword>>('api/user/editUserProfilePassword', {
+          formData: userPasswordForm,
         })
-      })
-      .catch((err) => {
-        notificationService.error(err.response.data)
-      })
-  }
+        .then(() => {
+          notificationService.success('Update successful');
+          setPasswordDisabled(true);
+          setPasswordSaveDisabled(true);
+          userUserPasswordForm({
+            _id: userId,
+            oldPassword: '',
+            newPassword: '',
+            newPassword1: '',
+          });
+        })
+        .catch((err) => {
+          notificationService.error(err.response.data);
+        });
+  };
 
   modalService.onPrimaryClicked = async (): Promise<void> => {
     await axios
-      .delete(`api/user/delete/${userId}`, {})
-      .then((result: any) => {
-        notificationService.success(result.data.message)
-        setTimeout(() => {
-          if (loggedUser.role === 'admin') {
-            history.push('/admin')
-          } else {
-            window.location.reload()
-          }
-        }, 2000)
-      })
-      .catch((e) => {
-        notificationService.error(e.response.data)
-      })
-  }
+        .delete(`api/user/delete/${userId}`, {})
+        .then((result: any) => {
+          notificationService.success(result.data.message);
+          setTimeout(() => {
+            if (loggedUser.role === 'admin') {
+              history.push('/admin');
+            } else {
+              window.location.reload();
+            }
+          }, 2000);
+        })
+        .catch((e) => {
+          notificationService.error(e.response.data);
+        });
+  };
 
   // Hide img while loading not to show a white border
-  const [didLoad, setLoad] = useState(false)
-  const imageStyle = didLoad ? {} : { display: 'none' }
+  const [didLoad, setLoad] = useState(false);
+  const imageStyle = didLoad ? {} : {display: 'none'};
 
   // User should be only allowed on his profile page, else redirect
   if (redirect) {
     if (loggedUser.role == 'admin') {
-      return <Redirect to="/admin" />
+      return <Redirect to="/admin" />;
     } else {
-      return <Redirect to="/dashboard" />
+      return <Redirect to="/dashboard" />;
     }
   }
 
@@ -199,22 +199,22 @@ const UserProfile = (props: any) => {
                         className="user-profile-img"
                         src={avatar}
                         style={imageStyle}
-                        onError={({ currentTarget }) => {
-                          currentTarget.onerror = null // prevents looping
+                        onError={({currentTarget}) => {
+                          currentTarget.onerror = null; // prevents looping
                           // display default image while link is broken
                           currentTarget.src =
-                            'https://cdn-icons-png.flaticon.com/512/149/149071.png'
+                            'https://cdn-icons-png.flaticon.com/512/149/149071.png';
                         }}
                         onLoad={() => setLoad(true)}
                       />
                       {/* Check to evaluate if user sending broken link to backend*/}
                       <img
-                        style={{ display: 'none' }}
+                        style={{display: 'none'}}
                         src={avatar}
-                        onError={({ currentTarget }) => {
-                          currentTarget.onerror = null // prevents looping
+                        onError={({currentTarget}) => {
+                          currentTarget.onerror = null; // prevents looping
                           // If image link is broken, use default avatar
-                          setBrokenLink(true)
+                          setBrokenLink(true);
                         }}
                         onLoad={() => setBrokenLink(false)}
                       />
@@ -261,9 +261,9 @@ const UserProfile = (props: any) => {
                           size="sm"
                           className="ms-2"
                           onClick={() => {
-                            setInputDisabled(true)
-                            setUserInfoSaveDisabled(true)
-                            setUserInfoForm(editUser)
+                            setInputDisabled(true);
+                            setUserInfoSaveDisabled(true);
+                            setUserInfoForm(editUser);
                           }}
                           disabled={userInfoSaveDisabled}
                         >
@@ -388,14 +388,14 @@ const UserProfile = (props: any) => {
                           size="sm"
                           className="ms-2"
                           onClick={() => {
-                            setPasswordDisabled(true)
-                            setPasswordSaveDisabled(true)
+                            setPasswordDisabled(true);
+                            setPasswordSaveDisabled(true);
                             userUserPasswordForm({
                               _id: userId,
                               oldPassword: '',
                               newPassword: '',
                               newPassword1: '',
-                            })
+                            });
                           }}
                           disabled={passwordSaveDisabled}
                         >
@@ -477,19 +477,19 @@ const UserProfile = (props: any) => {
                               size="sm"
                               onClick={() =>
                                 modalService.open(
-                                  <div className="d-flex flex-column">
-                                    <h2>Confirm Deletion</h2>
-                                    <span>
+                                    <div className="d-flex flex-column">
+                                      <h2>Confirm Deletion</h2>
+                                      <span>
                                       Are you sure you wish to delete{' '}
-                                      {loggedUser.name}?
-                                    </span>
-                                  </div>,
-                                  'lg',
-                                  {
-                                    width: 60,
-                                    primaryButtonText: 'Yes',
-                                    secondaryButtonText: 'No',
-                                  }
+                                        {loggedUser.name}?
+                                      </span>
+                                    </div>,
+                                    'lg',
+                                    {
+                                      width: 60,
+                                      primaryButtonText: 'Yes',
+                                      secondaryButtonText: 'No',
+                                    },
                                 )
                               }
                             >
@@ -522,7 +522,7 @@ const UserProfile = (props: any) => {
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default UserProfile
+export default UserProfile;

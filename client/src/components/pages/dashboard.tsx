@@ -1,130 +1,130 @@
 // 3rd Party
-import React, { useEffect, useState } from 'react'
-import axios from 'axios'
-import { FaPlus, FaTrashAlt } from 'react-icons/fa'
+import React, {useEffect, useState} from 'react';
+import axios from 'axios';
+import {FaPlus, FaTrashAlt} from 'react-icons/fa';
 
 // Custom
-import Navbar from '../common/Navbar'
-import { useAuth } from '../../context/authContext'
-import { useModalService } from '../../context/modal.context'
-import { notificationService } from '../../services/notification.service'
-import { queryDashboard, saveDashboard } from '../../services/dashboard.service'
-import { IResponse } from '../../types/queries'
-import { IDevice, IDeviceLog, IDeviceTotal } from '../../types/device'
-import { IDashboard, IDashboardWidget } from '../../types/dashboard'
-import AddWidgetModal from '../dashboard-widgets/addWidgetModal'
+import Navbar from '../common/Navbar';
+import {useAuth} from '../../context/authContext';
+import {useModalService} from '../../context/modal.context';
+import {notificationService} from '../../services/notification.service';
+import {queryDashboard, saveDashboard} from '../../services/dashboard.service';
+import {IResponse} from '../../types/queries';
+import {IDevice, IDeviceLog, IDeviceTotal} from '../../types/device';
+import {IDashboard, IDashboardWidget} from '../../types/dashboard';
+import AddWidgetModal from '../dashboard-widgets/addWidgetModal';
 // Widgets
-import CpuUsageWidget from '../device-detail-widgets/cpuUsageWidget'
-import CpuAdditionalWidget from '../device-detail-widgets/cpuAdditionalWidget'
-import MemoryUsageWidget from '../device-detail-widgets/memoryUsageWidget'
-import MemoryAdditionalWidget from '../device-detail-widgets/memoryAdditionalWidget'
-import DiskUsageWidget from '../device-detail-widgets/diskUsageWidget'
-import DiskAdditionalWidget from '../device-detail-widgets/diskAdditionalWidget'
-import WifiUsageWidget from '../device-detail-widgets/wifiUsageWidget'
-import WifiAdditionalWidget from '../device-detail-widgets/wifiAdditionalWidget'
+import CpuUsageWidget from '../device-detail-widgets/cpuUsageWidget';
+import CpuAdditionalWidget from '../device-detail-widgets/cpuAdditionalWidget';
+import MemoryUsageWidget from '../device-detail-widgets/memoryUsageWidget';
+import MemoryAdditionalWidget from '../device-detail-widgets/memoryAdditionalWidget';
+import DiskUsageWidget from '../device-detail-widgets/diskUsageWidget';
+import DiskAdditionalWidget from '../device-detail-widgets/diskAdditionalWidget';
+import WifiUsageWidget from '../device-detail-widgets/wifiUsageWidget';
+import WifiAdditionalWidget from '../device-detail-widgets/wifiAdditionalWidget';
 
 const Dashboard = () => {
-  const { user } = useAuth()
-  const modalService = useModalService()
+  const {user} = useAuth();
+  const modalService = useModalService();
 
-  const [dashboard, setDashboard] = useState({} as IDashboard)
-  const [deviceData, setDeviceData] = useState([] as IDeviceTotal[])
-  const [widgetType, setWidgetType] = useState('')
-  const [deviceName, setDeviceName] = useState('')
-  const [hover, setHover] = useState(false)
-  const [dashboardModified, setDashboardModified] = useState(false)
+  const [dashboard, setDashboard] = useState({} as IDashboard);
+  const [deviceData, setDeviceData] = useState([] as IDeviceTotal[]);
+  const [widgetType, setWidgetType] = useState('');
+  const [deviceName, setDeviceName] = useState('');
+  const [hover, setHover] = useState(false);
+  const [dashboardModified, setDashboardModified] = useState(false);
 
   const hoverStyleBox = {
     color: hover ? 'white' : 'grey',
-  }
+  };
   const hoverStyleIcon = {
     color: hover ? 'white' : 'grey',
     width: '100%',
     height: '100%',
-  }
+  };
 
   useEffect(() => {
-    queryDeviceData()
-  }, [dashboard])
+    queryDeviceData();
+  }, [dashboard]);
 
   useEffect(() => {
-    viewDash()
-  }, [])
+    viewDash();
+  }, []);
 
   const queryDeviceData = async (): Promise<void> => {
     if (!dashboard?.widgets) {
-      return
+      return;
     }
     const widgetDeviceIds = dashboard.widgets.map(
-      (widget) => widget.options.deviceId
-    )
+        (widget) => widget.options.deviceId,
+    );
     // Remove duplicate Device Ids
-    const deviceIds = Array.from(new Set(widgetDeviceIds)).join(',')
+    const deviceIds = Array.from(new Set(widgetDeviceIds)).join(',');
     const deviceResponse = await axios.get<IResponse<IDevice>>('api/device', {
-      params: { deviceIds: deviceIds },
-    })
+      params: {deviceIds: deviceIds},
+    });
     const latestDevicesResponse = await axios.get<IResponse<IDeviceLog>>(
-      'api/device-logs/latest',
-      { params: { Ids: deviceIds } }
-    )
-    const devices = deviceResponse.data.Results
-    const latestDevices = latestDevicesResponse.data.Results
+        'api/device-logs/latest',
+        {params: {Ids: deviceIds}},
+    );
+    const devices = deviceResponse.data.Results;
+    const latestDevices = latestDevicesResponse.data.Results;
 
     const dashboardDevices = devices.map((staticDevice) => ({
       static: staticDevice,
       dynamic: latestDevices.find(
-        (device) => device.deviceId === staticDevice.deviceId
+          (device) => device.deviceId === staticDevice.deviceId,
       ),
-    }))
-    setDeviceData(dashboardDevices)
-  }
+    }));
+    setDeviceData(dashboardDevices);
+  };
 
   const viewDash = (): void => {
-    queryDashboard({ userId: user._id }).then((newDashboard) => {
+    queryDashboard({userId: user._id}).then((newDashboard) => {
       if (newDashboard) {
-        setDashboard(newDashboard)
-        setDashboardModified(false)
+        setDashboard(newDashboard);
+        setDashboardModified(false);
       }
-    })
-  }
+    });
+  };
 
   const addWidgetType = (newWidgetType: string): void => {
-    setWidgetType(newWidgetType)
-    setDashboardModified(true)
-  }
+    setWidgetType(newWidgetType);
+    setDashboardModified(true);
+  };
 
   const saveDash = (): void => {
     saveDashboard(dashboard)
-      .catch((error) => {
-        notificationService.error(`Error: ${error.response.data}`)
-        return null
-      })
-      .then((a) => {
-        if (a) {
-          setDashboardModified(false)
-          notificationService.success(`Success: ${a}`)
-        }
-      })
-  }
+        .catch((error) => {
+          notificationService.error(`Error: ${error.response.data}`);
+          return null;
+        })
+        .then((a) => {
+          if (a) {
+            setDashboardModified(false);
+            notificationService.success(`Success: ${a}`);
+          }
+        });
+  };
 
   const resetDash = (): void => {
     setDashboard({
       userId: user._id,
       widgets: [] as IDashboardWidget[],
-    })
-    setDashboardModified(true)
-  }
+    });
+    setDashboardModified(true);
+  };
 
   const removeWidget = (index: number): void => {
-    dashboard.widgets.splice(index, 1)
-    setDashboard((prev) => ({ ...prev, widgets: dashboard.widgets }))
-    setDashboardModified(true)
-  }
+    dashboard.widgets.splice(index, 1);
+    setDashboard((prev) => ({...prev, widgets: dashboard.widgets}));
+    setDashboardModified(true);
+  };
 
   const overrideWidgetHeaderHTML = (
-    widgetName: string,
-    widgetTitle: string,
-    index: number
+      widgetName: string,
+      widgetTitle: string,
+      index: number,
   ): JSX.Element => (
     <div className="d-flex w-100">
       <div className="d-flex justify-content-center w-100">
@@ -134,7 +134,7 @@ const Dashboard = () => {
           </div>
           <div
             className="text-truncate text-center"
-            style={{ fontSize: '11px', opacity: '0.4', paddingTop: '1px' }}
+            style={{fontSize: '11px', opacity: '0.4', paddingTop: '1px'}}
           >
             {widgetName}
           </div>
@@ -147,18 +147,18 @@ const Dashboard = () => {
         <FaTrashAlt />
       </div>
     </div>
-  )
+  );
 
   const getWidgetHMTL = (
-    widget: IDashboardWidget,
-    index: number
+      widget: IDashboardWidget,
+      index: number,
   ): JSX.Element => {
     const device = deviceData.find(
-      (e) => e.static.deviceId === widget.options.deviceId
-    )
-    const staticDevice = device?.static
+        (e) => e.static.deviceId === widget.options.deviceId,
+    );
+    const staticDevice = device?.static;
     if (!staticDevice) {
-      return <></>
+      return <></>;
     }
     switch (widget.widgetType) {
       case 'CPU-Static':
@@ -166,50 +166,50 @@ const Dashboard = () => {
           <CpuAdditionalWidget
             deviceStatic={staticDevice}
             overrideHeader={overrideWidgetHeaderHTML(
-              widget.options.deviceName || widget.options.deviceId,
-              'Additional CPU Information',
-              index
+                widget.options.deviceName || widget.options.deviceId,
+                'Additional CPU Information',
+                index,
             )}
           ></CpuAdditionalWidget>
-        )
+        );
       case 'Memory-Static':
         return (
           <MemoryAdditionalWidget
             deviceStatic={staticDevice}
             overrideHeader={overrideWidgetHeaderHTML(
-              widget.options.deviceName || widget.options.deviceId,
-              'Additional Memory Information',
-              index
+                widget.options.deviceName || widget.options.deviceId,
+                'Additional Memory Information',
+                index,
             )}
           ></MemoryAdditionalWidget>
-        )
+        );
       case 'Disk-Static':
         return (
           <DiskAdditionalWidget
             deviceStatic={staticDevice}
             overrideHeader={overrideWidgetHeaderHTML(
-              widget.options.deviceName || widget.options.deviceId,
-              'Additional Disk Information',
-              index
+                widget.options.deviceName || widget.options.deviceId,
+                'Additional Disk Information',
+                index,
             )}
           ></DiskAdditionalWidget>
-        )
+        );
       case 'Network-Static':
         return (
           <WifiAdditionalWidget
             deviceStatic={staticDevice}
             overrideHeader={overrideWidgetHeaderHTML(
-              widget.options.deviceName || widget.options.deviceId,
-              'Additional Network Information',
-              index
+                widget.options.deviceName || widget.options.deviceId,
+                'Additional Network Information',
+                index,
             )}
           ></WifiAdditionalWidget>
-        )
+        );
     }
 
-    const dynamicDevice = device?.dynamic
+    const dynamicDevice = device?.dynamic;
     if (!dynamicDevice) {
-      return <></>
+      return <></>;
     }
     switch (widget.widgetType) {
       case 'CPU-Dynamic':
@@ -217,63 +217,63 @@ const Dashboard = () => {
           <CpuUsageWidget
             deviceDynamic={dynamicDevice}
             overrideHeader={overrideWidgetHeaderHTML(
-              widget.options.deviceName || widget.options.deviceId,
-              'CPU Usage Information',
-              index
+                widget.options.deviceName || widget.options.deviceId,
+                'CPU Usage Information',
+                index,
             )}
           ></CpuUsageWidget>
-        )
+        );
       case 'Memory-Dynamic':
         return (
           <MemoryUsageWidget
             deviceDynamic={dynamicDevice}
             overrideHeader={overrideWidgetHeaderHTML(
-              widget.options.deviceName || widget.options.deviceId,
-              'Memory Usage Information',
-              index
+                widget.options.deviceName || widget.options.deviceId,
+                'Memory Usage Information',
+                index,
             )}
           ></MemoryUsageWidget>
-        )
+        );
       case 'Disk-Dynamic':
         return (
           <DiskUsageWidget
             deviceDynamic={dynamicDevice}
             overrideHeader={overrideWidgetHeaderHTML(
-              widget.options.deviceName || widget.options.deviceId,
-              'Disk Usage Information',
-              index
+                widget.options.deviceName || widget.options.deviceId,
+                'Disk Usage Information',
+                index,
             )}
           ></DiskUsageWidget>
-        )
+        );
       case 'Network-Dynamic':
         return (
           <WifiUsageWidget
             deviceDynamic={dynamicDevice}
             overrideHeader={overrideWidgetHeaderHTML(
-              widget.options.deviceName || widget.options.deviceId,
-              'Network Usage Information',
-              index
+                widget.options.deviceName || widget.options.deviceId,
+                'Network Usage Information',
+                index,
             )}
           ></WifiUsageWidget>
-        )
+        );
     }
-    return <></>
-  }
+    return <></>;
+  };
 
   modalService.onPrimaryClicked = (): void => {
     if (dashboard.widgets?.length > 0) {
-      const wids: IDashboardWidget[] = dashboard.widgets
+      const wids: IDashboardWidget[] = dashboard.widgets;
       wids.push({
         widgetType: widgetType,
         options: {
           deviceId: deviceName,
           deviceName: deviceName,
         },
-      })
+      });
       setDashboard({
         ...dashboard,
         widgets: wids,
-      })
+      });
     } else {
       setDashboard({
         ...dashboard,
@@ -286,9 +286,9 @@ const Dashboard = () => {
             },
           },
         ],
-      })
+      });
     }
-  }
+  };
 
   return (
     <div id="dashboard-container">
@@ -334,12 +334,12 @@ const Dashboard = () => {
               onMouseOut={() => setHover(false)}
               onClick={() =>
                 modalService.open(
-                  <AddWidgetModal
-                    setType={addWidgetType}
-                    setName={setDeviceName}
-                  />,
-                  'lg',
-                  { width: 60 }
+                    <AddWidgetModal
+                      setType={addWidgetType}
+                      setName={setDeviceName}
+                    />,
+                    'lg',
+                    {width: 60},
                 )
               }
             >
@@ -351,7 +351,7 @@ const Dashboard = () => {
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default Dashboard
+export default Dashboard;

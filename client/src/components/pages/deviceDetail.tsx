@@ -1,82 +1,82 @@
 // 3rd Party
-import React, { useState, useEffect } from 'react'
-import axios from 'axios'
-import { Col, Row, Table, Accordion, Tabs, Tab } from 'react-bootstrap'
+import React, {useState, useEffect} from 'react';
+import axios from 'axios';
+import {Col, Row, Table, Accordion, Tabs, Tab} from 'react-bootstrap';
 
 // Custom
-import Navbar from '../common/Navbar'
-import { IResponse } from '../../types/queries'
-import { IDevice, IDeviceLog } from '../../types/device'
-import { useRealTimeService } from '../../context/realTimeContext'
-import PieWheel from '../common/pieWheel'
-import CpuUsageWidget from '../device-detail-widgets/cpuUsageWidget'
-import CpuAdditionalWidget from '../device-detail-widgets/cpuAdditionalWidget'
-import DiskUsageWidget from '../device-detail-widgets/diskUsageWidget'
-import DiskAdditionalWidget from '../device-detail-widgets/diskAdditionalWidget'
-import MemoryUsageWidget from '../device-detail-widgets/memoryUsageWidget'
-import MemoryAdditionalWidget from '../device-detail-widgets/memoryAdditionalWidget'
-import WifiUsageWidget from '../device-detail-widgets/wifiUsageWidget'
-import WifiAdditionalWidget from '../device-detail-widgets/wifiAdditionalWidget'
-import { SignalStrength } from '../common/signalStrength'
-import ProcessTable from '../device-detail-widgets/processTable'
+import Navbar from '../common/Navbar';
+import {IResponse} from '../../types/queries';
+import {IDevice, IDeviceLog} from '../../types/device';
+import {useRealTimeService} from '../../context/realTimeContext';
+import PieWheel from '../common/pieWheel';
+import CpuUsageWidget from '../device-detail-widgets/cpuUsageWidget';
+import CpuAdditionalWidget from '../device-detail-widgets/cpuAdditionalWidget';
+import DiskUsageWidget from '../device-detail-widgets/diskUsageWidget';
+import DiskAdditionalWidget from '../device-detail-widgets/diskAdditionalWidget';
+import MemoryUsageWidget from '../device-detail-widgets/memoryUsageWidget';
+import MemoryAdditionalWidget from '../device-detail-widgets/memoryAdditionalWidget';
+import WifiUsageWidget from '../device-detail-widgets/wifiUsageWidget';
+import WifiAdditionalWidget from '../device-detail-widgets/wifiAdditionalWidget';
+import {SignalStrength} from '../common/signalStrength';
+import ProcessTable from '../device-detail-widgets/processTable';
 
 const DeviceDetail = (props: any) => {
   const getSearchParam = (key: string): string => {
-    const search: string = props.location.search
-    const allParams = search.replace('?', '').split('&')
-    const found = allParams.find((param) => param.startsWith(`${key}=`))
-    return found?.split('=')[1] || ''
-  }
+    const search: string = props.location.search;
+    const allParams = search.replace('?', '').split('&');
+    const found = allParams.find((param) => param.startsWith(`${key}=`));
+    return found?.split('=')[1] || '';
+  };
 
-  const deviceId: string = getSearchParam('Id')
-  const [deviceData, setDeviceData] = useState({} as IDevice)
-  const [deviceLogsData, setDeviceLogsData] = useState({} as IDeviceLog)
+  const deviceId: string = getSearchParam('Id');
+  const [deviceData, setDeviceData] = useState({} as IDevice);
+  const [deviceLogsData, setDeviceLogsData] = useState({} as IDeviceLog);
 
-  const realTimeDataService = useRealTimeService()
+  const realTimeDataService = useRealTimeService();
 
   const initialRealTimeData = () => {
-    realTimeDataService.setDeviceIds([deviceId])
+    realTimeDataService.setDeviceIds([deviceId]);
     realTimeDataService.getRealTimeData((device) => {
-      setDeviceLogsData(device)
-    })
-  }
+      setDeviceLogsData(device);
+    });
+  };
 
   const queryLogs = async () => {
-    if (!deviceId) return
+    if (!deviceId) return;
 
     const queryParams = {
       deviceId: deviceId,
       limit: 1,
-    }
+    };
 
     await axios
-      .get<IResponse<IDevice>>('api/device', {
-        params: queryParams,
-      })
-      .then((deviceResponse) => {
-        const devices = deviceResponse.data.Results
-        setDeviceData(devices[0] || null)
-        axios
-          .get<IResponse<IDeviceLog>>('api/device-logs', {
-            params: queryParams,
-          })
-          .then((deviceLogResponse) => {
-            const deviceLogs = deviceLogResponse.data.Results
-            setDeviceLogsData(deviceLogs[0] || null)
-          })
-          .catch((error) => {
-            console.error(error)
-          })
-      })
-      .catch((error) => {
-        console.log(error)
-      })
-  }
+        .get<IResponse<IDevice>>('api/device', {
+          params: queryParams,
+        })
+        .then((deviceResponse) => {
+          const devices = deviceResponse.data.Results;
+          setDeviceData(devices[0] || null);
+          axios
+              .get<IResponse<IDeviceLog>>('api/device-logs', {
+                params: queryParams,
+              })
+              .then((deviceLogResponse) => {
+                const deviceLogs = deviceLogResponse.data.Results;
+                setDeviceLogsData(deviceLogs[0] || null);
+              })
+              .catch((error) => {
+                console.error(error);
+              });
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+  };
 
   useEffect(() => {
-    initialRealTimeData()
-    queryLogs()
-  }, [])
+    initialRealTimeData();
+    queryLogs();
+  }, []);
 
   /**
    * If the browser window unloads
@@ -84,13 +84,13 @@ const DeviceDetail = (props: any) => {
    * clear devices for real time data
    */
   useEffect(() => {
-    const clearDevices = () => realTimeDataService.setDeviceIds([])
-    window.addEventListener('beforeunload', clearDevices)
+    const clearDevices = () => realTimeDataService.setDeviceIds([]);
+    window.addEventListener('beforeunload', clearDevices);
     return () => {
-      window.removeEventListener('beforeunload', clearDevices)
-      clearDevices()
-    }
-  }, [])
+      window.removeEventListener('beforeunload', clearDevices);
+      clearDevices();
+    };
+  }, []);
 
   return (
     <div id="device-details-container">
@@ -121,36 +121,36 @@ const DeviceDetail = (props: any) => {
                             <tr>
                               <td
                                 className="w-50"
-                                style={{ fontWeight: '600' }}
+                                style={{fontWeight: '600'}}
                               >
                                 ID
                               </td>
                               <td>{deviceData?.deviceId}</td>
                             </tr>
                             <tr>
-                              <td style={{ fontWeight: '600' }}>Name</td>
+                              <td style={{fontWeight: '600'}}>Name</td>
                               <td>{deviceData?.name}</td>
                             </tr>
                             <tr>
-                              <td style={{ fontWeight: '600' }}>Description</td>
+                              <td style={{fontWeight: '600'}}>Description</td>
                               <td>{deviceData?.description}</td>
                             </tr>
                             <tr>
-                              <td style={{ fontWeight: '600' }}>
+                              <td style={{fontWeight: '600'}}>
                                 Connection Type
                               </td>
                               <td>{deviceData?.connectionType}</td>
                             </tr>
                             <tr>
-                              <td style={{ fontWeight: '600' }}>Status</td>
+                              <td style={{fontWeight: '600'}}>Status</td>
                               <td>{deviceData?.status}</td>
                             </tr>
                             <tr>
-                              <td style={{ fontWeight: '600' }}>Provider</td>
+                              <td style={{fontWeight: '600'}}>Provider</td>
                               <td>{deviceData?.provider}</td>
                             </tr>
                             <tr>
-                              <td style={{ fontWeight: '600' }}>
+                              <td style={{fontWeight: '600'}}>
                                 Hardware Name
                               </td>
                               <td>{deviceData?.hardware?.harwareName}</td>
@@ -201,8 +201,8 @@ const DeviceDetail = (props: any) => {
                             <PieWheel
                               percentage={
                                 deviceLogsData?.disk?.partitions?.reduce(
-                                  (sum, p) => sum + p.percent,
-                                  0
+                                    (sum, p) => sum + p.percent,
+                                    0,
                                 ) / deviceLogsData?.disk?.partitions?.length
                               }
                               text={true}
@@ -211,7 +211,7 @@ const DeviceDetail = (props: any) => {
                           <div>
                             <SignalStrength
                               strength={Number(
-                                deviceLogsData?.wifi?.signalStrength
+                                  deviceLogsData?.wifi?.signalStrength,
                               )}
                               showText={true}
                             />
@@ -325,7 +325,7 @@ const DeviceDetail = (props: any) => {
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default DeviceDetail
+export default DeviceDetail;

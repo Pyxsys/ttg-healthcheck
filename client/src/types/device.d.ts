@@ -1,7 +1,7 @@
-import { ICpuDynamic, ICpuProcess, ICpuStatic } from './cpu'
-import { IDiskDynamic, IDiskStatic } from './disk'
-import { IMemoryDynamic, IMemoryProcess, IMemoryStatic } from './memory'
-import { IWifiDynamic, IWifiStatic } from './wifi'
+import {ICpuDynamic, ICpuProcess, ICpuStatic} from './cpu';
+import {IDiskDynamic, IDiskStatic} from './disk';
+import {IMemoryDynamic, IMemoryProcess, IMemoryStatic} from './memory';
+import {IWifiDynamic, IWifiStatic} from './wifi';
 
 export interface IDevice {
   deviceId: string

@@ -1,27 +1,27 @@
 // 3rd Party
-import React from 'react'
-import { HiLogout } from 'react-icons/hi'
-import axios from 'axios'
+import React from 'react';
+import {HiLogout} from 'react-icons/hi';
+import axios from 'axios';
 
 // Custom
-import { useAuth } from '../../context/authContext'
+import {useAuth} from '../../context/authContext';
 
 const Pending = () => {
-  const { setUser, setIsAuthenticated } = useAuth()
+  const {setUser, setIsAuthenticated} = useAuth();
   const logout = async (e: React.ChangeEvent<any>) => {
-    e.preventDefault()
+    e.preventDefault();
     await axios
-      .get('api/user/logout')
-      .then((response) => {
-        if (response.data) {
-          setUser({ _id: '', name: '', role: '', avatar: '' })
-          setIsAuthenticated(false)
-        }
-      })
-      .catch((error) => {
-        console.error(error)
-      })
-  }
+        .get('api/user/logout')
+        .then((response) => {
+          if (response.data) {
+            setUser({_id: '', name: '', role: '', avatar: ''});
+            setIsAuthenticated(false);
+          }
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+  };
   return (
     <div className="h-100 d-flex flex-column">
       <div className="d-flex flex-column align-items-center home-header">
@@ -41,7 +41,7 @@ const Pending = () => {
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default Pending
+export default Pending;

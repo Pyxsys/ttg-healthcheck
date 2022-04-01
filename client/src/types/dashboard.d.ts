@@ -1,4 +1,4 @@
-import { IQuery } from './queries'
+import {IQuery} from './queries';
 
 export interface IDashboardWidget {
   widgetType: string

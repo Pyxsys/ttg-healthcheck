@@ -1,23 +1,23 @@
 // 3rd Party
-import React, { useState } from 'react'
+import React, {useState} from 'react';
 
 type Props = {
   setType: (type: string) => void
   setName: (name: string) => void
 }
 
-const AddWidgetModal = ({ setType, setName }: Props) => {
-  const [types, setTypes] = useState('')
+const AddWidgetModal = ({setType, setName}: Props) => {
+  const [types, setTypes] = useState('');
   return (
     <>
-      <div className="d-flex flex-column" style={{ minHeight: '25vh' }}>
+      <div className="d-flex flex-column" style={{minHeight: '25vh'}}>
         <h3 className="text-center">Add New Widget</h3>
         <div className="d-flex justify-content-around pt-4">
           <span>Widget Type</span>
           <select
             onChange={(e) => {
-              setTypes(e.target.value)
-              setType(e.target.value)
+              setTypes(e.target.value);
+              setType(e.target.value);
             }}
           >
             <option value=""></option>
@@ -44,7 +44,7 @@ const AddWidgetModal = ({ setType, setName }: Props) => {
         )}
       </div>
     </>
-  )
-}
+  );
+};
 
-export default AddWidgetModal
+export default AddWidgetModal;

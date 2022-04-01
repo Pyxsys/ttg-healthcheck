@@ -1,20 +1,20 @@
 // 3rd Party
-import React, { useEffect, useState } from 'react'
-import axios from 'axios'
-import { Link } from 'react-router-dom'
-import { FaPlus, FaTrashAlt } from 'react-icons/fa'
-import useOnclickOutside from 'react-cool-onclickoutside'
+import React, {useEffect, useState} from 'react';
+import axios from 'axios';
+import {Link} from 'react-router-dom';
+import {FaPlus, FaTrashAlt} from 'react-icons/fa';
+import useOnclickOutside from 'react-cool-onclickoutside';
 
 // Custom
-import { IResponse } from '../../types/queries'
-import { IDevice, IDeviceLog, IDeviceTotal } from '../../types/device'
-import { useRealTimeService } from '../../context/realTimeContext'
-import Navbar from '../common/Navbar'
-import PieWheel from '../common/pieWheel'
-import { SignalStrength, signalText } from '../common/signalStrength'
-import { IColumnDetail } from '../../types/tables'
-import Pagination from '../common/pagination'
-import ViewTable from '../common/viewTable'
+import {IResponse} from '../../types/queries';
+import {IDevice, IDeviceLog, IDeviceTotal} from '../../types/device';
+import {useRealTimeService} from '../../context/realTimeContext';
+import Navbar from '../common/Navbar';
+import PieWheel from '../common/pieWheel';
+import {SignalStrength, signalText} from '../common/signalStrength';
+import {IColumnDetail} from '../../types/tables';
+import Pagination from '../common/pagination';
+import ViewTable from '../common/viewTable';
 
 type CellValue = string | number | undefined
 
@@ -39,19 +39,19 @@ interface IFilter {
 
 const DevicesTable = () => {
   // Readonly Values
-  const initialPage: number = 1
-  const pageSize: number = 10
-  const initialOrderBy: string = 'static.deviceId'
+  const initialPage: number = 1;
+  const pageSize: number = 10;
+  const initialOrderBy: string = 'static.deviceId';
 
-  const [deviceTableData, setDeviceTableData] = useState([] as IDeviceTotal[])
-  const [page, setPage] = useState(initialPage)
-  const [totalPages, setTotalPages] = useState(0)
+  const [deviceTableData, setDeviceTableData] = useState([] as IDeviceTotal[]);
+  const [page, setPage] = useState(initialPage);
+  const [totalPages, setTotalPages] = useState(0);
 
-  const [filters, setFilters] = useState([] as IFilter[])
-  const [showFilters, setshowFilters] = useState(false)
-  const filtersRef = useOnclickOutside(() => setshowFilters(false))
+  const [filters, setFilters] = useState([] as IFilter[]);
+  const [showFilters, setshowFilters] = useState(false);
+  const filtersRef = useOnclickOutside(() => setshowFilters(false));
 
-  const realTimeDataService = useRealTimeService()
+  const realTimeDataService = useRealTimeService();
 
   const initialRealTimeData = () => {
     realTimeDataService.getRealTimeData((newDevice) => {
@@ -59,51 +59,51 @@ const DevicesTable = () => {
         prevState.map((device) => ({
           static: device.static,
           dynamic:
-            device.static.deviceId === newDevice.deviceId
-              ? newDevice
-              : device.dynamic,
-        }))
-      )
-    })
-  }
+            device.static.deviceId === newDevice.deviceId ?
+              newDevice :
+              device.dynamic,
+        })),
+      );
+    });
+  };
 
   const queryTable = async () => {
-    const deviceQuery = { params: { Total: true } }
+    const deviceQuery = {params: {Total: true}};
     await axios
-      .get<IResponse<IDevice>>('api/device', deviceQuery)
-      .then((deviceResponse) => {
-        const devices = deviceResponse.data.Results
-        const deviceIds = devices.map((device) => device.deviceId)
-        axios
-          .get<IResponse<IDeviceLog>>('api/device-logs/latest', {
-            params: { Ids: deviceIds.join(',') },
-          })
-          .then((latestDevicesResponse) => {
-            const latestDevices = latestDevicesResponse.data.Results
-            const tableDevices = devices.map((staticDevice) => ({
-              static: staticDevice,
-              dynamic: latestDevices.find(
-                (device) => device.deviceId === staticDevice.deviceId
-              ),
-            }))
-            setTotalPages(Math.ceil(deviceResponse.data.Total / pageSize))
-            setDeviceTableData(tableDevices)
-            realTimeDataService.setDeviceIds(deviceIds)
-          })
-          .catch((error) => {
-            console.log(error)
-          })
-      })
-      .catch((error) => {
-        console.log(error)
-      })
-  }
+        .get<IResponse<IDevice>>('api/device', deviceQuery)
+        .then((deviceResponse) => {
+          const devices = deviceResponse.data.Results;
+          const deviceIds = devices.map((device) => device.deviceId);
+          axios
+              .get<IResponse<IDeviceLog>>('api/device-logs/latest', {
+                params: {Ids: deviceIds.join(',')},
+              })
+              .then((latestDevicesResponse) => {
+                const latestDevices = latestDevicesResponse.data.Results;
+                const tableDevices = devices.map((staticDevice) => ({
+                  static: staticDevice,
+                  dynamic: latestDevices.find(
+                      (device) => device.deviceId === staticDevice.deviceId,
+                  ),
+                }));
+                setTotalPages(Math.ceil(deviceResponse.data.Total / pageSize));
+                setDeviceTableData(tableDevices);
+                realTimeDataService.setDeviceIds(deviceIds);
+              })
+              .catch((error) => {
+                console.log(error);
+              });
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+  };
 
   useEffect(() => {
-    initialRealTimeData()
-    queryTable()
-    setFilters([])
-  }, [])
+    initialRealTimeData();
+    queryTable();
+    setFilters([]);
+  }, []);
 
   /**
    * If the browser window unloads
@@ -111,13 +111,13 @@ const DevicesTable = () => {
    * clear devices for real time data
    */
   useEffect(() => {
-    const clearDevices = () => realTimeDataService.setDeviceIds([])
-    window.addEventListener('beforeunload', clearDevices)
+    const clearDevices = () => realTimeDataService.setDeviceIds([]);
+    window.addEventListener('beforeunload', clearDevices);
     return () => {
-      window.removeEventListener('beforeunload', clearDevices)
-      clearDevices()
-    }
-  }, [])
+      window.removeEventListener('beforeunload', clearDevices);
+      clearDevices();
+    };
+  }, []);
 
   const PieWheelCell = (cellValue: CellValue) => (
     <div className="d-flex justify-content-end align-items-center">
@@ -129,7 +129,7 @@ const DevicesTable = () => {
         <PieWheel percentage={Number(cellValue)} text={false} />
       </div>
     </div>
-  )
+  );
 
   const column: IColumnDetail[] = [
     {
@@ -184,7 +184,7 @@ const DevicesTable = () => {
         </div>
       ),
     },
-  ]
+  ];
 
   /*
    * Filter Functions
@@ -193,122 +193,122 @@ const DevicesTable = () => {
   const addEmptyFilter = (): void => {
     setFilters((prev) => [
       ...prev,
-      { columnKey: '', type: undefined, value: '' },
-    ])
-  }
+      {columnKey: '', type: undefined, value: ''},
+    ]);
+  };
 
   const removeFilter = (index: number): void => {
     setFilters((prev) => {
-      prev.splice(index, 1)
-      return [...prev]
-    })
-  }
+      prev.splice(index, 1);
+      return [...prev];
+    });
+  };
 
   const setFilterColumn = (
-    filter: IFilter,
-    index: number,
-    value: string
+      filter: IFilter,
+      index: number,
+      value: string,
   ): void => {
-    const columAndType = value.split(';')
-    const prevType = filters[index].type
-    const newType = columAndType[1] as 'string' | 'number'
+    const columAndType = value.split(';');
+    const prevType = filters[index].type;
+    const newType = columAndType[1] as 'string' | 'number';
 
     const newFilter: IFilter = {
       ...filter,
       columnKey: columAndType[0],
       type: newType,
-    }
+    };
 
     if (prevType !== newType) {
-      newFilter.value = ''
+      newFilter.value = '';
       newFilter.equality =
-        newType === 'number' ? Equality.E : Equality.StrictEqual
+        newType === 'number' ? Equality.E : Equality.StrictEqual;
     }
     setFilters((prev) => {
-      prev.splice(index, 1, newFilter)
-      return [...prev]
-    })
-  }
+      prev.splice(index, 1, newFilter);
+      return [...prev];
+    });
+  };
 
   const setFilterEquality = (
-    filter: IFilter,
-    index: number,
-    value: number
+      filter: IFilter,
+      index: number,
+      value: number,
   ): void => {
     setFilters((prev) => {
-      prev.splice(index, 1, { ...filter, equality: value })
-      return [...prev]
-    })
-  }
+      prev.splice(index, 1, {...filter, equality: value});
+      return [...prev];
+    });
+  };
 
   const setFilterValue = (
-    filter: IFilter,
-    index: number,
-    value: number | string
+      filter: IFilter,
+      index: number,
+      value: number | string,
   ): void => {
     setFilters((prev) => {
-      prev.splice(index, 1, { ...filter, value: value })
-      return [...prev]
-    })
-  }
+      prev.splice(index, 1, {...filter, value: value});
+      return [...prev];
+    });
+  };
 
   const computeFilterEquality = (
-    equality: Equality,
-    value: string | number
+      equality: Equality,
+      value: string | number,
   ) => {
     switch (equality) {
       case Equality.LTE:
         return (compareValue: number | undefined) =>
           compareValue !== undefined &&
           compareValue !== null &&
-          compareValue <= Number(value)
+          compareValue <= Number(value);
       case Equality.LT:
         return (compareValue: number | undefined) =>
           compareValue !== undefined &&
           compareValue !== null &&
-          compareValue < Number(value)
+          compareValue < Number(value);
       case Equality.E:
         return (compareValue: number | undefined) =>
           compareValue !== undefined &&
           compareValue !== null &&
-          compareValue === Number(value)
+          compareValue === Number(value);
       case Equality.GT:
         return (compareValue: number | undefined) =>
           compareValue !== undefined &&
           compareValue !== null &&
-          compareValue > Number(value)
+          compareValue > Number(value);
       case Equality.GTE:
         return (compareValue: number | undefined) =>
           compareValue !== undefined &&
           compareValue !== null &&
-          compareValue >= Number(value)
+          compareValue >= Number(value);
       case Equality.StrictEqual:
         return (compareValue: string | undefined) =>
           compareValue !== undefined &&
           compareValue !== null &&
-          compareValue.toLowerCase() === String(value).toLowerCase()
+          compareValue.toLowerCase() === String(value).toLowerCase();
       case Equality.StartsWith:
         return (compareValue: string | undefined) =>
           compareValue !== undefined &&
           compareValue !== null &&
-          compareValue.toLowerCase().startsWith(String(value).toLowerCase())
+          compareValue.toLowerCase().startsWith(String(value).toLowerCase());
       case Equality.EndsWith:
         return (compareValue: string | undefined) =>
           compareValue !== undefined &&
           compareValue !== null &&
-          compareValue.toLowerCase().endsWith(String(value).toLowerCase())
+          compareValue.toLowerCase().endsWith(String(value).toLowerCase());
       case Equality.Includes:
         return (compareValue: string | undefined) =>
           compareValue !== undefined &&
           compareValue !== null &&
-          compareValue.toLowerCase().includes(String(value).toLowerCase())
+          compareValue.toLowerCase().includes(String(value).toLowerCase());
       default:
-        return () => false
+        return () => false;
     }
-  }
+  };
 
   const getFilterEqualityOptions = (
-    type?: 'string' | 'number'
+      type?: 'string' | 'number',
   ): JSX.Element => {
     switch (type) {
       case 'string':
@@ -319,7 +319,7 @@ const DevicesTable = () => {
             <option value={Equality.EndsWith}>Ends With</option>
             <option value={Equality.Includes}>Includes</option>
           </>
-        )
+        );
       case 'number':
         return (
           <>
@@ -329,36 +329,36 @@ const DevicesTable = () => {
             <option value={Equality.GTE}>Greater Than or Equal (&ge;)</option>
             <option value={Equality.GT}>Greater Than (&gt;)</option>
           </>
-        )
+        );
       default:
-        return <></>
+        return <></>;
     }
-  }
+  };
 
   const getAttribute = (object: any, attribute: string): number | string => {
-    const attributes = attribute.split('.')
+    const attributes = attribute.split('.');
     return attributes.reduce(
-      (prev, attr) => (prev ? prev[attr] : undefined),
-      object
-    )
-  }
+        (prev, attr) => (prev ? prev[attr] : undefined),
+        object,
+    );
+  };
 
   const getFilteredDevices = (): IDeviceTotal[] => {
     const activeFilters = filters
-      .filter((filter) => filter.equality && filter.value)
-      .map((filter) => ({
-        ...filter,
-        compute: computeFilterEquality(
+        .filter((filter) => filter.equality && filter.value)
+        .map((filter) => ({
+          ...filter,
+          compute: computeFilterEquality(
           filter.equality as Equality,
-          filter.value as string | number
-        ),
-      }))
+          filter.value as string | number,
+          ),
+        }));
     return deviceTableData.filter((device) =>
       activeFilters.every((filter) =>
-        filter.compute(getAttribute(device, filter.columnKey) as any)
-      )
-    )
-  }
+        filter.compute(getAttribute(device, filter.columnKey) as any),
+      ),
+    );
+  };
 
   return (
     <div className="h-100 d-flex flex-column">
@@ -446,9 +446,9 @@ const DevicesTable = () => {
                             value={filter.equality}
                             onChange={(e) =>
                               setFilterEquality(
-                                filter,
-                                idx,
-                                Number(e.target.value)
+                                  filter,
+                                  idx,
+                                  Number(e.target.value),
                               )
                             }
                           >
@@ -516,7 +516,7 @@ const DevicesTable = () => {
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default DevicesTable
+export default DevicesTable;

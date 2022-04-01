@@ -1,10 +1,10 @@
 // 3rd Party
-import React from 'react'
+import React from 'react';
 
 // Custom
-import Navbar from './Navbar'
+import Navbar from './Navbar';
 
-const DevicesPageWrapper = ({ children }: { children: JSX.Element }) => {
+const DevicesPageWrapper = ({children}: { children: JSX.Element }) => {
   return (
     <div className="h-100 d-flex flex-column">
       <div id="outer-container">
@@ -21,7 +21,7 @@ const DevicesPageWrapper = ({ children }: { children: JSX.Element }) => {
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default DevicesPageWrapper
+export default DevicesPageWrapper;

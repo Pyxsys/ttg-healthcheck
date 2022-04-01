@@ -1,16 +1,16 @@
 /* eslint-disable react/display-name */
 /* eslint-disable react/prop-types */
-import React, { useState, useMemo } from 'react'
+import React, {useState, useMemo} from 'react';
 // 3rd Party
-import { Link } from 'react-router-dom'
-import axios from 'axios'
-import { Squash as Hamburger } from 'hamburger-react'
-import { DiRasberryPi } from 'react-icons/di'
-import { MdOutlineSpaceDashboard } from 'react-icons/md'
-import useOnclickOutside from 'react-cool-onclickoutside'
-import { Dropdown } from 'react-bootstrap'
+import {Link} from 'react-router-dom';
+import axios from 'axios';
+import {Squash as Hamburger} from 'hamburger-react';
+import {DiRasberryPi} from 'react-icons/di';
+import {MdOutlineSpaceDashboard} from 'react-icons/md';
+import useOnclickOutside from 'react-cool-onclickoutside';
+import {Dropdown} from 'react-bootstrap';
 // Custom
-import { useAuth } from '../../context/authContext'
+import {useAuth} from '../../context/authContext';
 
 // side nav items
 const SideNavData = [
@@ -26,49 +26,49 @@ const SideNavData = [
     icon: <DiRasberryPi />,
     cName: 'side-nav-item',
   },
-]
+];
 
 const Navbar = () => {
-  const [isOpen, setOpen] = useState(false)
+  const [isOpen, setOpen] = useState(false);
   const ref = useOnclickOutside(() => {
-    setOpen(false)
-  })
-  const { user, setUser, setIsAuthenticated } = useAuth()
+    setOpen(false);
+  });
+  const {user, setUser, setIsAuthenticated} = useAuth();
   const logout = async (e: React.ChangeEvent<any>) => {
-    e.preventDefault()
+    e.preventDefault();
     await axios
-      .get('api/user/logout')
-      .then((response) => {
-        if (response.data) {
-          setUser({ _id: '', name: '', role: '', avatar: '' })
-          setIsAuthenticated(false)
-        }
-      })
-      .catch((error) => {
-        console.error(error)
-      })
-  }
+        .get('api/user/logout')
+        .then((response) => {
+          if (response.data) {
+            setUser({_id: '', name: '', role: '', avatar: ''});
+            setIsAuthenticated(false);
+          }
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+  };
 
   // Custom toggle for right navigation
   type Props = any
   type Ref = HTMLDivElement
   const CustomToggle = useMemo(
-    () =>
-      React.forwardRef<Ref, Props>(({ onClick }, ref1) => (
-        <div
-          ref={ref1}
-          onClick={(e) => {
-            e.preventDefault()
-            onClick(e)
-          }}
-        >
-          <div className="nav-right-icon">
-            <img src={user.avatar}></img>
+      () =>
+        React.forwardRef<Ref, Props>(({onClick}, ref1) => (
+          <div
+            ref={ref1}
+            onClick={(e) => {
+              e.preventDefault();
+              onClick(e);
+            }}
+          >
+            <div className="nav-right-icon">
+              <img src={user.avatar}></img>
+            </div>
           </div>
-        </div>
-      )),
-    [user]
-  )
+        )),
+      [user],
+  );
 
   return (
     <>
@@ -95,9 +95,9 @@ const Navbar = () => {
               <Dropdown.Item
                 eventKey="1"
                 style={
-                  user.role == 'admin'
-                    ? { display: 'block' }
-                    : { display: 'none' }
+                  user.role == 'admin' ?
+                    {display: 'block'} :
+                    {display: 'none'}
                 }
                 href={'/admin'}
               >
@@ -131,7 +131,7 @@ const Navbar = () => {
                   <span className="side-nav-item-text">{item.title}</span>
                 </Link>
               </div>
-            )
+            );
           })}
         </div>
       ) : (
@@ -139,6 +139,6 @@ const Navbar = () => {
       )}
       {isOpen && <div className="side-nav-screen-background"></div>}
     </>
-  )
-}
-export default Navbar
+  );
+};
+export default Navbar;

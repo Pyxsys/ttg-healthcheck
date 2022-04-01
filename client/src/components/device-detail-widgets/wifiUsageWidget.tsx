@@ -1,16 +1,16 @@
 // 3rd Party
-import React from 'react'
-import { Col, Table, Accordion } from 'react-bootstrap'
-import { format } from 'fecha'
+import React from 'react';
+import {Col, Table, Accordion} from 'react-bootstrap';
+import {format} from 'fecha';
 
 // Custom
-import { IDeviceLog } from '../../types/device'
+import {IDeviceLog} from '../../types/device';
 
 const wifiUsageWidget = (props: {
   deviceDynamic: IDeviceLog
   overrideHeader?: JSX.Element
 }) => {
-  const deviceDynamic: IDeviceLog = props.deviceDynamic
+  const deviceDynamic: IDeviceLog = props.deviceDynamic;
 
   return (
     <Col className="device-details-accordion dark-accordion pt-3 pb-3">
@@ -49,12 +49,12 @@ const wifiUsageWidget = (props: {
                 <tr className="border-bottom">
                   <td>Timestamp</td>
                   <td className="float-right">
-                    {deviceDynamic?.timestamp
-                      ? format(
+                    {deviceDynamic?.timestamp ?
+                      format(
                           new Date(deviceDynamic?.timestamp),
-                          'MMM DD, YYYY, h:mm:ss A'
-                        )
-                      : 'N/A'}
+                          'MMM DD, YYYY, h:mm:ss A',
+                      ) :
+                      'N/A'}
                   </td>
                 </tr>
               </tbody>
@@ -63,7 +63,7 @@ const wifiUsageWidget = (props: {
         </Accordion.Item>
       </Accordion>
     </Col>
-  )
-}
+  );
+};
 
-export default wifiUsageWidget
+export default wifiUsageWidget;

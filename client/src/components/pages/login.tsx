@@ -1,57 +1,57 @@
 // 3rd Party
-import React, { useState } from 'react'
-import { Link, Redirect } from 'react-router-dom'
-import { Button, Form, InputGroup } from 'react-bootstrap'
-import { FaUserAlt, FaKey, FaBolt } from 'react-icons/fa'
+import React, {useState} from 'react';
+import {Link, Redirect} from 'react-router-dom';
+import {Button, Form, InputGroup} from 'react-bootstrap';
+import {FaUserAlt, FaKey, FaBolt} from 'react-icons/fa';
 
 // Custom
-import { useAuth } from '../../context/authContext'
-import { notificationService } from '../../services/notification.service'
-import { handleIncorrectInput, sendRequest } from '../common/inputValidation'
-import FrontPageWrapper from '../common/frontPageWrapper'
+import {useAuth} from '../../context/authContext';
+import {notificationService} from '../../services/notification.service';
+import {handleIncorrectInput, sendRequest} from '../common/inputValidation';
+import FrontPageWrapper from '../common/frontPageWrapper';
 
 const Login = () => {
-  const { user, setUser, setIsAuthenticated } = useAuth()
-  const [loggedIn, setLoggedIn] = useState(false)
+  const {user, setUser, setIsAuthenticated} = useAuth();
+  const [loggedIn, setLoggedIn] = useState(false);
 
   const [formData1, setFormData1] = useState({
     email1: '',
     password1: '',
-  })
+  });
 
-  const { email1, password1 } = formData1
+  const {email1, password1} = formData1;
 
   const onChange1 = (e: React.ChangeEvent<any>) =>
-    setFormData1({ ...formData1, [e.target.name]: e.target.value })
+    setFormData1({...formData1, [e.target.name]: e.target.value});
 
   const onSubmit = async (e: React.ChangeEvent<any>) => {
-    e.preventDefault()
+    e.preventDefault();
     if (handleIncorrectInput(formData1.email1, formData1.password1, 'login')) {
       try {
         const res = (await sendRequest(
-          formData1.email1,
-          formData1.password1,
-          'login'
-        )) as any
+            formData1.email1,
+            formData1.password1,
+            'login',
+        )) as any;
         if (res.data) {
-          setUser(res.data.user)
-          setIsAuthenticated(true)
-          setLoggedIn(true)
+          setUser(res.data.user);
+          setIsAuthenticated(true);
+          setLoggedIn(true);
         }
       } catch (error) {
         notificationService.error(
-          'Invalid Email or Password! Either the email or password you have entered is invalid!'
-        )
+            'Invalid Email or Password! Either the email or password you have entered is invalid!',
+        );
       }
     }
-  }
+  };
 
   if (loggedIn) {
-    notificationService.success('Logged in succesfully!')
+    notificationService.success('Logged in succesfully!');
     if (user.role == 'disabled') {
-      return <Redirect to="/pending" />
+      return <Redirect to="/pending" />;
     } else {
-      return <Redirect to="/dashboard" />
+      return <Redirect to="/dashboard" />;
     }
   }
   return (
@@ -102,7 +102,7 @@ const Login = () => {
         </Form>
       </div>
     </FrontPageWrapper>
-  )
-}
+  );
+};
 
-export default Login
+export default Login;

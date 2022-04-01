@@ -1,7 +1,7 @@
-import React, { useState } from 'react'
+import React, {useState} from 'react';
 
-import { IDeviceLog } from '../types/device'
-import Contextualizer, { AppServices } from '../services/context.service'
+import {IDeviceLog} from '../types/device';
+import Contextualizer, {AppServices} from '../services/context.service';
 
 /**
  * Calls the function, when a device log is updated from the database.
@@ -18,18 +18,18 @@ export interface IRealTimeService {
 }
 
 const RealTimeContext = Contextualizer.createContext<IRealTimeService>(
-  AppServices.RealTimeService
-)
+    AppServices.RealTimeService,
+);
 export const useRealTimeService = () =>
-  Contextualizer.use<IRealTimeService>(AppServices.RealTimeService)
+  Contextualizer.use<IRealTimeService>(AppServices.RealTimeService);
 
-const RealTimeService = ({ children }: any) => {
-  const SERVER_PORT = 5000
+const RealTimeService = ({children}: any) => {
+  const SERVER_PORT = 5000;
   const [wsClient, setWsClient] = useState(
     new WebSocket(
-      `ws://localhost:${SERVER_PORT}/?reason=realTime`
-    ) as WebSocket | null
-  )
+        `ws://localhost:${SERVER_PORT}/?reason=realTime`,
+    ) as WebSocket | null,
+  );
 
   const realTimeService: IRealTimeService = {
     setDeviceIds: (deviceIds) => {
@@ -37,13 +37,13 @@ const RealTimeService = ({ children }: any) => {
         switch (wsClient.readyState) {
           case WebSocket.CONNECTING:
             wsClient.onopen = () => {
-              wsClient.send(`clear-devices?deviceIds=${deviceIds.join(',')}`)
-              wsClient.onopen = null
-            }
-            break
+              wsClient.send(`clear-devices?deviceIds=${deviceIds.join(',')}`);
+              wsClient.onopen = null;
+            };
+            break;
           case WebSocket.OPEN:
-            wsClient.send(`clear-devices?deviceIds=${deviceIds.join(',')}`)
-            break
+            wsClient.send(`clear-devices?deviceIds=${deviceIds.join(',')}`);
+            break;
         }
       }
     },
@@ -51,30 +51,30 @@ const RealTimeService = ({ children }: any) => {
     getRealTimeData: (callbackFn) => {
       if (wsClient && wsClient.readyState === WebSocket.OPEN) {
         wsClient.onmessage = (msg) => {
-          const data = msg.data
+          const data = msg.data;
           if (!(data as string).startsWith('message')) {
-            const device: IDeviceLog = JSON.parse(data)
-            callbackFn(device)
+            const device: IDeviceLog = JSON.parse(data);
+            callbackFn(device);
           }
-        }
+        };
       }
     },
 
     enableRealTimeData: () => {
       if (!wsClient) {
         setWsClient(
-          new WebSocket(`ws://localhost:${SERVER_PORT}/?reason=realTime`)
-        )
+            new WebSocket(`ws://localhost:${SERVER_PORT}/?reason=realTime`),
+        );
       }
     },
 
     disableRealTimeData: () => {
       if (wsClient) {
-        wsClient.close()
-        setWsClient(null)
+        wsClient.close();
+        setWsClient(null);
       }
     },
-  }
+  };
 
   return (
     <>
@@ -82,7 +82,7 @@ const RealTimeService = ({ children }: any) => {
         {children}
       </RealTimeContext.Provider>
     </>
-  )
-}
+  );
+};
 
-export default RealTimeService
+export default RealTimeService;

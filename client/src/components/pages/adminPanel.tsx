@@ -1,43 +1,43 @@
 // 3rd Party
-import React, { useEffect, useState } from 'react'
-import axios from 'axios'
-import { Link } from 'react-router-dom'
+import React, {useEffect, useState} from 'react';
+import axios from 'axios';
+import {Link} from 'react-router-dom';
 
 // Custom
-import { IResponse } from '../../types/queries'
-import Navbar from '../common/Navbar'
-import { IColumnDetail } from '../../types/tables'
-import Pagination from '../common/pagination'
-import ViewTable from '../common/viewTable'
-import { IUserObject } from '../../types/users'
+import {IResponse} from '../../types/queries';
+import Navbar from '../common/Navbar';
+import {IColumnDetail} from '../../types/tables';
+import Pagination from '../common/pagination';
+import ViewTable from '../common/viewTable';
+import {IUserObject} from '../../types/users';
 
 const AdminPanel = () => {
   // Readonly Values
-  const initialPage: number = 1
-  const pageSize: number = 10
-  const initialOrderBy: string = 'static.name'
+  const initialPage: number = 1;
+  const pageSize: number = 10;
+  const initialOrderBy: string = 'static.name';
 
-  const [usersTable, setUsersTable] = useState([] as IUserObject[])
-  const [page, setPage] = useState(initialPage)
-  const [totalPages, setTotalPages] = useState(0)
+  const [usersTable, setUsersTable] = useState([] as IUserObject[]);
+  const [page, setPage] = useState(initialPage);
+  const [totalPages, setTotalPages] = useState(0);
 
   const queryTable = async () => {
     await axios
-      .get<IResponse<IUserObject>>('api/user/all')
-      .then((results) => {
-        const users = results.data.Results
+        .get<IResponse<IUserObject>>('api/user/all')
+        .then((results) => {
+          const users = results.data.Results;
 
-        setTotalPages(Math.ceil(results.data.Total / pageSize))
-        setUsersTable(users)
-      })
-      .catch((error) => {
-        console.log(error)
-      })
-  }
+          setTotalPages(Math.ceil(results.data.Total / pageSize));
+          setUsersTable(users);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+  };
 
   useEffect(() => {
-    queryTable()
-  }, [])
+    queryTable();
+  }, []);
 
   const column: IColumnDetail[] = [
     {
@@ -74,11 +74,11 @@ const AdminPanel = () => {
           height={50}
           width={50}
           src={String(cellValue)}
-          style={{ borderRadius: '50%' }}
+          style={{borderRadius: '50%'}}
         />
       ),
     },
-  ]
+  ];
 
   return (
     <div className="h-100 d-flex flex-column">
@@ -110,7 +110,7 @@ const AdminPanel = () => {
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default AdminPanel
+export default AdminPanel;
