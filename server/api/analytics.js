@@ -30,7 +30,7 @@ router.get('/graphWeek', auth, async(req,res) => {
     date1 = new Date();
     date2 = new Date();
     date2.setDate(date1.getDate() + i)
-    return date;
+    return date2;
   }
   // If query does not have Ids attribute
   if (!query.Ids) {
