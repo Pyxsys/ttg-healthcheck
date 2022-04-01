@@ -73,10 +73,28 @@ const AnalyticsPage = () => {
         <div className="h-100 container pe-2 ps-2">
           <Row>
             <Col>
-              <Row className="gx-4">
-                <SortWithThreshold title="Overworked CPU Devices" deviceDynamic = {deviceTableData} f = {(a:IDeviceTotal, b:IDeviceTotal) => b?.dynamic?.cpu?.aggregatedPercentage as number - (a?.dynamic?.cpu?.aggregatedPercentage as number)} columnKey= {'dynamic.cpu.aggregatedPercentage'} threshold = {10}></SortWithThreshold>
-                <SortWithThreshold deviceDynamic = {deviceTableData} title="Overworked Memory Devices" f = {(a:IDeviceTotal, b:IDeviceTotal) => b?.dynamic?.memory?.aggregatedPercentage as number - (a?.dynamic?.memory?.aggregatedPercentage as number) } columnKey= {'dynamic.memory.aggregatedPercentage'} ></SortWithThreshold>
-                <SortWithThreshold deviceDynamic = {deviceTableData} title="Network Speed Monitoring" f = {(a:IDeviceTotal, b:IDeviceTotal) => b?.dynamic?.wifi?.sendSpeed as number - (a?.dynamic?.wifi?.sendSpeed as number) } columnKey= {'dynamic.wifi.sendSpeed'}></SortWithThreshold>
+              <Row className="gx-4 d-flex">
+                <Col className='w-100 p-2'>
+                  <SortWithThreshold
+                    title="Overworked CPU Devices"
+                    deviceDynamic = {deviceTableData} f = {(a:IDeviceTotal, b:IDeviceTotal) => b?.dynamic?.cpu?.aggregatedPercentage as number - (a?.dynamic?.cpu?.aggregatedPercentage as number)}
+                    columnKey= {'dynamic.memory.aggregatedPercentage'} >
+                  </SortWithThreshold>
+                </Col>
+                <Col className='w-100 p-2'>
+                  <SortWithThreshold
+                    deviceDynamic = {deviceTableData}
+                    title="Overworked Memory Devices" f = {(a:IDeviceTotal, b:IDeviceTotal) => b?.dynamic?.memory?.aggregatedPercentage as number - (a?.dynamic?.memory?.aggregatedPercentage as number) }
+                    columnKey= {'dynamic.cpu.aggregatedPercentage'} >
+                  </SortWithThreshold>
+                </Col>
+                <Col className='w-100 p-2'>
+                  <SortWithThreshold
+                    deviceDynamic = {deviceTableData}
+                    title="Network Speed Monitoring" f = {(a:IDeviceTotal, b:IDeviceTotal) => b?.dynamic?.wifi?.sendSpeed as number - (a?.dynamic?.wifi?.sendSpeed as number) }
+                    columnKey= {'dynamic.wifi.sendSpeed'}>
+                  </SortWithThreshold>
+                </Col>
               </Row>
               <Row>
                 <Col className="analytics-accordion analytics-accordion-padding">
