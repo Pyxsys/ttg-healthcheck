@@ -7,6 +7,7 @@ import {MdClose} from 'react-icons/md';
 
 interface AnalyticsDevicesTableInputs {
   deviceDynamic: IDeviceTotal[]
+  sids: String[]
 }
 
 const graphDevices = (props: AnalyticsDevicesTableInputs) => {
