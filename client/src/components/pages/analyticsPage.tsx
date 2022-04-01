@@ -19,6 +19,7 @@ const AnalyticsPage = () => {
   const [deviceTableData, setDeviceTableData] = useState([] as IDeviceTotal[]);
   const [metric, setMetric] = useState('');
   const [dIds, setDIds] = useState([] as String[]);
+  const [sids, setSids] = useState([] as String[]);
   const [deviceHistories, setDeviceHistories] = useState([[]] as number[][]);
   const [days, setDays] = useState(0);
   const realTimeDataService = useRealTimeService();
