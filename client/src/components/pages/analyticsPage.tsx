@@ -17,7 +17,10 @@ import {IResponse} from '../../types/queries';
 
 const AnalyticsPage = () => {
   const [deviceTableData, setDeviceTableData] = useState([] as IDeviceTotal[]);
+  const [metric, setMetric] = useState('');
   const [dIds, setDIds] = useState([] as String[]);
+  const [deviceHistories, setDeviceHistories] = useState([[]] as number[][]);
+  const [days, setDays] = useState(0);
   const realTimeDataService = useRealTimeService();
 
   const initialRealTimeData = () => {
@@ -49,7 +52,9 @@ const AnalyticsPage = () => {
         {params: {Ids: deviceIds.join(',')}},
     );
     const latestDevices = latestDevicesResponse.data.Results;
-
+    const dh = await axios.get('api/analytics',
+        {params: {Ids: dIds, days: days}}) as Array<Array<number>>;
+    setDeviceHistories(dh);
     const tableDevices = devices.map((staticDevice) => ({
       static: staticDevice,
       dynamic: latestDevices.find(
@@ -114,7 +119,7 @@ const AnalyticsPage = () => {
                           <Row className="w-100">
                             <Col className="analytics-accordion-padding">
                               <div className="graph-widget-padding w-100">
-                                <GraphSettings listOfOptions={dIds}></GraphSettings>
+                                <GraphSettings listOfOptions={dIds} setMetric = {setMetric} setDays = {setDays}></GraphSettings>
                               </div>
                             </Col>
                             <Col className="analytics-accordion-padding">
@@ -128,7 +133,7 @@ const AnalyticsPage = () => {
                           <Row className="w-100">
                             <Col className="analytics-accordion-padding">
                               <div className="graph-widget-padding w-100">
-                                <GraphDisplay></GraphDisplay>
+                                <GraphDisplay metric = {metric} deviceHistories = {deviceHistories}></GraphDisplay>
                               </div>
                             </Col>
                           </Row>

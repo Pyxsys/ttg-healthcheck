@@ -32,7 +32,24 @@ const graphDisplay = (_props: any) => {
       value: 34200,
     },
   ];
-  _props.data ? data = _props.data as dataPoint[] : {};
+
+  if (_props.data) {
+    data =[];
+    let c1 = 0;
+    let c2 = 0;
+    (_props.data as number[][]).forEach((e) => {
+      e.forEach((e)=>{
+        data.push({
+          group: c1.toString(),
+          key: c2.toString(),
+          value: e,
+
+        } as dataPoint);
+        c2++;
+      });
+      c1++;
+    });
+  }
 
   const state = {
     data: data};
