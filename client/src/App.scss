@@ -1080,6 +1080,7 @@ body {
 
 /*-----------------------Analytics--------------------------*/
 
+
 .analytics-container {
   background-color: $tertiary-gray;
   max-width: 100%;
@@ -1113,9 +1114,30 @@ body {
 
 //----------------- ACCORDIONS
 
+.custom-font-size {
+  color: white;
+  background-color: $quinary-gray;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+}
+
 .analytics-accordion .accordion-header {
   border-top-left-radius: 7px;
   border-top-right-radius: 7px;
+}
+
+.header-overflow {
+  @media (min-width: $screen-w-xsm) {
+    font-size: 0.7em;
+  }
+  @media (min-width: $screen-w-sm) {
+    font-size: 0.7em;
+  }
+}
+
+.test{
+  background-color: $quinary-gray;
 }
 
 .analytics-accordion .accordion-item .accordion-button{
@@ -1286,10 +1308,10 @@ body {
     max-height: 250px;
   }
   @media (min-width: $screen-w-md) {
-    max-height: 250px;
+    max-height: 300px;
   }
   @media (min-width: $screen-w-xlg) {
-    max-height: 250px;
+    max-height: 300px;
   }
 }
 
