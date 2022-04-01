@@ -8,7 +8,11 @@ const graphDisplay = (_props: any) => {
   enum ToolbarControlTypes {
     MAKE_FULLSCREEN = 'Make fullscreen',
   }
-
+  type dataPoint = {
+    group: string,
+    key: string,
+    value: number,
+  }
   enum ScaleTypes {
     TIME = 'time',
     LINEAR = 'linear',
@@ -16,20 +20,22 @@ const graphDisplay = (_props: any) => {
     LABELS = 'labels',
     LABELS_RATIO = 'labels-ratio',
   }
+  let data = [
+    {
+      group: 'Dataset 1',
+      key: 'Qty',
+      value: 23500,
+    },
+    {
+      group: 'Dataset 2',
+      key: 'More',
+      value: 34200,
+    },
+  ];
+  _props.data ? data = _props.data as dataPoint[] : {};
 
   const state = {
-    data: [
-      {
-        group: 'Dataset 1',
-        key: 'Qty',
-        value: 23500,
-      },
-      {
-        group: 'Dataset 2',
-        key: 'More',
-        value: 34200,
-      },
-    ]};
+    data: data};
 
   const options = {
     title: 'CPU Usage',
