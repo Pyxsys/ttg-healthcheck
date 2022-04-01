@@ -1,6 +1,6 @@
 // 3rd Party
 import React from 'react';
-import {Col, Accordion} from 'react-bootstrap';
+import {Col, Accordion, Row} from 'react-bootstrap';
 import {IDeviceTotal} from '../../types/device';
 import {IColumnDetail} from '../../types/tables';
 import ViewTable from '../common/viewTable';
@@ -19,11 +19,33 @@ const PieWheelCell = (cellValue: CellValue) => (
     </div>
   </div>
 );
+const getAttribute = (
+    object: any | undefined,
+    attribute: string,
+): number | string | undefined => {
+  const attributes = attribute.split('.');
+  return attributes.reduce(
+      (prev, attr) => (prev ? prev[attr] : undefined),
+      object,
+  );
+};
+
+
 const sortWithThreshold = (_props: any) => {
   const devices: IDeviceTotal[] = _props.deviceDynamic;
   const devicesSorted: IDeviceTotal[] = devices.sort(_props.f).reverse();
-
-
+  let counter = 0;
+  let t = 0;
+  console.log(_props.threshold);
+  _props.threshold? t = _props.threshold as number : {};
+  devices.forEach((e) => {
+    const s = _props.columnKey;
+    console.log(getAttribute(e, s));
+    if (getAttribute(e, s) as number > t) {
+      console.log(getAttribute(e, s) + ' '+ s);
+      counter += 1;
+    }
+  });
   const column: IColumnDetail[] = [
     {
       key: 'static.deviceId',
@@ -44,6 +66,11 @@ const sortWithThreshold = (_props: any) => {
             <div className="d-flex w-100 justify-content-around">{_props.title}</div>
           </Accordion.Header>
           <Accordion.Body className="flex-grow-1 overflow-auto p-0">
+            <Row>
+              <Col>
+                {counter}
+              </Col>
+            </Row>
             <div className="overflow-auto">
               <ViewTable
                 tableData={devicesSorted}

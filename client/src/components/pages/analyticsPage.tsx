@@ -74,8 +74,8 @@ const AnalyticsPage = () => {
           <Row>
             <Col>
               <Row className="gx-4">
-                <SortWithThreshold title="Overworked CPU Devices" deviceDynamic = {deviceTableData} f = {(a:IDeviceTotal, b:IDeviceTotal) => b?.dynamic?.cpu?.aggregatedPercentage as number - (a?.dynamic?.cpu?.aggregatedPercentage as number)} columnKey= {'dynamic.memory.aggregatedPercentage'} ></SortWithThreshold>
-                <SortWithThreshold deviceDynamic = {deviceTableData} title="Overworked Memory Devices" f = {(a:IDeviceTotal, b:IDeviceTotal) => b?.dynamic?.memory?.aggregatedPercentage as number - (a?.dynamic?.memory?.aggregatedPercentage as number) } columnKey= {'dynamic.cpu.aggregatedPercentage'} ></SortWithThreshold>
+                <SortWithThreshold title="Overworked CPU Devices" deviceDynamic = {deviceTableData} f = {(a:IDeviceTotal, b:IDeviceTotal) => b?.dynamic?.cpu?.aggregatedPercentage as number - (a?.dynamic?.cpu?.aggregatedPercentage as number)} columnKey= {'dynamic.cpu.aggregatedPercentage'} threshold = {10}></SortWithThreshold>
+                <SortWithThreshold deviceDynamic = {deviceTableData} title="Overworked Memory Devices" f = {(a:IDeviceTotal, b:IDeviceTotal) => b?.dynamic?.memory?.aggregatedPercentage as number - (a?.dynamic?.memory?.aggregatedPercentage as number) } columnKey= {'dynamic.memory.aggregatedPercentage'} ></SortWithThreshold>
                 <SortWithThreshold deviceDynamic = {deviceTableData} title="Network Speed Monitoring" f = {(a:IDeviceTotal, b:IDeviceTotal) => b?.dynamic?.wifi?.sendSpeed as number - (a?.dynamic?.wifi?.sendSpeed as number) } columnKey= {'dynamic.wifi.sendSpeed'}></SortWithThreshold>
               </Row>
               <Row>
