@@ -9,6 +9,7 @@ import useOnclickOutside from 'react-cool-onclickoutside';
 import {IResponse} from '../../types/queries';
 import {IDevice, IDeviceLog, IDeviceTotal} from '../../types/device';
 import {useRealTimeService} from '../../context/realTimeContext';
+import {exportCSV} from '../../services/export.service';
 import Navbar from '../common/Navbar';
 import PieWheel from '../common/pieWheel';
 import {SignalStrength, signalText} from '../common/signalStrength';
@@ -360,27 +361,47 @@ const DevicesTable = () => {
     );
   };
 
+  const getTableCSV = (): void => {
+    const tableValues = getFilteredDevices().map((device) => ({
+      UUID: device.static.deviceId,
+      Name: device.static.name,
+      CPU: device.dynamic?.cpu?.aggregatedPercentage,
+      Memory: device.dynamic?.memory?.aggregatedPercentage,
+      Disk: device.dynamic?.disk?.partitions[0]?.percent,
+      Network: signalText(device.dynamic?.wifi?.signalStrength || -1) || undefined,
+      Timestamp: device.dynamic?.timestamp,
+    }));
+    exportCSV(tableValues, 'devices');
+  };
+
   return (
     <div className="h-100 d-flex flex-column">
       <Navbar />
       <div className="flex-grow-1 d-flex flex-column align-items-center overflow-auto devices-content">
-        {/* Table */}
         <div className="flex-grow-1 d-flex flex-column overflow-auto container">
-          {/* Filter Dropdown */}
-          <div className="pt-5 ps-0 w-100">
-            <div className="pb-0">
-              <button
-                ref={filtersRef}
-                className="btn btn-primary"
-                onClick={() => setshowFilters(!showFilters)}
-              >
-                <span>Filter Table ({filters.length})</span>
-                <span className={`ps-2 ${showFilters ? 'dropup' : 'dropdown'}`}>
-                  <i className="caret"></i>
-                </span>
-              </button>
-            </div>
 
+          {/* Row of Buttons (filter and export) */}
+          <div className="d-flex pt-5 pb-1 w-100">
+            <button
+              ref={filtersRef}
+              className="btn btn-primary"
+              onClick={() => setshowFilters(!showFilters)}
+            >
+              <span>Filter Table ({filters.length})</span>
+              <span className={`ps-2 ${showFilters ? 'dropup' : 'dropdown'}`}>
+                <i className="caret"></i>
+              </span>
+            </button>
+
+            <button
+              className="btn btn-primary ms-auto"
+              onClick={() => getTableCSV()}>
+                Export To CSV
+            </button>
+          </div>
+
+          {/* Filter Dropdown */}
+          <div className="w-100">
             <div
               ref={filtersRef}
               className={`d-flex flex-column position-absolute filter-container overflow-auto ${
@@ -492,6 +513,8 @@ const DevicesTable = () => {
               </div>
             </div>
           </div>
+
+          {/* Table */}
           <div className="flex-grow-1 overflow-auto table-container mt-3">
             <ViewTable
               tableData={getFilteredDevices()}
@@ -501,6 +524,8 @@ const DevicesTable = () => {
               initialOrderBy={initialOrderBy}
             />
           </div>
+
+          {/* Pagination */}
           <div className="d-flex py-2 ms-auto">
             <Pagination
               page={page}

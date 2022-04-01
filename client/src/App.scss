@@ -634,6 +634,13 @@ body {
   background-color: $tertiary-gray;
   border: 1px black solid;
   max-height: 50vh;
+  
+  @media (min-width: $screen-w-xxsm) {
+    width: 450px;
+  }
+  @media (min-width: $screen-w-md) {
+    width: 550px;
+  }
 }
 
 .devices-font {
