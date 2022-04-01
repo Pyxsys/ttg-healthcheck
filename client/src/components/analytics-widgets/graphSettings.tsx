@@ -13,11 +13,11 @@ const generateOptions = (listOfOptions: String[]) => {
 };
 const graphSettings = (Props:any) => {
   return (
-    <Col className="graph-dark-accordion analytics-accordion">
-      <Accordion defaultActiveKey="0">
-        <Accordion.Item eventKey="0" className="analytics-accordion-item">
+    <Col className='graph-dark-accordion analytics-accordion'>
+      <Accordion defaultActiveKey='0'>
+        <Accordion.Item eventKey='0' className='analytics-accordion-item'>
           <Accordion.Header>
-            <div className="d-flex w-100 justify-content-around">Settings</div>
+            <div className='d-flex w-100 justify-content-around'>Settings</div>
           </Accordion.Header>
           <Accordion.Body>
             <div className="settings-body-wrapper">

@@ -1280,7 +1280,10 @@ body {
 
 .restrict-accordion-height .accordion-body {
   @media (min-width: $screen-w-xsm) {
-    max-height: 150px;
+    max-height: 250px;
+  }
+  @media (min-width: $screen-w-sm) {
+    max-height: 250px;
   }
   @media (min-width: $screen-w-md) {
     max-height: 250px;
