@@ -1,6 +1,6 @@
 // 3rd Party
 import React from 'react';
-import {Col, Accordion} from 'react-bootstrap';
+import {Col, Accordion, Row} from 'react-bootstrap';
 import {IDeviceTotal} from '../../types/device';
 import {IColumnDetail} from '../../types/tables';
 import ViewTable from '../common/viewTable';
@@ -37,20 +37,27 @@ const sortWithThreshold = (_props: any) => {
   ];
 
   return (
-    <Col xs={12} sm={12} md={12} lg={4} xl={4} className="analytics-accordion restrict-accordion-height">
+    <Col xs={12} sm={12} md={12} lg={4} xl={4} className="w-100 analytics-accordion restrict-accordion-height">
       <Accordion defaultActiveKey="0">
         <Accordion.Item eventKey="0" className="analytics-accordion-item">
           <Accordion.Header>
             <div className="d-flex w-100 justify-content-around">{_props.title}</div>
           </Accordion.Header>
           <Accordion.Body className="flex-grow-1 overflow-auto p-0">
-            <div className="overflow-auto">
-              <ViewTable
-                tableData={devicesSorted}
-                columns={column}
-                initialOrderBy="pid"
-              />
-            </div>
+            <Row className='d-flex flex-column w-100 p-0 m-0'>
+              <Col className='p-0'>
+                Hello
+              </Col>
+              <Col className='p-0'>
+                <div className="overflow-auto">
+                  <ViewTable
+                    tableData={devicesSorted}
+                    columns={column}
+                    initialOrderBy="pid"
+                  />
+                </div>
+              </Col>
+            </Row>
           </Accordion.Body>
         </Accordion.Item>
       </Accordion>

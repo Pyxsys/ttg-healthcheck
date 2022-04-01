@@ -1,5 +1,5 @@
 import React from 'react';
-import {Col, Accordion, FormCheck} from 'react-bootstrap';
+import {Col, Accordion} from 'react-bootstrap';
 import {IDeviceTotal} from '../../types/device';
 import {IColumnDetail} from '../../types/tables';
 import ViewTable from '../common/viewTable';
@@ -23,7 +23,6 @@ const graphDevices = (props: AnalyticsDevicesTableInputs) => {
       override: () => (
         <div className="devices-settings-content-wrapper">
           <MdClose color="red" />
-          <FormCheck></FormCheck>
         </div>
       ),
     },
