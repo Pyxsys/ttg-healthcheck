@@ -92,6 +92,7 @@ router.get('/latest', auth, async (req, res) => {
   return res.status(200).json({ Results: nonEmptyResults })
 })
 router.get('/afterDate', auth, async (req, res) => {
+  console.log("helelo");
   const query = Object(req.query)
   const addDaysToToday = (i) => {
     date1 = new Date();
@@ -102,6 +103,7 @@ router.get('/afterDate', auth, async (req, res) => {
   // If query does not have Ids attribute
   if (!query.Ids) {
     if (query.Ids === undefined) {
+      console.log('jjjj')
       return res.status(501).send('Server Error: must include Ids parameter')
     } else {
       return res.status(200).json({ Results: [] })

@@ -53,8 +53,8 @@ const AnalyticsPage = () => {
         {params: {Ids: deviceIds.join(',')}},
     );
     const latestDevices = latestDevicesResponse.data.Results;
-    const dh = await axios.get('api/analytics',
-        {params: {Ids: dIds, days: days}}) as Array<Array<number>>;
+    const dh = await axios.get('api/analytics/afterDate',
+        {params: {Ids: deviceIds, days: days}}) as Array<Array<number>>;
     setDeviceHistories(dh);
     const tableDevices = devices.map((staticDevice) => ({
       static: staticDevice,
