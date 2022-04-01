@@ -1,21 +1,22 @@
 import React from 'react';
 import {Col, Accordion} from 'react-bootstrap';
-import {IDeviceTotal} from '../../types/device';
+// import {IDeviceTotal} from '../../types/device';
 import {IColumnDetail} from '../../types/tables';
 import ViewTable from '../common/viewTable';
 import {MdClose} from 'react-icons/md';
 
 interface AnalyticsDevicesTableInputs {
-  deviceDynamic: IDeviceTotal[]
-  sids: String[]
+  sids: deviceId[]
 }
-
+type deviceId ={
+  id: String
+}
 const graphDevices = (props: AnalyticsDevicesTableInputs) => {
-  const devices: IDeviceTotal[] = props.deviceDynamic || [];
+  const devices: deviceId[] = props.sids|| [];
 
   const column: IColumnDetail[] = [
     {
-      key: 'static.deviceId',
+      key: 'id',
       name: 'Name',
     },
     {

@@ -128,7 +128,9 @@ const AnalyticsPage = () => {
                             <Col className="analytics-accordion-padding">
                               <div className="graph-widget-padding w-100">
                                 <GraphDevices
-                                  deviceDynamic={deviceTableData} sids = {sids}
+                                  sids = {sids.map((e) => {
+                                    return {id: e};
+                                  })}
                                 ></GraphDevices>
                               </div>
                             </Col>
