@@ -36,9 +36,14 @@ class TestDaemonCheckerClass(unittest.TestCase):
         with patch('psutil.Process.cpu_percent', return_value=11.0):
             self.assertTrue(self.test_checker.too_much_cpu(self.test_proc))
 
-    def testDaemonCheck(self):
-        with patch('daemon.src.system_report.DaemonChecker.too_much_cpu', return_value=True):
-            self.assertRaises(SystemExit, self.test_checker.check_daemon())
+    @patch('daemon.src.system_report.SysScrubber.fetch_process_name', return_value='python3 -v system_report.py')
+    @patch('daemon.src.system_report.DaemonChecker.too_much_cpu', return_value=True)
+    def testDaemonCheck(self, m1, m2):
+        with self.assertRaises(SystemExit) as c:
+                self.test_checker.check_daemon()
+
+        exception = c.exception
+        self.assertRegex(exception.code, r"Exited daemon because CPU or Memory usage was too high.")
 
 if __name__ == '__main__':
     unittest.main()

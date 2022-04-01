@@ -4,6 +4,7 @@ const { DiskDynamicSchema } = require('./disk')
 const { MemoryDynamicSchema } = require('./memory')
 const { ProcessSchema } = require('./process')
 const { WifiDynamicSchema } = require('./wifi')
+const { PeripheralSchema } = require('./peripheral')
 
 const DeviceLogsSchema = new mongoose.Schema({
   deviceId: {
@@ -19,6 +20,7 @@ const DeviceLogsSchema = new mongoose.Schema({
   disk: DiskDynamicSchema,
   wifi: WifiDynamicSchema,
   processes: [ProcessSchema],
+  peripherals: [PeripheralSchema],
 })
 
 const DeviceLogs = mongoose.model('device_logs', DeviceLogsSchema)

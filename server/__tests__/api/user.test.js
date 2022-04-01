@@ -531,7 +531,7 @@ describe('Change user password', () => {
   })
 })
 
-describe ('user logout', () => {
+describe('user logout', () => {
   it("should not get a user's log if a disabled user is accessing it", async () => {
     const disabledCookieProfile = await login('disabled')
     const response = await request(app)

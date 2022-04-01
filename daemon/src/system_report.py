@@ -48,6 +48,7 @@ class Runner(threading.Thread):
         self.report.add_memory_usage_info()
         self.report.add_system_network_usage()
         self.report.add_disk_usage_info()
+        self.report.add_peripheral_info()
 
     #produces startup device report
     def gen_startup_report(self):
@@ -188,6 +189,12 @@ class SysReport:
         net_info['macAdress'] = ip.get('mac')
 
         self.set_section('wifi_', net_info)
+
+    def add_peripheral_info(self):
+        peripheral_info = list()
+        peripheral_info += SysScrubber.fetch_connected_usb_devices()
+
+        self.set_section("peripherals", peripheral_info)
 
 class SysScrubber:
     # ----------------------
@@ -620,6 +627,39 @@ class SysScrubber:
         ips['mac'] = buffer.pop().address
 
         return ips
+
+    # ---------------------
+    # Peripheral Fetch Methods
+    # ---------------------
+    @classmethod
+    def fetch_connected_usb_devices(cls):
+        devices = []
+
+        if SysScrubber.is_windows():
+            raise NotImplementedError('Cannot fetch peripheral info for Windows. Not yet implemented.')
+
+        elif SysScrubber.is_linux():
+            command = "lsusb"
+
+        extract = os.popen(command)
+        buffer = extract.read()
+        extract.close()
+
+        if SysScrubber.is_windows():
+            pass
+        elif SysScrubber.is_linux():
+            device_re = re.compile("Bus\s+(?P<bus>\d+)\s+Device\s+(?P<device>\d+).+ID\s\w+.\w+\s(?P<name>.+)$", re.I)
+            
+            for i in buffer.split('\n'):
+                if i:
+                    info = device_re.match(i)
+                    if info:
+                        dinfo = info.groupdict()
+                        dinfo['hid'] = '/dev/bus/usb/%s/%s' % (dinfo.pop('bus'), dinfo.pop('device'))
+                        dinfo['connection'] = 'USB'
+                        devices.append(dinfo)
+
+        return devices
 
 class DaemonChecker:
     def __init__(self, path):
