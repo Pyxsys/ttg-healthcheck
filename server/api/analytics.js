@@ -15,15 +15,6 @@ router.get('/', auth, async (req, res) => {
   return res.status(200).json(deviceLogsResponse)
 })
 
-router.get('/devicesByMem', auth, async(req, res) => {
-  const results = await DeviceLogs.find(
-    {},
-    {memory:{ aggregatedPercentage: 1} },
-    {limit: 20, sort: { memory:{ aggregatedPercentage: -1 }}}
-    )
-
-  
-})
 // get latest device logs from a list of device Ids
 router.get('/latest', auth, async (req, res) => {
   const query = Object(req.query)
