@@ -102,7 +102,7 @@ const sortWithThreshold = (_props: any) => {
                   <ViewTable
                     tableData={devicesSorted}
                     columns={column}
-                    initialOrderBy='pid'
+                    initialOrderBy={`-${_props.columnKey}`}
                   />
                 </div>
               </Col>

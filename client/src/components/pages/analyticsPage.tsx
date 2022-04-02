@@ -81,7 +81,7 @@ const AnalyticsPage = () => {
                   <SortWithThreshold
                     title="Overworked CPU Devices"
                     deviceDynamic = {deviceTableData} f = {(a:IDeviceTotal, b:IDeviceTotal) => b?.dynamic?.cpu?.aggregatedPercentage as number - (a?.dynamic?.cpu?.aggregatedPercentage as number) }
-                    columnKey= {'dynamic.memory.aggregatedPercentage'}
+                    columnKey="dynamic.memory.aggregatedPercentage"
                     threshold = {80}>
                   </SortWithThreshold>
                 </Col>
@@ -89,7 +89,7 @@ const AnalyticsPage = () => {
                   <SortWithThreshold
                     deviceDynamic = {deviceTableData}
                     title="Overworked Memory Devices" f = {(a:IDeviceTotal, b:IDeviceTotal) => b?.dynamic?.memory?.aggregatedPercentage as number - (a?.dynamic?.memory?.aggregatedPercentage as number) }
-                    columnKey= {'dynamic.cpu.aggregatedPercentage'}
+                    columnKey="dynamic.memory.aggregatedPercentage"
                     threshold = {80}>
                   </SortWithThreshold>
                 </Col>
@@ -97,7 +97,7 @@ const AnalyticsPage = () => {
                   <SortWithThreshold
                     deviceDynamic = {deviceTableData}
                     title="Network Speed Monitoring" f = {(a:IDeviceTotal, b:IDeviceTotal) => b?.dynamic?.wifi?.sendSpeed as number - (a?.dynamic?.wifi?.sendSpeed as number) }
-                    columnKey= {'dynamic.wifi.sendSpeed'}
+                    columnKey="dynamic.wifi.sendSpeed"
                     threshold = {80}>
                   </SortWithThreshold>
                 </Col>

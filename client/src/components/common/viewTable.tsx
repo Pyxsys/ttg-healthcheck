@@ -19,13 +19,17 @@ const useDebounce = (initialValue: string, delay: number) => {
 };
 
 const ViewTable = (props: ViewTableInputs<any>) => {
-  const [orderBy, setOrderBy] = useState(props.initialOrderBy || '');
+  const [orderBy, setOrderBy] = useState('');
   const [orderByAsc, setOrderByAsc] = useState(true);
   const [actualFilter, delayedFilter, setFilter] = useDebounce('', 500);
   const [filterKey, setFilterKey] = useState('');
 
   useEffect(() => {
     setFilterKey(props.columns.find((c) => c.filter)?.key || '');
+    if (props.initialOrderBy) {
+      setOrderBy(props.initialOrderBy.replace('-', ''));
+      setOrderByAsc(!props.initialOrderBy.startsWith('-'));
+    }
   }, []);
 
   const getAttribute = (
