@@ -38,13 +38,14 @@ const graphSettings = (Props:any) => {
               <select
                 className="form-select form-select-sm w-100 mx-2 my-2"
                 defaultValue={'DEFAULT'}
-                onChange={(e) => Props.setMetric(e.target.value)}
+                onChange={(e) => {
+                  Props.setMetric(e.target.value);
+                  Props.setTitle(e.target.options[e.target.selectedIndex].text);
+                }}
               >
                 <option value="">None</option>
                 <option value="cpu.aggregatedPercentage">CPU Usage</option>
                 <option value="memory.aggregatedPercentage">Memory Usage</option>
-                <option value="">Disk Usage</option>
-                <option value="">Latency</option>
               </select>
               <span className="settings-spans">Selected Time Range</span>
               <select

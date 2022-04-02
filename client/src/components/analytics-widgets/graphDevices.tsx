@@ -24,12 +24,15 @@ const graphDevices = (props: AnalyticsDevicesTableInputs) => {
     },
     {
       key: 'id',
-      name: 'Settings',
+      name: 'Remove',
+      disableOrderBy: true,
       override: (e) => (
-        <div className="devices-settings-content-wrapper">
-          <MdClose color="red" onClick={() => {
+        <div
+          className="devices-settings-content-wrapper cursor-pointer"
+          onClick={() => {
             props.setSids(props.sids.filter((ee) => e != ee ));
-          }} style = {{cursor: 'pointer'}}/>
+          }}>
+          <MdClose color="red" />
         </div>
       ),
     },
