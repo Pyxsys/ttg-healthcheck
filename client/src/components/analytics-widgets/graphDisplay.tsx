@@ -89,7 +89,7 @@ const graphDisplay = (_props: any) => {
           } else {
             return 0;
           }
-        }, 0);
+        }, 0)/ (onThisDay.length > 0? onThisDay.length : 1 );
         console.log(thisDayAvg);
         davgs.push({
           id: id,
