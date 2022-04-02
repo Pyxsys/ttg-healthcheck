@@ -6,7 +6,10 @@ import {Link} from 'react-router-dom';
 import axios from 'axios';
 import {Squash as Hamburger} from 'hamburger-react';
 import {DiRasberryPi} from 'react-icons/di';
-import {MdOutlineSpaceDashboard} from 'react-icons/md';
+import {
+  MdOutlineSpaceDashboard,
+  MdOutlineAnalytics,
+} from 'react-icons/md';
 import useOnclickOutside from 'react-cool-onclickoutside';
 import {Dropdown} from 'react-bootstrap';
 // Custom
@@ -24,6 +27,12 @@ const SideNavData = [
     title: 'Devices',
     path: '/devices',
     icon: <DiRasberryPi />,
+    cName: 'side-nav-item',
+  },
+  {
+    title: 'Analytics',
+    path: '/analytics',
+    icon: <MdOutlineAnalytics />,
     cName: 'side-nav-item',
   },
 ];
