@@ -74,7 +74,7 @@ const AnalyticsPage = () => {
   }, [sids, days, metric]);
   return (
     <div className="analytics-container">
-      <Navbar />
+      <Navbar name = "Analytics" />
       <div className="analytics-details-wrapper">
         <div className="h-100 container pe-2 ps-2">
           <Row>
