@@ -92,7 +92,6 @@ router.get('/latest', auth, async (req, res) => {
   return res.status(200).json({ Results: nonEmptyResults })
 })
 router.get('/afterDate', auth, async (req, res) => {
-  console.log("helelo");
   const query = Object(req.query)
   const addDaysToToday = (i) => {
     date1 = new Date();
@@ -110,7 +109,6 @@ router.get('/afterDate', auth, async (req, res) => {
   const idsArray = String(query.Ids).split(',')
   const results = await Promise.all(
     idsArray.map(async (id) => {
-      console.log(query.days)
       const devices = await DeviceLogs.find(
         { deviceId: id, timestamp:{$gte:addDaysToToday(-query.days)} },
         {},
@@ -121,7 +119,6 @@ router.get('/afterDate', auth, async (req, res) => {
   )
   const nonEmptyResults = results.filter((deviceLog) => deviceLog)
   
-  console.log(nonEmptyResults)
   return res.status(200).json({ Results: nonEmptyResults })
 })
 

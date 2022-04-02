@@ -4,9 +4,7 @@ import {Col, Accordion} from 'react-bootstrap';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const generateOptions = (listOfOptions: string[]) => {
   const returnString = [];
-  console.log(listOfOptions.length);
   for (let i = 0; i < listOfOptions.length; i++) {
-    console.log(i);
     returnString.push(<option key= {i} value = {listOfOptions[i].toString()}>{listOfOptions[i]}</option>);
   }
   return returnString;
@@ -52,7 +50,6 @@ const graphSettings = (Props:any) => {
                 defaultValue={'DEFAULT'}
                 onChange={(e) => {
                   Props.setDays(e.target.value);
-                  console.log(e.target.value);
                 }}
               >
                 <option value={7}>Week</option>

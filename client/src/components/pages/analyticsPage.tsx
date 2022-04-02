@@ -46,7 +46,6 @@ const AnalyticsPage = () => {
     const devices = deviceResponse.data.Results;
     const deviceIds = devices.map((device) => device.deviceId);
     setDIds(deviceIds);
-    console.log(deviceIds);
     const latestDevicesResponse = await axios.get<IResponse<IDeviceLog>>(
         'api/device-logs/latest',
         {params: {Ids: deviceIds.join(',')}},
@@ -54,8 +53,6 @@ const AnalyticsPage = () => {
     const latestDevices = latestDevicesResponse.data.Results;
     const dh = await axios.get<IResponse<Array<IDeviceLog>>>('api/analytics/afterDate',
         {params: {Ids: sids, days: days, metric: metric}});
-    console.log(sids+'nnnnnnn');
-    console.log(dh.data.Results);
     setDeviceHistories(dh.data.Results);
     const tableDevices = devices.map((staticDevice) => ({
       static: staticDevice,
@@ -72,7 +69,6 @@ const AnalyticsPage = () => {
     initialRealTimeData();
     queryTable();
   }, [sids, days, metric]);
-  console.log(deviceHistories);
   return (
     <div className="analytics-container">
       <Navbar />

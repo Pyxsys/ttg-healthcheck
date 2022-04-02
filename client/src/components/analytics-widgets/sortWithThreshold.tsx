@@ -49,7 +49,6 @@ const sortWithThreshold = (_props: any) => {
     });
     return updatedCounter;
   };
-  console.log(devices);
   const counter = updateCounter();
 
   const column: IColumnDetail[] = [
