@@ -376,7 +376,7 @@ const DevicesTable = () => {
 
   return (
     <div className="h-100 d-flex flex-column">
-      <Navbar />
+      <Navbar name="Devices"/>
       <div className="flex-grow-1 d-flex flex-column align-items-center overflow-auto devices-content">
         <div className="flex-grow-1 d-flex flex-column overflow-auto container">
 

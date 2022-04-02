@@ -99,6 +99,9 @@ const Login = () => {
           <Link to="/signup">
             <Button className="w-100 mt-3 home-button">Register</Button>
           </Link>
+          <Link to="/forgot-password">
+            <Button className="w-100 mt-3 home-button">Forgot Password</Button>
+          </Link>
         </Form>
       </div>
     </FrontPageWrapper>

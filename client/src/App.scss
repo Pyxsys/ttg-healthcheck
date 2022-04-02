@@ -29,6 +29,13 @@ $screen-w-xlg: 1200px;
 $screen-w-xxlg: 1940px;
 $screen-w-xxxlg: 2350px;
 
+$screen-h-xxsm: 0px;
+$screen-h-xsm: 400px;
+$screen-h-sm: 500px;
+$screen-h-md: 700px;
+$screen-h-lg: 900px;
+$screen-h-xlg: 1200px;
+
 // Tables
 $table-primary-bg: #3F4651;
 $table-secondary-bg: lighten($table-primary-bg, 5%);
@@ -61,10 +68,6 @@ body {
   cursor: pointer;
 }
 
-.text-muted {
-  color: $gray-700;
-}
-
 .border-dashed {
   border: 1px dashed;
 }
@@ -92,6 +95,28 @@ body {
 .form-control:focus, .form-select:focus {
   border-color: $gray-800;
   box-shadow: 0 0 0 0.25rem lighten($gray-800, 10%);
+}
+
+// Common Classes
+.form-container {
+  background-color: $quarternary-gray;
+  border-radius: 7px;
+  min-width: 475px;
+}
+.form-input-label {
+  background-color: #515864;
+  border-color: #515864;
+  color: white;
+  width: 150px;
+  font-size: 11px;
+  font-weight: 500 !important;
+}
+.form-input {
+  font-size: 13.5px;
+  border: none !important;
+  border-radius: 0 0.25rem 0.25rem 0 !important;
+  box-shadow: none !important;
+  -webkit-box-shadow: none !important;
 }
 
 // Custom scrollbar only for computers
@@ -134,45 +159,25 @@ body {
   -o-transition: all 0.5s ease;
   transition: all 0.5s ease;
 
-  @media (min-width: $screen-w-xxsm) {
-    min-height: 200px;
+  @media (min-height: $screen-h-xxsm) {
+    min-height: 95px;
   }
-  @media (min-width: $screen-w-md) {
-    min-height: 220px;
+  @media (min-height: $screen-h-sm) {
+    min-height: 20vh;
   }
-  @media (min-width: $screen-w-lg) {
-    min-height: 300px;
-  }
-  @media (min-width: $screen-w-xlg) {
-    min-height: 300px;
-  }
-  @media (min-width: $screen-w-xxlg) {
-    min-height: 330px;
-  }
-  @media (min-width: $screen-w-xxxlg) {
-    min-height: 350px;
+  @media (min-height: $screen-h-md) {
+    min-height: 25vh;
   }
 }
 
 .home-content {
   background-color: $gray-800;
-  @media (min-width: $screen-w-xxsm) {
-    min-height: 500px;
+  min-height: 50vh;
+  @media (min-height: $screen-h-xxsm) {
+    padding-top: 5vh;
   }
-  @media (min-width: $screen-w-md) {
-    min-height: 500px;
-  }
-  @media (min-width: $screen-w-lg) {
-    min-height: 500px;
-  }
-  @media (min-width: $screen-w-xlg) {
-    min-height: 550px;
-  }
-  @media (min-width: $screen-w-xxlg) {
-    min-height: 550px;
-  }
-  @media (min-width: $screen-w-xxxlg) {
-    min-height: 550px;
+  @media (min-height: $screen-h-md) {
+    padding-top: 10vh;
   }
 }
 
@@ -182,30 +187,14 @@ body {
 
 .home-logo {
   content: url('assets/brainlogo.png');
-  @media (min-width: $screen-w-xxsm) {
-    width: 100%;
-  }
-  @media (min-width: $screen-w-xsm) {
-    width: 330px;
-  }
-  @media (min-width: $screen-w-sm) {
-    width: 330px;
-  }
-  @media (min-width: $screen-w-md) {
-    width: 330px;
-  }
-  @media (min-width: $screen-w-lg) {
-    width: 330px;
-  }
-  @media (min-width: $screen-w-xlg) {
-    width: 340px;
-  }
-  @media (min-width: $screen-w-xxlg) {
-    width: 380px;
-  }
-  @media (min-width: $screen-w-xxxlg) {
-    width: 420px;
-  }
+  width: 90px;
+}
+
+.home-logo-text {
+  color: $gray-100;
+  font-size: 3rem;
+  font-weight: 500;
+  font-family: Arial, Helvetica, sans-serif;
 }
 
 .bottom-triangle {
@@ -250,7 +239,6 @@ body {
 }
 
 .home-form {
-  margin-top: 5rem;
   @media (min-width: $screen-w-xxsm) {
     padding-left: 1.5rem;
     padding-right: 1.5rem;
@@ -345,7 +333,6 @@ body {
   flex: 0;
   width: 100%;
   background-color:#1f262b;
-  justify-content: space-between;
   align-items: center;
   @media (min-width: $screen-w-xsm) {
     height: 55px;
@@ -360,6 +347,18 @@ body {
   }
 }
 
+.nav-page-title {
+  margin-left: 6px;
+  color: white;
+  font-weight: 600;
+  flex-grow: 1;
+  @media (min-width: $screen-w-md) {
+    font-size: 16px;
+  }
+  @media (min-width: $screen-w-lg) {
+    font-size: 19px;
+  }
+}
 // Right Nav Menu
 .nav-right-icon {
   width: 35px;

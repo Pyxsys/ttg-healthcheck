@@ -3,9 +3,12 @@ const express = require('express')
 const router = express.Router()
 const User = require('../models/user.js')
 const userLog = require('../models/user_logs.js')
+const ResetPassword = require('../models/reset_password.js')
 const jwt = require('jsonwebtoken')
 const bcrypt = require('bcrypt')
 const auth = require('../middleware/auth.js')
+const sgMail = require('@sendgrid/mail')
+sgMail.setApiKey(process.env.SENDGRID_API_KEY)
 
 const encryptPassword = async (password) => {
   const salt = await bcrypt.genSalt(10)
@@ -231,7 +234,7 @@ router.delete('/deleteWithEmail/:email', auth, async (req, res) => {
       })
     }
   } catch (err) {
-    res.status(500).send('Server error')
+    return res.status(500).send('Server Error: ' + err.message)
   }
 })
 
@@ -272,7 +275,7 @@ router.delete('/delete/:id', auth, async (req, res) => {
       })
     }
   } catch (err) {
-    res.status(500).send('Server error')
+    return res.status(500).send('Server Error: ' + err.message)
   }
 })
 
@@ -325,7 +328,7 @@ router.post('/editUserProfileInfo', auth, async (req, res) => {
     // save user event log
     await userEventLog(
       loggedUser.name,
-      _id,
+      name,
       'edit profile',
       'Account information was changed.'
     ).save()
@@ -339,7 +342,7 @@ router.post('/editUserProfileInfo', auth, async (req, res) => {
       },
     })
   } catch (err) {
-    res.status(500).send('Server Error: ' + err.message)
+    return res.status(500).send('Server Error: ' + err.message)
   }
 })
 
@@ -379,10 +382,11 @@ router.post('/editUserProfilePassword', auth, async (req, res) => {
 
     const encryptedPassword = await encryptPassword(newPassword)
     await User.findOneAndUpdate({ _id: _id }, { password: encryptedPassword })
+    const changedUser = await User.findOne({ _id: _id })
     // save user event log
     await userEventLog(
       loggedUser.name,
-      _id,
+      changedUser.name,
       'edit profile',
       'Account password was changed.'
     ).save()
@@ -396,7 +400,112 @@ router.post('/editUserProfilePassword', auth, async (req, res) => {
       },
     })
   } catch (err) {
-    res.status(500).send('Server error')
+    return res.status(500).send('Server Error: ' + err.message)
+  }
+})
+
+// Request a password reset by email
+router.post('/requestResetPassword', async (req, res) => {
+  const { email } = Object(req.body)
+  try {
+    const users = await User.find({ email: email })
+    if (users.length === 0) {
+      return res.status(400).send(`No account associated with the email: ${email}`)
+    }
+
+    const resetPasswordExists = await ResetPassword.find({ userId: String(users[0]._id) })
+    if (resetPasswordExists.length > 0) {
+      return res.status(400).send(`Email already sent to: ${email}`)
+    }
+
+    const key = jwt.sign(String(users[0]._id) + Date.now(), process.env.ACCESS_TOKEN_KEY)
+    const requestResetPassword = new ResetPassword({key: key, userId: String(users[0]._id)})
+    requestResetPassword.save()
+
+    const emailMsg = {
+      to: email,
+      from: {
+        name: "noreply-Pi-Health-Check",
+        email: "pi.health.email@gmail.com",
+      },
+      subject: 'Password Recovery',
+      html: `<pre>
+      Hello,
+
+      We received a request to reset your Pi Health Check account for the email address: ${email}.
+
+      Please use the following link to reset your password:
+      <a href="pi-healthcheck.herokuapp.com/reset-password?Key=${key}">pi-healthcheck.herokuapp.com/reset-password</a>
+
+      Thank you,
+      Pi Heath Check Team
+      </pre>`
+    }
+    sgMail.send(emailMsg).catch((err) => {
+      return res.status(500).send(err.message)
+    })
+
+    return res.status(200).json({
+      message: `Successfully sent email to ${email}`
+    })
+  } catch (err) {
+    return res.status(500).send('Server Error: ' + err.message)
+  }
+})
+
+// Get user from reset password key
+router.get('/resetPasswordUser', async (req, res) => {
+  const { key } = Object(req.query)
+  try {
+    const resetPasswords = await ResetPassword.find({ key: key })
+    if (resetPasswords.length === 0) {
+      return res.status(400).send('Invalid key')
+    }
+    const user = await User.findOne({ _id: String(resetPasswords[0].userId) })
+    return res.status(200).json({ Results: [user] })
+  } catch (err) {
+    return res.status(500).send('Server Error: ' + err.message)
+  }
+})
+
+// edit user profile information
+router.post('/resetPassword', async (req, res) => {
+  try {
+    const { key, _id, password, passwordConfirm } = Object(
+      req.body
+    )
+
+    const resetPasswords = await ResetPassword.find({ key: key })
+    if (resetPasswords.length === 0) {
+      return res.status(400).send('Reset Password Key has expired')
+    }
+
+    // check if both new password matches
+    if (password !== passwordConfirm) {
+      return res
+        .status(400)
+        .send('New password and confirm password do not match')
+    }
+
+    // If password is empty
+    if (!password) {
+      return res.status(400).send('Password cannot be empty')
+    }
+    
+    const user = await User.findOne({ _id: _id })
+    const encryptedPassword = await encryptPassword(password)
+    await User.findOneAndUpdate({ _id: _id }, { password: encryptedPassword })
+    await ResetPassword.deleteOne({ _id: String(resetPasswords[0]._id) })
+    // save user event log
+    await userEventLog(
+      String(user.name),
+      String(user.name),
+      'edit profile',
+      'Account password was changed.'
+    ).save()
+    return res.status(200).send('Successfully Reset Password')
+  } catch (err) {
+    return res.status(500).send('Server Error: ' + err.message)
   }
 })
 

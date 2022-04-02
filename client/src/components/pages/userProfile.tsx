@@ -184,7 +184,7 @@ const UserProfile = (props: any) => {
 
   return (
     <div className="h-100 d-flex flex-column">
-      <Navbar />
+      <Navbar name="Profile"/>
       <div className="user-profile-content pt-5">
         {/* Table */}
         <div className="d-flex flex-column container user-profile-container">
