@@ -7,6 +7,7 @@ import {MdClose} from 'react-icons/md';
 
 interface AnalyticsDevicesTableInputs {
   sids: string[]
+  setSids: Function
 }
 type dd = {
   id: string
@@ -24,11 +25,13 @@ const graphDevices = (props: AnalyticsDevicesTableInputs) => {
       name: 'Name',
     },
     {
-      key: '',
+      key: 'id',
       name: 'Settings',
-      override: () => (
+      override: (e) => (
         <div className="devices-settings-content-wrapper">
-          <MdClose color="red" />
+          <MdClose color="red" onClick={() => {
+            props.setSids(props.sids.filter((ee) => e != ee ));
+          }}/>
         </div>
       ),
     },

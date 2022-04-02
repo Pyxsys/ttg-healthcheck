@@ -130,6 +130,7 @@ const AnalyticsPage = () => {
                               <div className="graph-widget-padding w-100">
                                 <GraphDevices
                                   sids = {sids}
+                                  setSids = {setSids}
                                 ></GraphDevices>
                               </div>
                             </Col>
