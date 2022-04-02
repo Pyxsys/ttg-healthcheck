@@ -52,6 +52,7 @@ const graphSettings = (Props:any) => {
                   Props.setDays(e.target.value);
                 }}
               >
+                <option value={1}>Day</option>
                 <option value={7}>Week</option>
                 <option value={30}>Month</option>
               </select>
