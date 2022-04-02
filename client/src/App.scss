@@ -68,10 +68,6 @@ body {
   cursor: pointer;
 }
 
-.text-muted {
-  color: $gray-700;
-}
-
 .border-dashed {
   border: 1px dashed;
 }
@@ -99,6 +95,28 @@ body {
 .form-control:focus, .form-select:focus {
   border-color: $gray-800;
   box-shadow: 0 0 0 0.25rem lighten($gray-800, 10%);
+}
+
+// Common Classes
+.form-container {
+  background-color: $quarternary-gray;
+  border-radius: 7px;
+  min-width: 475px;
+}
+.form-input-label {
+  background-color: #515864;
+  border-color: #515864;
+  color: white;
+  width: 150px;
+  font-size: 11px;
+  font-weight: 500 !important;
+}
+.form-input {
+  font-size: 13.5px;
+  border: none !important;
+  border-radius: 0 0.25rem 0.25rem 0 !important;
+  box-shadow: none !important;
+  -webkit-box-shadow: none !important;
 }
 
 // Custom scrollbar only for computers
