@@ -55,7 +55,6 @@ const graphSettings = (Props:any) => {
                   console.log(e.target.value);
                 }}
               >
-                <option value={1}>Day</option>
                 <option value={7}>Week</option>
                 <option value={30}>Month</option>
               </select>
