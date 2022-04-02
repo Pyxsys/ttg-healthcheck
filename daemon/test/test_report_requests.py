@@ -12,10 +12,11 @@ from daemon.src.system_report import Runner, SysReport
 class TestRunner(unittest.TestCase):
 
     test_config_path = '/test/config.json'
+    test_mode = 0
 
     @classmethod
     def setUpClass(cls):
-        cls.test_runner=Runner(sys.path[0] + cls.test_config_path)
+        cls.test_runner=Runner(sys.path[0] + cls.test_config_path, cls.test_mode)
         print("\n[config values]:")
         print(json.dumps(cls.test_runner.get_config(), indent=4, sort_keys=True))
 
@@ -28,8 +29,9 @@ class TestRunner(unittest.TestCase):
         self.assertIsInstance(self.test_runner, Runner, msg=None)
 
     @patch('daemon.src.system_report.SysScrubber.fetch_network_strength', return_value='Medium')
-    def testRunnerGeneratingReport(self, m1):
-        expected_sections={'deviceId', 'processes', 'memory', 'network', 'disk', 'timestamp'}
+    @patch('daemon.src.system_report.SysScrubber.fetch_connected_usb_devices', return_value=[{'hid':'/dev/bus/usb/001/005', 'connection':'USB', 'name':'DUMMY UDisk flash drive'}])
+    def testRunnerGeneratingReport(self, m1, m2):
+        expected_sections={'deviceId', 'processes', 'memory', 'network', 'disk', 'peripherals', 'timestamp'}
         missing_sections=[]
 
         self.test_runner.gen_report()

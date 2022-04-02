@@ -324,7 +324,23 @@ class TestSystemScrubberWifi(unittest.TestCase):
 
         self.assertEqual(actual_result, expected_result)
 
-
+class TestSystemScrubberPeripherals(unittest.TestCase):
+    
+    @patch('daemon.src.system_report.SysScrubber.is_windows', return_value=True)
+    @patch('daemon.src.system_report.SysScrubber.is_linux', return_value=False)
+    def testFetchingPeripheralUSBInfoWIN(self, m1, m2):
+        self.assertRaises(NotImplementedError, SysScrubber.fetch_connected_usb_devices)
+    
+    @patch('daemon.src.system_report.SysScrubber.is_windows', return_value=False)
+    @patch('daemon.src.system_report.SysScrubber.is_linux', return_value=True)
+    def testFetchingPeripheralUSBInfoLUX(self, m1, m2):
+        MOCK_ADAPTER_TERMINAL_OUTPUT='Bus 001 Device 005: ID abcd:1234 DUMMY UDisk flash drive\nBus 001 Device 004: ID 0424:7800 Microchip Technology, Inc. (formerly SMSC)'
+        with patch('os.popen', new=mock_open(read_data = MOCK_ADAPTER_TERMINAL_OUTPUT)):
+            actual_result = SysScrubber.fetch_connected_usb_devices()[0]
+        
+        expected_result = {'hid':'/dev/bus/usb/001/005', 'connection':'USB', 'name':'DUMMY UDisk flash drive'}
+        
+        self.assertDictEqual(expected_result, actual_result)
 
 
 if __name__ == '__main__':

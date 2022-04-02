@@ -10,12 +10,21 @@ import AdminPanel from './components/pages/adminPanel';
 import DevicesTable from './components/pages/devicesTable';
 import deviceDetail from './components/pages/deviceDetail';
 import AnalyticsPage from './components/pages/analyticsPage';
+import UserProfile from './components/pages/userProfile';
+import Pending from './components/pages/pending';
+import UserLogs from './components/pages/userLogs';
 
 function App() {
   return (
     <>
       <Route exact path="/" component={Login}></Route>
       <Route exact path="/signup" component={Signup}></Route>
+      <PrivateRoute
+        exact
+        path="/pending"
+        roles={['disabled']}
+        component={Pending}
+      ></PrivateRoute>
       <PrivateRoute
         exact
         path="/dashboard"
@@ -42,9 +51,21 @@ function App() {
       ></PrivateRoute>
       <PrivateRoute
         exact
-        path="/adminpanel"
+        path="/admin"
         roles={['admin']}
         component={AdminPanel}
+      ></PrivateRoute>
+      <PrivateRoute
+        exact
+        path="/user-profile"
+        roles={['user', 'admin']}
+        component={UserProfile}
+      ></PrivateRoute>
+      <PrivateRoute
+        exact
+        path="/user-logs"
+        roles={['user', 'admin']}
+        component={UserLogs}
       ></PrivateRoute>
     </>
   );

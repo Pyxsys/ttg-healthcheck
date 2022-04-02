@@ -17,9 +17,9 @@ const handleIncorrectInput = (
   let emailValid = false;
   let passwordMatch = false;
   const login = name == 'login';
-  // check if name does not include symbols and that length is less than 45
+  // check if name does not include symbols and that length is less than 20
   if (name) {
-    nameValid = regex.test(name) && name.length < 45 && name.length > 0;
+    nameValid = regex.test(name) && name.length < 20 && name.length > 0;
   } else if (login) {
     nameValid = true;
   }
@@ -27,9 +27,9 @@ const handleIncorrectInput = (
   if (email) {
     emailValid = email.length < 80 && email.length > 0;
   }
-  // check if password is less than 45 characters
+  // check if password is less than 20 characters
   if (password) {
-    passwordValid = password.length < 45 && password.length > 0;
+    passwordValid = password.length < 20 && password.length > 0;
   }
   // check if password 2 matches password
   if (password2) {
@@ -53,7 +53,7 @@ const handleIncorrectInput = (
   if (!nameValid) {
     // do whatever you want here
     notificationService.error(
-        'Invalid Name! Name must not include symbols and the length must be less than 45 characters!',
+        'Invalid Name! Name must not include symbols and the length must be less than 20 characters!',
     );
   }
   if (!passwordMatch) {

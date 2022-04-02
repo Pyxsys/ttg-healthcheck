@@ -122,5 +122,15 @@ class TestSystemReportClass(unittest.TestCase):
 
         self.assertTupleEqual(actual_result, expected_result)
 
+    @patch('daemon.src.system_report.SysScrubber.fetch_connected_usb_devices', return_value=[{'hid':'/dev/bus/usb/001/005', 'connection':'USB', 'name':'DUMMY UDisk flash drive'}])
+    def testAddingPeripheralInfo(self, m1):
+        expected_result = ('hid', 'connection', 'name')
+
+        self.test_report.add_peripheral_info()
+        section = self.test_report.get_section("peripherals")[0]
+        actual_result = tuple(section)
+
+        self.assertTupleEqual(actual_result, expected_result)
+
 if __name__ == '__main__':
     unittest.main()
