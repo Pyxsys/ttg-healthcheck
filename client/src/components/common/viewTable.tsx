@@ -107,9 +107,9 @@ const ViewTable = (props: ViewTableInputs<any>) => {
     <table className="cerebellum-table table-striped text-white overflow-auto w-100">
       <thead>
         <tr className="sticky-header">
-          {props.columns.map((column) => (
+          {props.columns.map((column, idx) => (
             <th
-              key={column.key}
+              key={`${column.key}-${idx}`}
               tabIndex={0}
               className={column.disableOrderBy ? '' : 'cursor-pointer'}
               onClick={() =>
