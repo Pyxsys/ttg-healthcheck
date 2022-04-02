@@ -112,6 +112,14 @@ describe('Test Memory log formatter', () => {
   })
 })
 
+describe('Test Peripheral log formatter', () => {
+  const doc = daemonFunctions.processPeripheralLogInfo(mockLogPayload1)
+
+  it('Should return correct peripheral info', () => {
+    expect(doc[0].hardware_id).toBe(mockLogPayload1.peripherals[0].hid)
+  })
+})
+
 describe('Test Disk log formatter', () => {
   const doc = daemonFunctions.processDiskLogInfo(mockLogPayload1)
 

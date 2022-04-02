@@ -9,6 +9,7 @@ import useOnclickOutside from 'react-cool-onclickoutside';
 import {IResponse} from '../../types/queries';
 import {IDevice, IDeviceLog, IDeviceTotal} from '../../types/device';
 import {useRealTimeService} from '../../context/realTimeContext';
+import {exportCSV} from '../../services/export.service';
 import Navbar from '../common/Navbar';
 import PieWheel from '../common/pieWheel';
 import {SignalStrength, signalText} from '../common/signalStrength';
@@ -69,29 +70,34 @@ const DevicesTable = () => {
 
   const queryTable = async () => {
     const deviceQuery = {params: {Total: true}};
-    const deviceResponse = await axios.get<IResponse<IDevice>>(
-        'api/device',
-        deviceQuery,
-    );
-    const devices = deviceResponse.data.Results;
-    const deviceIds = devices.map((device) => device.deviceId);
-
-    const latestDevicesResponse = await axios.get<IResponse<IDeviceLog>>(
-        'api/device-logs/latest',
-        {params: {Ids: deviceIds.join(',')}},
-    );
-    const latestDevices = latestDevicesResponse.data.Results;
-
-    const tableDevices = devices.map((staticDevice) => ({
-      static: staticDevice,
-      dynamic: latestDevices.find(
-          (device) => device.deviceId === staticDevice.deviceId,
-      ),
-    }));
-
-    setTotalPages(Math.ceil(deviceResponse.data.Total / pageSize));
-    setDeviceTableData(tableDevices);
-    realTimeDataService.setDeviceIds(deviceIds);
+    await axios
+        .get<IResponse<IDevice>>('api/device', deviceQuery)
+        .then((deviceResponse) => {
+          const devices = deviceResponse.data.Results;
+          const deviceIds = devices.map((device) => device.deviceId);
+          axios
+              .get<IResponse<IDeviceLog>>('api/device-logs/latest', {
+                params: {Ids: deviceIds.join(',')},
+              })
+              .then((latestDevicesResponse) => {
+                const latestDevices = latestDevicesResponse.data.Results;
+                const tableDevices = devices.map((staticDevice) => ({
+                  static: staticDevice,
+                  dynamic: latestDevices.find(
+                      (device) => device.deviceId === staticDevice.deviceId,
+                  ),
+                }));
+                setTotalPages(Math.ceil(deviceResponse.data.Total / pageSize));
+                setDeviceTableData(tableDevices);
+                realTimeDataService.setDeviceIds(deviceIds);
+              })
+              .catch((error) => {
+                console.log(error);
+              });
+        })
+        .catch((error) => {
+          console.log(error);
+        });
   };
 
   useEffect(() => {
@@ -173,7 +179,7 @@ const DevicesTable = () => {
               {signalText(Number(cellValue))}
             </div>
             <div className="ps-2 pie-wheel-size">
-              <SignalStrength level={Number(cellValue)} showText={false} />
+              <SignalStrength strength={Number(cellValue)} showText={false} />
             </div>
           </div>
         </div>
@@ -355,15 +361,27 @@ const DevicesTable = () => {
     );
   };
 
+  const getTableCSV = (): void => {
+    const tableValues = getFilteredDevices().map((device) => ({
+      UUID: device.static.deviceId,
+      Name: device.static.name,
+      CPU: device.dynamic?.cpu?.aggregatedPercentage,
+      Memory: device.dynamic?.memory?.aggregatedPercentage,
+      Disk: device.dynamic?.disk?.partitions[0]?.percent,
+      Network: signalText(device.dynamic?.wifi?.signalStrength || -1) || undefined,
+      Timestamp: device.dynamic?.timestamp,
+    }));
+    exportCSV(tableValues, 'devices');
+  };
+
   return (
     <div className="h-100 d-flex flex-column">
-      <div id="outer-container">
-        <Navbar />
-      </div>
+      <Navbar name="Devices"/>
       <div className="flex-grow-1 d-flex flex-column align-items-center overflow-auto devices-content">
-        {/* Filter Dropdown */}
-        <div className="pt-2 ps-5 w-100">
-          <div className="pb-2">
+        <div className="flex-grow-1 d-flex flex-column overflow-auto container">
+
+          {/* Row of Buttons (filter and export) */}
+          <div className="d-flex pt-5 pb-1 w-100">
             <button
               ref={filtersRef}
               className="btn btn-primary"
@@ -374,123 +392,130 @@ const DevicesTable = () => {
                 <i className="caret"></i>
               </span>
             </button>
+
+            <button
+              className="btn btn-primary ms-auto"
+              onClick={() => getTableCSV()}>
+                Export To CSV
+            </button>
           </div>
 
-          <div
-            ref={filtersRef}
-            className={`d-flex flex-column position-absolute filter-container overflow-auto ${
-              showFilters ? '' : 'invisible'
-            }`}
-          >
-            <div className="d-flex flex-column overflow-auto">
-              {filters.length > 0 ? (
-                <div className="d-flex align-items-center fw-bold text-muted p-1">
-                  <div className="w-5"></div>
-                  <div className="w-20 px-1">Column</div>
-                  <div className="w-40 px-1">Equality</div>
-                  <div className="w-35 px-1">Value</div>
-                </div>
-              ) : (
-                <></>
-              )}
-              {filters.map((filter, idx) => (
+          {/* Filter Dropdown */}
+          <div className="w-100">
+            <div
+              ref={filtersRef}
+              className={`d-flex flex-column position-absolute filter-container overflow-auto ${
+                showFilters ? '' : 'invisible'
+              }`}
+            >
+              <div className="d-flex flex-column overflow-auto">
+                {filters.length > 0 ? (
+                  <div className="d-flex align-items-center fw-bold text-muted p-1">
+                    <div className="w-5"></div>
+                    <div className="w-20 px-1">Column</div>
+                    <div className="w-40 px-1">Equality</div>
+                    <div className="w-35 px-1">Value</div>
+                  </div>
+                ) : (
+                  <></>
+                )}
+                {filters.map((filter, idx) => (
+                  <div
+                    className={`d-flex align-items-center p-1`}
+                    key={`filter-${idx}`}
+                  >
+                    <div className="w-5">
+                      <i
+                        className="cursor-pointer user-select-none text-muted"
+                        onClick={() => removeFilter(idx)}
+                      >
+                        <FaTrashAlt />
+                      </i>
+                    </div>
+
+                    <div className="w-20 px-1">
+                      <select
+                        className="form-select form-select-sm w-100"
+                        value={`${filter.columnKey};${filter.type}`}
+                        onChange={(e) =>
+                          setFilterColumn(filter, idx, e.target.value)
+                        }
+                      >
+                        <option value=""></option>
+                        <option value="static.deviceId;string">UUID</option>
+                        <option value="static.name;string">Name</option>
+                        <option value="dynamic.cpu.aggregatedPercentage;number">
+                          CPU
+                        </option>
+                        <option value="dynamic.memory.aggregatedPercentage;number">
+                          Memory
+                        </option>
+                        <option value="dynamic.disk.partitions.0.percent;number">
+                          Disk
+                        </option>
+                        <option value="dynamic.wifi.signalStrength;number">
+                          Network
+                        </option>
+                      </select>
+                    </div>
+
+                    {filter.columnKey ? (
+                      <>
+                        <div className="w-40 px-1">
+                          <select
+                            className="form-select form-select-sm w-100"
+                            value={filter.equality}
+                            onChange={(e) =>
+                              setFilterEquality(
+                                  filter,
+                                  idx,
+                                  Number(e.target.value),
+                              )
+                            }
+                          >
+                            {getFilterEqualityOptions(filter.type)}
+                          </select>
+                        </div>
+
+                        <div className="w-35 px-1">
+                          <input
+                            className="form-control form-control-sm w-100"
+                            type={filter.type}
+                            value={filter.value}
+                            onChange={(e) =>
+                              setFilterValue(filter, idx, e.target.value)
+                            }
+                          />
+                        </div>
+                      </>
+                    ) : (
+                      <></>
+                    )}
+                  </div>
+                ))}
+              </div>
+
+              <div className="d-flex justify-content-center p-2">
                 <div
-                  className={`d-flex align-items-center p-1`}
-                  key={`filter-${idx}`}
+                  className="d-flex align-items-center text-muted cursor-pointer user-select-none border-dashed px-2"
+                  onClick={() => addEmptyFilter()}
                 >
-                  <div className="w-5">
-                    <i
-                      className="cursor-pointer user-select-none text-muted"
-                      onClick={() => removeFilter(idx)}
-                    >
-                      <FaTrashAlt />
-                    </i>
-                  </div>
-
-                  <div className="w-20 px-1">
-                    <select
-                      className="form-select form-select-sm w-100"
-                      value={`${filter.columnKey};${filter.type}`}
-                      onChange={(e) =>
-                        setFilterColumn(filter, idx, e.target.value)
-                      }
-                    >
-                      <option value=""></option>
-                      <option value="static.deviceId;string">UUID</option>
-                      <option value="static.name;string">Name</option>
-                      <option value="dynamic.cpu.aggregatedPercentage;number">
-                        CPU
-                      </option>
-                      <option value="dynamic.memory.aggregatedPercentage;number">
-                        Memory
-                      </option>
-                      <option value="dynamic.disk.partitions.0.percent;number">
-                        Disk
-                      </option>
-                      <option value="dynamic.wifi.signalStrength;number">
-                        Network
-                      </option>
-                    </select>
-                  </div>
-
-                  {filter.columnKey ? (
-                    <>
-                      <div className="w-40 px-1">
-                        <select
-                          className="form-select form-select-sm w-100"
-                          value={filter.equality}
-                          onChange={(e) =>
-                            setFilterEquality(
-                                filter,
-                                idx,
-                                Number(e.target.value),
-                            )
-                          }
-                        >
-                          {getFilterEqualityOptions(filter.type)}
-                        </select>
-                      </div>
-
-                      <div className="w-35 px-1">
-                        <input
-                          className="form-control form-control-sm w-100"
-                          type={filter.type}
-                          value={filter.value}
-                          onChange={(e) =>
-                            setFilterValue(filter, idx, e.target.value)
-                          }
-                        />
-                      </div>
-                    </>
-                  ) : (
-                    <></>
-                  )}
+                  <FaPlus />
+                  <span className="ps-2">Add Filter</span>
                 </div>
-              ))}
-            </div>
-
-            <div className="d-flex justify-content-center p-2">
-              <div
-                className="d-flex align-items-center text-muted cursor-pointer user-select-none border-dashed px-2"
-                onClick={() => addEmptyFilter()}
-              >
-                <FaPlus />
-                <span className="ps-2">Add Filter</span>
-              </div>
-              <div
-                className="d-flex align-items-center text-muted cursor-pointer user-select-none border-dashed px-2 ms-3"
-                onClick={() => setFilters([])}
-              >
-                <FaTrashAlt />
-                <span className="ps-2">Clear All</span>
+                <div
+                  className="d-flex align-items-center text-muted cursor-pointer user-select-none border-dashed px-2 ms-3"
+                  onClick={() => setFilters([])}
+                >
+                  <FaTrashAlt />
+                  <span className="ps-2">Clear All</span>
+                </div>
               </div>
             </div>
           </div>
-        </div>
 
-        {/* Table */}
-        <div className="flex-grow-1 d-flex flex-column overflow-auto container">
-          <div className="flex-grow-1 overflow-auto table-container mt-5">
+          {/* Table */}
+          <div className="flex-grow-1 overflow-auto table-container mt-3">
             <ViewTable
               tableData={getFilteredDevices()}
               page={page}
@@ -499,6 +524,8 @@ const DevicesTable = () => {
               initialOrderBy={initialOrderBy}
             />
           </div>
+
+          {/* Pagination */}
           <div className="d-flex py-2 ms-auto">
             <Pagination
               page={page}
