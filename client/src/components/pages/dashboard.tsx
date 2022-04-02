@@ -292,7 +292,7 @@ const Dashboard = () => {
 
   return (
     <div id="dashboard-container">
-      <Navbar />
+      <Navbar name="Dashboard"/>
       <div id="page-wrap" className="h-100 overflow-auto pe-2 ps-2">
         <div className="d-flex pt-5 container">
           <button className="btn btn-primary ms-3" onClick={() => resetDash()}>
