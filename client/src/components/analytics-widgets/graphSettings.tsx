@@ -52,6 +52,7 @@ const graphSettings = (Props:any) => {
                 defaultValue={'DEFAULT'}
                 onChange={(e) => {
                   Props.setDays(e.target.value);
+                  console.log(e.target.value);
                 }}
               >
                 <option value={1}>Day</option>

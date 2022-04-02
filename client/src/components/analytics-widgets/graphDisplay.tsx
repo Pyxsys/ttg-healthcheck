@@ -51,7 +51,7 @@ const graphDisplay = (_props: any) => {
       e.forEach((e)=>{
         console.log(_props.metric);
         data.push({
-          group: e ? e.deviceId : 0,
+          group: e.deviceId,
           key: c2.toString(),
           value: getAttribute(e, _props.metric? _props.metric:'memory.aggregatedPercentage'),
 

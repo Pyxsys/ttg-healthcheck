@@ -17,7 +17,7 @@ import {IResponse} from '../../types/queries';
 
 const AnalyticsPage = () => {
   const [deviceTableData, setDeviceTableData] = useState([] as IDeviceTotal[]);
-  const [metric, setMetric] = useState('');
+  const [metric, setMetric] = useState('cpu.aggregatedPercentage');
   const [dIds, setDIds] = useState([] as string[]);
   const [sids, setSids] = useState([] as string[]);
   const [days, setDays] = useState(0);
@@ -71,7 +71,7 @@ const AnalyticsPage = () => {
   useEffect(() => {
     initialRealTimeData();
     queryTable();
-  }, [sids]);
+  }, [sids, days, metric]);
   console.log(deviceHistories);
   return (
     <div className="analytics-container">
