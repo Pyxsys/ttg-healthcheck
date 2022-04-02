@@ -5,6 +5,17 @@ import '@carbon/charts/styles/styles-g90.scss';
 import {IDeviceLog} from '../../types/device';
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
+const addIfBothExist = (a: number|undefined, b:number|undefined) => {
+  if (b) {
+    if (a) {
+      return a+b;
+    } else {
+      return b;
+    }
+  } else {
+    return 0;
+  }
+};
 const graphDisplay = (_props: any) => {
   const addDaysToToday = (i:number) => {
     const date1 = new Date();
@@ -81,15 +92,7 @@ const graphDisplay = (_props: any) => {
           return (new Date(a[i].timestamp) < new Date(timeFunction(-j)) && new Date(a[i].timestamp) > new Date(timeFunction(-j-1)));
         });
         const thisDayAvg = (onThisDay.map((a) => getAttribute(a, _props.metric)) as number[]).reduce((a:number|undefined, b:number|undefined) => {
-          if (b) {
-            if (a) {
-              return a+b;
-            } else {
-              return b;
-            }
-          } else {
-            return 0;
-          }
+          return addIfBothExist(a, b);
         }, 0)/ (onThisDay.length > 0? onThisDay.length : 1 );
         console.log(thisDayAvg);
         davgs.push({
