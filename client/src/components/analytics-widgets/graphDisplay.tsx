@@ -77,7 +77,7 @@ const graphDisplay = (_props: any) => {
       console.log(e);
       const id = e[0].deviceId;
       for (let j = 0; j < days; j++) {
-        const onThisDay = e.filter((d, i, a) => {
+        const onThisDay = e.filter((_d, i, a) => {
           return (new Date(a[i].timestamp) < new Date(timeFunction(-j)) && new Date(a[i].timestamp) > new Date(timeFunction(-j-1)));
         });
         const thisDayAvg = (onThisDay.map((a) => getAttribute(a, _props.metric) as number)as number[]).reduce((a:number|undefined, b:number|undefined) => {
