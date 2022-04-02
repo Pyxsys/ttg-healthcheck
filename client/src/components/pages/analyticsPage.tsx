@@ -67,6 +67,9 @@ const AnalyticsPage = () => {
 
   useEffect(() => {
     initialRealTimeData();
+  }, []);
+
+  useEffect(() => {
     queryTable();
   }, [sids, days, metric]);
   return (
