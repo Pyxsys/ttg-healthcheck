@@ -106,7 +106,7 @@ const graphDisplay = (_props: any) => {
       }
     });
     data =[];
-    const davgsr = davgs.reverse();
+    const davgsr = [...davgs].reverse();
     davgsr.forEach((e) => {
       console.log(_props.metric);
       data.push({
