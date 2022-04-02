@@ -13,7 +13,6 @@ type dd = {
   id: string
 }
 const graphDevices = (props: AnalyticsDevicesTableInputs) => {
-
   const dds:dd[] = [];
   const sss:string[] = props.sids;
   sss.forEach((e) => dds.push({id: e} as dd));

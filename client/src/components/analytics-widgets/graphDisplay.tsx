@@ -92,7 +92,7 @@ const graphDisplay = (_props: any) => {
       }
     });
     data =[];
-    davgs.forEach((e) => {
+    davgs.reverse().forEach((e) => {
       console.log(_props.metric);
       data.push({
         group: e.id,
