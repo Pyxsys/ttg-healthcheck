@@ -80,7 +80,7 @@ const graphDisplay = (_props: any) => {
         const onThisDay = e.filter((_d, i, a) => {
           return (new Date(a[i].timestamp) < new Date(timeFunction(-j)) && new Date(a[i].timestamp) > new Date(timeFunction(-j-1)));
         });
-        const thisDayAvg = (onThisDay.map((a) => getAttribute(a, _props.metric) as number)as number[]).reduce((a:number|undefined, b:number|undefined) => {
+        const thisDayAvg = (onThisDay.map((a) => getAttribute(a, _props.metric)) as number[]).reduce((a:number|undefined, b:number|undefined) => {
           if (b) {
             if (a) {
               return a+b;
