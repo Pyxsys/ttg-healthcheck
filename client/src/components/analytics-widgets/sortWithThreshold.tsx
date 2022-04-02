@@ -34,7 +34,8 @@ const getAttribute = (
 
 const sortWithThreshold = (_props: any) => {
   const devices: IDeviceTotal[] = _props.deviceDynamic;
-  const devicesSorted: IDeviceTotal[] = devices.sort(_props.f).reverse().filter((a) => typeof getAttribute(a, _props.columnKey) == 'number');
+  const devicesSorted: IDeviceTotal[] = devices.sort(_props.f);
+  const devicesSortedFiltered: IDeviceTotal[] = devicesSorted.reverse().filter((a) => typeof getAttribute(a, _props.columnKey) == 'number');
   const [threshold, setThreshold] = useState(_props.threshold);
 
   const updateCounter = () => {
@@ -99,7 +100,7 @@ const sortWithThreshold = (_props: any) => {
               <Col className='p-0'>
                 <div>
                   <ViewTable
-                    tableData={devicesSorted}
+                    tableData={devicesSortedFiltered}
                     columns={column}
                     initialOrderBy={`-${_props.columnKey}`}
                   />
