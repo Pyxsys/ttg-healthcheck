@@ -138,7 +138,7 @@ const AnalyticsPage = () => {
                           <Row className="w-100">
                             <Col className="analytics-accordion-padding">
                               <div className="graph-widget-padding w-100">
-                                <GraphDisplay metric = {metric} deviceHistories = {deviceHistories} sids ={sids}></GraphDisplay>
+                                <GraphDisplay metric = {metric} deviceHistories = {deviceHistories} sids ={sids} days ={days}></GraphDisplay>
                               </div>
                             </Col>
                           </Row>

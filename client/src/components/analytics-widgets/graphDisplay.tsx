@@ -6,6 +6,12 @@ import {IDeviceLog} from '../../types/device';
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const graphDisplay = (_props: any) => {
+  const addDaysToToday = (i:number) => {
+    const date1 = new Date();
+    const date2 = new Date();
+    date2.setDate(date1.getDate() + i);
+    return date2;
+  };
   enum ToolbarControlTypes {
     MAKE_FULLSCREEN = 'Make fullscreen',
   }
@@ -44,20 +50,56 @@ const graphDisplay = (_props: any) => {
     },
   ];
   console.log(_props.deviceHistories);
-  if (_props.deviceHistories) {
-    data =[];
-    let c2 = 0;
-    (_props.deviceHistories as IDeviceLog[][]).forEach((e) => {
-      e.forEach((e)=>{
-        console.log(_props.metric);
-        data.push({
-          group: e.deviceId,
-          key: c2.toString(),
-          value: getAttribute(e, _props.metric? _props.metric:'memory.aggregatedPercentage'),
 
-        } as dataPoint);
-        c2++;
-      });
+  type davg = {
+    id: string,
+    index: number,
+    value: number,
+  }
+
+  if (_props.deviceHistories[0] && _props.deviceHistories[0].length > 0 ) {
+    console.log(_props.deviceHistories.length);
+    const davgs: davg[] = [];
+    (_props.deviceHistories as IDeviceLog[][]).forEach((e) => {
+      console.log(e);
+      const id = e[0].deviceId;
+      for (let j = 0; j < _props.days; j++) {
+        console.log(_props.days+' dayss');
+        const onThisDay = e.filter((d, i, a) => {
+          console.log(a[i].timestamp+' now');
+          console.log(addDaysToToday(-j)+' less than');
+          console.log((new Date(a[i].timestamp) < new Date(addDaysToToday(-j))));
+          return (new Date(a[i].timestamp) < new Date(addDaysToToday(-j)) && new Date(a[i].timestamp) > new Date(addDaysToToday(-j-1)));
+        });
+        console.log(onThisDay);
+        const thisDayAvg = (onThisDay.map((a) => getAttribute(a, _props.metric) as number)as number[]).reduce((a:number|undefined, b:number|undefined) => {
+          if (b) {
+            if (a) {
+              return a+b;
+            } else {
+              return b;
+            }
+          } else {
+            return 0;
+          }
+        }, 0);
+        console.log(thisDayAvg);
+        davgs.push({
+          id: id,
+          index: j,
+          value: thisDayAvg,
+        });
+      }
+    });
+    data =[];
+    davgs.forEach((e) => {
+      console.log(_props.metric);
+      data.push({
+        group: e.id,
+        key: e.index.toString(),
+        value: e.value,
+
+      } as dataPoint);
     });
   }
 

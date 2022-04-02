@@ -27,8 +27,8 @@ router.get('/devicesByMem', auth, async(req, res) => {
 router.get('/graphWeek', auth, async(req,res) => {
   const query = Object(req.query)
   const addDaysToToday = (i) => {
-    date1 = new Date();
-    date2 = new Date();
+    let date1 = new Date();
+    let date2 = new Date();
     date2.setDate(date1.getDate() + i)
     return date2;
   }
