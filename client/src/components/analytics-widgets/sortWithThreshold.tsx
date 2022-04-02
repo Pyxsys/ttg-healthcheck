@@ -34,7 +34,7 @@ const getAttribute = (
 
 const sortWithThreshold = (_props: any) => {
   const devices: IDeviceTotal[] = _props.deviceDynamic;
-  const devicesSorted: IDeviceTotal[] = devices.sort(_props.f).reverse();
+  const devicesSorted: IDeviceTotal[] = devices.sort(_props.f).reverse().filter((a) => typeof getAttribute(a, _props.columnKey) == 'number');
   const [threshold, setThreshold] = useState(_props.threshold);
 
   const updateCounter = () => {
