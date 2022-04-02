@@ -26,8 +26,9 @@ const graphSettings = (Props:any) => {
                 className="form-select form-select-sm w-100 mx-2 my-2"
                 defaultValue={'DEFAULT'}
                 onChange={(e) => {
-                  Props.setSids([...Props.sids, e.target.value]);
-                  console.log('diadjnkdjfndsjnfksjdnfkjs' + [...Props.sids, e.target.value]);
+                  if (!Props.sids||!Props.sids.includes(e.target.value)) {
+                    Props.setSids([...Props.sids, e.target.value]);
+                  }
                 }}
               >
                 {generateOptions(Props.listOfOptions)}
