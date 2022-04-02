@@ -50,12 +50,13 @@ const graphSettings = (Props:any) => {
               <select
                 className="form-select form-select-sm w-100 mx-2 my-2"
                 defaultValue={'DEFAULT'}
-                onChange={() => {}}
+                onChange={(e) => {
+                  Props.setDays(e.target.value);
+                }}
               >
-                <option value="">Day</option>
-                <option value="">Week</option>
-                <option value="">Month</option>
-                <option value="">Year</option>
+                <option value={1}>Day</option>
+                <option value={7}>Week</option>
+                <option value={30}>Month</option>
               </select>
             </div>
           </Accordion.Body>
