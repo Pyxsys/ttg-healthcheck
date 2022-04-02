@@ -71,7 +71,7 @@ const ResetPassword = (props: any): JSX.Element => {
     <div className="h-100 d-flex flex-column devices-content">
       <div className="flex-grow-1 d-flex flex-column align-items-center px-5">
         {/* Not loaded yet */}
-        {validEntry === null ? <></> : <></>}
+        {validEntry === null ? <>Loading...</> : <></>}
 
         {/* Invalid entry to the page */}
         {validEntry === false ?
