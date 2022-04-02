@@ -12,6 +12,12 @@ const graphDisplay = (_props: any) => {
     date2.setDate(date1.getDate() + i);
     return date2;
   };
+  const addHoursToToday = (i:number) => {
+    const date1 = new Date();
+    const date2 = new Date();
+    date2.setHours(date1.getHours() + i);
+    return date2;
+  };
   enum ToolbarControlTypes {
     MAKE_FULLSCREEN = 'Make fullscreen',
   }
