@@ -30,7 +30,7 @@ const graphSettings = (Props:any) => {
                 }}
               >
                 {generateOptions(Props.listOfOptions)}
-                <option value="">Place Holder</option>
+                <option value="">None</option>
               </select>
               <span className="settings-spans">Selected Metric</span>
               <select
@@ -38,7 +38,7 @@ const graphSettings = (Props:any) => {
                 defaultValue={'DEFAULT'}
                 onChange={(e) => Props.setMetric(e.target.value)}
               >
-                <option value="">Nothing</option>
+                <option value="">None</option>
                 <option value="cpu.aggregatedPercentage">CPU Usage</option>
                 <option value="memory.aggregatedPercentage">Memory Usage</option>
                 <option value="">Disk Usage</option>
@@ -52,6 +52,7 @@ const graphSettings = (Props:any) => {
                   Props.setDays(e.target.value);
                 }}
               >
+                <option value =''>None</option>
                 <option value={1}>Day</option>
                 <option value={7}>Week</option>
                 <option value={30}>Month</option>
