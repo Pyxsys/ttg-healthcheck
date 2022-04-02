@@ -1,6 +1,5 @@
 import React from 'react';
 import {Col, Accordion} from 'react-bootstrap';
-// import {IDeviceTotal} from '../../types/device';
 import {IColumnDetail} from '../../types/tables';
 import ViewTable from '../common/viewTable';
 import {MdClose} from 'react-icons/md';
