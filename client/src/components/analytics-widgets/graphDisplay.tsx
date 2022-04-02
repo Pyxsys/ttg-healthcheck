@@ -16,6 +16,9 @@ const addIfBothExist = (a: number|undefined, b:number|undefined) => {
     return 0;
   }
 };
+const oneIfLengthZero = (a:IDeviceLog[]) => {
+  return a.length > 0 ? a.length:1;
+};
 const graphDisplay = (_props: any) => {
   const addDaysToToday = (i:number) => {
     const date1 = new Date();
@@ -93,7 +96,7 @@ const graphDisplay = (_props: any) => {
         });
         const thisDayAvg = (onThisDay.map((a) => getAttribute(a, _props.metric)) as number[]).reduce((a:number|undefined, b:number|undefined) => {
           return addIfBothExist(a, b);
-        }, 0)/ (onThisDay.length > 0? onThisDay.length : 1 );
+        }, 0)/ oneIfLengthZero(onThisDay);
         console.log(thisDayAvg);
         davgs.push({
           id: id,
