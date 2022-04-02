@@ -20,10 +20,9 @@ const AnalyticsPage = () => {
   const [metric, setMetric] = useState('');
   const [dIds, setDIds] = useState([] as string[]);
   const [sids, setSids] = useState([] as string[]);
-  const [deviceHistories, setDeviceHistories] = useState([[]] as number[][]);
   const [days, setDays] = useState(0);
   const realTimeDataService = useRealTimeService();
-
+  const [deviceHistories, setDeviceHistories] = useState([[]] as IDeviceLog[][]);
   const initialRealTimeData = () => {
     realTimeDataService.getRealTimeData((newDevice) => {
       setDeviceTableData((prevState) =>
@@ -53,9 +52,10 @@ const AnalyticsPage = () => {
         {params: {Ids: deviceIds.join(',')}},
     );
     const latestDevices = latestDevicesResponse.data.Results;
-    const dh = await axios.get('api/analytics/afterDate',
-        {params: {Ids: deviceIds, days: days}}) as Array<Array<number>>;
-    setDeviceHistories(dh);
+    const dh = await axios.get<IResponse<Array<IDeviceLog>>>('api/analytics/afterDate',
+        {params: {Ids: deviceIds, days: 7+days}});
+    console.log(dh.data.Results);
+    setDeviceHistories(dh.data.Results);
     const tableDevices = devices.map((staticDevice) => ({
       static: staticDevice,
       dynamic: latestDevices.find(
@@ -71,7 +71,7 @@ const AnalyticsPage = () => {
     initialRealTimeData();
     queryTable();
   }, []);
-
+  console.log(deviceHistories);
   return (
     <div className="analytics-container">
       <Navbar />

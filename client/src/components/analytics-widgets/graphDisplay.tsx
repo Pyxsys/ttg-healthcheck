@@ -32,12 +32,12 @@ const graphDisplay = (_props: any) => {
       value: 34200,
     },
   ];
-
-  if (_props.data) {
+  console.log(_props.deviceHistories);
+  if (_props.deviceHistories) {
     data =[];
     let c1 = 0;
     let c2 = 0;
-    (_props.data as number[][]).forEach((e) => {
+    (_props.deviceHistories as number[][]).forEach((e) => {
       e.forEach((e)=>{
         data.push({
           group: c1.toString(),
