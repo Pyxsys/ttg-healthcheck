@@ -29,7 +29,7 @@ const graphDevices = (props: AnalyticsDevicesTableInputs) => {
         <div className="devices-settings-content-wrapper">
           <MdClose color="red" onClick={() => {
             props.setSids(props.sids.filter((ee) => e != ee ));
-          }}/>
+          }} style = {{cursor: 'pointer'}}/>
         </div>
       ),
     },
