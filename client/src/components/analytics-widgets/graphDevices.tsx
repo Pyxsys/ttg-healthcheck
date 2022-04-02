@@ -24,7 +24,7 @@ const graphDevices = (props: AnalyticsDevicesTableInputs) => {
     },
     {
       key: 'id',
-      name: 'Settings',
+      name: 'Delete Device',
       override: (e) => (
         <div className="devices-settings-content-wrapper">
           <MdClose color="red" onClick={() => {
