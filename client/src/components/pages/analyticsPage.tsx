@@ -53,7 +53,8 @@ const AnalyticsPage = () => {
     );
     const latestDevices = latestDevicesResponse.data.Results;
     const dh = await axios.get<IResponse<Array<IDeviceLog>>>('api/analytics/afterDate',
-        {params: {Ids: deviceIds, days: 7+days}});
+        {params: {Ids: sids, days: 7+days}});
+    console.log(sids+'nnnnnnn');
     console.log(dh.data.Results);
     setDeviceHistories(dh.data.Results);
     const tableDevices = devices.map((staticDevice) => ({
@@ -70,7 +71,7 @@ const AnalyticsPage = () => {
   useEffect(() => {
     initialRealTimeData();
     queryTable();
-  }, []);
+  }, [sids]);
   console.log(deviceHistories);
   return (
     <div className="analytics-container">

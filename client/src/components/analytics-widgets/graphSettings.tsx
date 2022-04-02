@@ -37,10 +37,11 @@ const graphSettings = (Props:any) => {
               <select
                 className="form-select form-select-sm w-100 mx-2 my-2"
                 defaultValue={'DEFAULT'}
-                onChange={() => {}}
+                onChange={(e) => Props.setMetric(e.target.value)}
               >
-                <option value="">CPU Usage</option>
-                <option value="">Memory Usage</option>
+                <option value="">Nothing</option>
+                <option value="cpu.aggregatedPercentage">CPU Usage</option>
+                <option value="memory.aggregatedPercentage">Memory Usage</option>
                 <option value="">Disk Usage</option>
                 <option value="">Latency</option>
               </select>

@@ -2,12 +2,23 @@ import React from 'react';
 import {Col, Accordion} from 'react-bootstrap';
 import {LineChart} from '@carbon/charts-react';
 import '@carbon/charts/styles/styles-g90.scss';
+import {IDeviceLog} from '../../types/device';
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const graphDisplay = (_props: any) => {
   enum ToolbarControlTypes {
     MAKE_FULLSCREEN = 'Make fullscreen',
   }
+  const getAttribute = (
+      object: any | undefined,
+      attribute: string,
+  ): number | string | undefined => {
+    const attributes = attribute.split('.');
+    return attributes.reduce(
+        (prev, attr) => (prev ? prev[attr] : undefined),
+        object,
+    );
+  };
   type dataPoint = {
     group: string,
     key: string,
@@ -35,19 +46,18 @@ const graphDisplay = (_props: any) => {
   console.log(_props.deviceHistories);
   if (_props.deviceHistories) {
     data =[];
-    let c1 = 0;
     let c2 = 0;
-    (_props.deviceHistories as number[][]).forEach((e) => {
+    (_props.deviceHistories as IDeviceLog[][]).forEach((e) => {
       e.forEach((e)=>{
+        console.log(_props.metric);
         data.push({
-          group: c1.toString(),
+          group: e.deviceId,
           key: c2.toString(),
-          value: e,
+          value: getAttribute(e, _props.metric? _props.metric:'memory.aggregatedPercentage'),
 
         } as dataPoint);
         c2++;
       });
-      c1++;
     });
   }
 

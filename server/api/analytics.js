@@ -103,9 +103,6 @@ router.get('/afterDate', auth, async (req, res) => {
   // If query does not have Ids attribute
   if (!query.Ids) {
     if (query.Ids === undefined) {
-      console.log('jjjj')
-      return res.status(501).send('Server Error: must include Ids parameter')
-    } else {
       return res.status(200).json({ Results: [] })
     }
   }
