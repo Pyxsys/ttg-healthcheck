@@ -64,20 +64,21 @@ const graphDisplay = (_props: any) => {
   }
 
   if (_props.deviceHistories[0] && _props.deviceHistories[0].length > 0 ) {
+    let timeFunction = addDaysToToday;
+    let days = _props.days;
+    if (_props.days == 1) {
+      timeFunction = addHoursToToday;
+      days = 24;
+    }
     console.log(_props.deviceHistories.length);
     const davgs: davg[] = [];
     (_props.deviceHistories as IDeviceLog[][]).forEach((e) => {
       console.log(e);
       const id = e[0].deviceId;
-      for (let j = 0; j < _props.days; j++) {
-        console.log(_props.days+' dayss');
+      for (let j = 0; j < days; j++) {
         const onThisDay = e.filter((d, i, a) => {
-          console.log(a[i].timestamp+' now');
-          console.log(addDaysToToday(-j)+' less than');
-          console.log((new Date(a[i].timestamp) < new Date(addDaysToToday(-j))));
-          return (new Date(a[i].timestamp) < new Date(addDaysToToday(-j)) && new Date(a[i].timestamp) > new Date(addDaysToToday(-j-1)));
+          return (new Date(a[i].timestamp) < new Date(timeFunction(-j)) && new Date(a[i].timestamp) > new Date(timeFunction(-j-1)));
         });
-        console.log(onThisDay);
         const thisDayAvg = (onThisDay.map((a) => getAttribute(a, _props.metric) as number)as number[]).reduce((a:number|undefined, b:number|undefined) => {
           if (b) {
             if (a) {
