@@ -39,8 +39,7 @@ const sortWithThreshold = (_props: any) => {
 
   const updateCounter = () => {
     let updatedCounter = 0;
-    let t = 0;
-    threshold? t = threshold as number : {};
+    const t = threshold? threshold as number: {};
     devices.forEach((e) => {
       const s = _props.columnKey;
       if (getAttribute(e, s) as number > t) {
