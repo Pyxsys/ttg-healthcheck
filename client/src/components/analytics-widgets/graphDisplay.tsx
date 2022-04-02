@@ -55,6 +55,7 @@ const graphDisplay = (_props: any) => {
       value: 34200,
     },
   ];
+  data = [];
   console.log(_props.deviceHistories);
 
   type davg = {
