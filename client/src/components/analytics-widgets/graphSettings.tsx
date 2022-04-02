@@ -25,7 +25,9 @@ const graphSettings = (Props:any) => {
                 defaultValue={'DEFAULT'}
                 onChange={(e) => {
                   if (!Props.sids||!Props.sids.includes(e.target.value)) {
-                    Props.setSids([...Props.sids, e.target.value]);
+                    if (e.target.value != '') {
+                      Props.setSids([...Props.sids, e.target.value]);
+                    }
                   }
                 }}
               >
