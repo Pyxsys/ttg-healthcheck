@@ -25,9 +25,10 @@ export const useRealTimeService = () =>
 
 const RealTimeService = ({children}: any) => {
   const SERVER_PORT = 5000;
+  const HOST = location.origin.replace(/^http/, 'ws').replace('3000', '5000');
   const [wsClient, setWsClient] = useState(
     new WebSocket(
-        `ws://localhost:${SERVER_PORT}/?reason=realTime`,
+        `${HOST}/?reason=realTime`,
     ) as WebSocket | null,
   );
 
