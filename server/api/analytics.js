@@ -49,7 +49,7 @@ router.get('/afterDate', auth, async (req, res) => {
     let date1 = new Date();
     let date2 = new Date();
     date2.setDate(date1.getDate() + i)
-    return date2;
+    return date2
   }
   // If query does not have Ids attribute
   if (!query.Ids) {
@@ -62,7 +62,7 @@ router.get('/afterDate', auth, async (req, res) => {
   const results = await Promise.all(
     idsArray.map(async (id) => {
       const devices = await DeviceLogs.find(
-        { deviceId: id, timestamp:{$gte:addDaysToToday(-query.days)} },
+        { deviceId: id, timestamp: { $gte: addDaysToToday(-query.days) } },
         {},
         { sort: { timestamp: [-1] } }
       )
@@ -70,7 +70,7 @@ router.get('/afterDate', auth, async (req, res) => {
     })
   )
   const nonEmptyResults = results.filter((deviceLog) => deviceLog)
-  
+
   return res.status(200).json({ Results: nonEmptyResults })
 })
 
