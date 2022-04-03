@@ -15,57 +15,6 @@ router.get('/', auth, async (req, res) => {
   return res.status(200).json(deviceLogsResponse)
 })
 
-router.get('/devicesByMem', auth, async (req, res) => {
-  const results = await DeviceLogs.find(
-    {},
-    { memory: { aggregatedPercentage: 1 } },
-    { limit: 20, sort: { memory: { aggregatedPercentage: -1 } } }
-  )
-})
-router.get('/graphWeek', auth, async (req, res) => {
-  const query = Object(req.query)
-  const addDaysToToday = (i) => {
-    let date1 = new Date()
-    let date2 = new Date()
-    date2.setDate(date1.getDate() + i)
-    return date2
-  }
-  // If query does not have Ids attribute
-  if (!query.Ids) {
-    if (query.Ids === undefined) {
-      return res.status(501).send('Server Error: must include Ids parameter')
-    } else {
-      return res.status(200).json({ Results: [] })
-    }
-  }
-
-  const idsArray = String(query.Ids).split(',')
-  const averages = [[]]
-  counter = 0
-  const results = await Promise.all(
-    idsArray.forEach(async (id) => {
-      counter++
-      for (let i = 0; i < 7; i++) {
-        const deviceDayAverage = await DeviceLogs.aggregate([
-          {
-            $match: {
-              deviceId: id,
-              timestamp: {
-                $lt: addDaysToToday(1 - i),
-                $gte: addDaysToToday(-1 - i),
-              },
-            },
-          },
-          { $group: { _id: '$deviceId', average: { $avg: query.metric } } },
-        ])
-        averages[counter][i] = deviceDayAverage
-      }
-    })
-  )
-  const nonEmptyResults = averages.filter((e) => e)
-
-  return res.status(200).json({ Results: nonEmptyResults })
-})
 // get latest device logs from a list of device Ids
 router.get('/latest', auth, async (req, res) => {
   const query = Object(req.query)
@@ -97,8 +46,8 @@ router.get('/latest', auth, async (req, res) => {
 router.get('/afterDate', auth, async (req, res) => {
   const query = Object(req.query)
   const addDaysToToday = (i) => {
-    date1 = new Date()
-    date2 = new Date()
+    let date1 = new Date();
+    let date2 = new Date();
     date2.setDate(date1.getDate() + i)
     return date2
   }

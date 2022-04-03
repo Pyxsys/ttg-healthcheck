@@ -1,6 +1,5 @@
 import React from 'react';
 import {Col, Accordion} from 'react-bootstrap';
-// import {IDeviceTotal} from '../../types/device';
 import {IColumnDetail} from '../../types/tables';
 import ViewTable from '../common/viewTable';
 import {MdClose} from 'react-icons/md';
@@ -25,12 +24,15 @@ const graphDevices = (props: AnalyticsDevicesTableInputs) => {
     },
     {
       key: 'id',
-      name: 'Settings',
+      name: 'Remove',
+      disableOrderBy: true,
       override: (e) => (
-        <div className="devices-settings-content-wrapper">
-          <MdClose color="red" onClick={() => {
+        <div
+          className="devices-settings-content-wrapper cursor-pointer"
+          onClick={() => {
             props.setSids(props.sids.filter((ee) => e != ee ));
-          }}/>
+          }}>
+          <MdClose color="red" />
         </div>
       ),
     },

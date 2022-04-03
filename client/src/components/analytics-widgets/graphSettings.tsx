@@ -25,24 +25,27 @@ const graphSettings = (Props:any) => {
                 defaultValue={'DEFAULT'}
                 onChange={(e) => {
                   if (!Props.sids||!Props.sids.includes(e.target.value)) {
-                    Props.setSids([...Props.sids, e.target.value]);
+                    if (e.target.value != '') {
+                      Props.setSids([...Props.sids, e.target.value]);
+                    }
                   }
                 }}
               >
                 {generateOptions(Props.listOfOptions)}
-                <option value="">Place Holder</option>
+                <option value="">None</option>
               </select>
               <span className="settings-spans">Selected Metric</span>
               <select
                 className="form-select form-select-sm w-100 mx-2 my-2"
                 defaultValue={'DEFAULT'}
-                onChange={(e) => Props.setMetric(e.target.value)}
+                onChange={(e) => {
+                  Props.setMetric(e.target.value);
+                  Props.setTitle(e.target.options[e.target.selectedIndex].text);
+                }}
               >
-                <option value="">Nothing</option>
+                <option value="">None</option>
                 <option value="cpu.aggregatedPercentage">CPU Usage</option>
                 <option value="memory.aggregatedPercentage">Memory Usage</option>
-                <option value="">Disk Usage</option>
-                <option value="">Latency</option>
               </select>
               <span className="settings-spans">Selected Time Range</span>
               <select
@@ -52,6 +55,8 @@ const graphSettings = (Props:any) => {
                   Props.setDays(e.target.value);
                 }}
               >
+                <option value =''>None</option>
+                <option value={1}>Day</option>
                 <option value={7}>Week</option>
                 <option value={30}>Month</option>
               </select>

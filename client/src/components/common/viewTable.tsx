@@ -20,7 +20,7 @@ const useDebounce = (initialValue: string, delay: number) => {
 
 const ViewTable = (props: ViewTableInputs<any>) => {
   const [orderBy, setOrderBy] = useState('');
-  const [orderByAsc, setOrderByAsc] = useState(true);
+  const [orderByAsc, setOrderByAsc] = useState(false);
   const [actualFilter, delayedFilter, setFilter] = useDebounce('', 500);
   const [filterKey, setFilterKey] = useState('');
 
@@ -72,7 +72,7 @@ const ViewTable = (props: ViewTableInputs<any>) => {
       setOrderByAsc(!orderByAsc);
     } else {
       setOrderBy(order);
-      setOrderByAsc(true);
+      setOrderByAsc(false);
     }
   };
 
@@ -107,9 +107,9 @@ const ViewTable = (props: ViewTableInputs<any>) => {
     <table className="cerebellum-table table-striped text-white overflow-auto w-100">
       <thead>
         <tr className="sticky-header">
-          {props.columns.map((column) => (
+          {props.columns.map((column, idx) => (
             <th
-              key={column.key}
+              key={`${column.key}-${idx}`}
               tabIndex={0}
               className={column.disableOrderBy ? '' : 'cursor-pointer'}
               onClick={() =>

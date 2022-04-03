@@ -17,7 +17,8 @@ import {IResponse} from '../../types/queries';
 
 const AnalyticsPage = () => {
   const [deviceTableData, setDeviceTableData] = useState([] as IDeviceTotal[]);
-  const [metric, setMetric] = useState('cpu.aggregatedPercentage');
+  const [metric, setMetric] = useState('');
+  const [graphTitle, setGraphTitle] = useState('None');
   const [dIds, setDIds] = useState([] as string[]);
   const [sids, setSids] = useState([] as string[]);
   const [days, setDays] = useState(0);
@@ -67,11 +68,14 @@ const AnalyticsPage = () => {
 
   useEffect(() => {
     initialRealTimeData();
+  }, []);
+
+  useEffect(() => {
     queryTable();
   }, [sids, days, metric]);
   return (
     <div className="analytics-container">
-      <Navbar />
+      <Navbar name = "Analytics" />
       <div className="analytics-details-wrapper">
         <div className="h-100 container pe-2 ps-2">
           <Row>
@@ -119,7 +123,7 @@ const AnalyticsPage = () => {
                           <Row className="w-100">
                             <Col className="analytics-accordion-padding">
                               <div className="graph-widget-padding w-100">
-                                <GraphSettings listOfOptions={dIds} setMetric = {setMetric} setDays = {setDays} setSids = {setSids} sids ={sids}></GraphSettings>
+                                <GraphSettings listOfOptions={dIds} setTitle={setGraphTitle} setMetric={setMetric} setDays={setDays} setSids={setSids} sids={sids}></GraphSettings>
                               </div>
                             </Col>
                             <Col className="analytics-accordion-padding">
@@ -134,7 +138,7 @@ const AnalyticsPage = () => {
                           <Row className="w-100">
                             <Col className="analytics-accordion-padding">
                               <div className="graph-widget-padding w-100">
-                                <GraphDisplay metric = {metric} deviceHistories = {deviceHistories} sids ={sids} days ={days}></GraphDisplay>
+                                <GraphDisplay title={graphTitle} metric={metric} deviceHistories={deviceHistories} sids={sids} days={days}></GraphDisplay>
                               </div>
                             </Col>
                           </Row>

@@ -1,15 +1,39 @@
+// 3rd Party
 import React from 'react';
 import {Col, Accordion} from 'react-bootstrap';
 import {LineChart} from '@carbon/charts-react';
 import '@carbon/charts/styles/styles-g90.scss';
+
+// Common
+import {exportCSV} from '../../services/export.service';
 import {IDeviceLog} from '../../types/device';
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
+const addIfBothExist = (a: number|undefined, b:number|undefined) => {
+  if (b) {
+    if (a) {
+      return a+b;
+    } else {
+      return b;
+    }
+  } else {
+    return 0;
+  }
+};
+const oneIfLengthZero = (a:IDeviceLog[]) => {
+  return a.length > 0 ? a.length:1;
+};
 const graphDisplay = (_props: any) => {
   const addDaysToToday = (i:number) => {
     const date1 = new Date();
     const date2 = new Date();
     date2.setDate(date1.getDate() + i);
+    return date2;
+  };
+  const addHoursToToday = (i:number) => {
+    const date1 = new Date();
+    const date2 = new Date();
+    date2.setHours(date1.getHours() + i);
     return date2;
   };
   enum ToolbarControlTypes {
@@ -49,7 +73,7 @@ const graphDisplay = (_props: any) => {
       value: 34200,
     },
   ];
-  console.log(_props.deviceHistories);
+  data = [];
 
   type davg = {
     id: string,
@@ -58,32 +82,23 @@ const graphDisplay = (_props: any) => {
   }
 
   if (_props.deviceHistories[0] && _props.deviceHistories[0].length > 0 ) {
-    console.log(_props.deviceHistories.length);
+    let timeFunction = addDaysToToday;
+    let days = _props.days;
+    if (_props.days == 1) {
+      timeFunction = addHoursToToday;
+      days = 24;
+    }
+
     const davgs: davg[] = [];
     (_props.deviceHistories as IDeviceLog[][]).forEach((e) => {
-      console.log(e);
       const id = e[0].deviceId;
-      for (let j = 0; j < _props.days; j++) {
-        console.log(_props.days+' dayss');
-        const onThisDay = e.filter((d, i, a) => {
-          console.log(a[i].timestamp+' now');
-          console.log(addDaysToToday(-j)+' less than');
-          console.log((new Date(a[i].timestamp) < new Date(addDaysToToday(-j))));
-          return (new Date(a[i].timestamp) < new Date(addDaysToToday(-j)) && new Date(a[i].timestamp) > new Date(addDaysToToday(-j-1)));
+      for (let j = 0; j < days; j++) {
+        const onThisDay = e.filter((_d, i, a) => {
+          return (new Date(a[i].timestamp) < new Date(timeFunction(-j)) && new Date(a[i].timestamp) > new Date(timeFunction(-j-1)));
         });
-        console.log(onThisDay);
-        const thisDayAvg = (onThisDay.map((a) => getAttribute(a, _props.metric) as number)as number[]).reduce((a:number|undefined, b:number|undefined) => {
-          if (b) {
-            if (a) {
-              return a+b;
-            } else {
-              return b;
-            }
-          } else {
-            return 0;
-          }
-        }, 0);
-        console.log(thisDayAvg);
+        const thisDayAvg = (onThisDay.map((a) => getAttribute(a, _props.metric)) as number[]).reduce((a:number|undefined, b:number|undefined) => {
+          return addIfBothExist(a, b);
+        }, 0)/ oneIfLengthZero(onThisDay);
         davgs.push({
           id: id,
           index: j,
@@ -92,8 +107,8 @@ const graphDisplay = (_props: any) => {
       }
     });
     data =[];
-    davgs.reverse().forEach((e) => {
-      console.log(_props.metric);
+    const davgsr = [...davgs].reverse();
+    davgsr.forEach((e) => {
       data.push({
         group: e.id,
         key: e.index.toString(),
@@ -107,7 +122,7 @@ const graphDisplay = (_props: any) => {
     data: data};
 
   const options = {
-    title: 'CPU Usage',
+    title: _props.title,
     axes: {
       left: {
         primary: true,
@@ -129,6 +144,29 @@ const graphDisplay = (_props: any) => {
     },
   };
 
+  const getGraphCSV = (): void => {
+    const convertDaysToText = (days: string): string => {
+      switch (days) {
+        case '1':
+          return 'Day';
+        case '7':
+          return 'Week';
+        case '30':
+          return 'Month';
+        default:
+          return 'None';
+      }
+    };
+    const period = convertDaysToText(_props.days);
+    const graphValues = state.data.map((graphData) => ({
+      Device_Name: graphData.group,
+      [period]: graphData.key,
+      Value: graphData.value,
+    }));
+    const today = new Date();
+    exportCSV(graphValues, `Analytics-${_props.title}-${today.getFullYear()}-${today.getMonth()}-${today.getDate()}`);
+  };
+
 
   return (
     <Col className='graph-dark-accordion analytics-accordion'>
@@ -139,6 +177,15 @@ const graphDisplay = (_props: any) => {
           </Accordion.Header>
           <Accordion.Body>
             <Col>
+              <div className="d-flex">
+                <div className="p-1 ms-auto">
+                  <button className="btn btn-primary"
+                    onClick={() => getGraphCSV()}
+                  >
+                    Export as CSV
+                  </button>
+                </div>
+              </div>
               <LineChart data={state.data} options={options}/>
             </Col>
           </Accordion.Body>

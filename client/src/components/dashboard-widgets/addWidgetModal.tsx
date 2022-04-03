@@ -4,9 +4,9 @@ import React, {useState} from 'react';
 type Props = {
   setType: (type: string) => void
   setName: (name: string) => void
-  deviceIds: String[]
+  deviceIds: string[]
 }
-const generateOptions = (listOfOptions: String[]) => {
+const generateOptions = (listOfOptions: string[]) => {
   const returnString = [];
   console.log(listOfOptions.length);
   for (let i = 0; i < listOfOptions.length; i++) {

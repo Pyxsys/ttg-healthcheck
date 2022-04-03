@@ -153,7 +153,7 @@ const DeviceDetail = (props: any) => {
 
   return (
     <div id="device-details-container">
-      <Navbar />
+      <Navbar name="Device details"/>
       <div className="device-details-wrapper">
         <div className="h-100 container pe-2 ps-2">
           <Row>
