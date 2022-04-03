@@ -26,7 +26,7 @@ describe("1. LightHouse", () => {
 
 // Check to ensure that the various components on the device page are properly loaded.
 describe("2 Check to ensure that the various components on the device detail page are properly loaded.", () => {
-  it("2.1 Checks to ensure that the devices detail page loads in under 4000 milliseconds.", () => {
+  it("2.1 Checks to ensure that the devices detail page loads in under 5000 milliseconds.", () => {
     loginAndNavigate("/devices")
       .its("performance")
       .then(performance => {
@@ -46,7 +46,7 @@ describe("2 Check to ensure that the various components on the device detail pag
           .should("be.visible")
           .then(() => performance.mark("end-loading"))
           .then(() => {
-            checkPageLoadTime(performance, 4000);
+            checkPageLoadTime(performance, 5000);
           });
       });
   });
