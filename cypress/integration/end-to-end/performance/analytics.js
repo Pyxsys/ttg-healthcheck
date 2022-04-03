@@ -33,16 +33,16 @@ const performanceGraph = index => {
 };
 
 describe("1. LightHouse", () => {
-  it("1.1 dashboard Page", () => {
+  it("1.1 Analytics Page", () => {
     cy.visit("/");
     runLogin();
-    cy.visit("/dashboard");
+    cy.visit("/analytics");
     cy.lighthouse(lighthouseThreshold, lighthouseConfig);
   });
 });
 
 describe("2. Check to ensure that the various pages related to login load in a reasonable amount of time.", () => {
-  it("2.1 Checks to ensure that the dashboard loads in in under 3000 milliseconds.", () => {
+  it("2.1 Checks to ensure that the dashboard loads in in under 4000 milliseconds.", () => {
     loginAndNavigate("/analytics")
       .its("performance")
       .then(performance => {
@@ -77,7 +77,7 @@ describe("2. Check to ensure that the various pages related to login load in a r
           .should("be.visible")
           .then(() => performance.mark("end-loading"))
           .then(() => {
-            checkPageLoadTime(performance, 3000);
+            checkPageLoadTime(performance, 4000);
           });
       });
   });
