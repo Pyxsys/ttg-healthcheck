@@ -41,8 +41,8 @@ describe("1. LightHouse", () => {
   });
 });
 
-describe("2. Check to ensure that the various pages related to login load in a reasonable amount of time.", () => {
-  it("2.1 Checks to ensure that the dashboard loads in in under 4000 milliseconds.", () => {
+describe("2. Check to ensure that the analytics page related to login load in a reasonable amount of time.", () => {
+  it("2.1 Checks to ensure that the dashboard loads in in under 5500 milliseconds.", () => {
     loginAndNavigate("/analytics")
       .its("performance")
       .then(performance => {
@@ -77,7 +77,7 @@ describe("2. Check to ensure that the various pages related to login load in a r
           .should("be.visible")
           .then(() => performance.mark("end-loading"))
           .then(() => {
-            checkPageLoadTime(performance, 4000);
+            checkPageLoadTime(performance, 5500);
           });
       });
   });
