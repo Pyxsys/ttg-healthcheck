@@ -25,8 +25,7 @@ export const useRealTimeService = () =>
 
 const RealTimeService = ({children}: any) => {
   const SERVER_PORT = 5000;
-  const CLIENT_PORT = 3000;
-  const HOST = location.origin.replace(/^http/, 'ws').replace(`${CLIENT_PORT}`, `${SERVER_PORT}`);
+  const HOST = location.origin.replace(/^http/, 'ws').replace('3000', '5000');
   const [wsClient, setWsClient] = useState(
     new WebSocket(
         `${HOST}/?reason=realTime`,
@@ -65,7 +64,7 @@ const RealTimeService = ({children}: any) => {
     enableRealTimeData: () => {
       if (!wsClient) {
         setWsClient(
-            new WebSocket(`${HOST}/?reason=realTime`),
+            new WebSocket(`ws://localhost:${SERVER_PORT}/?reason=realTime`),
         );
       }
     },
