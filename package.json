@@ -4,7 +4,6 @@
     "@cypress/instrument-cra": "^1.4.0",
     "babel-plugin-istanbul": "^6.1.1",
     "concurrently": "^6.2.2",
-    "cypress": "^9.0.0",
     "cypress-audit": "^1.1.0",
     "husky": "^4.3.8",
     "istanbul-lib-coverage": "^3.2.0",
@@ -40,6 +39,7 @@
     "all-test:staged": "concurrently \"npm run test:coverage --prefix server\"  \"cd client && npx cypress run\" \"npx cypress run\" "
   },
   "dependencies": {
+    "cypress": "^9.5.3",
     "react-burger-menu": "^3.0.6"
   }
 }
