@@ -92,7 +92,7 @@ const sortWithThreshold = (_props: any) => {
               <Col className='p-0 mb-2'>
                 <div className='border-bottom custom-font-size p-2'>
                   <div className=''>
-                    Devices Above 80
+                    Devices Above {threshold}
                   </div>
                   {counter}
                 </div>

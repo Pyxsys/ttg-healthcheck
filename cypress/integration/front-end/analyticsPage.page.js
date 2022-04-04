@@ -29,7 +29,7 @@ describe("1. Check to ensure the Devices Page's components behave appropriately.
       .type("50");
     cy.get(
       ":nth-child(1) > .analytics-accordion > .accordion > .analytics-accordion-item > .accordion-collapse > .flex-grow-1 > .flex-column > .mb-2 > .border-bottom"
-    ).contains("2");
+    ).contains('Devices Above 50');
 
     cy.get(
       ":nth-child(2) > .analytics-accordion > .accordion > .analytics-accordion-item > .accordion-collapse > .flex-grow-1 > .flex-column > :nth-child(1) > .border-bottom > .form-control"
@@ -38,7 +38,7 @@ describe("1. Check to ensure the Devices Page's components behave appropriately.
       .type("50");
     cy.get(
       ":nth-child(2) > .analytics-accordion > .accordion > .analytics-accordion-item > .accordion-collapse > .flex-grow-1 > .flex-column > .mb-2 > .border-bottom"
-    ).contains("2");
+    ).contains('Devices Above 50');
 
     cy.get(
       ":nth-child(3) > .analytics-accordion > .accordion > .analytics-accordion-item > .accordion-collapse > .flex-grow-1 > .flex-column > :nth-child(1) > .border-bottom > .form-control"
@@ -47,7 +47,7 @@ describe("1. Check to ensure the Devices Page's components behave appropriately.
       .type("50");
     cy.get(
       ":nth-child(3) > .analytics-accordion > .accordion > .analytics-accordion-item > .accordion-collapse > .flex-grow-1 > .flex-column > .mb-2 > .border-bottom"
-    ).contains("2");
+    ).contains('Devices Above 50');
   });
   it("1.2 After successful login, navigate to the analytics page and ensure the graphs function properly", () => {
     login();

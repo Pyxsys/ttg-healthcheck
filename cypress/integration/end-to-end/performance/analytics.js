@@ -20,8 +20,6 @@ const performanceWidget = index => {
     .should("be.visible");
   cy.get(".gx-4 > :nth-child(" + index + ")")
     .find("table")
-    .should("be.visible")
-    .contains("223ECC81-7069-45F9-9309-C641EBA776C8")
     .should("be.visible");
 };
 

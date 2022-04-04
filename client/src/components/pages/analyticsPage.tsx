@@ -85,7 +85,7 @@ const AnalyticsPage = () => {
                   <SortWithThreshold
                     title="Overworked CPU Devices"
                     deviceDynamic = {deviceTableData} f = {(a:IDeviceTotal, b:IDeviceTotal) => b?.dynamic?.cpu?.aggregatedPercentage as number - (a?.dynamic?.cpu?.aggregatedPercentage as number) }
-                    columnKey="dynamic.memory.aggregatedPercentage"
+                    columnKey="dynamic.cpu.aggregatedPercentage"
                     threshold = {80}>
                   </SortWithThreshold>
                 </Col>
