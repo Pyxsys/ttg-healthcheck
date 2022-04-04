@@ -44,6 +44,7 @@
     "react-burger-menu": "^3.0.6"
   },
   "nyc": {
-    "exclude": ["src/services/*.tsx", "src/reportWebVitals.ts"]
+    "exclude": ["src/services/*.tsx", "src/reportWebVitals.ts", "src/services/**/*.tsx"],
+    "excludeAfterRemap": true
  }
 }
