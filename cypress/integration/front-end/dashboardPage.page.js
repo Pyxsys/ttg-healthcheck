@@ -114,16 +114,4 @@ describe("1. Check to ensure the Dashboard Page's components behave appropriatel
       .contains("Clear Dashboard")
       .click();
   });
-  it("1.8 After successful login, navigate to the Dashboard page and Disk widgets", () => {
-    login();
-    addModal(8);
-    cy.contains("Adapter Name").should("be.visible");
-    cy.contains("SSID").should("be.visible");
-    cy.contains("Connection Type").should("be.visible");
-    cy.contains("IPV4 Address").should("be.visible");
-    cy.contains("IPV6 Address").should("be.visible");
-    cy.get(".ms-3")
-      .contains("Clear Dashboard")
-      .click();
-  });
 });
