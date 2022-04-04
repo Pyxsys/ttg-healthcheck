@@ -10,6 +10,7 @@
     "lint-staged": "^8.2.1",
     "nyc": "^15.1.0"
   },
+  
   "husky": {
     "hooks": {
       "pre-commit": "npx lint-staged"
@@ -41,5 +42,8 @@
   "dependencies": {
     "cypress": "^9.5.3",
     "react-burger-menu": "^3.0.6"
-  }
+  },
+  "nyc": {
+    "exclude": ["src/services/*.tsx", "src/reportWebVitals.ts"]
+ }
 }

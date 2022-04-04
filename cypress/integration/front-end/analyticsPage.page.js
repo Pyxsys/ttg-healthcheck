@@ -12,6 +12,44 @@ const login = () => {
   cy.get("button[type=submit]").click();
 };
 
+const getWidget = (which) => {
+      // open navbar
+      cy.get('div[class="hamburger-react"]').click();
+
+      // navigate to device detail page
+      cy.get('a[href*="/analytics"]').click();
+  
+      cy.get("div[class=analytics-details-wrapper]")
+        .find(`div[class=col] > :nth-child(1) > :nth-child(${which})`)
+        .contains('Change Threshold').should("be.visible");
+      
+      cy.get("div[class=analytics-details-wrapper]")
+        .find(`div[class=col] > :nth-child(1) > :nth-child(${which})`)
+        .contains('Devices Above').should("be.visible");
+      
+      cy.get("div[class=analytics-details-wrapper]")
+        .find(`div[class=col] > :nth-child(1) > :nth-child(${which})`)
+        .contains('Name').should("be.visible");
+  
+      cy.get("div[class=analytics-details-wrapper]")
+        .find(`div[class=col] > :nth-child(1) > :nth-child(${which})`)
+        .contains('aggregatedPercentage').should("be.visible");
+  
+      cy.get("div[class=analytics-details-wrapper]")
+        .find(`div[class=col] > :nth-child(1) > :nth-child(${which})`)
+        .find('input')
+        .clear()
+        .type('100')
+  
+      cy.get("div[class=analytics-details-wrapper]")
+        .find(`div[class=col] > :nth-child(1) > :nth-child(${which})`)
+        .contains('100').should("be.visible");
+  
+      cy.get("div[class=analytics-details-wrapper]")
+        .find(`div[class=col] > :nth-child(1) > :nth-child(${which})`)
+        .contains('0').should("be.visible");
+};
+
 describe("1. Check to ensure the Devices Page's components behave appropriately.", () => {
   it("1.1  Anlytics page, ensure the thresholds function properly", () => {
     login();
@@ -89,83 +127,12 @@ describe("1. Check to ensure the Devices Page's components behave appropriately.
   });
   it("1.4 Anlytics page, ensure Overworked CPU Devices works well.", () => {
     login();
-
-    // open navbar
-    cy.get('div[class="hamburger-react"]').click();
-
-    // navigate to device detail page
-    cy.get('a[href*="/analytics"]').click();
-
-    cy.get("div[class=analytics-details-wrapper]")
-      .find('div[class=col] > :nth-child(1) > :nth-child(1)')
-      .contains('Change Threshold').should("be.visible");
-    
-    cy.get("div[class=analytics-details-wrapper]")
-      .find('div[class=col] > :nth-child(1) > :nth-child(1)')
-      .contains('Devices Above').should("be.visible");
-    
-    cy.get("div[class=analytics-details-wrapper]")
-      .find('div[class=col] > :nth-child(1) > :nth-child(1)')
-      .contains('Name').should("be.visible");
-
-    cy.get("div[class=analytics-details-wrapper]")
-      .find('div[class=col] > :nth-child(1) > :nth-child(1)')
-      .contains('aggregatedPercentage').should("be.visible");
-
-    cy.get("div[class=analytics-details-wrapper]")
-      .find('div[class=col] > :nth-child(1) > :nth-child(1)')
-      .find('input')
-      .clear()
-      .type('100')
-
-    cy.get("div[class=analytics-details-wrapper]")
-      .find('div[class=col] > :nth-child(1) > :nth-child(1)')
-      .contains('100').should("be.visible");
-
-    cy.get("div[class=analytics-details-wrapper]")
-      .find('div[class=col] > :nth-child(1) > :nth-child(1)')
-      .contains('0').should("be.visible");
+    getWidget(1);
 
   });
   it("1.5 Anlytics page, ensure Overworked Memory Devices works well.", () => {
     login();
-
-    // open navbar
-    cy.get('div[class="hamburger-react"]').click();
-
-    // navigate to device detail page
-    cy.get('a[href*="/analytics"]').click();
-
-    cy.get("div[class=analytics-details-wrapper]")
-      .find('div[class=col] > :nth-child(1) > :nth-child(2)')
-      .contains('Change Threshold').should("be.visible");
-    
-    cy.get("div[class=analytics-details-wrapper]")
-      .find('div[class=col] > :nth-child(1) > :nth-child(2)')
-      .contains('Devices Above').should("be.visible");
-    
-    cy.get("div[class=analytics-details-wrapper]")
-      .find('div[class=col] > :nth-child(1) > :nth-child(2)')
-      .contains('Name').should("be.visible");
-
-    cy.get("div[class=analytics-details-wrapper]")
-      .find('div[class=col] > :nth-child(1) > :nth-child(2)')
-      .contains('aggregatedPercentage').should("be.visible");
-
-    cy.get("div[class=analytics-details-wrapper]")
-      .find('div[class=col] > :nth-child(1) > :nth-child(2)')
-      .find('input')
-      .clear()
-      .type('100')
-
-    cy.get("div[class=analytics-details-wrapper]")
-      .find('div[class=col] > :nth-child(1) > :nth-child(2)')
-      .contains('100').should("be.visible");
-
-    cy.get("div[class=analytics-details-wrapper]")
-      .find('div[class=col] > :nth-child(1) > :nth-child(2)')
-      .contains('0').should("be.visible");
-
+    getWidget(2);
   });
   it("1.6  Anlytics page, ensure Nerwork Speed Monitoring works well.", () => {
     login();
