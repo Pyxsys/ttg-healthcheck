@@ -35,7 +35,7 @@ router.post('/register', async (req, res) => {
   try {
     const role = 'disabled'
     const avatar = 'https://cdn-icons-png.flaticon.com/512/149/149071.png'
-    const { name, password, email } = req.body
+    const { name, password, email } = Object(req.body)
     const newUser = new User({
       name,
       password,
@@ -79,7 +79,7 @@ router.post('/register', async (req, res) => {
 // login
 router.post('/login', async (req, res) => {
   try {
-    const { email, password } = req.body
+    const { email, password } = Object(req.body)
     // Verify email
     const user = await User.findOne({ email: email })
     if (!user) {
