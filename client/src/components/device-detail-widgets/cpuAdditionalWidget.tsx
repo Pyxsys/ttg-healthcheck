@@ -46,7 +46,7 @@ const cpuAdditionalWidget = (props: {
                   </td>
                 </tr>
                 <tr className="border-bottom">
-                  <td>Number Of Scokets</td>
+                  <td>Number Of Sockets</td>
                   <td className="float-right">
                     {deviceStatic?.cpu?.sockets || 'N/A'}
                   </td>

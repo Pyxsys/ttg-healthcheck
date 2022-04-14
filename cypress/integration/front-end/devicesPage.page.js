@@ -61,4 +61,66 @@ describe("1. Check to ensure the Devices Page's components behave appropriately.
 
     cy.get('button[class="btn next"]').should("have.attr", "disabled");
   });
+  it("1.3 Check to ensure that filter button works.", () => {
+    login();
+
+    // open navbar
+    cy.get('div[class="hamburger-react"]').click();
+
+    // navigate to device detail page
+    cy.get('a[href*="/devices"]').click();
+
+    // check that you are on the device page
+    cy.url().should("include", "devices");
+
+    cy.get('div[class="app"] > :nth-child(1) > :nth-child(3) > :nth-child(1) > :nth-child(1) > :nth-child(1)')
+      .click();
+
+    cy.contains("Add Filter")
+      .should("be.visible");
+
+    cy.contains("Clear All")
+      .should("be.visible");
+  });
+  it("1.4 Make sure the Export CSV button is there.", () => {
+    login();
+    // open navbar
+    cy.get('div[class="hamburger-react"]').click();
+
+    // navigate to device detail page
+    cy.get('a[href*="/devices"]').click();
+
+    // check that you are on the device page
+    cy.url().should("include", "devices");
+
+    cy.contains("Export To CSV")
+      .should("be.visible");
+  });
+  it("1.5 Make sure add filter button works.", () => {
+    login();
+
+    // open navbar
+    cy.get('div[class="hamburger-react"]').click();
+
+    // navigate to device detail page
+    cy.get('a[href*="/devices"]').click();
+
+    // check that you are on the device page
+    cy.url().should("include", "devices");
+
+    cy.get('div[class="app"] > :nth-child(1) > :nth-child(3) > :nth-child(1) > :nth-child(1) > :nth-child(1)')
+      .click();
+
+    cy.get('div[class="app"] > :nth-child(1) > :nth-child(3) > :nth-child(1) > :nth-child(2) > :nth-child(1) > :nth-child(2) > :nth-child(1)')
+      .click();
+
+    cy.contains("Column")
+      .should("be.visible");
+
+    cy.contains("Equality")
+      .should("be.visible");
+    
+    cy.contains("Value")
+      .should("be.visible");
+  });
 });

@@ -169,7 +169,7 @@ const graphDisplay = (_props: any) => {
 
 
   return (
-    <Col className='graph-dark-accordion analytics-accordion'>
+    <Col className='graph-dark-accordion analytics-accordion gaph-Display'>
       <Accordion defaultActiveKey='0'>
         <Accordion.Item eventKey='0' className='analytics-accordion-item'>
           <Accordion.Header>

@@ -39,7 +39,7 @@ const ForgotPassword = () => {
         </div>
       </> : <div className="home-form">
         <div className="pb-4 home-header-subtitle">
-          Send an email to reset you password
+          Send an email to reset your password
         </div>
         <Form onSubmit={(e: any) => sumbitForgotForm(e)}>
           <Form.Group>
