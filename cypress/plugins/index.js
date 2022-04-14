@@ -26,7 +26,7 @@ const { lighthouse, pa11y, prepareAudit } = require("cypress-audit");
 module.exports = (on, config) => {
   require('@cypress/code-coverage/task')(on, config)
 
-  on("before:browser:launch", (browser, launchOptions) => {
+  on("before:browser:launch", (_browser, launchOptions) => {
     prepareAudit(launchOptions)
   })
 
