@@ -100,8 +100,15 @@ https://user-images.githubusercontent.com/21341750/153103337-4577a4a2-44bf-4e6f-
 ### Register
 https://user-images.githubusercontent.com/21341750/153103345-281d5191-9b55-491e-a29b-5451c8e40a84.mp4
 
+### Dashboard
+https://user-images.githubusercontent.com/21341750/163578162-0919c3a7-5233-447d-9baa-13667eb5cef0.mp4
+
 ### Devices 
 https://user-images.githubusercontent.com/21341750/153103357-7583525e-3890-4ffb-b6b2-63b359ce7e23.mp4
 
 ### Device Details
 https://user-images.githubusercontent.com/21341750/153103366-075d76c4-336a-4305-a642-ac86ac81a06e.mp4
+
+### Analytics
+https://user-images.githubusercontent.com/21341750/163578094-248dd30e-0cdc-4ac6-bbd3-43bdc755729c.mp4
+

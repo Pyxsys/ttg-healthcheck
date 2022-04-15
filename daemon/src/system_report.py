@@ -11,6 +11,7 @@ class Runner(threading.Thread):
 
     # Initializes instance attributes.
     def __init__(self, path, mode):
+        super().__init__()
         with open(path, "r") as config_file:
             self.configs = json.load(config_file)
         self.mode=mode
@@ -498,7 +499,7 @@ class SysScrubber:
 
         for partition_path in psutil.disk_partitions():
             disk_subdict = dict()
-            disk_buffer = psutil.disk_usage(partition_path.device)
+            disk_buffer = psutil.disk_usage(partition_path.mountpoint)
 
             disk_subdict['total'] = disk_buffer.total
             disk_subdict['used'] = disk_buffer.used
