@@ -6,7 +6,7 @@ const initDbURL = process.env.MONGODB_URL
 
 describe('Connect to the MongoDB with an incorrect URL', () => {
   it('should try to exit the server with code 1', (done) => {
-    subscribeOnExit((err, code) => {
+    subscribeOnExit((_err, code) => {
       expect(code).toBe(1)
       unsubscribeAll()
       done()

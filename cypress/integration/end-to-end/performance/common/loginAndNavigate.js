@@ -8,7 +8,7 @@ export const loginAndNavigate = endpoint => {
     }
   })
     .its("performance")
-    .then(performance => {
+    .then(() => {
       runLogin();
       cy.get("div[class=hamburger-react]").click();
     });

@@ -229,14 +229,14 @@ describe('Get user profile', () => {
   })
 
   it("should not get a user's profile if a user accesses another profile", async () => {
-    const userAccessInvalidCookie = await login('user')
-    const userOther = await User.findOne({ email: userTwo.email })
+    const userProfileAccessInvalidCookie = await login('user')
+    const userProfileOther = await User.findOne({ email: userTwo.email })
     const response = await request(app)
       .get('/api/user/profile')
-      .set('Cookie', userAccessInvalidCookie)
-      .query({ userId: String(userOther._id) })
-    expect(response.statusCode).toBe(401)
+      .set('Cookie', userProfileAccessInvalidCookie)
+      .query({ userId: String(userProfileOther._id) })
     expect(response.text).toBe('Unauthorized access')
+    expect(response.statusCode).toBe(401)
   })
 
   it("should get a user's profile if a user access their own profile", async () => {
@@ -554,12 +554,12 @@ describe('user logout', () => {
   })
 
   it("should not get a user's log if a user accesses another log", async () => {
-    const userAccessInvalidCookie = await login('user')
-    const userOther = await User.findOne({ email: userTwo.email })
+    const userLogAccessInvalidCookie = await login('user')
+    const userLogOther = await User.findOne({ email: userTwo.email })
     const response = await request(app)
       .get('/api/user/log')
-      .set('Cookie', userAccessInvalidCookie)
-      .query({ userId: String(userOther._id) })
+      .set('Cookie', userLogAccessInvalidCookie)
+      .query({ userId: String(userLogOther._id) })
     expect(response.statusCode).toBe(401)
     expect(response.text).toBe('Unauthorized access')
   })

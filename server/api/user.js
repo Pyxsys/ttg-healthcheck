@@ -16,6 +16,21 @@ const encryptPassword = async (password) => {
   return bcrypt.hash(password, salt)
 }
 
+const verifyUser = (query, user) => {
+  if (!query.userId) {
+    return {code: 400, msg: 'Bad request, no userId provided'}
+  }
+
+  if (
+    user.role === 'disabled' ||
+    (user.role === 'user' && String(user._id) !== query.userId)
+  ) {
+    return {code: 401, msg: 'Unauthorized access'}
+  }
+
+  return null
+}
+
 const userEventLog = (
   userPerformingAction,
   affectedUser,
@@ -35,7 +50,7 @@ router.post('/register', async (req, res) => {
   try {
     const role = 'disabled'
     const avatar = 'https://cdn-icons-png.flaticon.com/512/149/149071.png'
-    const { name, password, email } = req.body
+    const { name, password, email } = Object(req.body)
     const newUser = new User({
       name,
       password,
@@ -79,7 +94,7 @@ router.post('/register', async (req, res) => {
 // login
 router.post('/login', async (req, res) => {
   try {
-    const { email, password } = req.body
+    const { email, password } = Object(req.body)
     // Verify email
     const user = await User.findOne({ email: email })
     if (!user) {
@@ -144,22 +159,16 @@ router.get('/authenticate', auth, async (req, res) => {
 // get user logs for specific user
 router.get('/log', auth, async (req, res) => {
   const user = await User.findOne({ _id: req.userId })
-  const query = Object(req.query)
-  if (!query.userId) {
-    return res.status(400).send('Bad request, no userId provided')
-  }
-
-  if (
-    user.role === 'disabled' ||
-    (user.role === 'user' && String(user._id) !== query.userId)
-  ) {
-    return res.status(401).send('Unauthorized access')
+  const logQuery = Object(req.query)
+  const validUserForLogs = verifyUser(logQuery, user)
+  if (validUserForLogs) {
+    return res.status(validUserForLogs.code).send(validUserForLogs.msg)
   }
 
   try {
-    const validUser = await User.findOne({ _id: query.userId })
+    const validUser = await User.findOne({ _id: logQuery.userId })
     if (validUser) {
-      const results = await userLog.find({ affectedUser: query.userId })
+      const results = await userLog.find({ affectedUser: logQuery.userId })
       return res.status(200).json({ Results: results, Total: results.length })
     }
   } catch (err) {
@@ -189,20 +198,15 @@ router.get('/all', auth, async (req, res) => {
 // get user profile
 router.get('/profile', auth, async (req, res) => {
   const user = await User.findOne({ _id: req.userId })
-  const query = Object(req.query)
-  if (!query.userId) {
-    return res.status(400).send('Bad request, no userId provided')
+  const profileQuery = Object(req.query)
+  const validUserForProfile = verifyUser(profileQuery, user)
+  if (validUserForProfile) {
+    return res.status(validUserForProfile.code).send(validUserForProfile.msg)
   }
 
-  if (
-    user.role === 'disabled' ||
-    (user.role === 'user' && String(user._id) !== query.userId)
-  ) {
-    return res.status(401).send('Unauthorized access')
-  }
   try {
     const validUser = await User.findOne(
-      { _id: query.userId },
+      { _id: profileQuery.userId },
       {
         _id: 1,
         name: 1,
